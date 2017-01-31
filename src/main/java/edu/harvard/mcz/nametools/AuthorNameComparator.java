@@ -20,8 +20,11 @@ package edu.harvard.mcz.nametools;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Parent of class heirarchy for making comparisons between pairs of authorship strings
- * of scientific names.
+ * Parent of class hierarchy for making comparisons between pairs of authorship strings
+ * of scientific names.  Authorship strings can contain authors of names, authorship role
+ * markers (parentheses, ex, :, in), asserted year of publication and actual year of publication.
+ * Conventions vary between the codes and in some disciplines for how authorship strings 
+ * are typically constructed.
  * 
  * @author mole
  *
@@ -34,8 +37,8 @@ public abstract class AuthorNameComparator {
 	 * Compare two authorship strings, and assert a comparison between the
 	 * two in the form of a NameComparison.
 	 * 
-	 * @param anAuthor
-	 * @param toOtherAuthor
+	 * @param anAuthor  one authorship string for comparison
+	 * @param toOtherAuthor the other authorship string to comapare to.
 	 * @return a string description classifying the match between the two 
 	 * authorship strings, with awareness of string distance, parenthesies, and year.
 	 * 
@@ -46,15 +49,18 @@ public abstract class AuthorNameComparator {
 	/**
 	 * Given an authorship string and a kingdom, guess at the correct author name comparator to use.
 	 * 
-	 * @param authorship
-	 * @param kingdom
-	 * @return
+	 * @param authorship a scientific name authorship string.
+	 * @param kingdom dwc:kingdom
+	 * @return an AuthorNameComparator probably appropriate for the authorship string presented.
 	 */
 	public static AuthorNameComparator authorNameComparatorFactory(String authorship, String kingdom) { 
 		AuthorNameComparator result = new ICZNAuthorNameComparator(.75d, .5d);
 		if (kingdom!=null && (kingdom.toLowerCase().equals("plantae") || kingdom.toLowerCase().equals("fungi"))) {
 			// Plants and fungi follow ICNafp.
 			result = new ICNafpAuthorNameComparator(.75d, .5d);
+			
+			// TODO: Algae, tend to include year of authorship
+			
 		} else { 
 			if (authorship!=null) { 
 				boolean plantFlag = false;
@@ -107,7 +113,7 @@ public abstract class AuthorNameComparator {
 	/**
 	 * Test to see if an authorship string appears to contain parentheses.
 	 * 
-	 * @param authorship to test for parenthesies
+	 * @param authorship to test for parentheses
 	 * @return true if authorship string contains '()';
 	 */
 	public static boolean calculateHasParen(String authorship) { 
@@ -185,8 +191,8 @@ public abstract class AuthorNameComparator {
 	 * 0 (no similarity) to 1 (exact same strings), using a measure of the
 	 * string edit distance scaled to the length differences of the two strings.
 	 * 
-	 * @param string1
-	 * @param string2
+	 * @param string1 one string for comparison
+	 * @param string2 the string to compare with string1
 	 * @return a double in the range 0 to 1.
 	 */
 	public static double stringSimilarity(String string1, String string2) {

@@ -135,8 +135,8 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 	/**
 	 * Compare the non-numeric (i.e. removing the year if present) parts of two authorship strings.
 	 * 
-	 * @param anAuthor
-	 * @param toOtherAuthor
+	 * @param anAuthor for comparison
+	 * @param toOtherAuthor to compare with anAuthor
 	 * @return similarity (in the range 0 to 1) between the two strings.
 	 */
 	public static double calulateSimilarityOfAuthorYear(String anAuthor, String toOtherAuthor) { 

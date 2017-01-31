@@ -129,12 +129,12 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	}	
 	
 	/**
-	 * Compare the two author strings to see if they look like differeing abbreviations
+	 * Compare the two author strings to see if they look like differing abbreviations
 	 * of the same set of authors in the same semantic positions (comparing each 
 	 * parenthetical author, ex author, sanctioning author, etc separately.
 	 * 
-	 * @param anAuthor 
-	 * @param toOtherAuthor 
+	 * @param anAuthor for the comparison
+	 * @param toOtherAuthor to compare with anAuthor
 	 * 
 	 * @return true if each semantic piece of the two author strings is the same, or if 
 	 * each semantic piece appears to be an abbreviation of the corresponding semantic piece
@@ -227,8 +227,9 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Given a string, return any initials from that string.
-	 * @param name
-	 * @return
+	 * 
+	 * @param name to examine for initials
+	 * @return portion of name that fits the pattern of initials.
 	 */
 	public static String extractInitials(String name) { 
 		StringBuffer result = new StringBuffer();
@@ -245,8 +246,8 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	 * Compare to strings to see if they are the same or if the longer starts with
 	 * the shorter.  Special case, "L." is not same or starts with "Lamarck".  
 	 * 
-	 * @param aString
-	 * @param anotherString
+	 * @param aString for comparison
+	 * @param anotherString to compare with aString
 	 * @return true if the two strings are the same, or if the longer of the two strings
 	 * starts with the shorter of the two strings.
 	 */
@@ -279,7 +280,7 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	 * Given a botanical authorship string, split it into a list of component 
 	 * authors on parenthetical authors, ex authors, and sanctioning authors.
 	 * 
-	 * @param authorship
+	 * @param authorship to tokenize
 	 * @return a list of authorship strings representing the components of the 
 	 * authorship string.
 	 */
@@ -348,8 +349,8 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
      * unusual standard abbreviations linked to name and initials 
      * (e.g. DC. for de Candolle). 
      * 
-     * @param anAuthor
-     * @param anotherAuthor
+     * @param anAuthor for comparison
+     * @param anotherAuthor to compare with anAuthor
      * @return true if anAuthor and anotherAuthor form a known pair of
      * name and abbreviation.
      */
@@ -395,8 +396,8 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	 * If initials are present in both strings, true false if they are different, otherwise
 	 * return true.
 	 * 
-	 * @param anAuthorBit
-	 * @param toOtherAuthorBit
+	 * @param anAuthorBit for comparison
+	 * @param toOtherAuthorBit to compare with anAuthorBit
 	 * @return false if initials are present in both author bits, otherwise return true
 	 */
 	public static boolean initalsAreDifferent(String anAuthorBit, String toOtherAuthorBit) {
@@ -446,5 +447,4 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 		return result;
 	}
 	
-
 }
