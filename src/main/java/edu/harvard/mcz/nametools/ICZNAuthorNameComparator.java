@@ -73,8 +73,6 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 				if (anAuthor.length()==0 && toOtherAuthor.length()> 0 ) { 
 					result.setMatchType(NameComparison.MATCH_ADDSAUTHOR);
 				} else { 
-					NameUsage test = new NameUsage();
-					test.setAuthorship(anAuthor);
 					double similarity = ICZNAuthorNameComparator.calulateSimilarityOfAuthor(anAuthor, toOtherAuthor);
 					result.setSimilarity(similarity);
 					if (similarity > similarityThreshold) { 

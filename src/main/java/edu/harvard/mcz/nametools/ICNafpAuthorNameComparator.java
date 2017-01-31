@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.IOCase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -89,8 +88,6 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 				if (anAuthor.length()==0 && toOtherAuthor.length()> 0 ) { 
 					result.setMatchType(NameComparison.MATCH_ADDSAUTHOR);
 				} else { 
-					NameUsage test = new NameUsage();
-					test.setAuthorship(anAuthor);
 					if (similarity > similarityThreshold) { 
 						result.setMatchType(NameComparison.MATCH_AUTHSIMILAR);
 					} else if (similarity > weakThreshold) { 
