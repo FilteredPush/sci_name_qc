@@ -2,7 +2,7 @@ package edu.harvard.mcz.nametools.test;
 
 import static org.junit.Assert.*;
 
-import java.time.LocalDateTime;
+import java.time.Year;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +89,7 @@ public class TestICZNAuthorNameComparator {
         // out of range for meaning of year in this context
         // (between 1000 and now).
         
-        int currentCentury = (int) (Math.floor(LocalDateTime.now().getYear()/100));
+        int currentCentury = (int) (Math.floor(Year.now().getValue()/100));
         String nextCentury = Integer.toString(currentCentury+10).concat("00");
         assertFalse(ICZNAuthorNameComparator.calculateHasYear(nextCentury));
         assertFalse(ICZNAuthorNameComparator.calculateHasYear("999"));
