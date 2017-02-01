@@ -17,6 +17,9 @@
  */
 package edu.harvard.mcz.nametools;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -91,6 +94,47 @@ public abstract class AuthorNameComparator {
 				}
 			}
 		}
+		return result;
+	}
+	
+	public static Map<String,Boolean> detectApplicableCode(String authorship) { 
+		return detectApplicableCode(authorship, null, null);
+	}
+	
+	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom) { 
+		return detectApplicableCode(authorship, kingdom, null);
+	}
+	
+	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom, String phylum) { 
+		HashMap<String,Boolean> result = new HashMap<String,Boolean>();
+		result.put("ICZN", false);
+		result.put("ICNafp", false);
+		boolean done = false;
+		if (kingdom==null) { kingdom = ""; } 
+		if (phylum==null) { phylum = ""; } 
+		
+		if (!done && kingdom.trim().equalsIgnoreCase("Animalia")) { result.put("ICZN", true); done=true; }  
+		if (!done && kingdom.trim().equalsIgnoreCase("Fungi")) { result.put("ICNafp", true); done=true; }  
+		if (!done && kingdom.trim().equalsIgnoreCase("Plantae")) { result.put("ICNafp", true); done=true; }  
+		
+		if (!done && authorship!=null) { 
+			if (authorship.startsWith("(") && authorship.endsWith(")")) { 
+				// when plant authors contain parenthesies, at least one follows the parenthesies.
+				result.put("ICZN",true);
+				done = true;
+			}
+			if (authorship.contains(" ex ") || authorship.contains(":")) { 
+				// only plant names should contain ex authors or sanctioning authors, designated by these characters.
+				result.put("ICNafp",true);
+				done = true;
+			}
+			if (authorship.startsWith("(") && authorship.contains(")") && authorship.matches("[a-zA-Z.]$") && authorship.matches(") [A-Z]")) {
+				// when plant authors contain parenthesies at least one follows the parenthesis.
+				result.put("ICNafp",true);
+				done = true;
+			}
+		}		
+		
 		return result;
 	}
 	

@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
+	TestAuthorNameComparator.class, 
 	TestICZNAuthorNameComparator.class, 
 	TestICNafpAuthorNameComparator.class 
 	})
