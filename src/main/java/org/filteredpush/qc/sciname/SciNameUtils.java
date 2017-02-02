@@ -17,8 +17,16 @@
  */
 package org.filteredpush.qc.sciname;
 
+
+import java.util.Iterator;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.globalnames.parser.ScientificNameParser;
+import org.globalnames.parser.ScientificNameParser.Result;
+import org.json4s.JsonAST.JValue;
+
+import scala.collection.immutable.List;
 
 /**
  * Utility functions for working with DarwinCore scientific name terms.
@@ -31,6 +39,30 @@ public class SciNameUtils {
 	private static final Log logger = LogFactory.getLog(SciNameUtils.class);
 	
 	public SciNameUtils() { 
+		
+	} 
+	
+	public static void main(String[] args) { 
+		Result parse = ScientificNameParser.instance().fromString("Buccinum canetae Clench & Aguayo, 1944");
+		System.out.println(parse.ambiguousAuthorship());
+		System.out.println(parse.delimitedString("|"));
+		System.out.println(parse.authorshipDelimited().toString());
+		System.out.println(parse.canonized(true));
+		System.out.println(parse.normalized());
+		System.out.println(parse.scientificName());
+		List<JValue> parseBits = parse.detailed().children(); 
+		scala.collection.Iterator<JValue> i = parseBits.iterator();
+		while (i.hasNext()) {
+			JValue bit = i.next();
+			System.out.println(bit.toString());
+			scala.collection.Iterator<JValue> it = bit.children().iterator();
+			while (it.hasNext()) { 
+				JValue bit2 = it.next();
+				System.out.println(bit2.toString());
+			}
+		}
+		System.out.println();
+		System.out.println(parse.json(true));
 		
 	}
 }
