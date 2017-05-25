@@ -36,11 +36,26 @@
 			<artifactId>ffdq-api</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
-		<dependency>
+		<!--  >dependency>
 			<groupId>org.globalnames</groupId>
 			<artifactId>gnparser_2.11</artifactId>
 			<version>0.3.3</version>
-		</dependency>
+		</dependency -->
+        <dependency>
+            <groupId>org.gbif</groupId>
+            <artifactId>name-parser</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gbif</groupId>
+            <artifactId>gbif-api</artifactId>
+            <version>0.12</version>
+        </dependency>   
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>        
 		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-lang3</artifactId>
@@ -80,8 +95,13 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.0.0</version>
+            <version>2.7.3</version>
         </dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+        </dependency>        
 	</dependencies>
 	<build>
 		<plugins>
@@ -110,7 +130,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9.1</version>
@@ -122,7 +142,23 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin -->
+            <!-- plugin>
+                <groupId>org.jsonschema2pojo</groupId>
+                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                <version>0.4.29</version>
+                <configuration>
+                    <sourceDirectory>${basedir}/src/main/resources/globalnames/</sourceDirectory>
+                    <targetPackage>org.globalnames.gnparser.resultpojo</targetPackage>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin -->
 		</plugins>
 	</build>
 	<profiles>
