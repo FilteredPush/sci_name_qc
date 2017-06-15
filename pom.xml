@@ -103,6 +103,12 @@
             <version>1.4</version>
         </dependency>        
 	</dependencies>
+       <repositories>
+        <repository>
+             <id>GBIF</id>
+             <url>http://repository.gbif.org/content/repositories/releases</url>
+        </repository>
+       </repositories>
 	<build>
 		<plugins>
 			<plugin>
