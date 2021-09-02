@@ -22,6 +22,8 @@ public class Source  implements java.io.Serializable {
 
     private java.lang.String fulltext;
 
+    private java.lang.String doi;
+
     public Source() {
     }
 
@@ -32,7 +34,8 @@ public class Source  implements java.io.Serializable {
            java.lang.String page,
            java.lang.String url,
            java.lang.String link,
-           java.lang.String fulltext) {
+           java.lang.String fulltext,
+           java.lang.String doi) {
            this.source_id = source_id;
            this.use = use;
            this.reference = reference;
@@ -40,6 +43,7 @@ public class Source  implements java.io.Serializable {
            this.url = url;
            this.link = link;
            this.fulltext = fulltext;
+           this.doi = doi;
     }
 
 
@@ -182,6 +186,26 @@ public class Source  implements java.io.Serializable {
         this.fulltext = fulltext;
     }
 
+
+    /**
+     * Gets the doi value for this Source.
+     * 
+     * @return doi
+     */
+    public java.lang.String getDoi() {
+        return doi;
+    }
+
+
+    /**
+     * Sets the doi value for this Source.
+     * 
+     * @param doi
+     */
+    public void setDoi(java.lang.String doi) {
+        this.doi = doi;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Source)) return false;
@@ -212,7 +236,10 @@ public class Source  implements java.io.Serializable {
               this.link.equals(other.getLink()))) &&
             ((this.fulltext==null && other.getFulltext()==null) || 
              (this.fulltext!=null &&
-              this.fulltext.equals(other.getFulltext())));
+              this.fulltext.equals(other.getFulltext()))) &&
+            ((this.doi==null && other.getDoi()==null) || 
+             (this.doi!=null &&
+              this.doi.equals(other.getDoi())));
         __equalsCalc = null;
         return _equals;
     }
@@ -242,6 +269,9 @@ public class Source  implements java.io.Serializable {
         }
         if (getFulltext() != null) {
             _hashCode += getFulltext().hashCode();
+        }
+        if (getDoi() != null) {
+            _hashCode += getDoi().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -292,6 +322,12 @@ public class Source  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fulltext");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fulltext"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("doi");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "doi"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

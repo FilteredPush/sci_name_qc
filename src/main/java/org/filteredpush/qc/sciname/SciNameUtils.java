@@ -62,6 +62,8 @@ public class SciNameUtils {
 		String result = "";
 		//Result parse = ScientificNameParser.instance().fromString("scientificName");
 		NameParser parser = new NameParser();
+		logger.debug(scientificName);
+		logger.debug(scientificNameAuthorship);
 		try {
 			ParsedName parse = parser.parse(scientificName);
 			//String wormsGuid = WoRMSService.simpleNameSearch(parse.canonized(true).get(),scientificNameAuthorship,true);
@@ -71,6 +73,7 @@ public class SciNameUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		logger.debug(result);
 		
 		return result;
 	}
@@ -99,8 +102,12 @@ public class SciNameUtils {
 		return result;
 	}	
 	
-	/*
+
 	public static void main(String[] args) { 
+		System.out.println(simpleWoRMSGuidLookup("Buccinum canetae","Clench & Aguayo"));
+	}
+	
+/*	
 		Result parse = ScientificNameParser.instance().fromString("Buccinum canetae Clench & Aguayo, 1944");
 		System.out.println(parse.input().verbatim());
 		System.out.println(parse.ambiguousAuthorship());
@@ -139,5 +146,5 @@ public class SciNameUtils {
 		// StdDeserializer<Gnparser> gnparser = new BaseNodeDeserializer<Gnparser>().deserializeWithType(jp, ctxt, typeDeserializer);
 		
 	}
-	*/
+*/	
 }

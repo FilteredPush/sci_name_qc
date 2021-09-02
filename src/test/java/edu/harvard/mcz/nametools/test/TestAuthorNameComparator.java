@@ -65,7 +65,24 @@ public class TestAuthorNameComparator {
 	 */
 	@Test
 	public void testCalculateHasYear() {
-		fail("Not yet implemented");
+		assertEquals(false,AuthorNameComparator.calculateHasYear(""));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("Smith"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("1"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear(Integer.toString(Integer.MAX_VALUE)));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("Smith, 1"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("Smith, 1xxx"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("20001"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("Smith, 20001"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("Smith, '58"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("(Smith)"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("()"));
+		assertEquals(false,AuthorNameComparator.calculateHasYear("Smith, 195x"));
+		
+		assertEquals(true,AuthorNameComparator.calculateHasYear("Smith, 1880"));
+		assertEquals(true,AuthorNameComparator.calculateHasYear("Smith, 1880[sic]"));
+		assertEquals(true,AuthorNameComparator.calculateHasYear("2000"));
+		assertEquals(true,AuthorNameComparator.calculateHasYear("2000 1"));
+		assertEquals(true,AuthorNameComparator.calculateHasYear("4th Smith, 1935"));
 	}
 
 	/**
@@ -73,7 +90,23 @@ public class TestAuthorNameComparator {
 	 */
 	@Test
 	public void testCalculateHasParen() {
-		fail("Not yet implemented");
+		assertEquals(false,AuthorNameComparator.calculateHasParen(""));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("Smith"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("1"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen(Integer.toString(Integer.MAX_VALUE)));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("Smith, 1"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("Smith, 1xxx"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("20001"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("Smith, 20001"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("Smith, '58"));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("("));
+		assertEquals(false,AuthorNameComparator.calculateHasParen("Smith, 1952)"));
+		
+		assertEquals(true,AuthorNameComparator.calculateHasParen("(Smith, 1880)"));
+		assertEquals(true,AuthorNameComparator.calculateHasParen("(Smith)"));
+		assertEquals(true,AuthorNameComparator.calculateHasParen("()"));
+		assertEquals(true,AuthorNameComparator.calculateHasParen(",(Smith, 1880)"));
+		assertEquals(true,AuthorNameComparator.calculateHasParen("(Smith, 1880)[sic]"));
 	}
 
 	/**

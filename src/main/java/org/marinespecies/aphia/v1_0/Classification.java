@@ -44,7 +44,7 @@ public class Classification  implements java.io.Serializable {
     /**
      * Sets the aphiaID value for this Classification.
      * 
-     * @param aphiaID the value of aphiaID to set
+     * @param aphiaID
      */
     public void setAphiaID(int aphiaID) {
         this.aphiaID = aphiaID;
@@ -64,7 +64,7 @@ public class Classification  implements java.io.Serializable {
     /**
      * Sets the rank value for this Classification.
      * 
-     * @param rank the value of rank to set
+     * @param rank
      */
     public void setRank(java.lang.String rank) {
         this.rank = rank;
@@ -84,7 +84,7 @@ public class Classification  implements java.io.Serializable {
     /**
      * Sets the scientificname value for this Classification.
      * 
-     * @param scientificname the value of scientificname to set
+     * @param scientificname
      */
     public void setScientificname(java.lang.String scientificname) {
         this.scientificname = scientificname;
@@ -104,7 +104,7 @@ public class Classification  implements java.io.Serializable {
     /**
      * Sets the child value for this Classification.
      * 
-     * @param child the value of child to set
+     * @param child
      */
     public void setChild(org.marinespecies.aphia.v1_0.Classification child) {
         this.child = child;

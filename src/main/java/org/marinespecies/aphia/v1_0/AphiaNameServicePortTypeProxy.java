@@ -68,6 +68,12 @@ public class AphiaNameServicePortTypeProxy implements org.marinespecies.aphia.v1
     return aphiaNameServicePortType.getAphiaRecordByID(aphiaID);
   }
   
+  public org.marinespecies.aphia.v1_0.AphiaRecord[] getAphiaRecordsByIDs(int[] aphiaids) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaRecordsByIDs(aphiaids);
+  }
+  
   public org.marinespecies.aphia.v1_0.AphiaRecord getAphiaRecordByExtID(java.lang.String id, java.lang.String type) throws java.rmi.RemoteException{
     if (aphiaNameServicePortType == null)
       _initAphiaNameServicePortTypeProxy();
@@ -110,10 +116,10 @@ public class AphiaNameServicePortTypeProxy implements org.marinespecies.aphia.v1
     return aphiaNameServicePortType.getSourcesByAphiaID(aphiaID);
   }
   
-  public org.marinespecies.aphia.v1_0.AphiaRecord[] getAphiaSynonymsByID(int aphiaID) throws java.rmi.RemoteException{
+  public org.marinespecies.aphia.v1_0.AphiaRecord[] getAphiaSynonymsByID(int aphiaID, int offset) throws java.rmi.RemoteException{
     if (aphiaNameServicePortType == null)
       _initAphiaNameServicePortTypeProxy();
-    return aphiaNameServicePortType.getAphiaSynonymsByID(aphiaID);
+    return aphiaNameServicePortType.getAphiaSynonymsByID(aphiaID, offset);
   }
   
   public org.marinespecies.aphia.v1_0.Vernacular[] getAphiaVernacularsByID(int aphiaID) throws java.rmi.RemoteException{
@@ -132,6 +138,54 @@ public class AphiaNameServicePortTypeProxy implements org.marinespecies.aphia.v1
     if (aphiaNameServicePortType == null)
       _initAphiaNameServicePortTypeProxy();
     return aphiaNameServicePortType.matchAphiaRecordsByNames(scientificnames, marine_only);
+  }
+  
+  public org.marinespecies.aphia.v1_0.Distribution[] getAphiaDistributionsByID(int aphiaID) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaDistributionsByID(aphiaID);
+  }
+  
+  public org.marinespecies.aphia.v1_0.AphiaRank[] getAphiaTaxonRanksByID(int taxonRankID, int aphiaID) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaTaxonRanksByID(taxonRankID, aphiaID);
+  }
+  
+  public org.marinespecies.aphia.v1_0.AphiaRank[] getAphiaTaxonRanksByName(java.lang.String taxonRank, int aphiaID) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaTaxonRanksByName(taxonRank, aphiaID);
+  }
+  
+  public org.marinespecies.aphia.v1_0.AphiaRecord[] getAphiaRecordsByTaxonRankID(int taxonRankID, int belongsTo, int offset) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaRecordsByTaxonRankID(taxonRankID, belongsTo, offset);
+  }
+  
+  public org.marinespecies.aphia.v1_0.AttributeKey[] getAphiaAttributeKeysByID(int id, boolean include_children) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaAttributeKeysByID(id, include_children);
+  }
+  
+  public org.marinespecies.aphia.v1_0.AttributeValue[] getAphiaAttributeValuesByCategoryID(int id) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaAttributeValuesByCategoryID(id);
+  }
+  
+  public int[] getAphiaIDsByAttributeKeyID(int id, int offset) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaIDsByAttributeKeyID(id, offset);
+  }
+  
+  public org.marinespecies.aphia.v1_0.Attribute[] getAphiaAttributesByAphiaID(int id, boolean include_inherited) throws java.rmi.RemoteException{
+    if (aphiaNameServicePortType == null)
+      _initAphiaNameServicePortTypeProxy();
+    return aphiaNameServicePortType.getAphiaAttributesByAphiaID(id, include_inherited);
   }
   
   

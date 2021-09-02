@@ -148,9 +148,12 @@ public abstract class AuthorNameComparator {
 	 */
 	public static boolean calculateHasYear(String authorship) { 
 		boolean result = false;
-		if (authorship!=null && authorship.matches(".*[12][0-9]{3}.*") && authorship.replaceAll("[^0-9]","").length()==4) {
+		if (authorship!=null && 
+				authorship.matches("(^|.*[^0-9]+)[12][0-9]{3}([^0-9]+.*|$)") 
+			) 
+		{
 			result = true;
-		}
+		}		
 		return result;
 	}
 	

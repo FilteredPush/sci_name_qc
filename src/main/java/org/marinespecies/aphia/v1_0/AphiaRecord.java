@@ -16,6 +16,8 @@ public class AphiaRecord  implements java.io.Serializable {
 
     private java.lang.String authority;
 
+    private int taxonRankID;
+
     private java.lang.String rank;
 
     private java.lang.String status;
@@ -27,6 +29,8 @@ public class AphiaRecord  implements java.io.Serializable {
     private java.lang.String valid_name;
 
     private java.lang.String valid_authority;
+
+    private int parentNameUsageID;
 
     private java.lang.String kingdom;
 
@@ -66,12 +70,14 @@ public class AphiaRecord  implements java.io.Serializable {
            java.lang.String url,
            java.lang.String scientificname,
            java.lang.String authority,
+           int taxonRankID,
            java.lang.String rank,
            java.lang.String status,
            java.lang.String unacceptreason,
            int valid_AphiaID,
            java.lang.String valid_name,
            java.lang.String valid_authority,
+           int parentNameUsageID,
            java.lang.String kingdom,
            java.lang.String phylum,
            java.lang.String _class,
@@ -91,12 +97,14 @@ public class AphiaRecord  implements java.io.Serializable {
            this.url = url;
            this.scientificname = scientificname;
            this.authority = authority;
+           this.taxonRankID = taxonRankID;
            this.rank = rank;
            this.status = status;
            this.unacceptreason = unacceptreason;
            this.valid_AphiaID = valid_AphiaID;
            this.valid_name = valid_name;
            this.valid_authority = valid_authority;
+           this.parentNameUsageID = parentNameUsageID;
            this.kingdom = kingdom;
            this.phylum = phylum;
            this._class = _class;
@@ -128,7 +136,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the aphiaID value for this AphiaRecord.
      * 
-     * @param aphiaID the value of aphiaID to set
+     * @param aphiaID
      */
     public void setAphiaID(int aphiaID) {
         this.aphiaID = aphiaID;
@@ -148,7 +156,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the url value for this AphiaRecord.
      * 
-     * @param url the value of url to set
+     * @param url
      */
     public void setUrl(java.lang.String url) {
         this.url = url;
@@ -168,7 +176,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the scientificname value for this AphiaRecord.
      * 
-     * @param scientificname the value of scientificname to set
+     * @param scientificname
      */
     public void setScientificname(java.lang.String scientificname) {
         this.scientificname = scientificname;
@@ -188,10 +196,30 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the authority value for this AphiaRecord.
      * 
-     * @param authority the value of authority to set
+     * @param authority
      */
     public void setAuthority(java.lang.String authority) {
         this.authority = authority;
+    }
+
+
+    /**
+     * Gets the taxonRankID value for this AphiaRecord.
+     * 
+     * @return taxonRankID
+     */
+    public int getTaxonRankID() {
+        return taxonRankID;
+    }
+
+
+    /**
+     * Sets the taxonRankID value for this AphiaRecord.
+     * 
+     * @param taxonRankID
+     */
+    public void setTaxonRankID(int taxonRankID) {
+        this.taxonRankID = taxonRankID;
     }
 
 
@@ -208,7 +236,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the rank value for this AphiaRecord.
      * 
-     * @param rank the value of rank to set
+     * @param rank
      */
     public void setRank(java.lang.String rank) {
         this.rank = rank;
@@ -228,7 +256,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the status value for this AphiaRecord.
      * 
-     * @param status the value of status to set
+     * @param status
      */
     public void setStatus(java.lang.String status) {
         this.status = status;
@@ -248,7 +276,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the unacceptreason value for this AphiaRecord.
      * 
-     * @param unacceptreason the value of unacceptreason to set
+     * @param unacceptreason
      */
     public void setUnacceptreason(java.lang.String unacceptreason) {
         this.unacceptreason = unacceptreason;
@@ -268,7 +296,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the valid_AphiaID value for this AphiaRecord.
      * 
-     * @param valid the value of valid to set_AphiaID
+     * @param valid_AphiaID
      */
     public void setValid_AphiaID(int valid_AphiaID) {
         this.valid_AphiaID = valid_AphiaID;
@@ -288,7 +316,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the valid_name value for this AphiaRecord.
      * 
-     * @param valid the value of valid to set_name
+     * @param valid_name
      */
     public void setValid_name(java.lang.String valid_name) {
         this.valid_name = valid_name;
@@ -308,10 +336,30 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the valid_authority value for this AphiaRecord.
      * 
-     * @param valid the value of valid to set_authority
+     * @param valid_authority
      */
     public void setValid_authority(java.lang.String valid_authority) {
         this.valid_authority = valid_authority;
+    }
+
+
+    /**
+     * Gets the parentNameUsageID value for this AphiaRecord.
+     * 
+     * @return parentNameUsageID
+     */
+    public int getParentNameUsageID() {
+        return parentNameUsageID;
+    }
+
+
+    /**
+     * Sets the parentNameUsageID value for this AphiaRecord.
+     * 
+     * @param parentNameUsageID
+     */
+    public void setParentNameUsageID(int parentNameUsageID) {
+        this.parentNameUsageID = parentNameUsageID;
     }
 
 
@@ -328,7 +376,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the kingdom value for this AphiaRecord.
      * 
-     * @param kingdom the value of kingdom to set
+     * @param kingdom
      */
     public void setKingdom(java.lang.String kingdom) {
         this.kingdom = kingdom;
@@ -348,7 +396,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the phylum value for this AphiaRecord.
      * 
-     * @param phylum the value of phylum to set
+     * @param phylum
      */
     public void setPhylum(java.lang.String phylum) {
         this.phylum = phylum;
@@ -388,7 +436,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the order value for this AphiaRecord.
      * 
-     * @param order the value of order to set
+     * @param order
      */
     public void setOrder(java.lang.String order) {
         this.order = order;
@@ -408,7 +456,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the family value for this AphiaRecord.
      * 
-     * @param family the value of family to set
+     * @param family
      */
     public void setFamily(java.lang.String family) {
         this.family = family;
@@ -428,7 +476,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the genus value for this AphiaRecord.
      * 
-     * @param genus the value of genus to set
+     * @param genus
      */
     public void setGenus(java.lang.String genus) {
         this.genus = genus;
@@ -448,7 +496,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the citation value for this AphiaRecord.
      * 
-     * @param citation the value of citation to set
+     * @param citation
      */
     public void setCitation(java.lang.String citation) {
         this.citation = citation;
@@ -468,7 +516,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the lsid value for this AphiaRecord.
      * 
-     * @param lsid the value of lsid to set
+     * @param lsid
      */
     public void setLsid(java.lang.String lsid) {
         this.lsid = lsid;
@@ -488,7 +536,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the isMarine value for this AphiaRecord.
      * 
-     * @param isMarine the value of isMarine to set
+     * @param isMarine
      */
     public void setIsMarine(int isMarine) {
         this.isMarine = isMarine;
@@ -508,7 +556,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the isBrackish value for this AphiaRecord.
      * 
-     * @param isBrackish the value of isBrackish to set
+     * @param isBrackish
      */
     public void setIsBrackish(int isBrackish) {
         this.isBrackish = isBrackish;
@@ -528,7 +576,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the isFreshwater value for this AphiaRecord.
      * 
-     * @param isFreshwater the value of isFreshwater to set
+     * @param isFreshwater
      */
     public void setIsFreshwater(int isFreshwater) {
         this.isFreshwater = isFreshwater;
@@ -548,7 +596,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the isTerrestrial value for this AphiaRecord.
      * 
-     * @param isTerrestrial the value of isTerrestrial to set
+     * @param isTerrestrial
      */
     public void setIsTerrestrial(int isTerrestrial) {
         this.isTerrestrial = isTerrestrial;
@@ -568,7 +616,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the isExtinct value for this AphiaRecord.
      * 
-     * @param isExtinct the value of isExtinct to set
+     * @param isExtinct
      */
     public void setIsExtinct(int isExtinct) {
         this.isExtinct = isExtinct;
@@ -588,7 +636,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the match_type value for this AphiaRecord.
      * 
-     * @param match the value of match to set_type
+     * @param match_type
      */
     public void setMatch_type(java.lang.String match_type) {
         this.match_type = match_type;
@@ -608,7 +656,7 @@ public class AphiaRecord  implements java.io.Serializable {
     /**
      * Sets the modified value for this AphiaRecord.
      * 
-     * @param modified the value of modified to set
+     * @param modified
      */
     public void setModified(java.lang.String modified) {
         this.modified = modified;
@@ -636,6 +684,7 @@ public class AphiaRecord  implements java.io.Serializable {
             ((this.authority==null && other.getAuthority()==null) || 
              (this.authority!=null &&
               this.authority.equals(other.getAuthority()))) &&
+            this.taxonRankID == other.getTaxonRankID() &&
             ((this.rank==null && other.getRank()==null) || 
              (this.rank!=null &&
               this.rank.equals(other.getRank()))) &&
@@ -652,6 +701,7 @@ public class AphiaRecord  implements java.io.Serializable {
             ((this.valid_authority==null && other.getValid_authority()==null) || 
              (this.valid_authority!=null &&
               this.valid_authority.equals(other.getValid_authority()))) &&
+            this.parentNameUsageID == other.getParentNameUsageID() &&
             ((this.kingdom==null && other.getKingdom()==null) || 
              (this.kingdom!=null &&
               this.kingdom.equals(other.getKingdom()))) &&
@@ -708,6 +758,7 @@ public class AphiaRecord  implements java.io.Serializable {
         if (getAuthority() != null) {
             _hashCode += getAuthority().hashCode();
         }
+        _hashCode += getTaxonRankID();
         if (getRank() != null) {
             _hashCode += getRank().hashCode();
         }
@@ -724,6 +775,7 @@ public class AphiaRecord  implements java.io.Serializable {
         if (getValid_authority() != null) {
             _hashCode += getValid_authority().hashCode();
         }
+        _hashCode += getParentNameUsageID();
         if (getKingdom() != null) {
             _hashCode += getKingdom().hashCode();
         }
@@ -794,6 +846,12 @@ public class AphiaRecord  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("taxonRankID");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "taxonRankID"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("rank");
         elemField.setXmlName(new javax.xml.namespace.QName("", "rank"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -827,6 +885,12 @@ public class AphiaRecord  implements java.io.Serializable {
         elemField.setFieldName("valid_authority");
         elemField.setXmlName(new javax.xml.namespace.QName("", "valid_authority"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("parentNameUsageID");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "parentNameUsageID"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
