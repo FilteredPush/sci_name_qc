@@ -97,14 +97,93 @@ public abstract class AuthorNameComparator {
 		return result;
 	}
 	
-	public static Map<String,Boolean> detectApplicableCode(String authorship) { 
-		return detectApplicableCode(authorship, null, null);
+	public static Map<String,Boolean> detectApplicableCode(String authorship,boolean withCertainty) {
+		if (withCertainty) { 
+			return detectApplicableCodeWithCertainty(authorship, null, null);
+		} else { 
+			return detectApplicableCode(authorship, null, null);
+		}
 	}
 	
-	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom) { 
-		return detectApplicableCode(authorship, kingdom, null);
+	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom, boolean withCertainty) { 
+		if (withCertainty) { 
+			return detectApplicableCodeWithCertainty(authorship, kingdom, null);
+		} else { 
+			return detectApplicableCode(authorship, kingdom, null);
+		}
 	}
 	
+	/** Detect, if possible, which code is applicable for some combination of kingdom, phylum, and 
+	 * authorship.  Will only return one applicable code, and will return false/false for 
+	 * simple strings that could fit in either code.
+	 * 
+	 * @param authorship authorship string to test, for code
+	 * @param kingdom the kingdom to which the authorship string belongs, has primacy
+	 *   over other values, Animalia->ICZN, Fungi|Plantae->ICNafp
+	 * @param phylum not implemented yet.
+	 * @return a map containing keys ICZN and ICNafp with true/false values for each for detection
+	 *   of an applicable code.
+	 */
+	public static Map<String,Boolean> detectApplicableCodeWithCertainty(String authorship, String kingdom, String phylum) { 
+		HashMap<String,Boolean> result = new HashMap<String,Boolean>();
+		result.put("ICZN", false);
+		result.put("ICNafp", false);
+		boolean done = false;
+		if (kingdom==null) { kingdom = ""; } 
+		if (phylum==null) { phylum = ""; } 
+		
+		if (!done && kingdom.trim().equalsIgnoreCase("Animalia")) { result.put("ICZN", true); done=true; }  
+		if (!done && kingdom.trim().equalsIgnoreCase("Fungi")) { result.put("ICNafp", true); done=true; }  
+		if (!done && kingdom.trim().equalsIgnoreCase("Plantae")) { result.put("ICNafp", true); done=true; }  
+		
+		if (!done && authorship!=null) { 
+			authorship = authorship.trim();
+			boolean iczn = AuthorNameComparator.consistentWithICZNAuthor(authorship);
+			boolean icnafp = AuthorNameComparator.consistentWithICNapfAuthor(authorship);
+			if (iczn == true && icnafp == false) {
+				result.put("ICZN", true);
+				done = true;
+			} else if (iczn == false && icnafp == true) {
+				result.put("ICNafp", true);
+				done = true;
+			} else {
+				if (authorship.startsWith("(") && authorship.endsWith(")")) {
+					// when plant authors contain parenthesies, at least one follows the
+					// parenthesies.
+					result.put("ICZN", true);
+					done = true;
+				}
+				if (authorship.contains(" ex ") || authorship.contains(":")) {
+					// only plant names should contain ex authors or sanctioning authors, designated
+					// by these characters.
+					result.put("ICNafp", true);
+					done = true;
+				}
+				if (authorship.startsWith("(") && authorship.contains(")") && authorship.matches(".*[a-zA-Z.]+$")) {
+					// when plant authors contain parenthesies at least one follows the parenthesis.
+					result.put("ICNafp", true);
+					done = true;
+				}
+			}
+		}		
+		if (!done && authorship!=null) { 
+			// further checks could go here.
+		}
+		
+		return result;
+	}
+	
+	/** Detect, if possible, which code is applicable for some combination of kingdom, phylum, and 
+	 * authorship.  May return true/true if either code could apply, as in just a single author
+	 * name as the authorship string.
+	 * 
+	 * @param authorship authorship string to test, for code
+	 * @param kingdom the kingdom to which the authorship string belongs, has primacy
+	 *   over other values, Animalia->ICZN, Fungi|Plantae->ICNafp
+	 * @param phylum not implemented yet.
+	 * @return a map containing keys ICZN and ICNafp with true/false values for each for detection
+	 *   of an applicable code.
+	 */
 	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom, String phylum) { 
 		HashMap<String,Boolean> result = new HashMap<String,Boolean>();
 		result.put("ICZN", false);
@@ -118,25 +197,57 @@ public abstract class AuthorNameComparator {
 		if (!done && kingdom.trim().equalsIgnoreCase("Plantae")) { result.put("ICNafp", true); done=true; }  
 		
 		if (!done && authorship!=null) { 
-			if (authorship.startsWith("(") && authorship.endsWith(")")) { 
-				// when plant authors contain parenthesies, at least one follows the parenthesies.
-				result.put("ICZN",true);
+			authorship = authorship.trim();
+			boolean iczn = AuthorNameComparator.consistentWithICZNAuthor(authorship);
+			boolean icnafp = AuthorNameComparator.consistentWithICNapfAuthor(authorship);
+			if (iczn == true && icnafp == false) {
+				result.put("ICZN", true);
 				done = true;
-			}
-			if (authorship.contains(" ex ") || authorship.contains(":")) { 
-				// only plant names should contain ex authors or sanctioning authors, designated by these characters.
-				result.put("ICNafp",true);
+			} else if (iczn == false && icnafp == true) {
+				result.put("ICNafp", true);
 				done = true;
+			} else {
+				if (authorship.startsWith("(") && authorship.endsWith(")")) {
+					// when plant authors contain parenthesies, at least one follows the
+					// parenthesies.
+					result.put("ICZN", true);
+					done = true;
+				}
+				if (authorship.contains(" ex ") || authorship.contains(":")) {
+					// only plant names should contain ex authors or sanctioning authors, designated
+					// by these characters.
+					result.put("ICNafp", true);
+					done = true;
+				}
+				if (authorship.startsWith("(") && authorship.contains(")") && authorship.matches(".*[a-zA-Z.]+$")) {
+					// when plant authors contain parenthesies at least one follows the parenthesis.
+					result.put("ICNafp", true);
+					done = true;
+				}
 			}
-			if (authorship.startsWith("(") && authorship.contains(")") && authorship.matches("[a-zA-Z.]$") && authorship.matches(") [A-Z]")) {
-				// when plant authors contain parenthesies at least one follows the parenthesis.
-				result.put("ICNafp",true);
-				done = true;
+			if (!done) { 
+				if (authorship.matches("^[a-zA-Z. &]$")) { 
+					result.put("ICNafp", true);
+					result.put("ICZN", true);
+				} else if (iczn==true && icnafp == true) { 
+					result.put("ICNafp", true);
+					result.put("ICZN", true);
+				}
 			}
-		}		
-		
+			if (!done) {
+				if (authorship.equals("")) { 
+					result.put("ICNafp", true);
+					result.put("ICZN", true);
+				}
+			}
+		} else if (!done) {
+			// authorship is null, and taxonomy didn't indicate, so return true/true
+			result.put("ICNafp", true);
+			result.put("ICZN", true);
+		}
+ 		System.out.println(result.toString());
 		return result;
-	}
+	}	
 	
 	/**
 	 * Test to see if an authorship string appears to contain a year 
@@ -186,11 +297,15 @@ public abstract class AuthorNameComparator {
 				// ex author, botanical
 				result = false;
 			}
+			if (authorship.contains(" emend. ")) {
+				// emending author, botanical
+				result = false;
+			}
 			if (authorship.contains(":")) {
 				// sanctioning author, fungal
 				result = false;  
 			}
-			if (authorship.matches("\\(.*\\)[ A-Za-z]+")) { 
+			if (authorship.matches("\\(.*\\)[ A-Za-z.]+")) { 
 				// string after parenthesies, botanical
 				result = false;
 			}
@@ -221,12 +336,32 @@ public abstract class AuthorNameComparator {
 		return result;
 	}
 	
+	
+	/** Return a measure of case insensitive similarity between two authorship strings, 
+	 * ignoring commas and spaces, in a range of 0 (no similarity) to 1 (exact same 
+	 * strings), using a measure of the string edit distance scaled to the length 
+	 * difference of the two strings.  
+	 * 
+	 * @param anAuthor one authorship string
+	 * @param toOtherAuthor the second authorship string to make the comparason with.
+	 * @return a double in the range 0 to 1 where 0 is no similarity and 1 is an exact match.
+	 */
 	public static double calulateSimilarityOfAuthor(String anAuthor, String toOtherAuthor) { 
 		String au = toOtherAuthor.toLowerCase().replaceAll("[, ]", "");
 		String au1 = anAuthor.toLowerCase().replaceAll("[, ]", "");
 		return AuthorNameComparator.stringSimilarity(au, au1);
 	}
 
+	/** Return a measure of case insensitive similarity between just the alphabetic portion 
+	 * of two authorship strings, ignoring commas, spaces, numbers, punctuation, and
+	 * parentheses, in a range of 0 (no similarity) to 1 (no difference),
+	 * using a measure of the string edit distance scaled to the length 
+	 * difference of the two strings.  
+	 * 
+	 * @param anAuthor one authorship string
+	 * @param toOtherAuthor the second authorship string to make the comparason with.
+	 * @return a double in the range 0 to 1 where 0 is no similarity and 1 is an exact match.
+	 */
 	public static double calulateSimilarityOfAuthorAlpha(String anAuthor, String toOtherAuthor) { 
 		String au = toOtherAuthor.toLowerCase().replaceAll("[^A-Za-z]", "");
 		String au1 = anAuthor.toLowerCase().replaceAll("[^A-Za-z]", "");
@@ -243,7 +378,7 @@ public abstract class AuthorNameComparator {
 	 * @return a double in the range 0 to 1.
 	 */
 	public static double stringSimilarity(String string1, String string2) {
-		double result = 0d;
+		double result;
 		String longer = string1;
 		String shorter = string2;
 		if (string1.length() < string2.length()) {
