@@ -42,6 +42,8 @@ import scala.collection.immutable.List;
 import org.gbif.api.model.checklistbank.ParsedName;
 import org.gbif.nameparser.NameParser;
 
+import edu.harvard.mcz.nametools.LookupResult;
+import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
 
 /**
@@ -60,7 +62,6 @@ public class SciNameUtils {
 	
 	public static String simpleWoRMSGuidLookup(String scientificName, String scientificNameAuthorship) { 
 		String result = "";
-		//Result parse = ScientificNameParser.instance().fromString("scientificName");
 		NameParser parser = new NameParser();
 		logger.debug(scientificName);
 		logger.debug(scientificNameAuthorship);
@@ -70,7 +71,7 @@ public class SciNameUtils {
 			String wormsGuid = WoRMSService.simpleNameSearch(parse.canonicalName(),scientificNameAuthorship,true);
 			result = wormsGuid;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			logger.error(e);
 			e.printStackTrace();
 		}
 		logger.debug(result);
@@ -78,15 +79,13 @@ public class SciNameUtils {
 		return result;
 	}
 	
-	public static String simpleGBIRGuidLookup(String scientificName, String scientificNameAuthorship) { 
+	public static String simpleGBIFGuidLookup(String scientificName, String scientificNameAuthorship) { 
 		String result = "";
-		//Result parse = ScientificNameParser.instance().fromString("scientificName");
 		NameParser parser = new NameParser();
 		try {
 			ParsedName parse = parser.parse(scientificName);
 			GBIFService service = new GBIFService();
 			NameUsage nameToTest = new NameUsage();
-			//nameToTest.setCanonicalName(parse.canonized(true).get());
 			nameToTest.setCanonicalName(parse.canonicalName());
 			nameToTest.setOriginalAuthorship(scientificNameAuthorship);
 			nameToTest.setOriginalScientificName(scientificName);
@@ -95,7 +94,7 @@ public class SciNameUtils {
 			   result = gbifGuid;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			logger.error(e);
 			e.printStackTrace();
 		}
 		
@@ -105,6 +104,23 @@ public class SciNameUtils {
 
 	public static void main(String[] args) { 
 		System.out.println(simpleWoRMSGuidLookup("Buccinum canetae","Clench & Aguayo"));
+		
+		LookupResult comparison;
+		try {
+			comparison = WoRMSService.nameComparisonSearch("Buccinum canetae","Clench & Aguayo", false);
+			System.out.println(comparison.getMatchedName());
+			System.out.println(comparison.getNameComparison().getMatchType());
+			System.out.println(comparison.getNameComparison().getSimilarity());
+			System.out.println(comparison.getNameComparison().getMatchSeverity());
+			System.out.println(comparison.getNameComparison().getRemark());
+			System.out.println(comparison.getMatchedAuthorship());
+			System.out.println(comparison.getGuid());
+		} catch (Exception e) {
+			logger.error(e);
+			System.out.println(e.getMessage());
+		}
+		
+		System.out.println(simpleGBIFGuidLookup("Buccinum canetae","Clench & Aguayo"));
 	}
 	
 /*	

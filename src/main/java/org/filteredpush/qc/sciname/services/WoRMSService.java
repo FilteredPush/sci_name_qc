@@ -18,6 +18,7 @@
 package org.filteredpush.qc.sciname.services;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
+import edu.harvard.mcz.nametools.LookupResult;
 import edu.harvard.mcz.nametools.NameComparison;
 
 import org.apache.commons.logging.Log;
@@ -119,12 +120,51 @@ public class WoRMSService {
 
 		} catch (NullPointerException ex) {
 			// no match found
+			logger.debug("No match found");
 			id = null;
 		} catch (RemoteException e) {
 			throw new Exception("WoRMSService failed to access WoRMS Aphia service for " + taxon + ". " +e.getMessage());
 		} 
-
 		return id;
 	}
 
+	public static LookupResult nameComparisonSearch(String taxon, String author, boolean marineOnly) throws Exception {
+		LookupResult result  = null;
+
+		AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+
+		try {
+			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, marineOnly, 1);	
+			if (resultsArr!=null || resultsArr.length==1) { 
+				List<AphiaRecord> results = Arrays.asList(resultsArr);
+				Iterator<AphiaRecord> i = results.iterator();
+				logger.debug(resultsArr.length);
+				while (i.hasNext()) { 
+					AphiaRecord ar = i.next();
+					if (ar !=null && ar.getScientificname()!=null && taxon!=null && ar.getScientificname().equalsIgnoreCase(taxon)) {
+						logger.debug(ar.getScientificname());
+						logger.debug(ar.getAuthority());
+						
+						String foundId = ar.getLsid();
+						String foundTaxon = ar.getScientificname();
+						String foundAuthor = ar.getAuthority();
+						AuthorNameComparator comparator = AuthorNameComparator.authorNameComparatorFactory(author, null);
+						result = new LookupResult(comparator.compare(author, foundAuthor),foundTaxon, foundAuthor,foundId, WoRMSService.class);
+						
+						String match = result.getNameComparison().getMatchType();
+						logger.debug(taxon + ":" + author + " " + match + " " + foundAuthor);
+					}	
+				}
+			}
+
+		} catch (NullPointerException ex) {
+			// no match found
+			logger.debug("No match found");
+			result = new LookupResult();
+		} catch (RemoteException e) {
+			throw new Exception("WoRMSService failed to access WoRMS Aphia service for " + taxon + ". " +e.getMessage());
+		} 
+		return result;
+	}
+	
 }
