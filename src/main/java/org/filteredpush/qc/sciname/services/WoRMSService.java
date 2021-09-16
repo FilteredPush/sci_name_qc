@@ -149,7 +149,8 @@ public class WoRMSService {
 						String foundTaxon = ar.getScientificname();
 						String foundAuthor = ar.getAuthority();
 						AuthorNameComparator comparator = AuthorNameComparator.authorNameComparatorFactory(author, null);
-						result = new LookupResult(comparator.compare(author, foundAuthor),foundTaxon, foundAuthor,foundId, WoRMSService.class);
+						NameComparison comp = comparator.compare(author, foundAuthor);
+						result = new LookupResult(comp,foundTaxon, foundAuthor,foundId, WoRMSService.class);
 						
 						String match = result.getNameComparison().getMatchType();
 						logger.debug(taxon + ":" + author + " " + match + " " + foundAuthor);

@@ -20,8 +20,15 @@ package org.filteredpush.qc.sciname;
 
 import java.util.Iterator;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.BasicConfigurator;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.WoRMSService;
 /*
@@ -103,6 +110,43 @@ public class SciNameUtils {
 	
 
 	public static void main(String[] args) { 
+		
+		CommandLineParser parser = new DefaultParser();
+		
+		Options options = new Options();
+		options.addOption( "f", "file", true, "input csv file from which to lookup names" );
+		options.addOption("o","output", true, "output file into which to write results of lookup");
+		options.addOption("t","test", false, "test connectivity with an example name");
+		options.addOption("h","help", false, "print this message");
+		
+		try {
+			CommandLine cmd = parser.parse( options, args);
+			
+			if (cmd.hasOption("test")) { 
+				doTest();
+			}
+			if (cmd.hasOption("help")) { 
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp( "SciNameUtils", options );
+			}
+			if (cmd.hasOption("file")) { 
+				String infile = cmd.getOptionValue("file");
+				logger.debug(infile);
+				if (cmd.hasOption("output")) { 
+				String outfile = cmd.getOptionValue("file");
+					logger.debug(outfile);
+				}
+			}
+		} catch (ParseException e1) {
+			logger.error(e1);
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp( "SciNameUtils", options );
+		}
+		
+
+	}
+
+	private static void doTest() { 
 		System.out.println(simpleWoRMSGuidLookup("Buccinum canetae","Clench & Aguayo"));
 		
 		LookupResult comparison;
@@ -111,13 +155,14 @@ public class SciNameUtils {
 			System.out.println(comparison.getMatchedName());
 			System.out.println(comparison.getNameComparison().getMatchType());
 			System.out.println(comparison.getNameComparison().getSimilarity());
-			System.out.println(comparison.getNameComparison().getMatchSeverity());
-			System.out.println(comparison.getNameComparison().getRemark());
+			//System.out.println(comparison.getNameComparison().getMatchSeverity());
+			//System.out.println(comparison.getNameComparison().getRemark());
 			System.out.println(comparison.getMatchedAuthorship());
 			System.out.println(comparison.getGuid());
 		} catch (Exception e) {
 			logger.error(e);
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		
 		System.out.println(simpleGBIFGuidLookup("Buccinum canetae","Clench & Aguayo"));

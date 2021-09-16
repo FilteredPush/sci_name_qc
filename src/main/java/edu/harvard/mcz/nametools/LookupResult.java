@@ -58,7 +58,7 @@ public class LookupResult {
 	 */
 	public LookupResult(NameComparison nameComparison, String matchedName, String matchedAuthorship, String guid, Class<?> service) throws ExpectationsNotMetException {
 		if (nameComparison!=null) { 
-			if (!matchedName.equals(nameComparison.getNameTwo())) { 
+			if (!matchedAuthorship.equals(nameComparison.getNameTwo())) { 
 				throw new ExpectationsNotMetException("matchedName and nameComparison.nameTwo are not the same");
 			}
 		}

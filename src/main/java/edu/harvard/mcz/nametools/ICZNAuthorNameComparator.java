@@ -126,8 +126,14 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 					if (!parenSame && (similarityYear<1d && similarityAlpha==1d)) { 
 						result.setMatchType(NameComparison.MATCH_PARENYEARDIFFER);
 					}
+					if (result.getMatchType()!=null && result.getRemark()==null) { 
+						result.setRemark(result.getMatchType());
+					}
 				}
 			}
+		}
+		if (result.getRemark()==null) { 
+			result.setRemark(result.getMatchType());
 		}
 		return result;
 	}	
