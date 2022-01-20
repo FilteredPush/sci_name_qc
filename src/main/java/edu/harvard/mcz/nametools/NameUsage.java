@@ -22,12 +22,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.filteredpush.qc.sciname.services.GBIFService;
-import org.gbif.api.model.checklistbank.ParsedName;
 import org.gbif.api.model.common.LinneanClassification;
 import org.gbif.api.util.ClassificationUtils;
 import org.gbif.api.vocabulary.Rank;
-import org.gbif.nameparser.NameParser;
-import org.gbif.nameparser.UnparsableException;
+import org.gbif.nameparser.NameParserGBIF;
+import org.gbif.nameparser.api.NomCode;
+import org.gbif.nameparser.api.ParsedName;
+import org.gbif.nameparser.api.UnparsableNameException;
 import org.json.simple.JSONObject;
 import org.marinespecies.aphia.v1_0.AphiaRecord;
 
@@ -761,6 +762,7 @@ public class NameUsage implements LinneanClassification {
 	 * authorship string, sensitive to relevant nomenclatural code.
 	 * Remove authorship from scientific name if present.
 	 */
+	@SuppressWarnings("deprecation")
 	public void fixAuthorship() { 
 		if (authorship!=null) { 
 			if (scientificName != null && scientificName.contains(authorship)) { 
@@ -791,16 +793,22 @@ public class NameUsage implements LinneanClassification {
 		
 		// Check to see if acceptedName contains the acceptedNameAuthorship.
 		if (getAcceptedName().length()>0 && getAcceptedAuthorship().length()==0 ) { 
-			NameParser parser = new NameParser();
+			NameParserGBIF parser = new NameParserGBIF();
 	        ParsedName parse = null;
 	        try {
-				parse = parser.parse(getAcceptedName());
+	        	if (kingdom!=null && kingdom.equals("Animalia")) { 
+	        		parse = parser.parse(getAcceptedName(),null,NomCode.ZOOLOGICAL);
+	        	} else if (kingdom!=null && kingdom.equals("Plantae")) { 
+	        		parse = parser.parse(getAcceptedName(),null,NomCode.BOTANICAL);
+	        	} else {
+	        		parse = parser.parse(getAcceptedName(),null,null);
+	        	}
 				if (parse!=null) { 
                    String author = parse.authorshipComplete();
 				   setAcceptedAuthorship(author);
 				   setAcceptedName(getAcceptedName().substring(0, getAcceptedName().lastIndexOf(author)).trim());
 				}
-			} catch (UnparsableException e) {
+			} catch (UnparsableNameException e) {
 				// couldn't parse
 			}	
 	                
