@@ -21,6 +21,8 @@ package edu.harvard.mcz.nametools;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.gbif.api.model.common.LinneanClassification;
 import org.gbif.api.util.ClassificationUtils;
@@ -48,6 +50,8 @@ import org.marinespecies.aphia.v1_0.AphiaRecord;
  *
  */
 public class NameUsage implements LinneanClassification { 
+	
+	private static final Log logger = LogFactory.getLog(NameUsage.class);
 	
 	private int key;  // GBIF key
 	private int acceptedKey;  // GBIF pointer to accepted name record
@@ -762,7 +766,6 @@ public class NameUsage implements LinneanClassification {
 	 * authorship string, sensitive to relevant nomenclatural code.
 	 * Remove authorship from scientific name if present.
 	 */
-	@SuppressWarnings("deprecation")
 	public void fixAuthorship() { 
 		if (authorship!=null) { 
 			if (scientificName != null && scientificName.contains(authorship)) { 
@@ -806,7 +809,10 @@ public class NameUsage implements LinneanClassification {
 				if (parse!=null) { 
                    String author = parse.authorshipComplete();
 				   setAcceptedAuthorship(author);
-				   setAcceptedName(getAcceptedName().substring(0, getAcceptedName().lastIndexOf(author)).trim());
+				   if (getAcceptedName().lastIndexOf(author) > -1) {
+					   // remove authorship string from accepted name
+				       setAcceptedName(getAcceptedName().substring(0, getAcceptedName().lastIndexOf(author)).trim());
+				   }
 				}
 			} catch (UnparsableNameException e) {
 				// couldn't parse
