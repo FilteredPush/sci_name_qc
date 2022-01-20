@@ -28,7 +28,7 @@ public class AphiaNameServiceLocator extends org.apache.axis.client.Service impl
     }
 
     // Use to get a proxy class for AphiaNameServicePort
-    private java.lang.String AphiaNameServicePort_address = "http://marinespecies.org/aphia.php?p=soap";
+    private java.lang.String AphiaNameServicePort_address = "https://marinespecies.org/aphia.php?p=soap";
 
     public java.lang.String getAphiaNameServicePortAddress() {
         return AphiaNameServicePort_address;
