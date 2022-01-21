@@ -1,0 +1,204 @@
+/**
+ * Copyright 2022 President and Fellows of Harvard College
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
+package edu.harvard.mcz.nametools.test;
+
+import static org.junit.Assert.*;
+
+import org.filteredpush.qc.sciname.DwCSciNameDQ;
+import org.filteredpush.qc.sciname.EnumSciNameSourceAuthority;
+import org.junit.Test;
+
+/**
+ * @author mole
+ *
+ */
+public class TestDwCSciNameDQ {
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#DwCSciNameDQ()}.
+	 * also tests {@link org.filteredpush.qc.sciname.DwCSciNameDQ#getSourceAuthority()}.
+	 */
+	@Test
+	public void testDwCSciNameDQ() {
+		DwCSciNameDQ testInstance = new DwCSciNameDQ();
+		assertEquals(EnumSciNameSourceAuthority.GBIF, testInstance.getSourceAuthority());
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#DwCSciNameDQ(org.filteredpush.qc.sciname.EnumSciNameSourceAuthority)}.
+	 * also tests {@link org.filteredpush.qc.sciname.DwCSciNameDQ#getSourceAuthority()}.
+	 */
+	@Test
+	public void testDwCSciNameDQEnumSciNameSourceAuthority() {
+		DwCSciNameDQ testInstance = new DwCSciNameDQ(EnumSciNameSourceAuthority.WORMS);
+		assertEquals(EnumSciNameSourceAuthority.WORMS, testInstance.getSourceAuthority());
+		DwCSciNameDQ testInstance2 = new DwCSciNameDQ(EnumSciNameSourceAuthority.GBIF);
+		assertEquals(EnumSciNameSourceAuthority.GBIF, testInstance2.getSourceAuthority());
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPhylumNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationPhylumNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationFamilyNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationFamilyNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationScientificnameNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#amendmentTaxonidFromTaxon(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testAmendmentTaxonidFromTaxon() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonAmbiguous() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#amendmentScientificnameFromTaxonid(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testAmendmentScientificnameFromTaxonid() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationClassNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationClassNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationKingdomNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationKingdomNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameEmpty(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationScientificnameEmpty() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationOrderNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationOrderNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPolynomialInconsistent(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationPolynomialInconsistent() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonEmpty(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonEmpty() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonidEmpty(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonidEmpty() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonidAmbiguous(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonidAmbiguous() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationGenusNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationGenusNotfound() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationClassificationAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationClassificationAmbiguous() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonrankEmpty(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonrankEmpty() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonrankNotstandard(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonrankNotstandard() {
+		fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#amendmentTaxonrankStandardized(java.lang.String)}.
+	 */
+	@Test
+	public void testAmendmentTaxonrankStandardized() {
+		fail("Not yet implemented");
+	}
+
+}

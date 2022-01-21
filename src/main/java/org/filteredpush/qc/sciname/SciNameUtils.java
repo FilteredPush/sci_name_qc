@@ -48,6 +48,24 @@ public class SciNameUtils {
 		
 	} 
 	
+    /**
+     * Does a string contain a non-blank value.
+     * 
+     * @param aString to check
+     * @return true if the string is null, is an empty string, 
+     *     or contains only whitespace.
+     */
+    public static boolean isEmpty(String aString)  {
+    	boolean result = true;
+    	if (aString != null && aString.trim().length()>0) { 
+    		// TG2, do not consider string representations of NULL as null, consider as data.
+    		//if (!aString.trim().toUpperCase().equals("NULL")) { 
+    		   result = false;
+    		//}
+    	}
+    	return result;
+    }
+	
 	public static String simpleWoRMSGuidLookup(String scientificName, String scientificNameAuthorship) { 
 		String result = "";
 		NameParserGBIF parser = new NameParserGBIF();

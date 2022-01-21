@@ -8,7 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	TestAuthorNameComparator.class, 
 	TestICZNAuthorNameComparator.class, 
-	TestICNafpAuthorNameComparator.class 
+	TestICNafpAuthorNameComparator.class,
+	TestLookupResult.class
 	})
 public class AllTests {
 
