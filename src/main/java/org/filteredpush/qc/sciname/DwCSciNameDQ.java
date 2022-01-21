@@ -320,7 +320,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("7c4b9498-a8d9-4ebb-85f1-9f200c788595")
-    public DQResponse<ComplianceValue> validationScientificnameEmpty(@ActedUpon("dwc:scientificName") String scientificName) {
+    public static DQResponse<ComplianceValue> validationScientificnameEmpty(@ActedUpon("dwc:scientificName") String scientificName) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // COMPLIANT if dwc:scientificName is not EMPTY; otherwise 
@@ -415,7 +415,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
-    public DQResponse<ComplianceValue> validationTaxonEmpty(@ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:taxonConceptID") String taxonConceptID, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:scientificNameID") String scientificNameID, @ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:parentNameUsageID") String parentNameUsageID, @ActedUpon("dwc:subgenus") String subgenus, @ActedUpon("dwc:higherClassification") String higherClassification, @ActedUpon("dwc:vernacularName") String vernacularName, @ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, @ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:specificEpithet") String specificEpithet, @ActedUpon("dwc:order") String order) {
+    public static DQResponse<ComplianceValue> validationTaxonEmpty(@ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:taxonConceptID") String taxonConceptID, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:scientificNameID") String scientificNameID, @ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:parentNameUsageID") String parentNameUsageID, @ActedUpon("dwc:subgenus") String subgenus, @ActedUpon("dwc:higherClassification") String higherClassification, @ActedUpon("dwc:vernacularName") String vernacularName, @ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, @ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:specificEpithet") String specificEpithet, @ActedUpon("dwc:order") String order) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         //TODO:  Implement specification
@@ -435,7 +435,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("401bf207-9a55-4dff-88a5-abcd58ad97fa")
-    public DQResponse<ComplianceValue> validationTaxonidEmpty(@ActedUpon("dwc:taxonID") String taxonID) {
+    public static DQResponse<ComplianceValue> validationTaxonidEmpty(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT 
@@ -541,7 +541,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("14da5b87-8304-4b2b-911d-117e3c29e890")
-    public DQResponse<ComplianceValue> validationTaxonrankEmpty(@ActedUpon("dwc:taxonRank") String taxonRank) {
+    public static DQResponse<ComplianceValue> validationTaxonrankEmpty(@ActedUpon("dwc:taxonRank") String taxonRank) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
         
         // COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT 

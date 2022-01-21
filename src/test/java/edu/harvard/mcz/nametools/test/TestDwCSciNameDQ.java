@@ -17,6 +17,9 @@ package edu.harvard.mcz.nametools.test;
 
 import static org.junit.Assert.*;
 
+import org.datakurator.ffdq.api.DQResponse;
+import org.datakurator.ffdq.api.result.ComplianceValue;
+import org.datakurator.ffdq.model.ResultState;
 import org.filteredpush.qc.sciname.DwCSciNameDQ;
 import org.filteredpush.qc.sciname.EnumSciNameSourceAuthority;
 import org.junit.Test;
@@ -142,6 +145,12 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonEmpty() {
+		DQResponse<ComplianceValue> result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty("class", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 		fail("Not yet implemented");
 	}
 
@@ -182,7 +191,15 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonrankEmpty() {
-		fail("Not yet implemented");
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonrankEmpty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		result = DwCSciNameDQ.validationTaxonrankEmpty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		result = DwCSciNameDQ.validationTaxonrankEmpty("species");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 	}
 
 	/**
