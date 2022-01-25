@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License. 
  */
-package edu.harvard.mcz.nametools.test;
+package org.filteredpush.qc.sciname;
 
 import static org.junit.Assert.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.api.result.ComplianceValue;
 import org.datakurator.ffdq.model.ResultState;
-import org.filteredpush.qc.sciname.DwCSciNameDQ;
-import org.filteredpush.qc.sciname.EnumSciNameSourceAuthority;
 import org.junit.Test;
 
 /**
@@ -30,6 +30,8 @@ import org.junit.Test;
  */
 public class TestDwCSciNameDQ {
 
+	private static final Log logger = LogFactory.getLog(TestDwCSciNameDQ.class);
+	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#DwCSciNameDQ()}.
 	 * also tests {@link org.filteredpush.qc.sciname.DwCSciNameDQ#getSourceAuthority()}.
@@ -159,7 +161,20 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonidEmpty() {
-		fail("Not yet implemented");
+		// COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT
+		
+		String taxonId = "foo";
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidEmpty(taxonId);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonId = "";
+		result = DwCSciNameDQ.validationTaxonidEmpty(taxonId);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+		
 	}
 
 	/**
@@ -191,6 +206,8 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonrankEmpty() {
+		//COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT 
+		
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonrankEmpty(null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
