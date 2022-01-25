@@ -123,7 +123,21 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationScientificnameEmpty() {
-		fail("Not yet implemented");
+		
+		// COMPLIANT if dwc:scientificName is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		String scientificName = "Murex pecten";
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationScientificnameEmpty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "";
+		result = DwCSciNameDQ.validationScientificnameEmpty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+
 	}
 
 	/**

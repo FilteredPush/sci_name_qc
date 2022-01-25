@@ -319,7 +319,7 @@ public class DwCSciNameDQ {
      * @param scientificName the provided dwc:scientificName to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("7c4b9498-a8d9-4ebb-85f1-9f200c788595")
+    @Provides("urn:uuid:7c4b9498-a8d9-4ebb-85f1-9f200c788595")
     public static DQResponse<ComplianceValue> validationScientificnameEmpty(@ActedUpon("dwc:scientificName") String scientificName) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
@@ -434,7 +434,7 @@ public class DwCSciNameDQ {
      * @param taxonID the provided dwc:taxonID to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("401bf207-9a55-4dff-88a5-abcd58ad97fa")
+    @Provides("urn:uuid:401bf207-9a55-4dff-88a5-abcd58ad97fa")
     public static DQResponse<ComplianceValue> validationTaxonidEmpty(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
@@ -540,7 +540,7 @@ public class DwCSciNameDQ {
      * @param taxonRank the provided dwc:taxonRank to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("14da5b87-8304-4b2b-911d-117e3c29e890")
+    @Provides("urn:uuid:14da5b87-8304-4b2b-911d-117e3c29e890")
     public static DQResponse<ComplianceValue> validationTaxonrankEmpty(@ActedUpon("dwc:taxonRank") String taxonRank) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
         
