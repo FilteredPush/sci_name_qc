@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.SciNameUtils;
 import org.gbif.api.vocabulary.TaxonomicStatus;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -199,13 +200,14 @@ public class GBIFService {
 	
 	public static List<NameUsage> lookupGenus(String name, String targetChecklist, int limit) throws IOException { 
 		List<NameUsage> returnvalue = new ArrayList<NameUsage>();
-		StringBuilder result = new StringBuilder();
-		String datasetKey = "";
-		if (targetChecklist!=null) { 
-			datasetKey = "datasetKey=" + targetChecklist;
-		}
-		URL url;
-		url = new URL(GBIF_SERVICE + "/species/?name=" + URLEncoder.encode(name,"UTF-8") + "&limit=" + Integer.toString(limit) + "&" + datasetKey);
+		if (!SciNameUtils.isEmpty(name)) { 
+			StringBuilder result = new StringBuilder();
+			String datasetKey = "";
+			if (targetChecklist!=null) { 
+				datasetKey = "datasetKey=" + targetChecklist;
+			}
+			URL url;
+			url = new URL(GBIF_SERVICE + "/species/?name=" + URLEncoder.encode(name,"UTF-8") + "&limit=" + Integer.toString(limit) + "&" + datasetKey);
 			logger.debug(url.toString());
 			URLConnection connection = url.openConnection();
 			String line;
@@ -222,6 +224,7 @@ public class GBIFService {
 					returnvalue.add(usage);
 				}
 			}	
+		}
 		return returnvalue;
 	}	
 	

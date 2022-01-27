@@ -204,7 +204,26 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationGenusNotfound() {
-		fail("Not yet implemented");
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus 
+        // was found as a value at the rank of genus by the bdq:sourceAuthority 
+        //service; otherwise NOT_COMPLIANT 
+		
+		DwCSciNameDQ tester = new DwCSciNameDQ();
+	
+		DQResponse<ComplianceValue> result = tester.validationGenusNotfound(null);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = tester.validationGenusNotfound("a3555144X");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		result = tester.validationGenusNotfound("Murex");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		
 	}
 
 	/**

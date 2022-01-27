@@ -20,9 +20,11 @@ package org.filteredpush.qc.sciname.services;
 import edu.harvard.mcz.nametools.AuthorNameComparator;
 import edu.harvard.mcz.nametools.LookupResult;
 import edu.harvard.mcz.nametools.NameComparison;
+import edu.harvard.mcz.nametools.NameUsage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.SciNameUtils;
 import org.marinespecies.aphia.v1_0.AphiaNameServicePortTypeProxy;
 import org.marinespecies.aphia.v1_0.AphiaRecord;
 
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -126,6 +129,41 @@ public class WoRMSService {
 			throw new Exception("WoRMSService failed to access WoRMS Aphia service for " + taxon + ". " +e.getMessage());
 		} 
 		return id;
+	}
+	
+	public static  List<NameUsage> lookupGenus(String genus) throws RemoteException { 
+		List<NameUsage> result  = new ArrayList<NameUsage>();
+		
+		if (!SciNameUtils.isEmpty(genus)) { 
+			AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+
+			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(genus, false, false, false, 1);
+			if (resultsArr!=null && resultsArr.length>0) { 
+				List<AphiaRecord> results = Arrays.asList(resultsArr);
+				Iterator<AphiaRecord> i = results.iterator();
+				logger.debug(resultsArr.length);
+				while (i.hasNext()) { 
+					AphiaRecord ar = i.next();
+					if (ar !=null && ar.getScientificname()!=null && genus!=null 
+							&& ar.getScientificname().equalsIgnoreCase(genus)) {
+						logger.debug(ar.getScientificname());
+						logger.debug(ar.getAuthority());
+						logger.debug(ar.getTaxonRankID());
+						if (ar.getTaxonRankID()==180) { 
+							NameUsage match = new NameUsage();
+							match.setAuthorship(ar.getAuthority());
+							match.setCanonicalName(ar.getScientificname());
+							match.setGuid(ar.getLsid());
+							match.setRank("genus");
+							match.setKingdom(ar.getKingdom());
+							result.add(match);
+						}
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	public static LookupResult nameComparisonSearch(String taxon, String author, boolean marineOnly) throws Exception {

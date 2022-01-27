@@ -524,7 +524,7 @@ public class DwCSciNameDQ {
     public DQResponse<ComplianceValue> validationGenusNotfound(@ActedUpon("dwc:genus") String genus) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
         // if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus 
@@ -533,39 +533,53 @@ public class DwCSciNameDQ {
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
-		if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.GBIF)) { 
-			try {
-				List<NameUsage> matches = GBIFService.lookupGenus(genus, GBIFService.KEY_GBIFBACKBONE, 100);
-				if (matches.size()>0) { 
-					result.addComment("Exact match to provided genus found in GBIF backbone taxonomy as a genus.");
-					result.setValue(ComplianceValue.COMPLIANT);
-					result.setResultState(ResultState.RUN_HAS_RESULT);
-				} else { 
-					result.addComment("No exact match to provided genus found in GBIF backbone taxonomy as a genus.");
-					result.setValue(ComplianceValue.NOT_COMPLIANT);
-					result.setResultState(ResultState.RUN_HAS_RESULT);
-				}
-			} catch (IOException e) {
-				result.addComment("GBIF API not available:" + e.getMessage());
-				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
-			}
-		} else if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.WORMS)) {
-			try {
-				LookupResult retval = WoRMSService.nameComparisonSearch(genus, "", false);
-				// TODO: Implement
-			} catch (IOException e) {
-				result.addComment("WoRMS aphia API not available:" + e.getMessage());
-				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
-			} catch (Exception e) {
-				result.addComment("Error using WoRMS aphia API:" + e.getMessage());
-				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
-				logger.error(e.getMessage(),e);
-			}
-		} else { 
-			result.addComment("Source Authority Not Implemented.");
-			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
-		} 
-
+        if (SciNameUtils.isEmpty(genus)) { 
+        	result.addComment("No value provided for genus.");
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else { 
+        	if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.GBIF)) { 
+        		try {
+        			List<NameUsage> matches = GBIFService.lookupGenus(genus, GBIFService.KEY_GBIFBACKBONE, 100);
+        			logger.debug(matches.size());
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided genus found in GBIF backbone taxonomy as a genus.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided genus found in GBIF backbone taxonomy as a genus.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}
+        	} else if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.WORMS)) {
+        		try {
+        			List<NameUsage> matches = WoRMSService.lookupGenus(genus);
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided genus found in WoRMS as a genus.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided genus found in WoRMS as a genus.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("WoRMS aphia API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		} catch (Exception e) {
+        			result.addComment("Error using WoRMS aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}
+        	} else { 
+        		result.addComment("Source Authority Not Implemented.");
+        		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        	} 
+        }
+		
         return result;
     }
 
