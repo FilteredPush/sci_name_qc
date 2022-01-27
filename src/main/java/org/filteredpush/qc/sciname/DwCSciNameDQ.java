@@ -18,11 +18,20 @@
  */
 package org.filteredpush.qc.sciname;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.annotations.*;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.model.ResultState;
+import org.filteredpush.qc.sciname.services.GBIFService;
+import org.filteredpush.qc.sciname.services.WoRMSService;
+
+import edu.harvard.mcz.nametools.LookupResult;
+import edu.harvard.mcz.nametools.NameUsage;
+
 import org.datakurator.ffdq.api.result.*;
 
 /**
@@ -418,10 +427,38 @@ public class DwCSciNameDQ {
     public static DQResponse<ComplianceValue> validationTaxonEmpty(@ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:taxonConceptID") String taxonConceptID, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:scientificNameID") String scientificNameID, @ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:parentNameUsageID") String parentNameUsageID, @ActedUpon("dwc:subgenus") String subgenus, @ActedUpon("dwc:higherClassification") String higherClassification, @ActedUpon("dwc:vernacularName") String vernacularName, @ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, @ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:specificEpithet") String specificEpithet, @ActedUpon("dwc:order") String order) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if at least one term needed to determine the taxon 
         // of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT 
         //
+
+		if (SciNameUtils.isEmpty(taxonID) &&
+			SciNameUtils.isEmpty(kingdom) &&
+			SciNameUtils.isEmpty(phylum) &&
+			SciNameUtils.isEmpty(taxonomic_class) &&
+			SciNameUtils.isEmpty(order) &&
+			SciNameUtils.isEmpty(family) &&
+			SciNameUtils.isEmpty(genus) &&
+			SciNameUtils.isEmpty(subgenus) &&
+			SciNameUtils.isEmpty(scientificName) &&
+			SciNameUtils.isEmpty(specificEpithet) &&
+			SciNameUtils.isEmpty(infraspecificEpithet) &&
+			SciNameUtils.isEmpty(scientificNameID) &&
+			SciNameUtils.isEmpty(taxonConceptID) &&
+			SciNameUtils.isEmpty(parentNameUsageID) &&
+			SciNameUtils.isEmpty(acceptedNameUsageID) &&
+			SciNameUtils.isEmpty(originalNameUsageID) &&
+			SciNameUtils.isEmpty(higherClassification) &&
+			SciNameUtils.isEmpty(vernacularName)
+			) {
+			result.addComment("No value provided for any Taxon term.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for at least one Taxon term.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
 
         return result;
     }
@@ -496,6 +533,38 @@ public class DwCSciNameDQ {
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
+		if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.GBIF)) { 
+			try {
+				List<NameUsage> matches = GBIFService.lookupGenus(genus, GBIFService.KEY_GBIFBACKBONE, 100);
+				if (matches.size()>0) { 
+					result.addComment("Exact match to provided genus found in GBIF backbone taxonomy as a genus.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No exact match to provided genus found in GBIF backbone taxonomy as a genus.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			} catch (IOException e) {
+				result.addComment("GBIF API not available:" + e.getMessage());
+				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+			}
+		} else if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.WORMS)) {
+			try {
+				LookupResult retval = WoRMSService.nameComparisonSearch(genus, "", false);
+				// TODO: Implement
+			} catch (IOException e) {
+				result.addComment("WoRMS aphia API not available:" + e.getMessage());
+				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+			} catch (Exception e) {
+				result.addComment("Error using WoRMS aphia API:" + e.getMessage());
+				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+				logger.error(e.getMessage(),e);
+			}
+		} else { 
+			result.addComment("Source Authority Not Implemented.");
+			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+		} 
 
         return result;
     }

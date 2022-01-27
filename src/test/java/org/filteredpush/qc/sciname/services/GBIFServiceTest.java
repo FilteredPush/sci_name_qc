@@ -83,6 +83,43 @@ public class GBIFServiceTest {
 		}
 	}
 
+	@Test
+	public void testLookupGenus() {
+		try {
+			int requestedRecords = 1;
+			List<NameUsage> resultList = GBIFService.lookupGenus("Murex", GBIFService.KEY_GBIFBACKBONE,requestedRecords);
+			assertEquals(requestedRecords, resultList.size());
+			assertEquals("Murex",resultList.get(0).getCanonicalName());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IOException " + e.getMessage());
+		}	
+		try {
+			int requestedRecords = 50;
+			List<NameUsage> resultList = GBIFService.lookupGenus("Murex", GBIFService.KEY_GBIFBACKBONE,requestedRecords);
+			Iterator<NameUsage> i = resultList.iterator();
+			int murexCount = 0;
+			while (i.hasNext()) {
+				NameUsage usage = i.next();
+				logger.debug(usage.getCanonicalName() + " " + usage.getAcceptedAuthorship() + " " + usage.getTaxonomicStatus() );
+				if (usage.getTaxonomicStatus().equals(TaxonomicStatus.ACCEPTED.name()) && usage.getFamily().equals("Muricidae")) {
+					if (usage.getCanonicalName().equals("Murex")) { 
+						murexCount++;
+					}
+					if (usage.getGenus().equals("Murex")) {
+						assertEquals("Murex",usage.getCanonicalName());
+						assertEquals("Linnaeus, 1758", usage.getAcceptedAuthorship());
+					} 
+				}
+				assertEquals(GBIFService.KEY_GBIFBACKBONE,usage.getDatasetKey());
+			}
+			assertEquals(1, murexCount);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IOException " + e.getMessage());
+		}
+	}
+	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#searchForGenus(java.lang.String, java.lang.String, int)}.
 	 */

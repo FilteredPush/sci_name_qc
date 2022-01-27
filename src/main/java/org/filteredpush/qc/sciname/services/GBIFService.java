@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.gbif.api.vocabulary.TaxonomicStatus;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -184,7 +185,7 @@ public class GBIFService {
 			datasetKey = "datasetKey=" + targetChecklist;
 		}
 		URL url;
-			url = new URL(GBIF_SERVICE + "/species/search?q=" + URLEncoder.encode(name,"UTF-8") + "&rank=GENUS&limit=" + Integer.toString(limit) + "&" + datasetKey);
+			url = new URL(GBIF_SERVICE + "/species/search?q=" + URLEncoder.encode(name,"UTF-8") + "&rank=GENUS&strict=true&limit=" + Integer.toString(limit) + "&" + datasetKey);
 			logger.debug(url.toString());
 			URLConnection connection = url.openConnection();
 			String line;
@@ -194,6 +195,34 @@ public class GBIFService {
 				logger.debug(line);
 			}
 		return result.toString();
+	}	
+	
+	public static List<NameUsage> lookupGenus(String name, String targetChecklist, int limit) throws IOException { 
+		List<NameUsage> returnvalue = new ArrayList<NameUsage>();
+		StringBuilder result = new StringBuilder();
+		String datasetKey = "";
+		if (targetChecklist!=null) { 
+			datasetKey = "datasetKey=" + targetChecklist;
+		}
+		URL url;
+		url = new URL(GBIF_SERVICE + "/species/?name=" + URLEncoder.encode(name,"UTF-8") + "&limit=" + Integer.toString(limit) + "&" + datasetKey);
+			logger.debug(url.toString());
+			URLConnection connection = url.openConnection();
+			String line;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			while((line = reader.readLine()) != null) {
+				result.append(line);
+				logger.debug(line);
+			}
+			List<NameUsage> resultList = GBIFService.parseAllNameUsagesFromJSON(result.toString());
+			Iterator<NameUsage> i = resultList.iterator();
+			while (i.hasNext()) {
+				NameUsage usage = i.next();
+				if (usage.getRank().equalsIgnoreCase("GENUS") && usage.getCanonicalName().equalsIgnoreCase(name)) { 
+					returnvalue.add(usage);
+				}
+			}	
+		return returnvalue;
 	}	
 	
 	public static String fetchSynonyms(int taxonId, String targetChecklist) { 
