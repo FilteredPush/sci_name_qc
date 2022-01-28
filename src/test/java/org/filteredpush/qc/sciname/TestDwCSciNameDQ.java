@@ -90,13 +90,13 @@ public class TestDwCSciNameDQ {
 		String scientificName = "Murex pecten";
 		String taxonId = null;
 		String scientificNameAuthorship = null;
-		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
 
 		scientificName = "Vulpes vulpes";
 		taxonId = null;
 		scientificNameAuthorship = null;
-		response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
@@ -104,7 +104,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Vulpes vulpes";
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
-		response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -112,10 +112,11 @@ public class TestDwCSciNameDQ {
 		scientificName = "Vulpes vulpes";
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus)";
-		response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		
 		fail("Not yet implemented");
 	}
 

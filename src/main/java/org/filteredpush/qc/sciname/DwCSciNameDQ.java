@@ -160,49 +160,49 @@ public class DwCSciNameDQ {
      *
      * Provides: AMENDMENT_TAXONID_FROM_TAXON
      *
-     * @param taxonomic_class the provided dwc:class to evaluate
-     * @param genus the provided dwc:genus to evaluate
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
-     * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
-     * @param phylum the provided dwc:phylum to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param taxonID the provided dwc:taxonID to evaluate
+     * @param kingdom the provided dwc:kingdom to evaluate
+     * @param phylum the provided dwc:phylum to evaluate
+     * @param order the provided dwc:order to evaluate
+     * @param taxonomic_class the provided dwc:class to evaluate
+     * @param family the provided dwc:family to evaluate
+     * @param genus the provided dwc:genus to evaluate
      * @param subgenus the provided dwc:subgenus to evaluate
+     * @param scientificName the provided dwc:scientificName to evaluate
+     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
+     * @param specificEpithet the provided dwc:specificEpithet to evaluate
+     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
+     * @param taxonRank the provided dwc:taxonRank to evaluate
      * @param higherClassification the provided dwc:higherClassification to evaluate
      * @param vernacularName the provided dwc:vernacularName to evaluate
+     * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
+     * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
-     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-     * @param kingdom the provided dwc:kingdom to evaluate
-     * @param family the provided dwc:family to evaluate
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @param specificEpithet the provided dwc:specificEpithet to evaluate
-     * @param order the provided dwc:order to evaluate
      * @return DQResponse the response of type AmendmentValue to return
      */
     @Provides("431467d6-9b4b-48fa-a197-cd5379f5e889")
     public DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
-    		@Consulted("dwc:class") String taxonomic_class, 
-    		@Consulted("dwc:genus") String genus, 
-    		@Consulted("dwc:infraspecificEpithet") String infraspecificEpithet, 
-    		@Consulted("dwc:taxonConceptID") String taxonConceptID, 
-    		@Consulted("dwc:phylum") String phylum, 
-    		@Consulted("dwc:scientificNameID") String scientificNameID, 
     		@ActedUpon("dwc:taxonID") String taxonID, 
+    		@Consulted("dwc:kingdom") String kingdom, 
+    		@Consulted("dwc:phylum") String phylum, 
+    		@Consulted("dwc:class") String taxonomic_class, 
+    		@Consulted("dwc:order") String order,
+    		@Consulted("dwc:family") String family, 
+    		@Consulted("dwc:genus") String genus, 
     		@Consulted("dwc:subgenus") String subgenus, 
+    		@Consulted("dwc:scientificName") String scientificName, 
+    		@Consulted("dwc:scientificNameAuthorship") String scientificNameAuthorship, 
+    		@Consulted("dwc:specificEpithet") String specificEpithet,
+    		@Consulted("dwc:infraspecificEpithet") String infraspecificEpithet, 
+    		@Consulted("dwc:taxonRank") String taxonRank, 
     		@Consulted("dwc:higherClassification") String higherClassification, 
     		@Consulted("dwc:vernacularName") String vernacularName, 
+    		@Consulted("dwc:taxonConceptID") String taxonConceptID, 
+    		@Consulted("dwc:scientificNameID") String scientificNameID, 
     		@Consulted("dwc:originalNameUsageID") String originalNameUsageID, 
-    		@Consulted("dwc:scientificNameAuthorship") String scientificNameAuthorship, 
-    		@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID, 
-    		@Consulted("dwc:taxonRank") String taxonRank, 
-    		@Consulted("dwc:kingdom") String kingdom, 
-    		@Consulted("dwc:family") String family, 
-    		@Consulted("dwc:scientificName") String scientificName, 
-    		@Consulted("dwc:specificEpithet") String specificEpithet, 
-    		@Consulted("dwc:order") String order) {
-    	
+    		@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID
+    ){
         DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
         //TODO:  Implement specification
