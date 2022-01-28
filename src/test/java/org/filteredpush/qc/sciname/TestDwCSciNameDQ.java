@@ -107,7 +107,7 @@ public class TestDwCSciNameDQ {
 		assertNull(response.getValue());
 
 		family = null;
-		scientificName = "Vulpes vulpes";
+		scientificName = "Vulpes vulpes";  // no authorship provided
 		taxonId = null;
 		scientificNameAuthorship = null;
 		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
@@ -116,7 +116,7 @@ public class TestDwCSciNameDQ {
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
 		
 		family = null;
-		scientificName = "Vulpes vulpes";
+		scientificName = "Vulpes vulpes";  // not formed according to the dwc:scientificName definition, should include authorship
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
 		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
@@ -125,13 +125,31 @@ public class TestDwCSciNameDQ {
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
 		
 		family = null;
-		scientificName = "Vulpes vulpes";
+		scientificName = "Vulpes vulpes";  // not formed according to the dwc:scientificName definition, should include authorship
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus)";
 		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		
+		family = null;
+		scientificName = "Vulpes vulpes (Linnaeus, 1758)";  // correctly formed, with authorship included
+		taxonId = null;
+		scientificNameAuthorship = "(Linnaeus, 1758)";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		
+		family = null;
+		scientificName = "Vulpes vulpes (Linnaeus)";
+		taxonId = null;
+		scientificNameAuthorship = "(Linnaeus)";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));			
 		
 		family = "Muricidae";
 		scientificName = "";
@@ -152,10 +170,19 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
 		
+		family = "Muricidae";
+		scientificName = "Muricidae";
+		taxonId = null;
+		scientificNameAuthorship = "";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));			
+		
 		tester = new DwCSciNameDQ(EnumSciNameSourceAuthority.WORMS);
 		
 		family = "Muricidae";
-		scientificName = "";
+		scientificName = "Muricidae";
 		taxonId = null;
 		scientificNameAuthorship = "Rafinesque, 1815";   
 		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
@@ -172,6 +199,16 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
 		
+		family = "Muricidae";
+		scientificName = "Murex pecten Lightfoot, 1786";
+		taxonId = null;
+		scientificNameAuthorship = "Lightfoot, 1786";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
+				
+		
 		family = "Chaetodermatidae ";
 		scientificName = "Falcidens macrafrondis";
 		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
@@ -181,6 +218,15 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
+		family = "Chaetodermatidae ";
+		scientificName = "Falcidens macrafrondis Scheltema";
+		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
+		scientificNameAuthorship = "Scheltema";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());		
+		
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis";
 		taxonId = null;
@@ -189,7 +235,16 @@ public class TestDwCSciNameDQ {
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
-		
+	
+		family = "Chaetodermatidae";
+		scientificName = "Falcidens macrafrondis Scheltema";
+		taxonId = null;
+		scientificNameAuthorship = "Scheltema";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+				
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis";
 		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
@@ -199,6 +254,15 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
 		
+		family = "Chaetodermatidae";
+		scientificName = "Falcidens macrafrondis Scheltema";
+		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
+		scientificNameAuthorship = "Scheltema";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+				
 		family = "Muricidae";
 		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
 		taxonId = "";  
@@ -217,6 +281,16 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
 
+		family = "Muricidae";
+		scientificName = "Murex monoceros Sowerby, 1841";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
+		taxonId = "";  
+		scientificNameAuthorship = "Sowerby, 1841";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
+		
+		
 	}
 
 	/**

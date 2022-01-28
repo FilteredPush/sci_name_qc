@@ -256,6 +256,11 @@ public class DwCSciNameDQ {
 			if (SciNameUtils.isEmpty(lookMeUp)) { 
 				lookMeUp = kingdom;
 			}
+			if (!SciNameUtils.isEmpty(scientificNameAuthorship)) { 
+				if (lookMeUp.endsWith(scientificNameAuthorship)) { 
+					lookMeUp = lookMeUp.substring(0, lookMeUp.lastIndexOf(scientificNameAuthorship)).trim();
+				}
+			}
         	
 			try {
 				List<NameUsage> matchList = null;
