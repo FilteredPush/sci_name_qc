@@ -181,7 +181,7 @@ public class DwCSciNameDQ {
      * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
      * @return DQResponse the response of type AmendmentValue to return
      */
-    @Provides("431467d6-9b4b-48fa-a197-cd5379f5e889")
+    @Provides("urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889")
     public DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
     		@ActedUpon("dwc:taxonID") String taxonID, 
     		@Consulted("dwc:kingdom") String kingdom, 
