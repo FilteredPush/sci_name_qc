@@ -119,7 +119,7 @@ public abstract class AuthorNameComparator {
 	 * 
 	 * @param authorship authorship string to test, for code
 	 * @param kingdom the kingdom to which the authorship string belongs, has primacy
-	 *   over other values, Animalia->ICZN, Fungi|Plantae->ICNafp
+	 *   over other values, Animalia-use-ICZN, Fungi|Plantae-use-ICNafp
 	 * @param phylum not implemented yet.
 	 * @return a map containing keys ICZN and ICNafp with true/false values for each for detection
 	 *   of an applicable code.
@@ -179,7 +179,7 @@ public abstract class AuthorNameComparator {
 	 * 
 	 * @param authorship authorship string to test, for code
 	 * @param kingdom the kingdom to which the authorship string belongs, has primacy
-	 *   over other values, Animalia->ICZN, Fungi|Plantae->ICNafp
+	 *   over other values, Animalia-use-ICZN, Fungi|Plantae-use-ICNafp
 	 * @param phylum not implemented yet.
 	 * @return a map containing keys ICZN and ICNafp with true/false values for each for detection
 	 *   of an applicable code.

@@ -708,7 +708,7 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
-	 * @param scientificNameStringSimilarity the scientificNameStringSimilarity to set
+	 * @param scientificNameStringEditDistance the scientificNameStringEditDistance to set
 	 */
 	public void setScientificNameStringEditDistance(
 			double scientificNameStringEditDistance) {
@@ -724,7 +724,7 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
-	 * @param authorshipStringSimilarity the authorshipStringSimilarity to set
+	 * @param authorshipStringEditDistance the authorshipStringEditDistance to set
 	 */
 	public void setAuthorshipStringEditDistance(double authorshipStringEditDistance) {
 		this.authorshipStringSimilarity = authorshipStringEditDistance;
