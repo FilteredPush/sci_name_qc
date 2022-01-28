@@ -135,14 +135,14 @@ public class GBIFService {
 		return result.toString();
 	}
 	
-	public static String searchForTaxon(String name, String targetChecklist) { 
+	public static String searchForTaxon(String name, String targetChecklist) throws IOException { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
 		if (targetChecklist!=null) { 
 			datasetKey = "datasetKey=" + targetChecklist;
 		}
 		URL url;
-		try {
+		
 			//url = new URL(GBIF_SERVICE + "/name_usage/search?q=" + name + "&limit=100&" + datasetKey);
 			url = new URL(GBIF_SERVICE + "/species/?name=" + URLEncoder.encode(name,"UTF-8") + "&limit=100&" + datasetKey);
 			URLConnection connection = url.openConnection();
@@ -152,9 +152,7 @@ public class GBIFService {
 			while((line = reader.readLine()) != null) {
 				result.append(line);
 			}
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
+			// TODO: Keep iterating past 100 matches.
 
 		return result.toString();
 	}
@@ -337,7 +335,9 @@ public class GBIFService {
 				toCheck.setCanonicalName(taxonName);
 			}
 			String authorship = toCheck.getOriginalAuthorship();
-			List<NameUsage> hits = GBIFService.parseAllNameUsagesFromJSON(GBIFService.searchForTaxon(taxonName, targetKey));
+			List<NameUsage> hits;
+			try {
+				hits = GBIFService.parseAllNameUsagesFromJSON(GBIFService.searchForTaxon(taxonName, targetKey));
 			if (hits==null || hits.size()==0) { 
 				// no matches
 				result = false;
@@ -445,6 +445,10 @@ public class GBIFService {
 					}
 					}
 				}
+			}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		if (validatedNameUsage!=null) { 

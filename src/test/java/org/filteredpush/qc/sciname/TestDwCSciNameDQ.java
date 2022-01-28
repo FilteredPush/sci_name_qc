@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.api.DQResponse;
+import org.datakurator.ffdq.api.result.AmendmentValue;
 import org.datakurator.ffdq.api.result.ComplianceValue;
 import org.datakurator.ffdq.model.ResultState;
 import org.junit.Test;
@@ -83,6 +84,38 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testAmendmentTaxonidFromTaxon() {
+		
+		DwCSciNameDQ tester = new DwCSciNameDQ();
+		
+		String scientificName = "Murex pecten";
+		String taxonId = null;
+		String scientificNameAuthorship = null;
+		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+
+		scientificName = "Vulpes vulpes";
+		taxonId = null;
+		scientificNameAuthorship = null;
+		response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
+		
+		scientificName = "Vulpes vulpes";
+		taxonId = null;
+		scientificNameAuthorship = "(Linnaeus, 1758)";
+		response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		
+		scientificName = "Vulpes vulpes";
+		taxonId = null;
+		scientificNameAuthorship = "(Linnaeus)";
+		response = tester.amendmentTaxonidFromTaxon(null, null, null, null, null, null, taxonId, null, null, null, null, scientificNameAuthorship, null, null, null, null, scientificName, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
 		fail("Not yet implemented");
 	}
 

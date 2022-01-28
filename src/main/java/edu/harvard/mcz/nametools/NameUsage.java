@@ -206,6 +206,7 @@ public class NameUsage implements LinneanClassification {
 			sourceID = getValFromKey(json,"sourceId");
 			link = getValFromKey(json,"link");
             synonyms = Boolean.parseBoolean(getValFromKey(json,"synonym"));
+            guid = getValFromKey(json,"taxonID");
             fixAuthorship();
             nullBlanks();
 		}
@@ -233,7 +234,10 @@ public class NameUsage implements LinneanClassification {
 		this.setTclass(record.getClazz());
 		this.setOrder(record.getOrder());
 		this.setFamily(record.getFamily());
-		this.setGenus(record.getGenus());		
+		this.setGenus(record.getGenus());	
+		if (Integer.toString(record.getKey()).length()>0) { 
+			this.setGuid("gbif:" + Integer.toString(record.getKey()));
+		}
 		fixAuthorship();
         nullBlanks();
 	}	

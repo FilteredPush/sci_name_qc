@@ -65,6 +65,28 @@ public class SciNameUtils {
     	}
     	return result;
     }
+    
+    /**
+     * Test to see if two strings are the same or are not comparable, 
+     * returns true if either or both strings are null, returns true if both
+     * strings have a value and are equal, returns false only if both strings
+     * are non-null and have different values, note that an empty string
+     * is not treated as a null.
+     * @param aString a string to compare
+     * @param anotherString a string to compare
+     * @return false if both strings are non-null and have different values, otherwise true.
+     */
+    public static boolean isEqualOrNonEmpty(String aString, String anotherString) { 
+    	boolean result;
+    	if (aString==null || anotherString==null) {
+    		// if either string is null, can't make comparison, return true
+    		result = true;
+    	} else { 
+    		// both strings have a value
+    		result = aString.equals(anotherString);
+    	}
+    	return result;
+    }
 	
 	public static String simpleWoRMSGuidLookup(String scientificName, String scientificNameAuthorship) { 
 		String result = "";
