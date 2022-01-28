@@ -32,6 +32,7 @@ public class NameComparison {
 	private static final Log log = LogFactory.getLog(NameComparison.class);
 
 	public static final String MATCH_EXACT = "Exact Match";
+	public static final String MATCH_EXACT_BRACKETS = "Exact Match except for square brackets";
 	public static final String MATCH_ERROR = "Error in making comparison";
 	public static final String MATCH_CONNECTFAILURE = "Error connecting to service";
 	public static final String MATCH_FUZZY_SCINAME = "Fuzzy Match on Scientific Name";

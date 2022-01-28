@@ -80,8 +80,8 @@ public class WoRMSService {
 			logger.debug(resultsArr.length);
 			while (i.hasNext()) { 
 				AphiaRecord ar = i.next();
-				
-				// TODO: Implement
+				NameUsage usage = new NameUsage(ar);
+				result.add(usage);
 			}
 		}
 		

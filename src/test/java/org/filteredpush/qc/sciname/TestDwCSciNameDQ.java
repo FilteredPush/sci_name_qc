@@ -40,7 +40,7 @@ public class TestDwCSciNameDQ {
 	@Test
 	public void testDwCSciNameDQ() {
 		DwCSciNameDQ testInstance = new DwCSciNameDQ();
-		assertEquals(EnumSciNameSourceAuthority.GBIF, testInstance.getSourceAuthority());
+		assertEquals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY, testInstance.getSourceAuthority());
 	}
 
 	/**
@@ -51,8 +51,8 @@ public class TestDwCSciNameDQ {
 	public void testDwCSciNameDQEnumSciNameSourceAuthority() {
 		DwCSciNameDQ testInstance = new DwCSciNameDQ(EnumSciNameSourceAuthority.WORMS);
 		assertEquals(EnumSciNameSourceAuthority.WORMS, testInstance.getSourceAuthority());
-		DwCSciNameDQ testInstance2 = new DwCSciNameDQ(EnumSciNameSourceAuthority.GBIF);
-		assertEquals(EnumSciNameSourceAuthority.GBIF, testInstance2.getSourceAuthority());
+		DwCSciNameDQ testInstance2 = new DwCSciNameDQ(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+		assertEquals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY, testInstance2.getSourceAuthority());
 	}
 
 	/**
@@ -85,14 +85,25 @@ public class TestDwCSciNameDQ {
 	@Test
 	public void testAmendmentTaxonidFromTaxon() {
 		
-		DwCSciNameDQ tester = new DwCSciNameDQ();
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if all of dwc:kingdom, dwc:phylum, dwc:class, dwc:order, 
+        // dwc:family, dwc:genus, and dwc:scientificName are EMPTY; 
+        // AMENDED if a value for dwc:taxonID is unique and resolvable 
+        // on the basis of the value of the lowest ranking not EMPTY 
+        // taxon classification terms dwc:scientificName, dwc:scientificNameAuthorship, 
+        // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_CHANGED 
+        //
+		
+		DwCSciNameDQ tester = new DwCSciNameDQ();  // default gbif
 		
 		String family = null;
 		String scientificName = "Murex pecten";  // GBIF returns two matches, we can't tell which to use.
 		String taxonId = null;
 		String scientificNameAuthorship = null;
 		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
-		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMBIGUOUS.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 
 		family = null;
@@ -141,9 +152,71 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
 		
+		tester = new DwCSciNameDQ(EnumSciNameSourceAuthority.WORMS);
 		
+		family = "Muricidae";
+		scientificName = "";
+		taxonId = null;
+		scientificNameAuthorship = "Rafinesque, 1815";   
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:148", response.getValue().getObject().get("dwc:taxonID"));
 		
-		fail("Not yet implemented");
+		family = "Muricidae";
+		scientificName = "Murex pecten";
+		taxonId = null;
+		scientificNameAuthorship = "Lightfoot, 1786";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
+		
+		family = "Chaetodermatidae ";
+		scientificName = "Falcidens macrafrondis";
+		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
+		scientificNameAuthorship = "Scheltema";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
+		family = "Chaetodermatidae";
+		scientificName = "Falcidens macrafrondis";
+		taxonId = null;
+		scientificNameAuthorship = "Scheltema";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+		
+		family = "Chaetodermatidae";
+		scientificName = "Falcidens macrafrondis";
+		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
+		scientificNameAuthorship = "Scheltema";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+		
+		family = "Muricidae";
+		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
+		taxonId = "";  
+		scientificNameAuthorship = "";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.AMBIGUOUS.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
+		family = "Muricidae";
+		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
+		taxonId = "";  
+		scientificNameAuthorship = "Sowerby, 1841";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
+
 	}
 
 	/**

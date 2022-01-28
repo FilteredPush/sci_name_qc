@@ -2,7 +2,7 @@ package org.filteredpush.qc.sciname;
 
 public enum EnumSciNameSourceAuthority {
 
-    GBIF,
+    GBIF_BACKBONE_TAXONOMY,
     WORMS;
 
 	public String getName() {

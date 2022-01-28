@@ -69,6 +69,11 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 			{ 
 				result.setMatchType(NameComparison.MATCH_EXACT);
 				result.setSimilarity(1.0d);
+			} else if (anAuthor.equals(toOtherAuthor) 
+					|| anAuthor.toLowerCase().replaceAll("[ \\[\\].,]", "").equals(toOtherAuthor.toLowerCase().replaceAll("[ \\[\\].,]", ""))) 
+			{ 
+				result.setMatchType(NameComparison.MATCH_EXACT);
+				result.setSimilarity(1.0d);
 			} else {
 				if (anAuthor.length()==0 && toOtherAuthor.length()> 0 ) { 
 					result.setMatchType(NameComparison.MATCH_ADDSAUTHOR);
