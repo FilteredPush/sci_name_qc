@@ -33,7 +33,6 @@ import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.WoRMSService;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
-import edu.harvard.mcz.nametools.LookupResult;
 import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
 
