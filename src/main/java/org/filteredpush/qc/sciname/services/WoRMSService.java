@@ -68,7 +68,25 @@ public class WoRMSService {
 		URLConnection conn = test.openConnection();
 		conn.connect();
 	}
-
+	
+	public static List<NameUsage> lookupTaxon(String taxon, String author, boolean marineOnly) throws RemoteException {
+		List<NameUsage> result  = new ArrayList<NameUsage>();
+	
+		AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+		AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, marineOnly, 1);	
+		if (resultsArr!=null || resultsArr.length==1) { 
+			List<AphiaRecord> results = Arrays.asList(resultsArr);
+			Iterator<AphiaRecord> i = results.iterator();
+			logger.debug(resultsArr.length);
+			while (i.hasNext()) { 
+				AphiaRecord ar = i.next();
+				
+				// TODO: Implement
+			}
+		}
+		
+		return result;
+	}
 	/**
 	 * Find a taxon name record in WoRMS.
 	 * 

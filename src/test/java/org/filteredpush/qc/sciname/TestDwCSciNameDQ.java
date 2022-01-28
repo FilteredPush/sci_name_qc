@@ -87,35 +87,61 @@ public class TestDwCSciNameDQ {
 		
 		DwCSciNameDQ tester = new DwCSciNameDQ();
 		
-		String scientificName = "Murex pecten";
+		String family = null;
+		String scientificName = "Murex pecten";  // GBIF returns two matches, we can't tell which to use.
 		String taxonId = null;
 		String scientificNameAuthorship = null;
-		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
 
+		family = null;
 		scientificName = "Vulpes vulpes";
 		taxonId = null;
 		scientificNameAuthorship = null;
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
 		
+		family = null;
 		scientificName = "Vulpes vulpes";
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
 		
+		family = null;
 		scientificName = "Vulpes vulpes";
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus)";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, null, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		
+		family = "Muricidae";
+		scientificName = "";
+		taxonId = null;
+		scientificNameAuthorship = "Rafinesque, 1815";   // not known to GBIF, so can't be sure of match, so won't change
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		// NOTE: If GBIF improves its data quality, this test will fail
+		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
+		family = "Muricidae";
+		scientificName = "";
+		taxonId = null;
+		scientificNameAuthorship = "";
+		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
+		
+		
 		
 		fail("Not yet implemented");
 	}

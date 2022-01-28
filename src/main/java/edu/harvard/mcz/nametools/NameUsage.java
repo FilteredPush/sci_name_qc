@@ -813,9 +813,14 @@ public class NameUsage implements LinneanClassification {
 				if (parse!=null) { 
                    String author = parse.authorshipComplete();
 				   setAcceptedAuthorship(author);
-				   if (getAcceptedName().lastIndexOf(author) > -1) {
-					   // remove authorship string from accepted name
-				       setAcceptedName(getAcceptedName().substring(0, getAcceptedName().lastIndexOf(author)).trim());
+				   try { 
+					   if (getAcceptedName().lastIndexOf(author) > -1) {
+						   // remove authorship string from accepted name
+						   setAcceptedName(getAcceptedName().substring(0, getAcceptedName().lastIndexOf(author)).trim());
+					   }
+				   } catch (NullPointerException e) { 
+					   // expected when no accepted name
+					   logger.debug(e.getMessage());
 				   }
 				}
 			} catch (UnparsableNameException e) {

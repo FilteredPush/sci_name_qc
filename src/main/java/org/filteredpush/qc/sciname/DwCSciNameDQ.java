@@ -227,9 +227,36 @@ public class DwCSciNameDQ {
 			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         } else { 
         	
+			String lookMeUp = scientificName;
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = subgenus;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = genus;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = genus;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = family;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = order;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = taxonomic_class;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = phylum;
+			}
+			if (SciNameUtils.isEmpty(lookMeUp)) { 
+				lookMeUp = kingdom;
+			}
+        	
         	if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.GBIF)) { 
         		try {
-        			String matches = GBIFService.searchForTaxon(scientificName, GBIFService.KEY_GBIFBACKBONE);
+
+        			String matches = GBIFService.searchForTaxon(lookMeUp, GBIFService.KEY_GBIFBACKBONE);
         			logger.debug(matches);
         			List<NameUsage> matchList = GBIFService.parseAllNameUsagesFromJSON(matches);
         			logger.debug(matchList.size());
@@ -247,7 +274,7 @@ public class DwCSciNameDQ {
         							(SciNameUtils.isEqualOrNonEmpty(order, match.getOrder())) &&
         							(SciNameUtils.isEqualOrNonEmpty(family, match.getFamily())) &&
         							(SciNameUtils.isEqualOrNonEmpty(genus, match.getGenus())) &&
-        							(SciNameUtils.isEqualOrNonEmpty(scientificName, match.getCanonicalName())) 
+        							(SciNameUtils.isEqualOrNonEmpty(lookMeUp, match.getCanonicalName())) 
         						) 
         					{ 
         						logger.debug(match.getCanonicalName());
@@ -317,6 +344,7 @@ public class DwCSciNameDQ {
         		}
         	} else if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.WORMS)) {
         		try {
+        			//WoRMSService.simpleNameSearch(lookMeUp, scientificNameAuthorship, false)
         			List<NameUsage> matches = WoRMSService.lookupGenus(genus);
         			// TODO: Implement
         		} catch (IOException e) {
