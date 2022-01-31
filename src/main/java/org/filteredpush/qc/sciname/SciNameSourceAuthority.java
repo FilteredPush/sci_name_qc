@@ -56,6 +56,42 @@ public class SciNameSourceAuthority {
 		updateDefaultSubAuthorities();
 	}
 	
+	
+	/**
+	 * Utility constructor to construct a scientific name source authority from a string instead of the enum.
+	 * 
+	 * @param authorityString a value matching the name of an item in EnumSciNameSourceAuthority
+	 * @throws SourceAuthorityException if the string is not matched to the enumeration, or if the specified
+	 *   source authority requires the specification of an authoritySubDataset.
+	 */
+	public SciNameSourceAuthority(String authorityString) throws SourceAuthorityException { 
+	    if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName())) {
+	    	throw new SourceAuthorityException("You must specify which GBIF checklist you wish to use with " + EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName());
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.WORMS.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY;
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_COL.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_COL;
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_FAUNA_EUROPAEA.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_FAUNA_EUROPAEA;
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_INDEX_FUNGORUM.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_INDEX_FUNGORUM;	
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_IPNI.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_IPNI;	
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_ITIS.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_ITIS;	
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_PALEOBIOLOGY_DATABASE.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_ITIS;	
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_UKSI.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_UKSI;	
+	    } else { 
+	    	throw new SourceAuthorityException("Unable to construct a SourceAuthority from string [" + authorityString);
+	    }
+		authoritySubDataset = null;
+		updateDefaultSubAuthorities();
+	}
+	
 	/**
 	 * Construct a scientific name source authority descriptor.
 	 * 
