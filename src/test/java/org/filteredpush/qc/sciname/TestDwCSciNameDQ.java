@@ -32,35 +32,45 @@ import org.junit.Test;
 public class TestDwCSciNameDQ {
 
 	private static final Log logger = LogFactory.getLog(TestDwCSciNameDQ.class);
-	
-	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#DwCSciNameDQ()}.
-	 * also tests {@link org.filteredpush.qc.sciname.DwCSciNameDQ#getSourceAuthority()}.
-	 */
-	@Test
-	public void testDwCSciNameDQ() {
-		DwCSciNameDQ testInstance = new DwCSciNameDQ();
-		assertEquals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY, testInstance.getSourceAuthority());
-	}
-
-	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#DwCSciNameDQ(org.filteredpush.qc.sciname.EnumSciNameSourceAuthority)}.
-	 * also tests {@link org.filteredpush.qc.sciname.DwCSciNameDQ#getSourceAuthority()}.
-	 */
-	@Test
-	public void testDwCSciNameDQEnumSciNameSourceAuthority() {
-		DwCSciNameDQ testInstance = new DwCSciNameDQ(EnumSciNameSourceAuthority.WORMS);
-		assertEquals(EnumSciNameSourceAuthority.WORMS, testInstance.getSourceAuthority());
-		DwCSciNameDQ testInstance2 = new DwCSciNameDQ(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
-		assertEquals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY, testInstance2.getSourceAuthority());
-	}
 
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPhylumNotfound(java.lang.String)}.
 	 */
 	@Test
 	public void testValidationPhylumNotfound() {
-		fail("Not yet implemented");
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum 
+        // was found as a value at the rank of phylum by the bdq:sourceAuthority 
+        // service; otherwise NOT_COMPLIANT 		
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationPhylumNotfound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationPhylumNotfound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		result = DwCSciNameDQ.validationPhylumNotfound("Mollusca",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationPhylumNotfound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		
+		result = DwCSciNameDQ.validationPhylumNotfound("Mollusca",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 	}
 
 	/**
@@ -68,7 +78,40 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationFamilyNotfound() {
-		fail("Not yet implemented");
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if dwc:family is EMPTY; COMPLIANT if the value of dwc:family 
+        // was found as a value at the rank of family by the bdq:sourceAuthority 
+        // service; otherwise NOT_COMPLIANT 
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationFamilyNotfound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationFamilyNotfound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		result = DwCSciNameDQ.validationFamilyNotfound("Muricidae",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationFamilyNotfound("Animalia",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		
+		result = DwCSciNameDQ.validationFamilyNotfound("Muricidae",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		
 	}
 
 	/**
@@ -76,7 +119,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationScientificnameNotfound() {
-		fail("Not yet implemented");
+// TODO:		fail("Not yet implemented");
 	}
 
 	/**
@@ -96,21 +139,26 @@ public class TestDwCSciNameDQ {
         // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_CHANGED 
         //
 		
-		DwCSciNameDQ tester = new DwCSciNameDQ();  // default gbif
+		SciNameSourceAuthority authority = null;
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+		} catch (SourceAuthorityException e1) {
+			fail(e1.getMessage());
+		}
 		
 		String family = null;
 		String scientificName = "Murex pecten";  // GBIF returns two matches, we can't tell which to use.
 		String taxonId = null;
 		String scientificNameAuthorship = null;
-		DQResponse<AmendmentValue> response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
-		assertEquals(ResultState.AMBIGUOUS.getLabel(), response.getResultState().getLabel());
+		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
+		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 
 		family = null;
 		scientificName = "Vulpes vulpes";  // no authorship provided
 		taxonId = null;
 		scientificNameAuthorship = null;
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
@@ -119,7 +167,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Vulpes vulpes";  // not formed according to the dwc:scientificName definition, should include authorship
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -128,7 +176,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Vulpes vulpes";  // not formed according to the dwc:scientificName definition, should include authorship
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus)";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -137,7 +185,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Vulpes vulpes (Linnaeus, 1758)";  // correctly formed, with authorship included
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -146,7 +194,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Vulpes vulpes (Linnaeus)";
 		taxonId = null;
 		scientificNameAuthorship = "(Linnaeus)";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));			
@@ -155,7 +203,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "";
 		taxonId = null;
 		scientificNameAuthorship = "Rafinesque, 1815";   // not known to GBIF, so can't be sure of match, so won't change
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		// NOTE: If GBIF improves its data quality, this test will fail
 		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
@@ -165,7 +213,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "";
 		taxonId = null;
 		scientificNameAuthorship = "";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
@@ -174,18 +222,22 @@ public class TestDwCSciNameDQ {
 		scientificName = "Muricidae";
 		taxonId = null;
 		scientificNameAuthorship = "";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));			
 		
-		tester = new DwCSciNameDQ(EnumSciNameSourceAuthority.WORMS);
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
 		
 		family = "Muricidae";
 		scientificName = "Muricidae";
 		taxonId = null;
 		scientificNameAuthorship = "Rafinesque, 1815";   
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:148", response.getValue().getObject().get("dwc:taxonID"));
@@ -194,7 +246,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Murex pecten";
 		taxonId = null;
 		scientificNameAuthorship = "Lightfoot, 1786";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
@@ -203,7 +255,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Murex pecten Lightfoot, 1786";
 		taxonId = null;
 		scientificNameAuthorship = "Lightfoot, 1786";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
@@ -213,7 +265,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Falcidens macrafrondis";
 		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
 		scientificNameAuthorship = "Scheltema";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
@@ -222,7 +274,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Falcidens macrafrondis Scheltema";
 		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
 		scientificNameAuthorship = "Scheltema";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());		
@@ -231,7 +283,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Falcidens macrafrondis";
 		taxonId = null;
 		scientificNameAuthorship = "Scheltema";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -240,7 +292,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Falcidens macrafrondis Scheltema";
 		taxonId = null;
 		scientificNameAuthorship = "Scheltema";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -249,7 +301,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Falcidens macrafrondis";
 		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
 		scientificNameAuthorship = "Scheltema";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -258,7 +310,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Falcidens macrafrondis Scheltema";
 		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
 		scientificNameAuthorship = "Scheltema";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -267,16 +319,16 @@ public class TestDwCSciNameDQ {
 		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
 		taxonId = "";  
 		scientificNameAuthorship = "";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.AMBIGUOUS.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		family = "Muricidae";
 		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
 		taxonId = "";  
 		scientificNameAuthorship = "Sowerby, 1841";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
@@ -285,7 +337,7 @@ public class TestDwCSciNameDQ {
 		scientificName = "Murex monoceros Sowerby, 1841";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
 		taxonId = "";  
 		scientificNameAuthorship = "Sowerby, 1841";
-		response = tester.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
@@ -298,7 +350,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonAmbiguous() {
-		fail("Not yet implemented");
+// TODO:		fail("Not yet implemented");
 	}
 
 	/**
@@ -306,7 +358,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testAmendmentScientificnameFromTaxonid() {
-		fail("Not yet implemented");
+// TODO:		fail("Not yet implemented");
 	}
 
 	/**
@@ -314,7 +366,39 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationClassNotfound() {
-		fail("Not yet implemented");
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if dwc:class is EMPTY; COMPLIANT if the value of dwc:class 
+        // was found as a value at the rank of class by the bdq:sourceAuthority 
+        //service; otherwise NOT_COMPLIANT 
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassNotfound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationClassNotfound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		result = DwCSciNameDQ.validationClassNotfound("Gastropoda",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationClassNotfound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		
+		result = DwCSciNameDQ.validationClassNotfound("Gastropoda",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 	}
 
 	/**
@@ -322,7 +406,39 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationKingdomNotfound() {
-		fail("Not yet implemented");
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum 
+        // was found as a value at the rank of phylum by the bdq:sourceAuthority 
+        // service; otherwise NOT_COMPLIANT 
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationKingdomNotfound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationKingdomNotfound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		result = DwCSciNameDQ.validationKingdomNotfound("Animalia",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationKingdomNotfound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		
+		result = DwCSciNameDQ.validationKingdomNotfound("Animalia",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 	}
 
 	/**
@@ -352,7 +468,40 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationOrderNotfound() {
-		fail("Not yet implemented");
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
+        // if dwc:order is EMPTY; COMPLIANT if the value of dwc:order 
+        // was found as a value at the rank of order by the bdq:sourceAuthority 
+        //service; otherwise NOT_COMPLIANT 
+
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationOrderNotfound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationOrderNotfound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		result = DwCSciNameDQ.validationOrderNotfound("Carnivora",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		
+		result = DwCSciNameDQ.validationOrderNotfound("Animalia",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		
+		result = DwCSciNameDQ.validationOrderNotfound("Neogastropoda",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 	}
 
 	/**
@@ -360,7 +509,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationPolynomialInconsistent() {
-		fail("Not yet implemented");
+// TODD:		fail("Not yet implemented");
 	}
 
 	/**
@@ -374,7 +523,61 @@ public class TestDwCSciNameDQ {
 		result =DwCSciNameDQ.validationTaxonEmpty("class", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		fail("Not yet implemented");
+		result =DwCSciNameDQ.validationTaxonEmpty(null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonEmpty("A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		
 	}
 
 	/**
@@ -403,7 +606,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonidAmbiguous() {
-		fail("Not yet implemented");
+// TODO: 		fail("Not yet implemented");
 	}
 
 	/**
@@ -419,15 +622,25 @@ public class TestDwCSciNameDQ {
         // was found as a value at the rank of genus by the bdq:sourceAuthority 
         //service; otherwise NOT_COMPLIANT 
 		
-		DwCSciNameDQ tester = new DwCSciNameDQ();
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 	
-		DQResponse<ComplianceValue> result = tester.validationGenusNotfound(null);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationGenusNotfound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = tester.validationGenusNotfound("a3555144X");
+		result = DwCSciNameDQ.validationGenusNotfound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = tester.validationGenusNotfound("Murex");
+		result = DwCSciNameDQ.validationGenusNotfound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		
+		result = DwCSciNameDQ.validationGenusNotfound("Murex",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 		
@@ -438,7 +651,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationClassificationAmbiguous() {
-		fail("Not yet implemented");
+// TODO: 		fail("Not yet implemented");
 	}
 
 	/**
@@ -464,7 +677,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonrankNotstandard() {
-		fail("Not yet implemented");
+// TODO:		fail("Not yet implemented");
 	}
 
 	/**
@@ -472,7 +685,7 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testAmendmentTaxonrankStandardized() {
-		fail("Not yet implemented");
+// TODO:		fail("Not yet implemented");
 	}
 
 }

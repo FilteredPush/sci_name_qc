@@ -1,5 +1,5 @@
 /** 
- * EnumSciNameSourceAuthority.java 
+ * SciNameSourceAuthority.java 
  * 
  * Copyright 2022 President and Fellows of Harvard College
  *
@@ -18,27 +18,16 @@
 package org.filteredpush.qc.sciname;
 
 /**
- * A list of source authorities for which implementations exist in this package.
- * 
  * @author mole
  *
  */
-public enum EnumSciNameSourceAuthority {
+public class SourceAuthorityException extends Exception {
 
-    GBIF_BACKBONE_TAXONOMY,
-    GBIF_COL,
-    GBIF_PALEOBIOLOGY_DATABASE,
-    GBIF_IPNI,
-    GBIF_INDEX_FUNGORUM,
-    GBIF_FAUNA_EUROPAEA,
-    GBIF_ITIS,
-    GBIF_UKSI,
-    GBIF_ARBITRARY,
-    WORMS;
+	private static final long serialVersionUID = 2150334636977513462L;
 
-	public String getName() {
-		// return the exact name of the enum instance.
-		return name();
+	public SourceAuthorityException(String message) {
+		super(message);
 	}
+
 	
 }

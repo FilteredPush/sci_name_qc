@@ -74,12 +74,41 @@ Currently recognised comparisons:
 
 ## DwCSciNameQC - for Fit4U Framework
 
+Class: org.filteredpush.qc.sciname.DwCSciNameDQ
+
+Implements the TDWG BDQ TG2 Scientific Name (NAME) tests.
+
 
 # Include using maven
 
+Not yet available in Maven Central.  
+
+    <dependency>
+        <groupId>org.filteredpush</groupId>
+        <artifactId>sci_name_qc</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+
 # Building
 
+To build an executable jar in the project directory (sci_name_qc-{version}-{commit}-executable.jar), run:
+
     mvn package
+
+To install in your local maven repository run:
+
+	mvn install
+
+# Testing
+
+Separation of tests that can be run online and those that require conection to remote services are ongoing.
+
+Goal is for the test phase to run only tests that can be run offline.  Until then, use -DskipTests if you need to build while offline.
+
+To run tests that make calls to remote APIs (GBIF api and WoRMS aphia api), run a phase that includes integration-test, and use the profile services-test:
+
+   mvn integration-test -Pservices-test
 
 # Developer deployment: 
 

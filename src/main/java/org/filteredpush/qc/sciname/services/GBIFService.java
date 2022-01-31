@@ -1,7 +1,7 @@
 /**
  * GBIFService.java 
  * 
- * Copyright 2015 President and Fellows of Harvard College
+ * Copyright 2015-2022 President and Fellows of Harvard College
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,8 @@ import edu.harvard.mcz.nametools.NameUsage;
 /**
  * Wrapper for accessing the GBIF API to search for scientific names. 
  * 
- * See service documentation at: http://dev.gbif.org/wiki/display/POR/Webservice+API#WebserviceAPI-ChecklistBankServices:Nameusage
+ * See service documentation at: https://www.gbif.org/developer/species
+ * Formerly at: http://dev.gbif.org/wiki/display/POR/Webservice+API#WebserviceAPI-ChecklistBankServices:Nameusage
  * 
  * @author mole
  *
@@ -61,10 +62,13 @@ public class GBIFService {
 	public static final String KEY_IPNI = "046bbc50-cae2-47ff-aa43-729fbf53f7c5";
 	public static final String KEY_INDEXFUNGORUM = "bf3db7c9-5e5d-4fd0-bd5b-94539eaf9598";
 	public static final String KEY_COL = "7ddf754f-d193-4cc9-b351-99906754a03b";
+	public static final String KEY_PALEIOBIOLOGY_DATABASE = "c33ce2f2-c3cc-43a5-a380-fe4526d63650";
+	public static final String KEY_ITIS ="9ca92552-f23a-41a8-a140-01abaa31c931";
+	public static final String KEY_FAUNA_EUROPAEA = "90d9e8a6-0ce1-472d-b682-3451095dbc5a";
+	public static final String KEY_UKSI = "dbaa27eb-29e7-4cbb-8eab-3f689cfce116";
 	
 	private NameUsage validatedNameUsage = null;
 	
-
 	
 	protected String targetKey;
 	protected String targetDataSetName; 
@@ -219,6 +223,46 @@ public class GBIFService {
 			while (i.hasNext()) {
 				NameUsage usage = i.next();
 				if (usage.getRank().equalsIgnoreCase("GENUS") && usage.getCanonicalName().equalsIgnoreCase(name)) { 
+					returnvalue.add(usage);
+				}
+			}	
+		}
+		return returnvalue;
+	}	
+	
+	/**
+	 * Lookup records of a name at a particular rank in a particular GBIF name list.
+	 * 
+	 * @param name the name to search for
+	 * @param targetChecklist the checklist in which to look for the name
+	 * @param rank that matching records must possess
+	 * @param limit limit of the number of records to check
+	 * @return a list of matching NameUsages
+	 * @throws IOException in case of problems forming or making the request to GBIF
+	 */
+	public static List<NameUsage> lookupTaxonAtRank(String name, String targetChecklist, String rank, int limit) throws IOException { 
+		List<NameUsage> returnvalue = new ArrayList<NameUsage>();
+		if (!SciNameUtils.isEmpty(name)) { 
+			StringBuilder result = new StringBuilder();
+			String datasetKey = "";
+			if (targetChecklist!=null) { 
+				datasetKey = "datasetKey=" + targetChecklist;
+			}
+			URL url;
+			url = new URL(GBIF_SERVICE + "/species/?name=" + URLEncoder.encode(name,"UTF-8") + "&limit=" + Integer.toString(limit) + "&" + datasetKey);
+			logger.debug(url.toString());
+			URLConnection connection = url.openConnection();
+			String line;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			while((line = reader.readLine()) != null) {
+				result.append(line);
+				logger.debug(line);
+			}
+			List<NameUsage> resultList = GBIFService.parseAllNameUsagesFromJSON(result.toString());
+			Iterator<NameUsage> i = resultList.iterator();
+			while (i.hasNext()) {
+				NameUsage usage = i.next();
+				if (usage.getRank().equalsIgnoreCase(rank) && usage.getCanonicalName().equalsIgnoreCase(name)) { 
 					returnvalue.add(usage);
 				}
 			}	

@@ -50,34 +50,6 @@ public class DwCSciNameDQ {
 	
 	private static final Log logger = LogFactory.getLog(DwCSciNameDQ.class);
 	
-	private EnumSciNameSourceAuthority sourceAuthority = EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY;
-	
-	/** 
-	 * Construct an instance of DwCSciNameDQ using the default (GBIF backbone) source authority.
-	 * 
-	 */
-	public DwCSciNameDQ() {
-		super();
-		this.sourceAuthority = EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY;
-	}
-	
-    /**
-     * Construct an instance of DwCSciNameDQ with a specified bdq:sourceAuthority.
-     * 
-	 * @param sourceAuthority the source authority to use in invocations of the class instance.
-	 */
-	public DwCSciNameDQ(EnumSciNameSourceAuthority sourceAuthority) {
-		super();
-		this.sourceAuthority = sourceAuthority;
-	}
-
-	/**
-	 * 
-	 * @return the source authority used by the instance.
-	 */
-	public EnumSciNameSourceAuthority getSourceAuthority() {
-		return sourceAuthority;
-	}
 
 	/**
      * #22 Validation SingleRecord Conformance: phylum notfound
@@ -88,20 +60,20 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f")
-    public DQResponse<ComplianceValue> validationPhylumNotfound(@ActedUpon("dwc:phylum") String phylum) {
+    public static DQResponse<ComplianceValue> validationPhylumNotfound(@ActedUpon("dwc:phylum") String phylum, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
         // if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum 
         // was found as a value at the rank of phylum by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // service; otherwise NOT_COMPLIANT 
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
 
-        return result;
+        return validateHigherTaxonAtRank(phylum, "Phylum", sourceAuthority);
     }
 
     /**
@@ -113,20 +85,20 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("3667556d-d8f5-454c-922b-af8af38f613c")
-    public DQResponse<ComplianceValue> validationFamilyNotfound(@ActedUpon("dwc:family") String family) {
+    public static DQResponse<ComplianceValue> validationFamilyNotfound(@ActedUpon("dwc:family") String family, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
         // if dwc:family is EMPTY; COMPLIANT if the value of dwc:family 
         // was found as a value at the rank of family by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // service; otherwise NOT_COMPLIANT 
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
 
-        return result;
+        return validateHigherTaxonAtRank(family, "Family", sourceAuthority);
     }
 
     /**
@@ -181,7 +153,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type AmendmentValue to return
      */
     @Provides("urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889")
-    public DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
+    public static  DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
     		@ActedUpon("dwc:taxonID") String taxonID, 
     		@Consulted("dwc:kingdom") String kingdom, 
     		@Consulted("dwc:phylum") String phylum, 
@@ -200,7 +172,8 @@ public class DwCSciNameDQ {
     		@Consulted("dwc:taxonConceptID") String taxonConceptID, 
     		@Consulted("dwc:scientificNameID") String scientificNameID, 
     		@Consulted("dwc:originalNameUsageID") String originalNameUsageID, 
-    		@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID
+    		@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID,
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
     ){
         DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
@@ -215,13 +188,18 @@ public class DwCSciNameDQ {
         // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_CHANGED 
         //
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
         
         // NOTES: ... Return a result with no value and a result state of 
-        // ambiguous if the information provided does not resolve to a 
+        // NO CHANGE with ambiguous nature noted in the comment if the 
+        // information provided does not resolve to a 
         // unique result (e.g. if homonyms exist and there is insufficient 
         // information in the provided data to resolve them)
+        
+        if (sourceAuthority==null) { 
+        	sourceAuthority = new SciNameSourceAuthority();
+        }
 
         if (SciNameUtils.isEmpty(kingdom) && SciNameUtils.isEmpty(phylum) && SciNameUtils.isEmpty(taxonomic_class) &&
         		SciNameUtils.isEmpty(order) && SciNameUtils.isEmpty(family) && SciNameUtils.isEmpty(genus) &&
@@ -264,11 +242,15 @@ public class DwCSciNameDQ {
         	
 			try {
 				List<NameUsage> matchList = null;
-				if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
+				if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
 					String matches = GBIFService.searchForTaxon(lookMeUp, GBIFService.KEY_GBIFBACKBONE);
 					logger.debug(matches);
 					matchList = GBIFService.parseAllNameUsagesFromJSON(matches);
-				} else if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.WORMS)) {
+				} else if (sourceAuthority.isGBIFChecklist()) { 
+					String matches = GBIFService.searchForTaxon(lookMeUp, sourceAuthority.getAuthoritySubDataset());
+					logger.debug(matches);
+					matchList = GBIFService.parseAllNameUsagesFromJSON(matches);					
+				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 					matchList = WoRMSService.lookupTaxon(lookMeUp, scientificNameAuthorship, false);
 				} else { 
 					throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
@@ -302,28 +284,28 @@ public class DwCSciNameDQ {
 								logger.debug(match.getAuthorComparator().compare(scientificNameAuthorship, match.getAuthorship()).getMatchType());
 								NameComparison authorshipComparison = match.getAuthorComparator().compare(scientificNameAuthorship, match.getAuthorship());
 								if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACT)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with exact match on authorship. ");
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with exact match on authorship. ");
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACT_BRACKETS)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with exact match (except for square brackets) on authorship.");
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with exact match (except for square brackets) on authorship.");
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACTADDSYEAR)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACTMISSINGYEAR)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_SOWERBYEXACTYEAR)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_L_EXACTYEAR)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_SAMEBUTABBREVIATED)) {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
 									authorshipOK = true;
 								} else {
-									result.addComment("Match for provided taxon in " + this.sourceAuthority.getName() + " has different author: " + authorshipComparison.getRemark());
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " has different author: " + authorshipComparison.getRemark());
 									authorshipOK = false;
 								}
 							} else { 
@@ -339,32 +321,33 @@ public class DwCSciNameDQ {
 					}
 					if (hasMatch) {
 						if (matchCounter>1) { 
-							result.addComment("More than one exact match found for provided taxon in " + this.sourceAuthority.getName() + ".");
-							//result.setResultState(ResultState.NO_CHANGE);
-							result.setResultState(ResultState.AMBIGUOUS);
+							result.addComment("More than one exact match found for provided taxon in " + sourceAuthority.getName() + ".");
+							result.setResultState(ResultState.NO_CHANGE);
+							// result.setResultState(ResultState.AMBIGUOUS);  Discussed in TG2 call 2022 Jan 30, use NO_CHANGE and discuss ambiguity in comments.
+							// separate examination of ambiguity into a separate validation, rather than asserting as a result.
 						} else { 
 							if (kvp.get("dwc:taxonID").equals(taxonID)) { 
-								result.addComment("Exact match to provided taxon found in " + this.sourceAuthority.getName() + ", matching the current value of dwc:taxonID");
+								result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ", matching the current value of dwc:taxonID");
 								result.setResultState(ResultState.NO_CHANGE);
 							} else  {
 								// Specification does not state that amendment is to be provided only for an
 								// empty taxonID, so proposing a change if the the value found is different from the current value
-								result.addComment("Exact match to provided taxon found in " + this.sourceAuthority.getName() + ".");
+								result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ".");
 								AmendmentValue ammendedTaxonID = new AmendmentValue(kvp);
 								result.setValue(ammendedTaxonID);
 								result.setResultState(ResultState.CHANGED);
 							} 
 						}
 					} else { 
-						result.addComment("No exact match found for provided taxon in " + this.sourceAuthority.getName() + ".");
+						result.addComment("No exact match found for provided taxon in " + sourceAuthority.getName() + ".");
 						result.setResultState(ResultState.NO_CHANGE);
 					}
 				} else { 
-					result.addComment("No match found for provided taxon in " + this.sourceAuthority.getName() + ".");
+					result.addComment("No match found for provided taxon in " + sourceAuthority.getName() + ".");
 					result.setResultState(ResultState.NO_CHANGE);
 				}
 			} catch (IOException e) {
-				result.addComment(this.sourceAuthority.getName() + " API not available:" + e.getMessage());
+				result.addComment(sourceAuthority.getName() + " API not available:" + e.getMessage());
 				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 			} catch (UnsupportedSourceAuthorityException e) { 
 				result.addComment("Unable to process:" + e.getMessage());
@@ -457,10 +440,10 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("2cd6884e-3d14-4476-94f7-1191cfff309b")
-    public DQResponse<ComplianceValue> validationClassNotfound(@ActedUpon("dwc:class") String taxonomic_class) {
+    public static DQResponse<ComplianceValue> validationClassNotfound(@ActedUpon("dwc:class") String taxonomic_class, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
         // if dwc:class is EMPTY; COMPLIANT if the value of dwc:class 
@@ -470,7 +453,7 @@ public class DwCSciNameDQ {
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
 
-        return result;
+        return validateHigherTaxonAtRank(taxonomic_class, "Class", sourceAuthority);
     }
 
     /**
@@ -482,20 +465,20 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("125b5493-052d-4a0d-a3e1-ed5bf792689e")
-    public DQResponse<ComplianceValue> validationKingdomNotfound(@ActedUpon("dwc:kingdom") String kingdom) {
+    public static DQResponse<ComplianceValue> validationKingdomNotfound(@ActedUpon("dwc:kingdom") String kingdom, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
         // if dwc:kingdom is EMPTY; COMPLIANT if the value of dwc:kingdom 
         // was found as a value at the rank of kingdom by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // service; otherwise NOT_COMPLIANT 
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
 
-        return result;
+        return validateHigherTaxonAtRank(kingdom, "Kingdom", sourceAuthority);
     }
 
     /**
@@ -535,19 +518,87 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
-    public DQResponse<ComplianceValue> validationOrderNotfound(@ActedUpon("dwc:order") String order) {
+    public static DQResponse<ComplianceValue> validationOrderNotfound(@ActedUpon("dwc:order") String order,  @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
         // if dwc:order is EMPTY; COMPLIANT if the value of dwc:order 
         // was found as a value at the rank of order by the bdq:sourceAuthority 
         //service; otherwise NOT_COMPLIANT 
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
+        
+        if (sourceAuthority==null) { 
+        	sourceAuthority = new SciNameSourceAuthority();
+        }
 
+        if (SciNameUtils.isEmpty(order)) { 
+        	result.addComment("No value provided for order.");
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else { 
+        	if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
+        		try {
+        			List<NameUsage> matches = GBIFService.lookupTaxonAtRank(order, GBIFService.KEY_GBIFBACKBONE, "Order", 100);
+        			logger.debug(matches.size());
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided order found in GBIF backbone taxonomy as an order.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided order found in GBIF backbone taxonomy as an order.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}
+        	} else if (sourceAuthority.isGBIFChecklist()) { 
+        		try {
+        			List<NameUsage> matches = GBIFService.lookupTaxonAtRank(order, sourceAuthority.getAuthoritySubDataset(), "Order", 100);
+        			logger.debug(matches.size());
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided order found in " + sourceAuthority.getAuthority().getName() + " as an order.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided order found  " + sourceAuthority.getAuthority().getName() + "  as an order.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}        		
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
+        		try {
+        			List<NameUsage> matches = WoRMSService.lookupTaxonAtRank(order,"Order");
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided order found in WoRMS as an order.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided order found in WoRMS as an order.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("WoRMS aphia API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		} catch (Exception e) {
+        			result.addComment("Error using WoRMS aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}
+        	} else { 
+        		result.addComment("Source Authority Not Implemented.");
+        		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        	} 
+        }
+		
         return result;
     }
 
@@ -602,7 +653,25 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
-    public static DQResponse<ComplianceValue> validationTaxonEmpty(@ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:taxonConceptID") String taxonConceptID, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:scientificNameID") String scientificNameID, @ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:parentNameUsageID") String parentNameUsageID, @ActedUpon("dwc:subgenus") String subgenus, @ActedUpon("dwc:higherClassification") String higherClassification, @ActedUpon("dwc:vernacularName") String vernacularName, @ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, @ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:specificEpithet") String specificEpithet, @ActedUpon("dwc:order") String order) {
+    public static DQResponse<ComplianceValue> validationTaxonEmpty(
+    		@ActedUpon("dwc:class") String taxonomic_class, 
+    		@ActedUpon("dwc:genus") String genus, 
+    		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, 
+    		@ActedUpon("dwc:taxonConceptID") String taxonConceptID, 
+    		@ActedUpon("dwc:phylum") String phylum, 
+    		@ActedUpon("dwc:scientificNameID") String scientificNameID, 
+    		@ActedUpon("dwc:taxonID") String taxonID, 
+    		@ActedUpon("dwc:parentNameUsageID") String parentNameUsageID, 
+    		@ActedUpon("dwc:subgenus") String subgenus, 
+    		@ActedUpon("dwc:higherClassification") String higherClassification, 
+    		@ActedUpon("dwc:vernacularName") String vernacularName, 
+    		@ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, 
+    		@ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, 
+    		@ActedUpon("dwc:kingdom") String kingdom, 
+    		@ActedUpon("dwc:family") String family, 
+    		@ActedUpon("dwc:scientificName") String scientificName, 
+    		@ActedUpon("dwc:specificEpithet") String specificEpithet, 
+    		@ActedUpon("dwc:order") String order) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -699,7 +768,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("3667556d-d8f5-454c-922b-af8af38f613c")
-    public DQResponse<ComplianceValue> validationGenusNotfound(@ActedUpon("dwc:genus") String genus) {
+    public static DQResponse<ComplianceValue> validationGenusNotfound(@ActedUpon("dwc:genus") String genus, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -711,11 +780,16 @@ public class DwCSciNameDQ {
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
+        
+        if (sourceAuthority==null) { 
+        	sourceAuthority = new SciNameSourceAuthority();
+        }
+        
         if (SciNameUtils.isEmpty(genus)) { 
         	result.addComment("No value provided for genus.");
         	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         } else { 
-        	if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
+        	if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
         		try {
         			List<NameUsage> matches = GBIFService.lookupGenus(genus, GBIFService.KEY_GBIFBACKBONE, 100);
         			logger.debug(matches.size());
@@ -732,7 +806,24 @@ public class DwCSciNameDQ {
         			result.addComment("GBIF API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		}
-        	} else if (this.sourceAuthority.equals(EnumSciNameSourceAuthority.WORMS)) {
+        	} else if (sourceAuthority.isGBIFChecklist()) { 
+        		try {
+        			List<NameUsage> matches = GBIFService.lookupGenus(genus, sourceAuthority.getAuthoritySubDataset(), 100);
+        			logger.debug(matches.size());
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided genus found in  " + sourceAuthority.getAuthority().getName() + "  as a genus.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided genus found in  " + sourceAuthority.getAuthority().getName() + "  as a genus.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}        		
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
         		try {
         			List<NameUsage> matches = WoRMSService.lookupGenus(genus);
         			if (matches.size()>0) { 
@@ -865,8 +956,96 @@ public class DwCSciNameDQ {
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
+        
+        // NOTES: Default sourceAuthority is https://rs.gbif.org/vocabulary/gbif/rank.xml
+        //  meaning that "using" must be interpreted as "to a value in", as this is a static xml 
+        //  document not a service which itself can perform transformations
+        
+        
 
         return result;
     }
+    
+    /**
+     * Provides internals for validationKingdomNotFound etc.
+     * 
+     * @param taxon name of the taxon to look up
+     * @param rank at which potential matches of the taxon must be to match (expected to be single word, first letter capitalized.
+     * @param sourceAuthority in which to look up the taxon
+     * @return a validation compliance value specifying a match (COMPLIANT) or not.
+     */
+    public static DQResponse<ComplianceValue> validateHigherTaxonAtRank(String taxon, String rank, SciNameSourceAuthority sourceAuthority) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        if (sourceAuthority==null) { 
+        	sourceAuthority = new SciNameSourceAuthority();
+        }
+
+        if (SciNameUtils.isEmpty(taxon)) { 
+        	result.addComment("No value provided for " + rank + ".");
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else { 
+        	if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
+        		try {
+        			List<NameUsage> matches = GBIFService.lookupTaxonAtRank(taxon, GBIFService.KEY_GBIFBACKBONE, rank, 100);
+        			logger.debug(matches.size());
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided " + rank +  " found in GBIF backbone taxonomy at rank " + rank + ".");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided " + rank + " found in GBIF backbone taxonomy at rank " + rank + ".");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}
+        	} else if (sourceAuthority.isGBIFChecklist()) { 
+        		try {
+        			List<NameUsage> matches = GBIFService.lookupTaxonAtRank(taxon, sourceAuthority.getAuthoritySubDataset(), "Order", 100);
+        			logger.debug(matches.size());
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided " + rank + " found in " + sourceAuthority.getAuthority().getName() + " at rank " + rank + ".");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided " + rank +  " found  " + sourceAuthority.getAuthority().getName() + " at rank " + rank + ".");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}        		
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
+        		try {
+        			List<NameUsage> matches = WoRMSService.lookupTaxonAtRank(taxon,rank);
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided "+rank+" found in WoRMS at rank " + rank + ".");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided " + rank + " found in WoRMS at rank " + rank + ".");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (IOException e) {
+        			result.addComment("WoRMS aphia API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		} catch (Exception e) {
+        			result.addComment("Error using WoRMS aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}
+        	} else { 
+        		result.addComment("Source Authority Not Implemented.");
+        		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        	} 
+        }
+		
+        return result;
+    }    
 
 }

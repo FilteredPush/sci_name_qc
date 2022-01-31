@@ -1,5 +1,17 @@
 /**
- * 
+ * Copyright 2022 President and Fellows of Harvard College
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
  */
 package org.filteredpush.qc.sciname.services;
 
@@ -21,26 +33,27 @@ import edu.harvard.mcz.nametools.NameUsage;
  * @author mole
  *
  */
-public class GBIFServiceTest {
+public class GBIFServiceTestIT {
 
-	private static final Log logger = LogFactory.getLog(GBIFServiceTest.class);
+	private static final Log logger = LogFactory.getLog(GBIFServiceTestIT.class);
 
-//	/**
-//	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#fetchTaxon(java.lang.String, java.lang.String)}.
-//	 */
-//	@Test
-//	public void testFetchTaxon() {
-//		fail("Not yet implemented");
-//	}
-//
-//	/**
-//	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#searchForTaxon(java.lang.String, java.lang.String)}.
-//	 */
-//	@Test
-//	public void testSearchForTaxon() {
-//		fail("Not yet implemented");
-//	}
-//
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#fetchTaxon(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testFetchTaxon() {
+	 // TODO:	fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#searchForTaxon(java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testSearchForTaxon() {
+	 // TODO	fail("Not yet implemented");
+	}
+
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#searchForSpecies(java.lang.String, java.lang.String)}.
 	 */
@@ -164,12 +177,59 @@ public class GBIFServiceTest {
 		}		
 	}
 
-//	/**
-//	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#fetchSynonyms(int, java.lang.String)}.
-//	 */
-//	@Test
-//	public void testFetchSynonyms() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testLookupTaxonAtRank() {
+		try {
+			int requestedRecords = 1;
+			List<NameUsage> resultList = GBIFService.lookupTaxonAtRank("Muricidae", GBIFService.KEY_GBIFBACKBONE,"FAMILY",requestedRecords);
+			assertEquals(requestedRecords, resultList.size());
+			assertEquals("Muricidae",resultList.get(0).getCanonicalName());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IOException " + e.getMessage());
+		}	
+		try {
+			int requestedRecords = 1;
+			List<NameUsage> resultList = GBIFService.lookupTaxonAtRank("Muricidae", GBIFService.KEY_GBIFBACKBONE,"KINGDOM",requestedRecords);
+			assertEquals(0, resultList.size());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IOException " + e.getMessage());
+		}		
+		try {
+			int requestedRecords = 50;
+			List<NameUsage> resultList = GBIFService.lookupTaxonAtRank("Muricidae", GBIFService.KEY_GBIFBACKBONE,"FAMILY",requestedRecords);
+			Iterator<NameUsage> i = resultList.iterator();
+			int murexCount = 0;
+			while (i.hasNext()) {
+				NameUsage usage = i.next();
+				logger.debug(usage.getCanonicalName() + " " + usage.getAcceptedAuthorship() + " " + usage.getTaxonomicStatus() );
+				if (usage.getTaxonomicStatus().equals(TaxonomicStatus.ACCEPTED.name()) && usage.getFamily().equals("Muricidae")) {
+					if (usage.getCanonicalName().equals("Muricidae")) { 
+						murexCount++;
+					}
+					if (usage.getFamily().equals("Muricidae")) {
+						assertEquals("Muricidae",usage.getCanonicalName());
+						if (!SciNameUtils.isEmpty(usage.getAcceptedAuthorship())) {
+							assertEquals("Linnaeus, 1758", usage.getAcceptedAuthorship());
+						}
+					} 
+				}
+				assertEquals(GBIFService.KEY_GBIFBACKBONE,usage.getDatasetKey());
+			}
+			assertEquals(1, murexCount);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("IOException " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.services.GBIFService#fetchSynonyms(int, java.lang.String)}.
+	 */
+	@Test
+	public void testFetchSynonyms() {
+	// TODO:	fail("Not yet implemented");
+	}
 
 }
