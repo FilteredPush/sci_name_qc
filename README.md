@@ -100,15 +100,23 @@ To install in your local maven repository run:
 
 	mvn install
 
-# Testing
+# Testing on and offline
 
-Separation of tests that can be run online and those that require conection to remote services are ongoing.
+Test are separated into those be run offline and those that require conection to remote services (GBIF API, WoRMS aphia API).
 
-Goal is for the test phase to run only tests that can be run offline.  Until then, use -DskipTests if you need to build while offline.
+Tests requiring online access to remote services are run in the integration-test phase, which lies between the package and install phases.  So, invocation of
 
-To run tests that make calls to remote APIs (GBIF api and WoRMS aphia api), run a phase that includes integration-test, and use the profile services-test:
+    mvn package
 
-   mvn integration-test -Pservices-test
+will run the tests that do not need online access to services, (as will mvn test), while invocation of
+
+	mvn install
+
+will run both these test and the integration tests that require access to online services (similarly mvn deploy).  
+It is currently safe to invoke mvn integration-test from the command line, but this is not a recommended practice, 
+as integration-tests are typically expected to start/stop a local jetty server in pre- and post- phases.  If you
+have to run mvn install in an offline environment, you can use mvn install -DskipTests to prevent test failures
+from the absence of a connection to GBIF and WoRMS from causing the build to fail.
 
 # Developer deployment: 
 
