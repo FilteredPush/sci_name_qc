@@ -56,7 +56,6 @@ public class SciNameSourceAuthority {
 		updateDefaultSubAuthorities();
 	}
 	
-	
 	/**
 	 * Utility constructor to construct a scientific name source authority from a string instead of the enum.
 	 * 

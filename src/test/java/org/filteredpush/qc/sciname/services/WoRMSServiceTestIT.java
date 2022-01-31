@@ -48,11 +48,6 @@ public class WoRMSServiceTestIT {
 		}
 	}
 	
-	@Test
-	public void testFail() { 
-		fail("integration tests are run");
-	}
-	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.services.WoRMSService#simpleNameSearch(java.lang.String, java.lang.String, boolean)}.
 	 */
