@@ -131,6 +131,7 @@
 							<directory>${project.basedir}</directory>
 							<includes>
 								<include>${project.artifactId}-*-executable.jar</include>
+								<include>${project.artifactId}-*-cfweblib.jar</include>
 							</includes>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
@@ -207,6 +208,7 @@
 				<version>3.1.0</version>
 				<executions>
 					<execution>
+						<id>executable</id>
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>
@@ -214,6 +216,38 @@
 						<configuration>
 							<outputDirectory>${project.basedir}</outputDirectory>
 							<outputFile>${project.artifactId}-${project.version}-${git.commit.id.abbrev}-executable.jar</outputFile>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>org.filteredpush.qc.sciname.SciNameUtils</Main-Class>
+										<Class-Path>org/filteredpush/qc/sciname</Class-Path>
+										<Multi-Release>true</Multi-Release>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cfweblib</id>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}</outputDirectory>
+							<outputFile>${project.artifactId}-${project.version}-${git.commit.id.abbrev}-cfweblib.jar</outputFile>
+							<artifactSet>
+								<excludes>
+									<exclude>axis:axis</exclude>
+<!--
+									<exclude>org.apache.axis:axis-jaxrpc</exclude>
+									<exclude>org.apache.axis:axis-saaj</exclude>
+-->
+								</excludes>
+							</artifactSet>
 							<transformers>
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
