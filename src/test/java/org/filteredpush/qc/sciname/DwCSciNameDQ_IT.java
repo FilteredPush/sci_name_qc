@@ -142,7 +142,7 @@ public class DwCSciNameDQ_IT {
         // AMENDED if a value for dwc:taxonID is unique and resolvable 
         // on the basis of the value of the lowest ranking not EMPTY 
         // taxon classification terms dwc:scientificName, dwc:scientificNameAuthorship, 
-        // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_CHANGED 
+        // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_AMENDED 
         //
 		
 		SciNameSourceAuthority authority = null;
@@ -157,7 +157,7 @@ public class DwCSciNameDQ_IT {
 		String taxonId = null;
 		String scientificNameAuthorship = null;
 		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
-		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 
 		family = null;
@@ -166,7 +166,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = null;
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
 		
 		family = null;
@@ -175,7 +175,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "(Linnaeus, 1758)";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
 		
 		family = null;
@@ -184,7 +184,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "(Linnaeus)";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
 		
 		family = null;
@@ -193,7 +193,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "(Linnaeus, 1758)";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
 		
 		family = null;
@@ -202,7 +202,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "(Linnaeus)";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));			
 		
 		family = "Muricidae";
@@ -212,7 +212,7 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
 		// NOTE: If GBIF improves its data quality, this test will fail
-		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		family = "Muricidae";
@@ -221,7 +221,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
 		
 		family = "Muricidae";
@@ -230,7 +230,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));			
 		
 		try {
@@ -245,7 +245,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Rafinesque, 1815";   
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:148", response.getValue().getObject().get("dwc:taxonID"));
 		
 		family = "Muricidae";
@@ -254,7 +254,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Lightfoot, 1786";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
 		
 		family = "Muricidae";
@@ -263,7 +263,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Lightfoot, 1786";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
 		
 		family = "Chaetodermatidae ";
@@ -272,7 +272,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Scheltema";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		family = "Chaetodermatidae ";
@@ -281,7 +281,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Scheltema";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());		
 		
 		family = "Chaetodermatidae";
@@ -290,7 +290,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Scheltema";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
 	
 		family = "Chaetodermatidae";
@@ -299,7 +299,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Scheltema";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
 				
 		family = "Chaetodermatidae";
@@ -308,7 +308,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Scheltema";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
 		
 		family = "Chaetodermatidae";
@@ -317,7 +317,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Scheltema";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
 				
 		family = "Muricidae";
@@ -326,7 +326,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.NO_CHANGE.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		family = "Muricidae";
@@ -335,7 +335,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Sowerby, 1841";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
 
 		family = "Muricidae";
@@ -344,7 +344,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = "Sowerby, 1841";
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxonId, null, null, null, null, family, null, null, scientificName, scientificNameAuthorship, null, null, null, null, null, null, null, null, null, authority);
 		logger.debug(response.getComment());
-		assertEquals(ResultState.CHANGED.getLabel(), response.getResultState().getLabel());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
 		
 		
@@ -355,6 +355,39 @@ public class DwCSciNameDQ_IT {
 	 */
 	@Test
 	public void testValidationTaxonAmbiguous() {
+		
+		String scientificName = "";
+		String kingdom = "";
+		String taxonomic_class = "";
+		
+		// ambiregnal homonyms 
+		scientificName = "Graphis";  // gastropod and lichen
+		kingdom = "Fungi";
+		taxonomic_class= "Lecanoromycetes";
+		scientificName = "Graphis Adanson, 1763";  // fungi
+		kingdom = "Animalia";
+		taxonomic_class = "Gastropoda";
+		scientificName = "Graphis Jeffreys, 1867"; // gastropod
+		
+		scientificName = "Calotheca"; // beetle, grass, and junior homonym choanoflagellate
+		kingdom = "Protozoa";
+		taxonomic_class = "Choanoflagellatea";
+		scientificName = "Calotheca Thomsen & Moestrup, 1983";
+		kingdom = "Animalia";
+		taxonomic_class = "Insecta";
+		scientificName = "Calotheca Heyden, 1887";
+		kingdom = "Plantae";
+		taxonomic_class = "Magnoliopsida";
+		scientificName = "Calotheca A.M.F.J. Palisot de Beauvois";
+		
+		scientificName = "Gaimardia";
+		kingdom = "Animalia";
+		taxonomic_class = "Bivalvia";
+		scientificName = "Gaimardia Gould, 1852"; // clam
+		kingdom = "Plantae";
+		taxonomic_class = "Magnoliopsida";
+		scientificName = "Gaimardia Gaudichaud-Beaupré, 1825";  // plant  
+		
 // TODO:		fail("Not yet implemented");
 	}
 

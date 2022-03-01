@@ -322,29 +322,29 @@ public class DwCSciNameDQ {
 					if (hasMatch) {
 						if (matchCounter>1) { 
 							result.addComment("More than one exact match found for provided taxon in " + sourceAuthority.getName() + ".");
-							result.setResultState(ResultState.NO_CHANGE);
-							// result.setResultState(ResultState.AMBIGUOUS);  Discussed in TG2 call 2022 Jan 30, use NO_CHANGE and discuss ambiguity in comments.
+							result.setResultState(ResultState.NOT_AMENDED);
+							// result.setResultState(ResultState.AMBIGUOUS);  Discussed in TG2 call 2022 Jan 30, use NOT_AMENDED and discuss ambiguity in comments.
 							// separate examination of ambiguity into a separate validation, rather than asserting as a result.
 						} else { 
 							if (kvp.get("dwc:taxonID").equals(taxonID)) { 
 								result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ", matching the current value of dwc:taxonID");
-								result.setResultState(ResultState.NO_CHANGE);
+								result.setResultState(ResultState.NOT_AMENDED);
 							} else  {
 								// Specification does not state that amendment is to be provided only for an
 								// empty taxonID, so proposing a change if the the value found is different from the current value
 								result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ".");
 								AmendmentValue ammendedTaxonID = new AmendmentValue(kvp);
 								result.setValue(ammendedTaxonID);
-								result.setResultState(ResultState.CHANGED);
+								result.setResultState(ResultState.AMENDED);
 							} 
 						}
 					} else { 
 						result.addComment("No exact match found for provided taxon in " + sourceAuthority.getName() + ".");
-						result.setResultState(ResultState.NO_CHANGE);
+						result.setResultState(ResultState.NOT_AMENDED);
 					}
 				} else { 
 					result.addComment("No match found for provided taxon in " + sourceAuthority.getName() + ".");
-					result.setResultState(ResultState.NO_CHANGE);
+					result.setResultState(ResultState.NOT_AMENDED);
 				}
 			} catch (IOException e) {
 				result.addComment(sourceAuthority.getName() + " API not available:" + e.getMessage());
