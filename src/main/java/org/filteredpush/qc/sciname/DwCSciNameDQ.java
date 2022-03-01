@@ -185,7 +185,7 @@ public class DwCSciNameDQ {
         // AMENDED if a value for dwc:taxonID is unique and resolvable 
         // on the basis of the value of the lowest ranking not EMPTY 
         // taxon classification terms dwc:scientificName, dwc:scientificNameAuthorship, 
-        // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_CHANGED 
+        // dwc:kingdom, dwc:phylum, dwc:class, etc.; otherwise NOT_AMENDED 
         //
 
         // Parameters. This test is defined as parameterized.
@@ -423,7 +423,7 @@ public class DwCSciNameDQ {
         // if dwc:taxonID is EMPTY, the value of dwc:taxonID is ambiguous 
         // or dwc:scientificName was not EMPTY; AMENDED if dwc:scientificName 
         // was added from a successful lookup of dwc:taxonID in the 
-        //bdq:sourceAuthority; otherwise NOT_CHANGED 
+        //bdq:sourceAuthority; otherwise NOT_AMENDED 
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
@@ -952,7 +952,7 @@ public class DwCSciNameDQ {
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // service was not available; AMENDED if the value of dwc:taxonRank 
         // was standardized using the bdq:sourceAuthority service; 
-        //otherwise NOT_CHANGED 
+        //otherwise NOT_AMENDED 
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
