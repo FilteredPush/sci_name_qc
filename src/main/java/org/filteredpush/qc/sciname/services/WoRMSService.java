@@ -69,24 +69,45 @@ public class WoRMSService {
 		conn.connect();
 	}
 	
-	public static List<NameUsage> lookupTaxon(String taxon, String author, boolean marineOnly) throws RemoteException {
+	public static  List<NameUsage> lookupTaxon(String taxon,  String authorship) throws RemoteException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
-	
-		AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
-		AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, marineOnly, 1);	
-		if (resultsArr!=null || resultsArr.length==1) { 
-			List<AphiaRecord> results = Arrays.asList(resultsArr);
-			Iterator<AphiaRecord> i = results.iterator();
-			logger.debug(resultsArr.length);
-			while (i.hasNext()) { 
-				AphiaRecord ar = i.next();
-				NameUsage usage = new NameUsage(ar);
-				result.add(usage);
+		
+		if (!SciNameUtils.isEmpty(taxon)) { 
+			AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+
+			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, false, 1);
+			if (resultsArr!=null && resultsArr.length>0) { 
+				List<AphiaRecord> results = Arrays.asList(resultsArr);
+				Iterator<AphiaRecord> i = results.iterator();
+				logger.debug(resultsArr.length);
+				while (i.hasNext()) { 
+					AphiaRecord ar = i.next();
+					if (ar !=null && ar.getScientificname()!=null && taxon!=null 
+							&& ar.getScientificname().equalsIgnoreCase(taxon)) {
+						logger.debug(ar.getScientificname());
+						logger.debug(ar.getAuthority());
+						NameUsage match = new NameUsage();
+						match.setAuthorship(ar.getAuthority());
+						match.setOriginalAuthorship(authorship);
+						match.setCanonicalName(ar.getScientificname());
+						match.setGuid(ar.getLsid());
+						match.setRank(ar.getRank());
+						match.setKingdom(ar.getKingdom());
+						NameComparison comparison = match.getAuthorComparator().compare(authorship, ar.getAuthority());
+						if (comparison.getMatchType().equals(NameComparison.MATCH_STRONGDISSIMILAR)) { 
+							// leave out
+							logger.debug(comparison.getMatchType());
+						} else {  
+							result.add(match);
+						}
+					}
+				}
 			}
 		}
-		
 		return result;
 	}
+	
+	
 	/**
 	 * Find a taxon name record in WoRMS.
 	 * 

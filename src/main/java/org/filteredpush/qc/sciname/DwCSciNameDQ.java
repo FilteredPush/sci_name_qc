@@ -251,7 +251,7 @@ public class DwCSciNameDQ {
 					logger.debug(matches);
 					matchList = GBIFService.parseAllNameUsagesFromJSON(matches);					
 				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
-					matchList = WoRMSService.lookupTaxon(lookMeUp, scientificNameAuthorship, false);
+					matchList = WoRMSService.lookupTaxon(lookMeUp, scientificNameAuthorship);
 				} else { 
 					throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
 				} 
@@ -517,7 +517,7 @@ public class DwCSciNameDQ {
      * @param order the provided dwc:order to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
+    @Provides("urn:uuid:81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
     public static DQResponse<ComplianceValue> validationOrderNotfound(@ActedUpon("dwc:order") String order,  @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
