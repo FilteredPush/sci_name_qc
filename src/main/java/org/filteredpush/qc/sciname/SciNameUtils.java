@@ -18,6 +18,8 @@
 package org.filteredpush.qc.sciname;
 
 
+import java.io.IOException;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -27,7 +29,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.services.GBIFService;
+import org.filteredpush.qc.sciname.services.Validator;
 import org.filteredpush.qc.sciname.services.WoRMSService;
+import org.filteredpush.qc.sciname.services.ZooBankService;
 import org.gbif.nameparser.NameParserGBIF;
 import org.gbif.nameparser.api.ParsedName;
 
@@ -135,10 +139,11 @@ public class SciNameUtils {
 		CommandLineParser parser = new DefaultParser();
 		
 		Options options = new Options();
-		options.addOption( "f", "file", true, "input csv file from which to lookup names" );
-		options.addOption("o","output", true, "output file into which to write results of lookup");
-		options.addOption("t","test", false, "test connectivity with an example name");
-		options.addOption("h","help", false, "print this message");
+		options.addOption( "f", "file", true, "Input csv file from which to lookup names.  Assumes a csv file, first three columns being dbpk, scientificname, authorship, (TODO: family), columns after the third are ignored. " );
+		options.addOption("o","output", true, "Output file into which to write results of lookup, default output.csv");
+		options.addOption("s","service", true, "Service to lookup names against  WoRMS, GBIF_BACKBONE, GBIF_ITIS, GBIF_FAUNA_EUROPEA, GBIF_UKSI, GBIF_IPNI, GBIF_INDEXFUNGORUM, GBIF_COL, GBIF_PALEOBIOLOGYDB, or ZooBank (TODO: WoRMS+ZooBank). ");
+		options.addOption("t","test", false, "Test connectivity with an example name");
+		options.addOption("h","help", false, "Print this message");
 		
 		try {
 			CommandLine cmd = parser.parse( options, args);
@@ -153,13 +158,66 @@ public class SciNameUtils {
 			if (cmd.hasOption("file")) { 
 				String infile = cmd.getOptionValue("file");
 				logger.debug(infile);
+				String outfile = "output.csv";
 				if (cmd.hasOption("output")) { 
-				String outfile = cmd.getOptionValue("file");
+					outfile = cmd.getOptionValue("output");
 					logger.debug(outfile);
 				}
+				String targetService = "WoRMS";
+				if (cmd.hasOption("service")) {
+					targetService = cmd.getOptionValue("service");
+				}
+					
+				Validator validator = null;	
+				switch (targetService.toLowerCase()) { 
+				case "worms":
+					validator = new WoRMSService(true);
+					break;
+				case "gbif_backbone":
+					validator = new GBIFService(GBIFService.KEY_GBIFBACKBONE);
+					break;
+				case "gbif_itis":
+					validator = new GBIFService(GBIFService.KEY_ITIS);
+					break;
+				case "gbif_fauna_europaea":
+					validator = new GBIFService(GBIFService.KEY_ITIS);
+					break;
+				case "gbif_uksi":
+					validator = new GBIFService(GBIFService.KEY_UKSI);
+					break;
+				case "gbif_ipni":
+					validator = new GBIFService(GBIFService.KEY_IPNI);
+					break;
+				case "gbif_indexfungorum":
+					validator = new GBIFService(GBIFService.KEY_INDEXFUNGORUM);
+					break;
+				case "gbif_col":
+					validator = new GBIFService(GBIFService.KEY_COL);
+					break;
+				case "gbif_paleobiologydb":
+					validator = new GBIFService(GBIFService.KEY_PALEIOBIOLOGY_DATABASE);
+					break;
+				case "zoobank":
+					validator = new ZooBankService();
+					break;
+				default: 
+					throw new SourceAuthorityException("Unknown or unsupported service: [" + targetService + "]");
+				}
+				
+				BatchRunner runner = new BatchRunner(infile, outfile, new WoRMSService(false));
+				runner.runBatch();
 			}
 		} catch (ParseException e1) {
 			logger.error(e1);
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp( "SciNameUtils", options );
+		} catch (FileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		} catch (SourceAuthorityException e) {
+			logger.error(e.getMessage());
 			HelpFormatter formatter = new HelpFormatter();
 			formatter.printHelp( "SciNameUtils", options );
 		}

@@ -77,6 +77,9 @@ public class NameComparison {
      */
 	public static final String MATCH_SAMEBUTABBREVIATED = "Same Author, but abbreviated differently.";
 	
+	public static final String SNMATCH_SUBGENUS = "Same name, but with subgenus present in one case.";
+	public static final String SNMATCH_ONGENUS = "Exact match on genus, but not on specific/infraspecific epithet.";
+	
 	private String nameOne;
 	private String nameTwo;
 	private String matchType;
@@ -120,6 +123,9 @@ public class NameComparison {
 	 * @return the matchType
 	 */
 	public String getMatchType() {
+		if (matchType==null) { 
+			return "";
+		}
 		return matchType;
 	}
 	/**

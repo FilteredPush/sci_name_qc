@@ -885,6 +885,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the unacceptReason
 	 */
 	public String getUnacceptReason() {
+		if (unacceptReason==null) { 
+			return "";
+		}
 		return unacceptReason;
 	}
 

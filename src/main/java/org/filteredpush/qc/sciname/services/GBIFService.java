@@ -31,7 +31,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.SciNameUtils;
-import org.gbif.api.vocabulary.TaxonomicStatus;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -52,7 +51,7 @@ import edu.harvard.mcz.nametools.NameUsage;
  * @author mole
  *
  */
-public class GBIFService {
+public class GBIFService implements Validator {
 	
 	private static final Log logger = LogFactory.getLog(GBIFService.class);
 	
@@ -522,6 +521,117 @@ public class GBIFService {
 	
 	public NameUsage getValidatedNameUsage() { 
 		return validatedNameUsage;
+	}
+
+	@SuppressWarnings("static-access")
+	@Override
+	public NameUsage validate(NameUsage taxonNameToValidate) {
+		NameUsage result = null;
+		if (taxonNameToValidate!=null) {
+			try { 
+			// TODO: Handle autonyms of botanical names (should not have an authorship).
+			String taxonName = taxonNameToValidate.getCanonicalName();
+			if (taxonName==null || taxonName.length()==0) { 
+				taxonName = taxonNameToValidate.getScientificName();
+				taxonNameToValidate.setCanonicalName(taxonName);
+			}
+			String authorship = taxonNameToValidate.getAuthorship();
+			List<NameUsage> hits = GBIFService.parseAllNameUsagesFromJSON(GBIFService.searchForTaxon(taxonName, targetKey));
+			if (hits==null || hits.size()==0) { 
+				// no matches
+			} else if (hits.size()==1) { 
+			    Iterator<NameUsage> i = hits.iterator();
+				// One possible match
+				NameUsage potentialMatch = i.next();
+				AuthorNameComparator authorNameComparator = new ICNafpAuthorNameComparator(.70d,.5d);
+				if (potentialMatch.getKingdom().equals("Animalia")) { 
+				    authorNameComparator = new ICZNAuthorNameComparator(.75d,.5d);
+				}
+				if (potentialMatch.getCanonicalName().equals(taxonName) && potentialMatch.getAuthorship().equals(authorship)) { 
+					potentialMatch.setMatchDescription(NameComparison.MATCH_EXACT);
+					result = potentialMatch;
+				    result.setAuthorshipStringEditDistance(1d);
+				} else { 
+					NameComparison authorComparison = authorNameComparator.compare(authorship, potentialMatch.getAuthorship());
+					double similarity = authorComparison.getSimilarity();
+					String match = authorComparison.getMatchType();
+					logger.debug(authorship);
+					logger.debug(potentialMatch.getAuthorship());
+					logger.debug(similarity);
+					potentialMatch.setMatchDescription(match);
+					result = potentialMatch;
+				    result.setAuthorshipStringEditDistance(similarity);
+				}
+				result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+				result.setScientificNameStringEditDistance(1d);
+				result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+				result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
+			} else { 
+				// multiple possible matches
+			    Iterator<NameUsage> i = hits.iterator();
+			    logger.debug("More than one match: " + hits.size());
+				boolean exactMatch = false;
+				List<NameUsage> matches = new ArrayList<NameUsage>();
+			    while (i.hasNext() && !exactMatch) { 
+			        NameUsage potentialMatch = i.next();
+				    matches.add(potentialMatch);
+				    logger.debug(potentialMatch.getScientificName());
+				    logger.debug(potentialMatch.getCanonicalName());
+				    logger.debug(potentialMatch.getKey());
+				    logger.debug(potentialMatch.getAuthorship());
+				    logger.debug(potentialMatch.getTaxonomicStatus());
+				    if (potentialMatch.getScientificName().equals(taxonName)) {
+				    	if (potentialMatch.getAuthorship().equals(authorship)) {
+				    		// If one of the results is an exact match on scientific name and authorship, pick that one. 
+				    		result = potentialMatch;
+				    		result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+				    		result.setMatchDescription(NameComparison.MATCH_EXACT);
+				    		result.setAuthorshipStringEditDistance(1d);
+				    		result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+				    		result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
+				    		result.setScientificNameStringEditDistance(1d);
+				    		exactMatch = true;
+				    	}
+				    }
+				}
+				if (!exactMatch) {
+					// If we didn't find an exact match on scientific name and authorship in the list, pick the 
+					// closest authorship and list all of the potential matches.  
+					Iterator<NameUsage> im = matches.iterator();
+					if (im.hasNext()) { 
+					NameUsage closest = im.next();
+					StringBuffer names = new StringBuffer();
+					names.append(closest.getScientificName()).append(" ").append(closest.getAuthorship()).append(" ").append(closest.getUnacceptReason()).append(" ").append(closest.getTaxonomicStatus());
+					while (im.hasNext()) { 
+						NameUsage current = im.next();
+					    names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
+						if (taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+							closest = current;
+						}
+					}
+					result = closest;
+				    result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+				    result.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
+				    result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+				    result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
+				    result.setScientificNameStringEditDistance(1d);
+				    result.setAuthorshipStringEditDistance(taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(taxonNameToValidate.getAuthorship(), result.getAuthorship()));
+					}
+				}
+			}
+			} catch (IOException e) { 
+				logger.error(e.getMessage());
+			}
+		}
+		if (result!=null) { 
+			// GBIF includes the authorship in the scientific name.
+			// result.setScientificName(result.getScientificName().replaceAll(result.getAuthorship() + "$", ""));
+			result.setScientificName(result.getCanonicalName());
+			// set a guid for the gbif records
+			result.setGuid("http://api.gbif.org/v1/species/" + Integer.toString(result.getKey()));
+		}
+		return result;
+		
 	}	
 	
 }

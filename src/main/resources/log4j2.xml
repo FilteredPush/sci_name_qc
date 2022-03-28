@@ -2,11 +2,17 @@
 <Configuration status="WARN">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %l - %msg%n"/>
     </Console>
+    <File name="SciNameQCLog" fileName="sci_name_qc.log" append="false">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %l - %msg%n"/>
+    </File>    
   </Appenders>
   <Loggers>
-    <Root level="error">
+    <Logger name="org.filteredpush.qc.sciname" level="DEBUG">
+      <AppenderRef ref="SciNameQCLog"/>
+    </Logger>
+    <Root level="WARN">
       <AppenderRef ref="Console"/>
     </Root>
   </Loggers>
