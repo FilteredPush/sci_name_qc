@@ -1,16 +1,16 @@
 package org.marinespecies.aphia.v1_0.handler;
 
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonTokenId;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.datatype.threetenbp.DateTimeUtils;
 import com.fasterxml.jackson.datatype.threetenbp.DecimalUtils;
 import com.fasterxml.jackson.datatype.threetenbp.deser.ThreeTenDateTimeDeserializerBase;
 import com.fasterxml.jackson.datatype.threetenbp.function.BiFunction;
 import com.fasterxml.jackson.datatype.threetenbp.function.Function;
 import org.threeten.bp.DateTimeException;
+import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.Instant;
 import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneId;
@@ -147,7 +147,7 @@ public class CustomInstantDeserializer<T extends Temporal>
   }
 
   @Override
-  protected JsonDeserializer<T> withDateFormat(DateTimeFormatter dtf) {
+  protected ThreeTenDateTimeDeserializerBase<T> withDateFormat(DateTimeFormatter dtf) {
     if (dtf == _formatter) {
       return this;
     }
@@ -158,7 +158,7 @@ public class CustomInstantDeserializer<T extends Temporal>
   public T deserialize(JsonParser parser, DeserializationContext context) throws IOException {
     //NOTE: Timestamps contain no timezone info, and are always in configured TZ. Only
     //string values have to be adjusted to the configured TZ.
-    switch (parser.getCurrentTokenId()) {
+    switch (parser.currentTokenId()) {
       case JsonTokenId.ID_NUMBER_FLOAT: {
         BigDecimal value = parser.getDecimalValue();
         long seconds = value.longValue();
@@ -205,7 +205,7 @@ public class CustomInstantDeserializer<T extends Temporal>
 
   private ZoneId getZone(DeserializationContext context) {
     // Instants are always in UTC, so don't waste compute cycles
-    return (_valueClass == Instant.class) ? null : DateTimeUtils.timeZoneToZoneId(context.getTimeZone());
+    return (_valueClass == Instant.class) ? null : DateTimeUtils.toZoneId(context.getTimeZone());
   }
 
   private static class FromIntegerArguments {
@@ -229,4 +229,16 @@ public class CustomInstantDeserializer<T extends Temporal>
       this.zoneId = zoneId;
     }
   }
+
+@Override
+protected ThreeTenDateTimeDeserializerBase<T> withLeniency(Boolean leniency) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+protected ThreeTenDateTimeDeserializerBase<T> withShape(Shape shape) {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
