@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.SciNameUtils;
 import org.marinespecies.aphia.v1_0.model.AphiaRecord;
+import org.marinespecies.aphia.v1_0.model.AphiaRecordsArray;
 import org.marinespecies.aphia.v1_0.api.TaxonomicDataApi;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
@@ -224,7 +225,8 @@ public class WoRMSService implements Validator {
 						logger.debug(ar.getScientificname());
 						logger.debug(ar.getAuthority());
 						logger.debug(ar.getTaxonRankID());
-						if (ar.getTaxonRankID()==WoRMSService.rankStringToNumber(rank)) { 
+						logger.debug(WoRMSService.rankStringToNumber(rank));
+						if (ar.getTaxonRankID().equals(WoRMSService.rankStringToNumber(rank))) { 
 							NameUsage match = new NameUsage();
 							match.setAuthorship(ar.getAuthority());
 							match.setCanonicalName(ar.getScientificname());
@@ -619,14 +621,14 @@ public class WoRMSService implements Validator {
 				logger.debug("No match.");
 				// Try WoRMS fuzzy matching query
 				String[] searchNames = { taxonName + " " + authorship };
-				AphiaRecord[][] matchResultsArr = wormsService.matchAphiaRecordsByNames(searchNames, false);
-				if (matchResultsArr!=null && matchResultsArr.length>0) {
-					Iterator<AphiaRecord[]> i0 = (Arrays.asList(matchResultsArr)).iterator();
+				List<String> searchNamesList = Arrays.asList(searchNames);
+				List<AphiaRecordsArray> matchResultsArr = wormsService.aphiaRecordsByMatchNames(searchNamesList, false);
+				if (matchResultsArr!=null && matchResultsArr.size()>0) {
+					Iterator<AphiaRecordsArray> i0 = matchResultsArr.iterator();
 					while (i0.hasNext()) {
 						// iterate through the inputs, there should be one and only one
-						AphiaRecord[] matchResArr = i0.next();
-						List<AphiaRecord> matches = Arrays.asList(matchResArr);
-						Iterator<AphiaRecord> im = matches.iterator();
+						AphiaRecordsArray matchResArr = i0.next();
+						Iterator<AphiaRecord> im = matchResArr.iterator();
 						List<NameUsage> potentialMatches = new ArrayList<NameUsage>();
 						while (im.hasNext()) { 
 							// iterate through the results, no match will have one result that is null
@@ -657,7 +659,7 @@ public class WoRMSService implements Validator {
 			    	logger.error("Fuzzy match query returned null instead of a result set.");
 			    }
 			}
-		} catch (RemoteException e) {
+		} catch (ApiException e) {
 			if (e.getMessage().equals("Connection timed out")) { 
 				logger.error(e.getMessage() + " " + taxonNameToValidate.getScientificName() + " " + taxonNameToValidate.getInputDbPK());
 			} else if (e.getCause()!=null && e.getCause().getClass().equals(UnknownHostException.class)) { 

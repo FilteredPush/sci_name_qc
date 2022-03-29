@@ -9,6 +9,7 @@ import javax.ws.rs.core.GenericType;
 
 import org.marinespecies.aphia.v1_0.model.AphiaRank;
 import org.marinespecies.aphia.v1_0.model.AphiaRecord;
+import org.marinespecies.aphia.v1_0.model.AphiaRecordsArray;
 import org.marinespecies.aphia.v1_0.model.Classification;
 import org.threeten.bp.OffsetDateTime;
 
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T22:21:58.348Z[GMT]")public class TaxonomicDataApi {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")public class TaxonomicDataApi {
   private ApiClient apiClient;
 
   public TaxonomicDataApi() {
@@ -326,10 +327,10 @@ import java.util.Map;
    * For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.&lt;br/&gt;This allows you to (fuzzy) match multiple names in one call. Limited to 50 names at once for performance reasons
    * @param scientificnames Names to search for (required)
    * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
-   * @return List&lt;AphiaRecord&gt;
+   * @return List&lt;AphiaRecordsArray&gt;
    * @throws ApiException if fails to make API call
    */
-  public List<AphiaRecord> aphiaRecordsByMatchNames(List<String> scientificnames, Boolean marineOnly) throws ApiException {
+  public List<AphiaRecordsArray> aphiaRecordsByMatchNames(List<String> scientificnames, Boolean marineOnly) throws ApiException {
     Object localVarPostBody = null;
     // verify the required parameter 'scientificnames' is set
     if (scientificnames == null) {
@@ -359,7 +360,7 @@ import java.util.Map;
 
     String[] localVarAuthNames = new String[] {  };
 
-    GenericType<List<AphiaRecord>> localVarReturnType = new GenericType<List<AphiaRecord>>() {};
+    GenericType<List<AphiaRecordsArray>> localVarReturnType = new GenericType<List<AphiaRecordsArray>>() {};
     return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
   }
   /**

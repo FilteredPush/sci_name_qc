@@ -51,7 +51,7 @@ import org.marinespecies.aphia.v1_0.handler.auth.HttpBasicAuth;
 import org.marinespecies.aphia.v1_0.handler.auth.ApiKeyAuth;
 import org.marinespecies.aphia.v1_0.handler.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T22:21:58.348Z[GMT]")public class ApiClient {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")public class ApiClient {
   protected Map<String, String> defaultHeaderMap = new HashMap<String, String>();
   protected String basePath = "https://www.marinespecies.org/rest";
   protected boolean debugging = false;

@@ -21,7 +21,7 @@ import org.marinespecies.aphia.v1_0.model.AphiaRecord;
  * AphiaRecordsArray
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T22:21:58.348Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")
 public class AphiaRecordsArray extends ArrayList<AphiaRecord> {
 
   @Override

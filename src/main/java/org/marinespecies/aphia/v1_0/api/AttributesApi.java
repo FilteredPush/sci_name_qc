@@ -7,8 +7,8 @@ import org.marinespecies.aphia.v1_0.handler.Pair;
 
 import javax.ws.rs.core.GenericType;
 
-import org.marinespecies.aphia.v1_0.model.AttributeKey;
 import org.marinespecies.aphia.v1_0.model.Attribute;
+import org.marinespecies.aphia.v1_0.model.AttributeKey;
 import org.marinespecies.aphia.v1_0.model.AttributeValue;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T22:21:58.348Z[GMT]")public class AttributesApi {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")public class AttributesApi {
   private ApiClient apiClient;
 
   public AttributesApi() {
@@ -40,7 +40,7 @@ import java.util.Map;
    * Get attribute definitions. To refer to root items specify ID &#x3D; &#x27;0&#x27;
    * @param ID The attribute definition id to search for (required)
    * @param includeChildren Include the tree of children. Default&#x3D;true (optional, default to true)
-   * @return List&lt;AtrributeKeys&gt;
+   * @return List&lt;AttributeKey&gt;
    * @throws ApiException if fails to make API call
    */
   public List<AttributeKey> aphiaAttributeKeysByID(Integer ID, Boolean includeChildren) throws ApiException {
@@ -80,7 +80,7 @@ import java.util.Map;
    * Get list values that are grouped by an CateogryID
    * Get list values that are grouped by an CateogryID
    * @param ID The CateogryID to search for (required)
-   * @return List&lt;AttributeValues&gt;
+   * @return List&lt;AttributeValue&gt;
    * @throws ApiException if fails to make API call
    */
   public List<AttributeValue> aphiaAttributeValuesByCategoryID(Integer ID) throws ApiException {

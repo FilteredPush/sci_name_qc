@@ -98,6 +98,7 @@ public class WoRMSServiceTestIT {
 			String name = "Murex";
 			List<NameUsage> matches;
 			matches = WoRMSService.lookupTaxonAtRank(name,"Genus");
+			logger.debug(matches.size());
 			assertTrue(matches.size() > 0);
 			Iterator<NameUsage> i = matches.iterator();
 			while (i.hasNext()) { 
