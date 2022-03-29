@@ -35,7 +35,6 @@ import org.gbif.nameparser.NameParserGBIF;
 import org.gbif.nameparser.api.NameParser;
 import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.UnparsableNameException;
-import org.marinespecies.aphia.v1_0.AphiaNameServicePortTypeProxy;
 
 import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
 import edu.harvard.mcz.nametools.NameComparison;

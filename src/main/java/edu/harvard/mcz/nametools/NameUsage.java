@@ -32,7 +32,7 @@ import org.gbif.nameparser.api.NomCode;
 import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.UnparsableNameException;
 import org.json.simple.JSONObject;
-import org.marinespecies.aphia.v1_0.AphiaRecord;
+import org.marinespecies.aphia.v1_0.model.AphiaRecord;
 
 /**
  * Representation of a usage of a scientific name, suitable for validation of names against 
@@ -255,10 +255,10 @@ public class NameUsage implements LinneanClassification {
 		this.setScientificName(record.getScientificname());
 		this.setRank(record.getRank());
 		this.setAuthorship(record.getAuthority());
-		this.setAcceptedName(record.getValid_name());
+		this.setAcceptedName(record.getValidName());
 		this.setKingdom(record.getKingdom());
 		this.setPhylum(record.getPhylum());
-		this.setTclass(record.get_class());
+		this.setTclass(record.getPropertyClass());
 		this.setOrder(record.getOrder());
 		this.setFamily(record.getFamily());
 		this.setGenus(record.getGenus());

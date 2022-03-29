@@ -26,8 +26,9 @@ import edu.harvard.mcz.nametools.NameUsage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.SciNameUtils;
-import org.marinespecies.aphia.v1_0.AphiaNameServicePortTypeProxy;
-import org.marinespecies.aphia.v1_0.AphiaRecord;
+import org.marinespecies.aphia.v1_0.model.AphiaRecord;
+import org.marinespecies.aphia.v1_0.api.TaxonomicDataApi;
+import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -52,7 +53,7 @@ public class WoRMSService implements Validator {
 
 	private static final Log logger = LogFactory.getLog(WoRMSService.class);
 	
-	private AphiaNameServicePortTypeProxy wormsService;
+	private TaxonomicDataApi wormsService;
 	protected AuthorNameComparator authorNameComparator;
 	protected int depth;  // for managing retries on network failure
 	
@@ -60,30 +61,29 @@ public class WoRMSService implements Validator {
 
 	public WoRMSService(boolean test) throws IOException {
 		super();
-		wormsService = new AphiaNameServicePortTypeProxy();
+		wormsService = new TaxonomicDataApi();
 		if (test) { 
 			test();
 		}
 	}
 	
 	protected void test()  throws IOException { 
-		logger.debug(wormsService.getEndpoint());
-		URL test = new URL(wormsService.getEndpoint());
+		logger.debug(wormsService.getApiClient().getBasePath());
+		URL test = new URL(wormsService.getApiClient().getBasePath());
 		URLConnection conn = test.openConnection();
 		conn.connect();
 	}
 	
-	public static  List<NameUsage> lookupTaxon(String taxon,  String authorship) throws RemoteException { 
+	public static  List<NameUsage> lookupTaxon(String taxon,  String authorship) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
 		
 		if (!SciNameUtils.isEmpty(taxon)) { 
-			AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+			TaxonomicDataApi wormsService = new TaxonomicDataApi();
 
-			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, false, 1);
-			if (resultsArr!=null && resultsArr.length>0) { 
-				List<AphiaRecord> results = Arrays.asList(resultsArr);
+			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, false, 1);
+			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
-				logger.debug(resultsArr.length);
+				logger.debug(results.size());
 				while (i.hasNext()) { 
 					AphiaRecord ar = i.next();
 					if (ar !=null && ar.getScientificname()!=null && taxon!=null 
@@ -125,14 +125,13 @@ public class WoRMSService implements Validator {
 	public static String simpleNameSearch(String taxon, String author, boolean marineOnly) throws Exception {
 		String id  = null;
 
-		AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+		TaxonomicDataApi wormsService = new TaxonomicDataApi();
 
 		try {
-			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, marineOnly, 1);	
-			if (resultsArr!=null || resultsArr.length==1) { 
-				List<AphiaRecord> results = Arrays.asList(resultsArr);
+			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
+			if (results!=null || results.size()==1) { 
 				Iterator<AphiaRecord> i = results.iterator();
-				logger.debug(resultsArr.length);
+				logger.debug(results.size());
 				while (i.hasNext()) { 
 					AphiaRecord ar = i.next();
 					if (ar !=null && ar.getScientificname()!=null && taxon!=null && ar.getScientificname().equalsIgnoreCase(taxon)) {
@@ -168,23 +167,22 @@ public class WoRMSService implements Validator {
 			// no match found
 			logger.debug("No match found");
 			id = null;
-		} catch (RemoteException e) {
+		} catch (ApiException e) {
 			throw new Exception("WoRMSService failed to access WoRMS Aphia service for " + taxon + ". " +e.getMessage());
 		} 
 		return id;
 	}
 	
-	public static  List<NameUsage> lookupGenus(String genus) throws RemoteException { 
+	public static  List<NameUsage> lookupGenus(String genus) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
 		
 		if (!SciNameUtils.isEmpty(genus)) { 
-			AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+			TaxonomicDataApi wormsService = new TaxonomicDataApi();
 
-			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(genus, false, false, false, 1);
-			if (resultsArr!=null && resultsArr.length>0) { 
-				List<AphiaRecord> results = Arrays.asList(resultsArr);
+			List<AphiaRecord> results = wormsService.aphiaRecordsByName(genus, false, false, 1);
+			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
-				logger.debug(resultsArr.length);
+				logger.debug(results.size());
 				while (i.hasNext()) { 
 					AphiaRecord ar = i.next();
 					if (ar !=null && ar.getScientificname()!=null && genus!=null 
@@ -209,17 +207,16 @@ public class WoRMSService implements Validator {
 		return result;
 	}
 
-	public static  List<NameUsage> lookupTaxonAtRank(String taxon, String rank) throws RemoteException { 
+	public static  List<NameUsage> lookupTaxonAtRank(String taxon, String rank) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
 		
 		if (!SciNameUtils.isEmpty(taxon)) { 
-			AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+			TaxonomicDataApi wormsService = new TaxonomicDataApi();
 
-			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, false, 1);
-			if (resultsArr!=null && resultsArr.length>0) { 
-				List<AphiaRecord> results = Arrays.asList(resultsArr);
+			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, false, 1);
+			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
-				logger.debug(resultsArr.length);
+				logger.debug(results.size());
 				while (i.hasNext()) { 
 					AphiaRecord ar = i.next();
 					if (ar !=null && ar.getScientificname()!=null && taxon!=null 
@@ -475,14 +472,13 @@ public class WoRMSService implements Validator {
 	public static LookupResult nameComparisonSearch(String taxon, String author, boolean marineOnly) throws Exception {
 		LookupResult result  = null;
 
-		AphiaNameServicePortTypeProxy wormsService = new AphiaNameServicePortTypeProxy();
+		TaxonomicDataApi wormsService = new TaxonomicDataApi();
 
 		try {
-			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxon, false, false, marineOnly, 1);	
-			if (resultsArr!=null || resultsArr.length==1) { 
-				List<AphiaRecord> results = Arrays.asList(resultsArr);
+			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
+			if (results!=null || results.size()==1) { 
 				Iterator<AphiaRecord> i = results.iterator();
-				logger.debug(resultsArr.length);
+				logger.debug(results.size());
 				while (i.hasNext()) { 
 					AphiaRecord ar = i.next();
 					if (ar !=null && ar.getScientificname()!=null && taxon!=null && ar.getScientificname().equalsIgnoreCase(taxon)) {
@@ -506,7 +502,7 @@ public class WoRMSService implements Validator {
 			// no match found
 			logger.debug("No match found");
 			result = new LookupResult();
-		} catch (RemoteException e) {
+		} catch (ApiException e) {
 			throw new Exception("WoRMSService failed to access WoRMS Aphia service for " + taxon + ". " +e.getMessage());
 		} 
 		return result;
@@ -522,14 +518,13 @@ public class WoRMSService implements Validator {
 			String authorship = taxonNameToValidate.getAuthorship();
 			authorNameComparator = AuthorNameComparator.authorNameComparatorFactory(authorship, taxonNameToValidate.getKingdom());
 			taxonNameToValidate.setAuthorComparator(authorNameComparator);
-			AphiaRecord[] resultsArr = wormsService.getAphiaRecords(taxonName, false, false, false, 1);
-			if (resultsArr!=null && resultsArr.length>0) { 
+			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxonName, false, false, 1);
+			if (results!=null && results.size()>0) { 
 				// We got at least one result
-				List<AphiaRecord> results = Arrays.asList(resultsArr);
 				Iterator<AphiaRecord> i = results.iterator();
 				//Multiple matches indicate homonyms (or in WoRMS, deleted records).
 				if (results.size()>1) {
-				    logger.debug("More than one match: " + resultsArr.length);
+				    logger.debug("More than one match: " + results.size());
 					boolean exactMatch = false;
 					List<AphiaRecord> matches = new ArrayList<AphiaRecord>();
 					while (i.hasNext() && !exactMatch) { 

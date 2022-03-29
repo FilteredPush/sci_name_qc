@@ -31,6 +31,7 @@ import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.model.ResultState;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.WoRMSService;
+import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
 import edu.harvard.mcz.nametools.NameComparison;
@@ -352,6 +353,9 @@ public class DwCSciNameDQ {
 			} catch (UnsupportedSourceAuthorityException e) { 
 				result.addComment("Unable to process:" + e.getMessage());
 				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+			} catch (ApiException e) {
+				result.addComment(sourceAuthority.getName() + " API invocation error:" + e.getMessage());
+				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 			}
         }
         
@@ -585,7 +589,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
-        		} catch (IOException e) {
+        		} catch (ApiException e) {
         			result.addComment("WoRMS aphia API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		} catch (Exception e) {
@@ -835,7 +839,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
-        		} catch (IOException e) {
+        		} catch (ApiException e) {
         			result.addComment("WoRMS aphia API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		} catch (Exception e) {
@@ -1031,7 +1035,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
-        		} catch (IOException e) {
+        		} catch (ApiException e) {
         			result.addComment("WoRMS aphia API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		} catch (Exception e) {
