@@ -14,3 +14,4 @@ buildNumber.properties
 .settings
 sci_name_qc-*-executable.jar
 sci_name_qc-*-cfweblib.jar
+sci_name_qc.log
