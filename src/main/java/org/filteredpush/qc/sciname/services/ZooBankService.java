@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -140,6 +142,11 @@ public class ZooBankService implements Validator {
 		}
 		
 		return returnValue;
+	}
+
+	@Override
+	public List<String> supportedExtensionTerms() {
+		return new ArrayList<String>();
 	}
 
 }

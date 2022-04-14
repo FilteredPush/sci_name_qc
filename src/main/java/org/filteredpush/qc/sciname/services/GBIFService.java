@@ -632,6 +632,11 @@ public class GBIFService implements Validator {
 		}
 		return result;
 		
+	}
+
+	@Override
+	public List<String> supportedExtensionTerms() {
+		return new ArrayList<String>();
 	}	
 	
 }

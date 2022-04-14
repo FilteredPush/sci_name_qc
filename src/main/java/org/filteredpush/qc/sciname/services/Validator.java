@@ -3,6 +3,8 @@
  */
 package org.filteredpush.qc.sciname.services;
 
+import java.util.List;
+
 import edu.harvard.mcz.nametools.NameUsage;
 
 /**
@@ -16,5 +18,7 @@ import edu.harvard.mcz.nametools.NameUsage;
 public interface Validator {
 
 	public NameUsage validate(NameUsage taxonToValidate);
+	
+	public List<String> supportedExtensionTerms();
 	
 }

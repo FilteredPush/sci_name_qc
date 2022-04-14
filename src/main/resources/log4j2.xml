@@ -12,6 +12,9 @@
     <Logger name="org.filteredpush.qc.sciname" level="DEBUG">
       <AppenderRef ref="SciNameQCLog"/>
     </Logger>
+    <Logger name="org.gbif.nameparser.NameParserGBIF" level="WARN">
+      <AppenderRef ref="SciNameQCLog"/>
+    </Logger>
     <Root level="WARN">
       <AppenderRef ref="Console"/>
     </Root>

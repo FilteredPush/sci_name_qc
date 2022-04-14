@@ -38,8 +38,10 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Provides support for scientific name validation against the WoRMS 
@@ -608,6 +610,35 @@ public class WoRMSService implements Validator {
 							        result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 							        result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 								    result.setMatchDescription(match);
+								    AphiaRecord wormsRecord = wormsService.aphiaRecordByAphiaID(ar.getAphiaID());
+								    Map<String,String> attributes = new HashMap<String,String>();
+								    if (wormsRecord.isIsBrackish()==null) { 
+								    	attributes.put("brackish", "");
+								    } else { 
+								    	attributes.put("brackish", wormsRecord.isIsBrackish().toString());
+								    }
+								    if (wormsRecord.isIsFreshwater()==null) { 
+								    	attributes.put("freshwater", "");
+								    } else { 
+								    	attributes.put("freshwater", wormsRecord.isIsFreshwater().toString());
+								    }
+								    if (wormsRecord.isIsMarine()==null) { 
+								    	attributes.put("marine", "");
+								    } else { 
+								    	attributes.put("marine", wormsRecord.isIsMarine().toString());
+								    	logger.debug(attributes.get("marine"));
+								    }
+								    if (wormsRecord.isIsTerrestrial()==null) { 
+								    	attributes.put("terrestrial", "");
+								    } else { 
+								    	attributes.put("terrestrial", wormsRecord.isIsTerrestrial().toString());
+								    }
+								    if (wormsRecord.isIsExtinct()==null) { 
+								    	attributes.put("extinct", "");
+								    } else { 
+								    	attributes.put("extinct", wormsRecord.isIsExtinct().toString());
+								    }
+								    result.setExtension(attributes);
 								//}
 							} else { 
 								// no authorship was provided in the results, treat as no match
@@ -674,6 +705,17 @@ public class WoRMSService implements Validator {
 		}
 		depth--;
 		return result;		
+	}
+
+	@Override
+	public List<String> supportedExtensionTerms() {
+	    List<String> terms = new ArrayList<String>();
+	    terms.add("brackish");
+	    terms.add("freshwater");
+	    terms.add("marine");
+	    terms.add("terrestrial");
+	    terms.add("extinct");
+		return terms;
 	}
 	
 }

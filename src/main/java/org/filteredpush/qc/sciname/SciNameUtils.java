@@ -204,7 +204,7 @@ public class SciNameUtils {
 					throw new SourceAuthorityException("Unknown or unsupported service: [" + targetService + "]");
 				}
 				
-				BatchRunner runner = new BatchRunner(infile, outfile, new WoRMSService(false));
+				BatchRunner runner = new BatchRunner(infile, outfile, validator);
 				runner.runBatch();
 			}
 		} catch (ParseException e1) {

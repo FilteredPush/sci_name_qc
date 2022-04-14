@@ -18,6 +18,8 @@
  */
 package edu.harvard.mcz.nametools;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,6 +91,8 @@ public class NameUsage implements LinneanClassification {
 	private String originalScientificName;  
 	private String originalAuthorship;    
 	
+	private Map<String,String> extension;  // additional attributes specific to some services but not all.
+	
 	protected AuthorNameComparator authorComparator;
 	
 	/**
@@ -115,6 +119,7 @@ public class NameUsage implements LinneanClassification {
 		family = null;   
 		genus = null;
 		subgenus = null;
+		extension = new HashMap<String,String>();
 	}
 	
 	/**
@@ -896,6 +901,20 @@ public class NameUsage implements LinneanClassification {
 	 */
 	public void setUnacceptReason(String unacceptReason) {
 		this.unacceptReason = unacceptReason;
+	}
+
+	/**
+	 * @return the extension
+	 */
+	public Map<String,String> getExtension() {
+		return extension;
+	}
+
+	/**
+	 * @param extension the extension to set
+	 */
+	public void setExtension(Map<String,String> extension) {
+		this.extension = extension;
 	}	
 	
 }
