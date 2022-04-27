@@ -14,26 +14,29 @@ package org.marinespecies.aphia.v1_0.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.IOException;
 /**
  * AphiaRank
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
 public class AphiaRank {
-  @JsonProperty("taxonRankID")
+  @SerializedName("taxonRankID")
   private Integer taxonRankID = null;
 
-  @JsonProperty("taxonRank")
+  @SerializedName("taxonRank")
   private String taxonRank = null;
 
-  @JsonProperty("AphiaID")
+  @SerializedName("AphiaID")
   private Integer aphiaID = null;
 
-  @JsonProperty("kingdom")
+  @SerializedName("kingdom")
   private String kingdom = null;
 
   public AphiaRank taxonRankID(Integer taxonRankID) {

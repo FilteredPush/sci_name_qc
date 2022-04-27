@@ -75,8 +75,8 @@ public class DwCSciNameDQ_IT {
 		}
 		
 		result = DwCSciNameDQ.validationPhylumNotfound("Mollusca",authority);
-		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
-		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	}
 
 	/**

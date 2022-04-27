@@ -14,45 +14,48 @@ package org.marinespecies.aphia.v1_0.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.IOException;
 import java.math.BigDecimal;
 /**
  * Distribution
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
 public class Distribution {
-  @JsonProperty("locality")
+  @SerializedName("locality")
   private String locality = null;
 
-  @JsonProperty("locationID")
+  @SerializedName("locationID")
   private String locationID = null;
 
-  @JsonProperty("higherGeography")
+  @SerializedName("higherGeography")
   private String higherGeography = null;
 
-  @JsonProperty("higherGeographyID")
+  @SerializedName("higherGeographyID")
   private String higherGeographyID = null;
 
-  @JsonProperty("recordStatus")
+  @SerializedName("recordStatus")
   private String recordStatus = null;
 
-  @JsonProperty("typeStatus")
+  @SerializedName("typeStatus")
   private String typeStatus = null;
 
-  @JsonProperty("establishmentMeans")
+  @SerializedName("establishmentMeans")
   private String establishmentMeans = null;
 
-  @JsonProperty("decimalLatitude")
+  @SerializedName("decimalLatitude")
   private BigDecimal decimalLatitude = null;
 
-  @JsonProperty("decimalLongitude")
+  @SerializedName("decimalLongitude")
   private BigDecimal decimalLongitude = null;
 
-  @JsonProperty("qualityStatus")
+  @SerializedName("qualityStatus")
   private String qualityStatus = null;
 
   public Distribution locality(String locality) {

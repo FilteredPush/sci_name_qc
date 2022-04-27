@@ -14,95 +14,98 @@ package org.marinespecies.aphia.v1_0.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.IOException;
 /**
  * AphiaRecord
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-03-28T23:57:28.350Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
 public class AphiaRecord {
-  @JsonProperty("AphiaID")
+  @SerializedName("AphiaID")
   private Integer aphiaID = 127160;
 
-  @JsonProperty("url")
+  @SerializedName("url")
   private String url = null;
 
-  @JsonProperty("scientificname")
+  @SerializedName("scientificname")
   private String scientificname = null;
 
-  @JsonProperty("authority")
+  @SerializedName("authority")
   private String authority = null;
 
-  @JsonProperty("taxonRankID")
+  @SerializedName("taxonRankID")
   private Integer taxonRankID = null;
 
-  @JsonProperty("rank")
+  @SerializedName("rank")
   private String rank = null;
 
-  @JsonProperty("status")
+  @SerializedName("status")
   private String status = null;
 
-  @JsonProperty("unacceptreason")
+  @SerializedName("unacceptreason")
   private String unacceptreason = null;
 
-  @JsonProperty("valid_AphiaID")
+  @SerializedName("valid_AphiaID")
   private Boolean validAphiaID = null;
 
-  @JsonProperty("valid_name")
+  @SerializedName("valid_name")
   private String validName = null;
 
-  @JsonProperty("valid_authority")
+  @SerializedName("valid_authority")
   private String validAuthority = null;
 
-  @JsonProperty("parentNameUsageID")
+  @SerializedName("parentNameUsageID")
   private Integer parentNameUsageID = null;
 
-  @JsonProperty("kingdom")
+  @SerializedName("kingdom")
   private String kingdom = null;
 
-  @JsonProperty("phylum")
+  @SerializedName("phylum")
   private String phylum = null;
 
-  @JsonProperty("class")
+  @SerializedName("class")
   private String propertyClass = null;
 
-  @JsonProperty("order")
+  @SerializedName("order")
   private String order = null;
 
-  @JsonProperty("family")
+  @SerializedName("family")
   private String family = null;
 
-  @JsonProperty("genus")
+  @SerializedName("genus")
   private String genus = null;
 
-  @JsonProperty("citation")
+  @SerializedName("citation")
   private String citation = null;
 
-  @JsonProperty("lsid")
+  @SerializedName("lsid")
   private String lsid = null;
 
-  @JsonProperty("isMarine")
+  @SerializedName("isMarine")
   private Boolean isMarine = null;
 
-  @JsonProperty("isBrackish")
+  @SerializedName("isBrackish")
   private Boolean isBrackish = null;
 
-  @JsonProperty("isFreshwater")
+  @SerializedName("isFreshwater")
   private Boolean isFreshwater = null;
 
-  @JsonProperty("isTerrestrial")
+  @SerializedName("isTerrestrial")
   private Boolean isTerrestrial = null;
 
-  @JsonProperty("isExtinct")
+  @SerializedName("isExtinct")
   private Boolean isExtinct = null;
 
-  @JsonProperty("match_type")
+  @SerializedName("match_type")
   private String matchType = null;
 
-  @JsonProperty("modified")
+  @SerializedName("modified")
   private String modified = null;
 
   public AphiaRecord aphiaID(Integer aphiaID) {
