@@ -418,6 +418,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the canonicalName
 	 */
 	public String getCanonicalName() {
+		if (canonicalName ==null) {
+			return "";
+		}
 		return canonicalName;
 	}
 
@@ -491,7 +494,11 @@ public class NameUsage implements LinneanClassification {
 	 * @return the rank
 	 */
 	public String getRank() {
-		return rank;
+		if (rank==null) { 
+			return "";
+		} else { 
+		   return rank;
+		}
 	}
 
 	/**
@@ -505,6 +512,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the kingdom
 	 */
 	public String getKingdom() {
+		if (kingdom==null) { 
+			return "";
+		}
 		return kingdom;
 	}
 
@@ -537,6 +547,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the phylum
 	 */
 	public String getPhylum() {
+		if (phylum==null) { 
+			return "";
+		}
 		return phylum;
 	}
 
@@ -551,6 +564,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the tclass
 	 */
 	public String getTclass() {
+		if (tclass==null) { 
+			return "";
+		}
 		return tclass;
 	}
 
@@ -565,6 +581,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the order
 	 */
 	public String getOrder() {
+		if (order==null) { 
+			return "";
+		}
 		return order;
 	}
 
@@ -579,6 +598,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the family
 	 */
 	public String getFamily() {
+		if (family==null) {
+			return "";
+		}
 		return family;
 	}
 
@@ -593,6 +615,9 @@ public class NameUsage implements LinneanClassification {
 	 * @return the genus
 	 */
 	public String getGenus() {
+		if (genus==null) {
+			return "";
+		}
 		return genus;
 	}
 
