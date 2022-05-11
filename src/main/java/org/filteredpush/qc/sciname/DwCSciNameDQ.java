@@ -265,11 +265,11 @@ public class DwCSciNameDQ {
 					while (i.hasNext()) { 
 						NameUsage match = i.next();
 						if (
-								(SciNameUtils.isEqualOrNonEmpty(kingdom, match.getKingdom())) &&
-								(SciNameUtils.isEqualOrNonEmpty(phylum, match.getPhylum())) &&
-								(SciNameUtils.isEqualOrNonEmpty(taxonomic_class, match.getClazz())) &&
-								(SciNameUtils.isEqualOrNonEmpty(order, match.getOrder())) &&
-								(SciNameUtils.isEqualOrNonEmpty(family, match.getFamily())) &&
+								(SciNameUtils.isEqualOrNonEmptyES(kingdom, match.getKingdom())) &&
+								(SciNameUtils.isEqualOrNonEmptyES(phylum, match.getPhylum())) &&
+								(SciNameUtils.isEqualOrNonEmptyES(taxonomic_class, match.getClazz())) &&
+								(SciNameUtils.isEqualOrNonEmptyES(order, match.getOrder())) &&
+								(SciNameUtils.isEqualOrNonEmptyES(family, match.getFamily())) &&
 								(SciNameUtils.isEqualOrNonEmpty(genus, match.getGenus())) &&
 								(SciNameUtils.isEqualOrNonEmpty(lookMeUp, match.getCanonicalName())) 
 								) 
