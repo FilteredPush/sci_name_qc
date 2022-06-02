@@ -552,6 +552,7 @@ public class WoRMSService implements Validator {
 					    		result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 					    		result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 					    		result.setScientificNameStringEditDistance(1d);
+					    		result.setExtension(lookupHabitat(ar));
 					    		exactMatch = true;
 					    	}
 					    }
@@ -569,6 +570,7 @@ public class WoRMSService implements Validator {
 							if (NameComparison.isPlausible(comparison.getMatchType())) { 
 								names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
 								if (ICZNAuthorNameComparator.calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < ICZNAuthorNameComparator.calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+									current.setExtension(lookupHabitat(ar));
 									closest = current;
 								}
 							}
@@ -601,6 +603,7 @@ public class WoRMSService implements Validator {
 							result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 							result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 							result.setScientificNameStringEditDistance(1d);
+							result.setExtension(lookupHabitat(ar));
 						} else {
 							// find how 
 							if (authorship!=null && ar!=null && ar.getAuthority()!=null) { 
@@ -611,44 +614,16 @@ public class WoRMSService implements Validator {
 								String match = comparison.getMatchType();
 								double similarity = comparison.getSimilarity();
 								logger.debug(similarity);
-							        result = new NameUsage(ar);
-							        result.setInputDbPK(taxonNameToValidate.getInputDbPK());
-							        result.setAuthorshipStringEditDistance(similarity);
-							        result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
-							        result.setOriginalScientificName(taxonNameToValidate.getScientificName());
-								    result.setMatchDescription(match);
-								    NameComparison nameComparison = scientificNameComparator.compare(taxonName, ar.getScientificname());
-									result.setNameMatchDescription(nameComparison.getMatchType());
-									result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
-								    AphiaRecord wormsRecord = wormsService.aphiaRecordByAphiaID(ar.getAphiaID());
-								    Map<String,String> attributes = new HashMap<String,String>();
-								    if (wormsRecord.isIsBrackish()==null) { 
-								    	attributes.put("brackish", "");
-								    } else { 
-								    	attributes.put("brackish", wormsRecord.isIsBrackish().toString());
-								    }
-								    if (wormsRecord.isIsFreshwater()==null) { 
-								    	attributes.put("freshwater", "");
-								    } else { 
-								    	attributes.put("freshwater", wormsRecord.isIsFreshwater().toString());
-								    }
-								    if (wormsRecord.isIsMarine()==null) { 
-								    	attributes.put("marine", "");
-								    } else { 
-								    	attributes.put("marine", wormsRecord.isIsMarine().toString());
-								    	logger.debug(attributes.get("marine"));
-								    }
-								    if (wormsRecord.isIsTerrestrial()==null) { 
-								    	attributes.put("terrestrial", "");
-								    } else { 
-								    	attributes.put("terrestrial", wormsRecord.isIsTerrestrial().toString());
-								    }
-								    if (wormsRecord.isIsExtinct()==null) { 
-								    	attributes.put("extinct", "");
-								    } else { 
-								    	attributes.put("extinct", wormsRecord.isIsExtinct().toString());
-								    }
-								    result.setExtension(attributes);
+								result = new NameUsage(ar);
+								result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+								result.setAuthorshipStringEditDistance(similarity);
+								result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+								result.setOriginalScientificName(taxonNameToValidate.getScientificName());
+								result.setMatchDescription(match);
+								NameComparison nameComparison = scientificNameComparator.compare(taxonName, ar.getScientificname());
+								result.setNameMatchDescription(nameComparison.getMatchType());
+								result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
+								result.setExtension(lookupHabitat(ar));
 							} else { 
 								// no authorship was provided in the results, treat as no match
 								logger.error("Result with null authorship.");
@@ -684,6 +659,7 @@ public class WoRMSService implements Validator {
 								if (NameComparison.isPlausible(comparison.getMatchType())) { 
 									match.setNameMatchDescription(comparison.getMatchType());
 									match.setScientificNameStringEditDistance(comparison.getSimilarity());
+									result.setExtension(lookupHabitat(ar));
 									potentialMatches.add(match);
 								}
 							} else {
@@ -732,4 +708,39 @@ public class WoRMSService implements Validator {
 		return terms;
 	}
 	
+	protected Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
+		AphiaRecord wormsRecord = wormsService.aphiaRecordByAphiaID(ar.getAphiaID());
+		Map<String,String> attributes = new HashMap<String,String>();
+		if (wormsRecord.isIsBrackish()==null) { 
+			attributes.put("brackish", "");
+		} else { 
+			attributes.put("brackish", wormsRecord.isIsBrackish().toString());
+		}
+		if (wormsRecord.isIsFreshwater()==null) { 
+			attributes.put("freshwater", "");
+		} else { 
+			attributes.put("freshwater", wormsRecord.isIsFreshwater().toString());
+		}
+		if (wormsRecord.isIsMarine()==null) { 
+			attributes.put("marine", "");
+		} else { 
+			attributes.put("marine", wormsRecord.isIsMarine().toString());
+		}
+		if (wormsRecord.isIsTerrestrial()==null) { 
+			attributes.put("terrestrial", "");
+		} else { 
+			attributes.put("terrestrial", wormsRecord.isIsTerrestrial().toString());
+		}
+		if (wormsRecord.isIsExtinct()==null) { 
+			attributes.put("extinct", "");
+		} else { 
+			attributes.put("extinct", wormsRecord.isIsExtinct().toString());
+		}
+		Iterator<String> ia = attributes.keySet().iterator();
+		while (ia.hasNext()) { 
+			String key = ia.next();
+			logger.debug(key + " " + attributes.get(key));
+		}
+		return attributes;
+	}
 }

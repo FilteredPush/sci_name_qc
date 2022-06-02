@@ -26,6 +26,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
+import edu.harvard.mcz.nametools.AuthorNameComparator;
+import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
 import edu.harvard.mcz.nametools.LookupResult;
 import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
@@ -203,6 +205,24 @@ public class WoRMSServiceTestIT {
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
+	}
+	
+	@Test 
+	public void testValidate() { 
+		if (service==null) { 
+			setUp();
+		}
+		String sciName = "Partula lutea";
+		String authorship = "Lesson, 1831";
+		NameUsage toTest = new NameUsage("WoRMS", AuthorNameComparator.authorNameComparatorFactory(authorship, "Animalia"), sciName, authorship); 
+		toTest.setScientificName(sciName);
+		toTest.setAuthorship(authorship);
+		NameUsage result =  service.validate(toTest);
+		assertEquals("urn:lsid:marinespecies.org:taxname:986771",result.getGuid());
+		assertEquals("Exact Match",result.getMatchDescription());
+		assertEquals("Exact Match",result.getNameMatchDescription());
+		assertEquals("true",result.getExtension().get("terrestrial"));
+		assertEquals("false",result.getExtension().get("marine"));
 	}
 
 	
