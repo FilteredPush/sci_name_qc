@@ -17,11 +17,17 @@
  */
 package edu.harvard.mcz.nametools;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.gbif.nameparser.NameParserGBIF;
 import org.gbif.nameparser.api.NameParser;
+import org.gbif.nameparser.api.NamePart;
 import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.UnparsableNameException;
 
@@ -48,33 +54,147 @@ public class ScientificNameComparator {
 			} else {
 				NameParser nameParser = new NameParserGBIF();
 	    		try {
+	    			log.debug(aName);
 	    			ParsedName parse = nameParser.parse(aName);
+	    			Map<NamePart,String> qualifiers = parse.getEpithetQualifier();
+	    			if (qualifiers==null) { 
+	    				qualifiers = new HashMap<NamePart,String>();
+	    			}
+	    			log.debug(parse.getUninomial());
+	    			log.debug(parse.getGenus());
+	    			log.debug(parse.getInfragenericEpithet());
+	    			log.debug(parse.getSpecificEpithet());
+	    			log.debug(parse.getInfraspecificEpithet());
+	    			log.debug(parse.getTerminalEpithet());
+	    			log.debug(qualifiers.isEmpty());
+	    			log.debug(parse.getRank());
 	    			ParsedName otherParse = nameParser.parse(toOtherName);
-	    			if (parse.getUninomial().equals(otherParse.getUninomial()) &&
-	    					parse.getRank().equals(otherParse.getRank()) && 
-	    					parse.getSpecificEpithet().equals(otherParse.getSpecificEpithet()) && 
-	    					parse.getTerminalEpithet().equals(otherParse.getTerminalEpithet()) &&
-	    					! parse.getInfragenericEpithet().equals(otherParse.getInfragenericEpithet())
-	    					)  
-	    			{
-	    				result.setMatchType(NameComparison.SNMATCH_SUBGENUS);
+	    			Map<NamePart,String> otherQualifiers = otherParse.getEpithetQualifier();
+	    			if (otherQualifiers==null) { 
+	    				otherQualifiers = new HashMap<NamePart,String>();
+	    			}
+	    			Boolean qualifiersDiffer = false;
+	    			if (qualifiers.size()!= otherQualifiers.size()) { 
+	    				qualifiersDiffer = true;
+	    			} else if (qualifiers.size()>0) { 
+	    				Set<NamePart> keys = qualifiers.keySet();
+	    				Iterator<NamePart> i = keys.iterator();
+	    				while (i.hasNext()) { 
+	    					NamePart key = i.next();
+	    					if (otherQualifiers.containsKey(key)) { 
+	    						if (!qualifiers.get(key).equals(otherQualifiers.get(key))) { 
+	    							qualifiersDiffer = true;
+	    						}
+	    					} else { 
+	    						qualifiersDiffer = true;
+	    					}
+	    				}
+	    			}
+	    			log.debug(qualifiersDiffer);
+	    			
+	    			if (StringUtils.equals(parse.getGenus(), otherParse.getGenus()) && 
+	    					StringUtils.equals(parse.getInfragenericEpithet(), otherParse.getInfragenericEpithet()) && 
+	    					StringUtils.equals(parse.getSpecificEpithet(), otherParse.getSpecificEpithet()) && 
+	    					StringUtils.equals(parse.getInfraspecificEpithet(), otherParse.getInfraspecificEpithet()) && 
+	    					StringUtils.equals(parse.getTerminalEpithet(), otherParse.getTerminalEpithet()) && 
+	    					StringUtils.equals(parse.getGenus(), otherParse.getGenus()) && 
+	    					qualifiersDiffer
+	    					) { 
+	    				result.setMatchType(NameComparison.SNMATCH_QUALIFIER);
 	    				result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
 	    				result.setNameOne(aName);
 	    				result.setNameTwo(toOtherName);
-	    			} else if (parse.getUninomial().equals(otherParse.getUninomial())  && 
-	    					!parse.getSpecificEpithet().equals(otherParse.getSpecificEpithet())) 
-	    			{ 
-	    				result.setMatchType(NameComparison.SNMATCH_ONGENUS);
+	    			} else if (parse.getUninomial()!=null && otherParse.getUninomial()!=null) { 
+	    				result.setMatchType(NameComparison.SNMATCH_ONHIGHER);
 	    				result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
 	    				result.setNameOne(aName);
 	    				result.setNameTwo(toOtherName);
-	    			} else if (parse.getUninomial().equals(otherParse.getUninomial())  && 
-	    					!parse.getTerminalEpithet().equals(otherParse.getTerminalEpithet())) 
-	    			{ 
-	    				result.setMatchType(NameComparison.SNMATCH_ONGENUS);
-	    				result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
-	    				result.setNameOne(aName);
-	    				result.setNameTwo(toOtherName);
+	    				// comparison of a genus or higher rank taxon 
+	    			} else if (parse.getUninomial()!=null || otherParse.getUninomial()!=null) {
+	    				// comparison of a genus or higher rank taxon with a taxon of rank lower than genus.
+	    				if (parse.getUninomial()!=null ) { 
+	    					if (StringUtils.equals(parse.getUninomial(),otherParse.getGenus())) { 
+	    						result.setMatchType(NameComparison.SNMATCH_GENUSTOLOWER);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    						result.setNameOne(aName);
+	    						result.setNameTwo(toOtherName);
+	    					} else { 
+	    						result.setMatchType(NameComparison.SNMATCH_DISSIMILAR);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    						result.setNameOne(aName);
+	    						result.setNameTwo(toOtherName);
+	    					}
+	    				} else { 
+	    					if (StringUtils.equals(parse.getGenus(),otherParse.getUninomial())) { 
+	    						result.setMatchType(NameComparison.SNMATCH_GENUSTOLOWER);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    						result.setNameOne(aName);
+	    						result.setNameTwo(toOtherName);
+	    					} else { 
+	    						result.setMatchType(NameComparison.SNMATCH_DISSIMILAR);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    						result.setNameOne(aName);
+	    						result.setNameTwo(toOtherName);
+	    					}	
+	    				}
+	    			} else { 
+	    				// comparison of two taxa of rank lower than genus
+	    				if (StringUtils.equals(parse.getGenus(),otherParse.getGenus()) &&
+	    						StringUtils.equals(parse.getRank().name(),otherParse.getRank().name()) && 
+	    						StringUtils.equals(parse.getSpecificEpithet(),otherParse.getSpecificEpithet()) && 
+	    						StringUtils.equals(parse.getTerminalEpithet(),otherParse.getTerminalEpithet()) &&
+	    						! StringUtils.equals(parse.getInfragenericEpithet(),otherParse.getInfragenericEpithet())
+	    						)  
+	    				{
+	    					result.setMatchType(NameComparison.SNMATCH_SUBGENUS);
+	    					result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    					result.setNameOne(aName);
+	    					result.setNameTwo(toOtherName);
+	    				} else if (StringUtils.equals(parse.getGenus(),otherParse.getGenus())  && 
+	    						!StringUtils.equals(parse.getSpecificEpithet(),otherParse.getSpecificEpithet())) 
+	    				{ 
+	    					if (StringUtils.equals(parse.getGenus(),otherParse.getGenus())  && 
+	    							!StringUtils.equals(parse.getSpecificEpithet(), otherParse.getSpecificEpithet()) &&
+	    							parse.getInfraspecificEpithet()!=null &&
+	    							StringUtils.equals(parse.getInfraspecificEpithet(), otherParse.getInfraspecificEpithet())
+	    							) 
+	    					{ 
+	    						result.setMatchType(NameComparison.SNMATCH_GENUSSUBSPECIFIC);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));	
+	    						result.setNameOne(aName);	
+	    						result.setNameTwo(toOtherName);
+	    					} else { 
+	    						result.setMatchType(NameComparison.SNMATCH_ONGENUS);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    						result.setNameOne(aName);
+	    						result.setNameTwo(toOtherName);
+	    					}
+	    				} else if (StringUtils.equals(parse.getGenus(),otherParse.getGenus())  && 
+	    				 	 	StringUtils.equals(parse.getSpecificEpithet(), otherParse.getSpecificEpithet()) &&
+	    				 	 	parse.getInfraspecificEpithet()!=null &&
+	    				 	 	! StringUtils.equals(parse.getInfraspecificEpithet(), otherParse.getInfraspecificEpithet())
+	    					) 
+	    					{ 
+	    						result.setMatchType(NameComparison.SNMATCH_GENUSSPECIFIC);
+	    						result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    						result.setNameOne(aName);
+	    						result.setNameTwo(toOtherName);
+	    				} else if (!StringUtils.equals(parse.getGenus(),otherParse.getGenus())  && 
+	    							StringUtils.equals(parse.getSpecificEpithet(),otherParse.getSpecificEpithet()) &&
+	    							StringUtils.equals(parse.getInfraspecificEpithet(),otherParse.getInfraspecificEpithet())
+	    							) 
+	    				{ 
+	    					result.setMatchType(NameComparison.SNMATCH_GENUSDIFFERENT);
+	    					result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    					result.setNameOne(aName);
+	    					result.setNameTwo(toOtherName);
+	    				} else { 
+	    					result.setMatchType(NameComparison.SNMATCH_DISSIMILAR);
+	    					result.setSimilarity(ScientificNameComparator.stringSimilarity(aName, toOtherName));
+	    					result.setNameOne(aName);
+	    					result.setNameTwo(toOtherName);
+	    				}
+	    				
 	    			}
 	    		} catch (UnparsableNameException e) {
 	    			log.error(e.getMessage());

@@ -89,9 +89,11 @@ public class BatchRunner {
 			headerNames.add("authorship");
 			headerNames.add("guid");
 			headerNames.add("match");
+			headerNames.add("nameMatch");
 			headerNames.add("sciNameWas");
 			headerNames.add("authorWas");
 			headerNames.add("authorSimilarity");
+			headerNames.add("nameSimilarity");
 			if (validator.supportedExtensionTerms().size() > 0) {
 				headerNames.addAll(validator.supportedExtensionTerms());
 			}
@@ -127,9 +129,11 @@ public class BatchRunner {
 						columns.add(vUsage.getAuthorship());
 						columns.add(vUsage.getGuid());
 						columns.add(vUsage.getMatchDescription());
+						columns.add(vUsage.getNameMatchDescription());
 						columns.add(vUsage.getOriginalScientificName());
 						columns.add(vUsage.getOriginalAuthorship());
 						columns.add(Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString());
+						columns.add(Double.valueOf(vUsage.getScientificNameStringEditDistance()).toString());
 						Iterator<String> addedTermIterator = validator.supportedExtensionTerms().iterator();
 						while (addedTermIterator.hasNext()) { 
 							// add in the order of the supportedExtenstionTerms list, to match the header.
@@ -146,9 +150,11 @@ public class BatchRunner {
 						columns.add(usage.getAuthorship());
 						columns.add(usage.getGuid());
 						columns.add(usage.getMatchDescription());
+						columns.add("");
 						columns.add(usage.getOriginalScientificName());
 						columns.add(usage.getOriginalAuthorship());
 						columns.add(Double.valueOf(usage.getAuthorshipStringEditDistance()).toString());
+						columns.add(Double.valueOf(usage.getScientificNameStringEditDistance()).toString());
 						columns.addAll(Arrays.asList(added));
 						printer.printRecord(columns);
 						//printer.printRecord(Integer.valueOf(usage.getInputDbPK()).toString(),usage.getScientificName(),usage.getAuthorship(),usage.getGuid(),usage.getMatchDescription(),usage.getOriginalScientificName(), usage.getOriginalAuthorship(), Double.valueOf(usage.getAuthorshipStringEditDistance()).toString(), added);

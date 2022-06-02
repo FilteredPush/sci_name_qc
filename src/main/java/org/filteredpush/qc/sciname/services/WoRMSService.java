@@ -22,6 +22,7 @@ import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
 import edu.harvard.mcz.nametools.LookupResult;
 import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
+import edu.harvard.mcz.nametools.ScientificNameComparator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -521,6 +522,7 @@ public class WoRMSService implements Validator {
 			String taxonName = taxonNameToValidate.getScientificName();
 			String authorship = taxonNameToValidate.getAuthorship();
 			authorNameComparator = AuthorNameComparator.authorNameComparatorFactory(authorship, taxonNameToValidate.getKingdom());
+			ScientificNameComparator scientificNameComparator = new ScientificNameComparator();
 			taxonNameToValidate.setAuthorComparator(authorNameComparator);
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxonName, false, false, 1);
 			if (results!=null && results.size()>0) { 
@@ -545,6 +547,7 @@ public class WoRMSService implements Validator {
 					    		result = new NameUsage(ar);
 					    		result.setInputDbPK(taxonNameToValidate.getInputDbPK());
 					    		result.setMatchDescription(NameComparison.MATCH_EXACT);
+					    		result.setNameMatchDescription(NameComparison.MATCH_EXACT);
 					    		result.setAuthorshipStringEditDistance(1d);
 					    		result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 					    		result.setOriginalScientificName(taxonNameToValidate.getScientificName());
@@ -557,25 +560,31 @@ public class WoRMSService implements Validator {
 						// If we didn't find an exact match on scientific name and authorship in the list, pick the 
 						// closest authorship and list all of the potential matches.  
 						Iterator<AphiaRecord> im = matches.iterator();
-						AphiaRecord ar = im.next();
-						NameUsage closest = new NameUsage(ar);
+						NameUsage closest = null;
 						StringBuffer names = new StringBuffer();
-						names.append(closest.getScientificName()).append(" ").append(closest.getAuthorship()).append(" ").append(closest.getUnacceptReason()).append(" ").append(closest.getTaxonomicStatus());
 						while (im.hasNext()) { 
-							ar = im.next();
+							AphiaRecord ar = im.next();
 							NameUsage current = new NameUsage(ar);
-						    names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
-							if (ICZNAuthorNameComparator.calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < ICZNAuthorNameComparator.calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
-								closest = current;
+							NameComparison comparison = scientificNameComparator.compare(taxonName, current.getScientificName());
+							if (NameComparison.isPlausible(comparison.getMatchType())) { 
+								names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
+								if (ICZNAuthorNameComparator.calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < ICZNAuthorNameComparator.calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+									closest = current;
+								}
 							}
 						}
-						result = closest;
-					    result.setInputDbPK(taxonNameToValidate.getInputDbPK());
-					    result.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
-					    result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
-					    result.setOriginalScientificName(taxonNameToValidate.getScientificName());
-					    result.setScientificNameStringEditDistance(1d);
-					    result.setAuthorshipStringEditDistance(ICZNAuthorNameComparator.calulateSimilarityOfAuthor(taxonNameToValidate.getAuthorship(), result.getAuthorship()));
+						if (closest==null) {
+							// none of the responses were plausible, treat as no match.
+							logger.debug("No plausible matches");
+						} else { 
+							result = closest;
+							result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+							result.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
+							result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+							result.setOriginalScientificName(taxonNameToValidate.getScientificName());
+							result.setScientificNameStringEditDistance(1d);
+							result.setAuthorshipStringEditDistance(ICZNAuthorNameComparator.calulateSimilarityOfAuthor(taxonNameToValidate.getAuthorship(), result.getAuthorship()));
+						}
 					}
 				} else { 
 				  // we got exactly one result
@@ -587,6 +596,7 @@ public class WoRMSService implements Validator {
 							result = new NameUsage(ar);
 							result.setInputDbPK(taxonNameToValidate.getInputDbPK());
 							result.setMatchDescription(NameComparison.MATCH_EXACT);
+				    		result.setNameMatchDescription(NameComparison.MATCH_EXACT);
 							result.setAuthorshipStringEditDistance(1d);
 							result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 							result.setOriginalScientificName(taxonNameToValidate.getScientificName());
@@ -601,15 +611,15 @@ public class WoRMSService implements Validator {
 								String match = comparison.getMatchType();
 								double similarity = comparison.getSimilarity();
 								logger.debug(similarity);
-								//if (match.equals(NameUsage.MATCH_DISSIMILAR) || match.equals(NameUsage.MATCH_ERROR)) {
-									// result.setMatchDescription("Same name, authorship different");
-								//} else { 
 							        result = new NameUsage(ar);
 							        result.setInputDbPK(taxonNameToValidate.getInputDbPK());
 							        result.setAuthorshipStringEditDistance(similarity);
 							        result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 							        result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 								    result.setMatchDescription(match);
+								    NameComparison nameComparison = scientificNameComparator.compare(taxonName, ar.getScientificname());
+									result.setNameMatchDescription(nameComparison.getMatchType());
+									result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
 								    AphiaRecord wormsRecord = wormsService.aphiaRecordByAphiaID(ar.getAphiaID());
 								    Map<String,String> attributes = new HashMap<String,String>();
 								    if (wormsRecord.isIsBrackish()==null) { 
@@ -639,7 +649,6 @@ public class WoRMSService implements Validator {
 								    	attributes.put("extinct", wormsRecord.isIsExtinct().toString());
 								    }
 								    result.setExtension(attributes);
-								//}
 							} else { 
 								// no authorship was provided in the results, treat as no match
 								logger.error("Result with null authorship.");
@@ -671,7 +680,12 @@ public class WoRMSService implements Validator {
 								logger.debug(match.getScientificName());
 								logger.debug(match.getAuthorship());
 								logger.debug(similarity);
-								potentialMatches.add(match);
+								NameComparison comparison = scientificNameComparator.compare(taxonName, match.getScientificName());
+								if (NameComparison.isPlausible(comparison.getMatchType())) { 
+									match.setNameMatchDescription(comparison.getMatchType());
+									match.setScientificNameStringEditDistance(comparison.getSimilarity());
+									potentialMatches.add(match);
+								}
 							} else {
 								logger.debug("im.next() was null");
 							}

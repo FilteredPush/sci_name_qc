@@ -118,7 +118,8 @@ public class ZooBankService implements Validator {
 		    		} catch (UnparsableNameException e) {
 		    			log.error(e.getMessage());
 		    		}
-		    		if (sciComp.compare(taxonToValidate.getScientificName(), scientificName).equals(NameComparison.MATCH_EXACT)) { 
+		    		NameComparison nameComparison = sciComp.compare(taxonToValidate.getScientificName(), scientificName);
+		    		if (nameComparison.equals(NameComparison.MATCH_EXACT)) { 
 		    			usage.setScientificName(scientificName);
 		    			usage.setAuthorship(foundAuthor);
 		    			usage.setGuid(act.getLsid());
@@ -126,6 +127,8 @@ public class ZooBankService implements Validator {
 		    			usage.setOriginalAuthorship(author);
 		    			usage.setOriginalScientificName(taxonToValidate.getScientificName());
 		    			usage.setInputDbPK(taxonToValidate.getInputDbPK());
+		    			usage.setScientificNameStringEditDistance(nameComparison.getSimilarity());
+		    			usage.setNameMatchDescription(nameComparison.getMatchType());
 		    			NameComparison comparison = usage.getAuthorComparator().compare(author, foundAuthor);
 		    			usage.setMatchDescription(comparison.getMatchType());
 		    			if (bestSimilarity < 0 || comparison.getMatchType().equals(NameComparison.MATCH_EXACT) || comparison.getSimilarity() > bestSimilarity) { 

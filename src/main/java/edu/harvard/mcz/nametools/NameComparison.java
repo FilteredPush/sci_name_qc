@@ -79,6 +79,14 @@ public class NameComparison {
 	
 	public static final String SNMATCH_SUBGENUS = "Same name, but with subgenus present in one case.";
 	public static final String SNMATCH_ONGENUS = "Exact match on genus, but not on specific/infraspecific epithet.";
+	public static final String SNMATCH_ONHIGHER = "Match is of genus or higher rank taxon.";
+	public static final String SNMATCH_QUALIFIER = "Same name, but differ in qualifier(s)";
+	public static final String SNMATCH_GENUSTOLOWER = "Match of genus to contained lower rank taxon.";
+	public static final String SNMATCH_DISSIMILAR = "Scientific name dissimilar.";
+	public static final String SNMATCH_GENUSDIFFERENT = "Difference only in generic name.";
+	public static final String SNMATCH_GENUSSPECIFIC = "Difference only in specific name.";
+	public static final String SNMATCH_GENUSSUBSPECIFIC = "Difference only in subspecific name.";
+	
 	
 	private String nameOne;
 	private String nameTwo;
@@ -172,5 +180,19 @@ public class NameComparison {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
+	
+	public static boolean isPlausible(String match) {
+		boolean result = false;
+		if (match.equals(SNMATCH_SUBGENUS) || 
+				match.equals(SNMATCH_ONGENUS) || 
+				match.equals(SNMATCH_GENUSSPECIFIC) || 
+				match.equals(SNMATCH_GENUSSUBSPECIFIC) ||
+				match.equals(SNMATCH_ONHIGHER)
+		) { 
+			result = true;
+		}
+		
+		return result;
+	}
+	
 }

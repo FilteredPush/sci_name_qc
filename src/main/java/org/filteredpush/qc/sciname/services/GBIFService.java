@@ -41,6 +41,7 @@ import edu.harvard.mcz.nametools.ICNafpAuthorNameComparator;
 import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
 import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
+import edu.harvard.mcz.nametools.ScientificNameComparator;
 
 /**
  * Wrapper for accessing the GBIF API to search for scientific names. 
@@ -370,6 +371,7 @@ public class GBIFService implements Validator {
 	@SuppressWarnings("static-access")
 	public boolean nameSearchAgainstServices(NameUsage toCheck) {
 		boolean result = false;
+		ScientificNameComparator nameComparator = new ScientificNameComparator();
 		if (toCheck!=null) {
 			// TODO: Handle autonyms of botanical names (should not have an authorship).
 			String taxonName = toCheck.getCanonicalName();
@@ -381,114 +383,121 @@ public class GBIFService implements Validator {
 			List<NameUsage> hits;
 			try {
 				hits = GBIFService.parseAllNameUsagesFromJSON(GBIFService.searchForTaxon(taxonName, targetKey));
-			if (hits==null || hits.size()==0) { 
-				// no matches
-				result = false;
-			} else if (hits.size()==1) { 
-				Iterator<NameUsage> i = hits.iterator();
-				// One possible match
-				NameUsage potentialMatch = i.next();
-				AuthorNameComparator authorNameComparator = new ICNafpAuthorNameComparator(.70d,.5d);
-				if (potentialMatch.getKingdom().equals("Animalia")) { 
-					authorNameComparator = new ICZNAuthorNameComparator(.75d,.5d);
-				}
-				if (potentialMatch.getCanonicalName().equals(taxonName) && potentialMatch.getAuthorship().equals(authorship)) { 
-					potentialMatch.setMatchDescription(NameComparison.MATCH_EXACT);
-					validatedNameUsage = potentialMatch;
-					validatedNameUsage.setAuthorshipStringEditDistance(1d);
-			        addToComment("Exact match found in found in " + targetDataSetName + ".");
-				} else { 
-					NameComparison authorComparison = authorNameComparator.compare(authorship, potentialMatch.getAuthorship());
-					double similarity = authorComparison.getSimilarity();
-					String match = authorComparison.getMatchType();
-					logger.debug(authorship);
-					logger.debug(potentialMatch.getAuthorship());
-					logger.debug(similarity);
-					potentialMatch.setMatchDescription(match);
-					validatedNameUsage = potentialMatch;
-					validatedNameUsage.setAuthorshipStringEditDistance(similarity);
-			        addToComment("Potential match found in found in " + targetDataSetName + ". " + validatedNameUsage.getMatchDescription());
-				}
-				validatedNameUsage.setInputDbPK(toCheck.getInputDbPK());
-				validatedNameUsage.setScientificNameStringEditDistance(1d);
-				validatedNameUsage.setOriginalAuthorship(toCheck.getOriginalAuthorship());
-				validatedNameUsage.setOriginalScientificName(toCheck.getCanonicalName());
-				if(validatedNameUsage.getKingdom()==null) { validatedNameUsage.setKingdom(potentialMatch.getKingdom()); }
-				if(validatedNameUsage.getPhylum()==null) { validatedNameUsage.setPhylum(potentialMatch.getPhylum()); } 
-				if(validatedNameUsage.getClazz()==null) { validatedNameUsage.setClazz(potentialMatch.getClazz()); }
-				if(validatedNameUsage.getOrder()==null) { validatedNameUsage.setOrder(potentialMatch.getOrder()); }
-				if(validatedNameUsage.getFamily()==null) { validatedNameUsage.setFamily(potentialMatch.getFamily()); }
-				
-				result = true;
-			} else { 
-				// multiple possible matches
-				Iterator<NameUsage> i = hits.iterator();
-				logger.debug("More than one match: " + hits.size());
-				boolean exactMatch = false;
-				List<NameUsage> matches = new ArrayList<NameUsage>();
-				while (i.hasNext() && !exactMatch) { 
+				if (hits==null || hits.size()==0) { 
+					// no matches
+					result = false;
+				} else if (hits.size()==1) { 
+					Iterator<NameUsage> i = hits.iterator();
+					// One possible match
 					NameUsage potentialMatch = i.next();
-					matches.add(potentialMatch);
-					logger.debug(potentialMatch.getScientificName());
-					logger.debug(potentialMatch.getCanonicalName());
-					logger.debug(potentialMatch.getKey());
-					logger.debug(potentialMatch.getAuthorship());
-					logger.debug(potentialMatch.getTaxonomicStatus());
-					if (potentialMatch.getScientificName().equals(taxonName)) {
-						if (potentialMatch.getAuthorship().equals(authorship)) {
-							// If one of the results is an exact match on scientific name and authorship, pick that one. 
-							validatedNameUsage = potentialMatch;
-							validatedNameUsage.setInputDbPK(toCheck.getInputDbPK());
-							validatedNameUsage.setMatchDescription(NameComparison.MATCH_EXACT);
-							validatedNameUsage.setAuthorshipStringEditDistance(1d);
-							validatedNameUsage.setOriginalAuthorship(toCheck.getOriginalAuthorship());
-							validatedNameUsage.setOriginalScientificName(toCheck.getCanonicalName());
-							validatedNameUsage.setScientificNameStringEditDistance(1d);
-			                addToComment("Exact match found in multiple results found in " + targetDataSetName + ".  There may be homonyms. " + validatedNameUsage.getScientificName() + " " + validatedNameUsage.getAuthorship() + " " + validatedNameUsage.getMatchDescription());
-							exactMatch = true;
-							result = true;
-						}
+					AuthorNameComparator authorNameComparator = new ICNafpAuthorNameComparator(.70d,.5d);
+					if (potentialMatch.getKingdom().equals("Animalia")) { 
+						authorNameComparator = new ICZNAuthorNameComparator(.75d,.5d);
 					}
-				}
-				if (!exactMatch) {
-					if (matches.size()>1 && toCheck.getOriginalAuthorship().trim().length()==0) { 
-						// There are multiple matches in GBIF, and we don't have an authorship string to 
-						// disambiguate amongst them.
-			            addToComment("Multiple results found in " + targetDataSetName + ".  A homonym or hemihomonym could exist, and authorship was not provided.");
-					    Iterator<NameUsage> im = matches.iterator();
-					    while (im.hasNext()) {
-							NameUsage current = im.next();
-					    	addToComment(current.getScientificName() + " " + current.getAuthorship());
-					    }
-					    result = false;
+					if (potentialMatch.getCanonicalName().equals(taxonName) && potentialMatch.getAuthorship().equals(authorship)) { 
+						potentialMatch.setMatchDescription(NameComparison.MATCH_EXACT);
+						validatedNameUsage = potentialMatch;
+						validatedNameUsage.setAuthorshipStringEditDistance(1d);
+						addToComment("Exact match found in found in " + targetDataSetName + ".");
 					} else { 
-					// If we didn't find an exact match on scientific name and authorship in the list, pick the 
-					// closest authorship and list all of the potential matches.  
-					Iterator<NameUsage> im = matches.iterator();
-					if (im.hasNext()) { 
-						NameUsage closest = im.next();
-						StringBuffer names = new StringBuffer();
-						names.append(closest.getScientificName()).append(" ").append(closest.getAuthorship()).append(" ").append(closest.getUnacceptReason()).append(" ").append(closest.getTaxonomicStatus());
-						while (im.hasNext()) { 
-							NameUsage current = im.next();
-							names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
-							if (toCheck.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < toCheck.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
-								closest = current;
+						NameComparison authorComparison = authorNameComparator.compare(authorship, potentialMatch.getAuthorship());
+						double similarity = authorComparison.getSimilarity();
+						String match = authorComparison.getMatchType();
+						logger.debug(authorship);
+						logger.debug(potentialMatch.getAuthorship());
+						logger.debug(similarity);
+						potentialMatch.setMatchDescription(match);
+						validatedNameUsage = potentialMatch;
+						validatedNameUsage.setAuthorshipStringEditDistance(similarity);
+						NameComparison nameComparison = nameComparator.compare(taxonName, potentialMatch.getCanonicalName());
+						validatedNameUsage.setNameMatchDescription(nameComparison.getMatchType());
+						validatedNameUsage.setScientificNameStringEditDistance(nameComparison.getSimilarity());
+						addToComment("Potential match found in found in " + targetDataSetName + ". " + validatedNameUsage.getMatchDescription());
+					}
+					validatedNameUsage.setInputDbPK(toCheck.getInputDbPK());
+					validatedNameUsage.setScientificNameStringEditDistance(1d);
+					validatedNameUsage.setOriginalAuthorship(toCheck.getOriginalAuthorship());
+					validatedNameUsage.setOriginalScientificName(toCheck.getCanonicalName());
+					if(validatedNameUsage.getKingdom()==null) { validatedNameUsage.setKingdom(potentialMatch.getKingdom()); }
+					if(validatedNameUsage.getPhylum()==null) { validatedNameUsage.setPhylum(potentialMatch.getPhylum()); } 
+					if(validatedNameUsage.getClazz()==null) { validatedNameUsage.setClazz(potentialMatch.getClazz()); }
+					if(validatedNameUsage.getOrder()==null) { validatedNameUsage.setOrder(potentialMatch.getOrder()); }
+					if(validatedNameUsage.getFamily()==null) { validatedNameUsage.setFamily(potentialMatch.getFamily()); }
+
+					result = true;
+				} else { 
+					// multiple possible matches
+					Iterator<NameUsage> i = hits.iterator();
+					logger.debug("More than one match: " + hits.size());
+					boolean exactMatch = false;
+					List<NameUsage> matches = new ArrayList<NameUsage>();
+					while (i.hasNext() && !exactMatch) { 
+						NameUsage potentialMatch = i.next();
+						matches.add(potentialMatch);
+						logger.debug(potentialMatch.getScientificName());
+						logger.debug(potentialMatch.getCanonicalName());
+						logger.debug(potentialMatch.getKey());
+						logger.debug(potentialMatch.getAuthorship());
+						logger.debug(potentialMatch.getTaxonomicStatus());
+						if (potentialMatch.getScientificName().equals(taxonName)) {
+							if (potentialMatch.getAuthorship().equals(authorship)) {
+								// If one of the results is an exact match on scientific name and authorship, pick that one. 
+								validatedNameUsage = potentialMatch;
+								validatedNameUsage.setInputDbPK(toCheck.getInputDbPK());
+								validatedNameUsage.setMatchDescription(NameComparison.MATCH_EXACT);
+								validatedNameUsage.setAuthorshipStringEditDistance(1d);
+								validatedNameUsage.setOriginalAuthorship(toCheck.getOriginalAuthorship());
+								validatedNameUsage.setOriginalScientificName(toCheck.getCanonicalName());
+								validatedNameUsage.setScientificNameStringEditDistance(1d);
+								addToComment("Exact match found in multiple results found in " + targetDataSetName + ".  There may be homonyms. " + validatedNameUsage.getScientificName() + " " + validatedNameUsage.getAuthorship() + " " + validatedNameUsage.getMatchDescription());
+								exactMatch = true;
+								result = true;
 							}
 						}
-						validatedNameUsage = closest;
-						validatedNameUsage.setInputDbPK(toCheck.getInputDbPK());
-						validatedNameUsage.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
-						validatedNameUsage.setOriginalAuthorship(toCheck.getOriginalAuthorship());
-						validatedNameUsage.setOriginalScientificName(toCheck.getCanonicalName());
-						validatedNameUsage.setScientificNameStringEditDistance(1d);
-						validatedNameUsage.setAuthorshipStringEditDistance(toCheck.getAuthorComparator().calulateSimilarityOfAuthor(toCheck.getAuthorship(), validatedNameUsage.getAuthorship()));
-			            addToComment("Plausible match in multiple results found in " + targetDataSetName + ".  The result could incorrectly be a homonym of the desired name. " + validatedNameUsage.getScientificName() + " " + validatedNameUsage.getAuthorship() + " " + validatedNameUsage.getMatchDescription());
-						result = true;
 					}
+					if (!exactMatch) {
+						if (matches.size()>1 && toCheck.getOriginalAuthorship().trim().length()==0) { 
+							// There are multiple matches in GBIF, and we don't have an authorship string to 
+							// disambiguate amongst them.
+							addToComment("Multiple results found in " + targetDataSetName + ".  A homonym or hemihomonym could exist, and authorship was not provided.");
+							Iterator<NameUsage> im = matches.iterator();
+							while (im.hasNext()) {
+								NameUsage current = im.next();
+								addToComment(current.getScientificName() + " " + current.getAuthorship());
+							}
+							result = false;
+						} else { 
+							// If we didn't find an exact match on scientific name and authorship in the list, pick the 
+							// closest authorship and list all of the potential matches.  
+							Iterator<NameUsage> im = matches.iterator();
+							if (im.hasNext()) { 
+								NameUsage closest = null;
+								StringBuffer names = new StringBuffer();
+								while (im.hasNext()) { 
+									NameUsage current = im.next();
+									NameComparison nameComparison = nameComparator.compare(taxonName, current.getCanonicalName());
+									if (NameComparison.isPlausible(nameComparison.getMatchType()))  {
+										names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
+										if (toCheck.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < toCheck.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+											closest = current;
+										}
+									}
+								}
+								if (closest!=null) { 
+									validatedNameUsage = closest;
+									validatedNameUsage.setInputDbPK(toCheck.getInputDbPK());
+									validatedNameUsage.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
+									validatedNameUsage.setOriginalAuthorship(toCheck.getOriginalAuthorship());
+									validatedNameUsage.setOriginalScientificName(toCheck.getCanonicalName());
+									validatedNameUsage.setScientificNameStringEditDistance(1d);
+									validatedNameUsage.setAuthorshipStringEditDistance(toCheck.getAuthorComparator().calulateSimilarityOfAuthor(toCheck.getAuthorship(), validatedNameUsage.getAuthorship()));
+									addToComment("Plausible match in multiple results found in " + targetDataSetName + ".  The result could incorrectly be a homonym of the desired name. " + validatedNameUsage.getScientificName() + " " + validatedNameUsage.getAuthorship() + " " + validatedNameUsage.getMatchDescription());
+									result = true;
+								}
+							}
+						}
 					}
 				}
-			}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -528,97 +537,107 @@ public class GBIFService implements Validator {
 	public NameUsage validate(NameUsage taxonNameToValidate) {
 		NameUsage result = null;
 		if (taxonNameToValidate!=null) {
+			ScientificNameComparator nameComparator = new ScientificNameComparator();
 			try { 
-			// TODO: Handle autonyms of botanical names (should not have an authorship).
-			String taxonName = taxonNameToValidate.getCanonicalName();
-			if (taxonName==null || taxonName.length()==0) { 
-				taxonName = taxonNameToValidate.getScientificName();
-				taxonNameToValidate.setCanonicalName(taxonName);
-			}
-			String authorship = taxonNameToValidate.getAuthorship();
-			List<NameUsage> hits = GBIFService.parseAllNameUsagesFromJSON(GBIFService.searchForTaxon(taxonName, targetKey));
-			if (hits==null || hits.size()==0) { 
-				// no matches
-			} else if (hits.size()==1) { 
-			    Iterator<NameUsage> i = hits.iterator();
-				// One possible match
-				NameUsage potentialMatch = i.next();
-				AuthorNameComparator authorNameComparator = new ICNafpAuthorNameComparator(.70d,.5d);
-				if (potentialMatch.getKingdom().equals("Animalia")) { 
-				    authorNameComparator = new ICZNAuthorNameComparator(.75d,.5d);
+				// TODO: Handle autonyms of botanical names (should not have an authorship).
+				String taxonName = taxonNameToValidate.getCanonicalName();
+				if (taxonName==null || taxonName.length()==0) { 
+					taxonName = taxonNameToValidate.getScientificName();
+					taxonNameToValidate.setCanonicalName(taxonName);
 				}
-				if (potentialMatch.getCanonicalName().equals(taxonName) && potentialMatch.getAuthorship().equals(authorship)) { 
-					potentialMatch.setMatchDescription(NameComparison.MATCH_EXACT);
-					result = potentialMatch;
-				    result.setAuthorshipStringEditDistance(1d);
+				String authorship = taxonNameToValidate.getAuthorship();
+				List<NameUsage> hits = GBIFService.parseAllNameUsagesFromJSON(GBIFService.searchForTaxon(taxonName, targetKey));
+				if (hits==null || hits.size()==0) { 
+					// no matches
+					logger.debug("No Matches");
+				} else if (hits.size()==1) { 
+					Iterator<NameUsage> i = hits.iterator();
+					// One possible match
+					NameUsage potentialMatch = i.next();
+					AuthorNameComparator authorNameComparator = new ICNafpAuthorNameComparator(.70d,.5d);
+					if (potentialMatch.getKingdom().equals("Animalia")) { 
+						authorNameComparator = new ICZNAuthorNameComparator(.75d,.5d);
+					}
+					if (potentialMatch.getCanonicalName().equals(taxonName) && potentialMatch.getAuthorship().equals(authorship)) { 
+						potentialMatch.setMatchDescription(NameComparison.MATCH_EXACT);
+						result = potentialMatch;
+						result.setAuthorshipStringEditDistance(1d);
+					} else { 
+						NameComparison authorComparison = authorNameComparator.compare(authorship, potentialMatch.getAuthorship());
+						double similarity = authorComparison.getSimilarity();
+						String match = authorComparison.getMatchType();
+						logger.debug(authorship);
+						logger.debug(potentialMatch.getAuthorship());
+						logger.debug(similarity);
+						potentialMatch.setMatchDescription(match);
+						result = potentialMatch;
+						result.setAuthorshipStringEditDistance(similarity);
+					}
+					NameComparison nameComparison = nameComparator.compare(taxonName, potentialMatch.getCanonicalName());
+					result.setNameMatchDescription(nameComparison.getMatchType());
+					result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
+					result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+					result.setScientificNameStringEditDistance(1d);
+					result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+					result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
 				} else { 
-					NameComparison authorComparison = authorNameComparator.compare(authorship, potentialMatch.getAuthorship());
-					double similarity = authorComparison.getSimilarity();
-					String match = authorComparison.getMatchType();
-					logger.debug(authorship);
-					logger.debug(potentialMatch.getAuthorship());
-					logger.debug(similarity);
-					potentialMatch.setMatchDescription(match);
-					result = potentialMatch;
-				    result.setAuthorshipStringEditDistance(similarity);
-				}
-				result.setInputDbPK(taxonNameToValidate.getInputDbPK());
-				result.setScientificNameStringEditDistance(1d);
-				result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
-				result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
-			} else { 
-				// multiple possible matches
-			    Iterator<NameUsage> i = hits.iterator();
-			    logger.debug("More than one match: " + hits.size());
-				boolean exactMatch = false;
-				List<NameUsage> matches = new ArrayList<NameUsage>();
-			    while (i.hasNext() && !exactMatch) { 
-			        NameUsage potentialMatch = i.next();
-				    matches.add(potentialMatch);
-				    logger.debug(potentialMatch.getScientificName());
-				    logger.debug(potentialMatch.getCanonicalName());
-				    logger.debug(potentialMatch.getKey());
-				    logger.debug(potentialMatch.getAuthorship());
-				    logger.debug(potentialMatch.getTaxonomicStatus());
-				    if (potentialMatch.getScientificName().equals(taxonName)) {
-				    	if (potentialMatch.getAuthorship().equals(authorship)) {
-				    		// If one of the results is an exact match on scientific name and authorship, pick that one. 
-				    		result = potentialMatch;
-				    		result.setInputDbPK(taxonNameToValidate.getInputDbPK());
-				    		result.setMatchDescription(NameComparison.MATCH_EXACT);
-				    		result.setAuthorshipStringEditDistance(1d);
-				    		result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
-				    		result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
-				    		result.setScientificNameStringEditDistance(1d);
-				    		exactMatch = true;
-				    	}
-				    }
-				}
-				if (!exactMatch) {
-					// If we didn't find an exact match on scientific name and authorship in the list, pick the 
-					// closest authorship and list all of the potential matches.  
-					Iterator<NameUsage> im = matches.iterator();
-					if (im.hasNext()) { 
-					NameUsage closest = im.next();
-					StringBuffer names = new StringBuffer();
-					names.append(closest.getScientificName()).append(" ").append(closest.getAuthorship()).append(" ").append(closest.getUnacceptReason()).append(" ").append(closest.getTaxonomicStatus());
-					while (im.hasNext()) { 
-						NameUsage current = im.next();
-					    names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
-						if (taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
-							closest = current;
+					// multiple possible matches
+					Iterator<NameUsage> i = hits.iterator();
+					logger.debug("More than one match: " + hits.size());
+					boolean exactMatch = false;
+					List<NameUsage> matches = new ArrayList<NameUsage>();
+					while (i.hasNext() && !exactMatch) { 
+						NameUsage potentialMatch = i.next();
+						matches.add(potentialMatch);
+						logger.debug(potentialMatch.getScientificName());
+						logger.debug(potentialMatch.getCanonicalName());
+						logger.debug(potentialMatch.getKey());
+						logger.debug(potentialMatch.getAuthorship());
+						logger.debug(potentialMatch.getTaxonomicStatus());
+						if (potentialMatch.getScientificName().equals(taxonName)) {
+							if (potentialMatch.getAuthorship().equals(authorship)) {
+								// If one of the results is an exact match on scientific name and authorship, pick that one. 
+								result = potentialMatch;
+								result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+								result.setMatchDescription(NameComparison.MATCH_EXACT);
+								result.setNameMatchDescription(NameComparison.MATCH_EXACT);
+								result.setAuthorshipStringEditDistance(1d);
+								result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+								result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
+								result.setScientificNameStringEditDistance(1d);
+								exactMatch = true;
+							}
 						}
 					}
-					result = closest;
-				    result.setInputDbPK(taxonNameToValidate.getInputDbPK());
-				    result.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
-				    result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
-				    result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
-				    result.setScientificNameStringEditDistance(1d);
-				    result.setAuthorshipStringEditDistance(taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(taxonNameToValidate.getAuthorship(), result.getAuthorship()));
+					if (!exactMatch) {
+						// If we didn't find an exact match on scientific name and authorship in the list, pick the 
+						// closest authorship and list all of the potential matches.  
+						Iterator<NameUsage> im = matches.iterator();
+						if (im.hasNext()) { 
+							NameUsage closest = null;
+							StringBuffer names = new StringBuffer();
+							while (im.hasNext()) { 
+								NameUsage current = im.next();
+								NameComparison nameComparison = nameComparator.compare(taxonName, current.getScientificName());
+								if (NameComparison.isPlausible(nameComparison.getMatchType())) { 
+									names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
+									if (taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+										closest = current;
+									}
+								}
+							}
+							if (closest != null) { 
+								result = closest;
+								result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+								result.setMatchDescription(NameComparison.MATCH_MULTIPLE + " " + names.toString());
+								result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
+								result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
+								result.setScientificNameStringEditDistance(1d);
+								result.setAuthorshipStringEditDistance(taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(taxonNameToValidate.getAuthorship(), result.getAuthorship()));
+							}
+						}
 					}
 				}
-			}
 			} catch (IOException e) { 
 				logger.error(e.getMessage());
 			}
@@ -631,7 +650,7 @@ public class GBIFService implements Validator {
 			result.setGuid("http://api.gbif.org/v1/species/" + Integer.toString(result.getKey()));
 		}
 		return result;
-		
+
 	}
 
 	@Override

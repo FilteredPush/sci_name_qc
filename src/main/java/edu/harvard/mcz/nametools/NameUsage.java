@@ -84,6 +84,7 @@ public class NameUsage implements LinneanClassification {
 	private String guid;             // GUID for the name usage
 	
 	private String matchDescription;  // metadata, description of the match between this name usage and the original
+	private String nameMatchDescription; // medatdata, description of the match between the name part excluding the authorshship of this name usage and the original
 	private double authorshipStringSimilarity;
 	private double scientificNameStringSimilarity;
 	
@@ -940,6 +941,14 @@ public class NameUsage implements LinneanClassification {
 	 */
 	public void setExtension(Map<String,String> extension) {
 		this.extension = extension;
+	}
+
+	public String getNameMatchDescription() {
+		return nameMatchDescription;
+	}
+
+	public void setNameMatchDescription(String nameMatchDescription) {
+		this.nameMatchDescription = nameMatchDescription;
 	}	
 	
 }
