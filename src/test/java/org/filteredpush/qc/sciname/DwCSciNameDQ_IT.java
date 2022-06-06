@@ -43,28 +43,34 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPhylumNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationPhylumNotfound() {
+	public void testValidationPhylumFound() {
 		
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum 
-        // was found as a value at the rank of phylum by the bdq:sourceAuthority 
-        // service; otherwise NOT_COMPLIANT 		
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum 
+        // is EMPTY; COMPLIANT if the value of dwc:phylum was found 
+        // as a value at the rank of Phylum by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationPhylumNotfound(null,authority);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationPhylumFound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = DwCSciNameDQ.validationPhylumNotfound("a3555144X",authority);
+		result = DwCSciNameDQ.validationPhylumFound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationPhylumNotfound("Mollusca",authority);
+		result = DwCSciNameDQ.validationPhylumFound("Mollusca",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
-		result = DwCSciNameDQ.validationPhylumNotfound("Murex",authority);
+		result = DwCSciNameDQ.validationPhylumFound("Murex",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
 		
@@ -74,37 +80,47 @@ public class DwCSciNameDQ_IT {
 			fail(e.getMessage());
 		}
 		
-		result = DwCSciNameDQ.validationPhylumNotfound("Mollusca",authority);
+		result = DwCSciNameDQ.validationPhylumFound("Mollusca",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		result = DwCSciNameDQ.validationPhylumFound("Mollusca",null);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 	}
 
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationFamilyNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationFamilyNotfound() {
+	public void testValidationFamilyFound() {
 		
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:family is EMPTY; COMPLIANT if the value of dwc:family 
-        // was found as a value at the rank of family by the bdq:sourceAuthority 
-        // service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:family 
+        // is EMPTY; COMPLIANT if the value of dwc:family was found 
+        // as a value at the rank of Family by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationFamilyNotfound(null,authority);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationFamilyFound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = DwCSciNameDQ.validationFamilyNotfound("a3555144X",authority);
+		result = DwCSciNameDQ.validationFamilyFound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationFamilyNotfound("Muricidae",authority);
+		result = DwCSciNameDQ.validationFamilyFound("Muricidae",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
-		result = DwCSciNameDQ.validationFamilyNotfound("Animalia",authority);
+		result = DwCSciNameDQ.validationFamilyFound("Animalia",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
 		
@@ -114,10 +130,13 @@ public class DwCSciNameDQ_IT {
 			fail(e.getMessage());
 		}
 		
-		result = DwCSciNameDQ.validationFamilyNotfound("Muricidae",authority);
+		result = DwCSciNameDQ.validationFamilyFound("Muricidae",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 		
+		result = DwCSciNameDQ.validationFamilyFound("Muricidae",null);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 	}
 
 	/**
@@ -403,28 +422,34 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationClassNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationClassNotfound() {
+	public void testValidationClassFound() {
 		
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:class is EMPTY; COMPLIANT if the value of dwc:class 
-        // was found as a value at the rank of class by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:class 
+        // is EMPTY; COMPLIANT if the value of dwc:class was found 
+        // as a value at the rank of Class in the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassNotfound(null,authority);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassFound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = DwCSciNameDQ.validationClassNotfound("a3555144X",authority);
+		result = DwCSciNameDQ.validationClassFound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationClassNotfound("Gastropoda",authority);
+		result = DwCSciNameDQ.validationClassFound("Gastropoda",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
-		result = DwCSciNameDQ.validationClassNotfound("Murex",authority);
+		result = DwCSciNameDQ.validationClassFound("Murex",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
 		
@@ -434,7 +459,11 @@ public class DwCSciNameDQ_IT {
 			fail(e.getMessage());
 		}
 		
-		result = DwCSciNameDQ.validationClassNotfound("Gastropoda",authority);
+		result = DwCSciNameDQ.validationClassFound("Gastropoda",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		
+		result = DwCSciNameDQ.validationClassFound("Gastropoda",null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 	}
@@ -443,28 +472,34 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationKingdomNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationKingdomNotfound() {
+	public void testValidationKingdomFound() {
 		
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum 
-        // was found as a value at the rank of phylum by the bdq:sourceAuthority 
-        // service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:kingdom 
+        // is EMPTY; COMPLIANT if the value of dwc:kingdom was found 
+        // as a value at the rank of kingdom by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationKingdomNotfound(null,authority);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationKingdomFound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = DwCSciNameDQ.validationKingdomNotfound("a3555144X",authority);
+		result = DwCSciNameDQ.validationKingdomFound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationKingdomNotfound("Animalia",authority);
+		result = DwCSciNameDQ.validationKingdomFound("Animalia",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
-		result = DwCSciNameDQ.validationKingdomNotfound("Murex",authority);
+		result = DwCSciNameDQ.validationKingdomFound("Murex",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -474,7 +509,11 @@ public class DwCSciNameDQ_IT {
 			fail(e.getMessage());
 		}
 		
-		result = DwCSciNameDQ.validationKingdomNotfound("Animalia",authority);
+		result = DwCSciNameDQ.validationKingdomFound("Animalia",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		
+		result = DwCSciNameDQ.validationKingdomFound("Animalia",null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 	}
@@ -484,29 +523,34 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationOrderNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationOrderNotfound() {
+	public void testValidationOrderFound() {
 		
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:order is EMPTY; COMPLIANT if the value of dwc:order 
-        // was found as a value at the rank of order by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:order 
+        // is EMPTY; COMPLIANT if the value of dwc:order was found 
+        // as a value at the rank of Order by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationOrderNotfound(null,authority);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationOrderFound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = DwCSciNameDQ.validationOrderNotfound("a3555144X",authority);
+		result = DwCSciNameDQ.validationOrderFound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationOrderNotfound("Carnivora",authority);
+		result = DwCSciNameDQ.validationOrderFound("Carnivora",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 		
-		result = DwCSciNameDQ.validationOrderNotfound("Animalia",authority);
+		result = DwCSciNameDQ.validationOrderFound("Animalia",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
 		
@@ -516,7 +560,11 @@ public class DwCSciNameDQ_IT {
 			fail(e.getMessage());
 		}
 		
-		result = DwCSciNameDQ.validationOrderNotfound("Neogastropoda",authority);
+		result = DwCSciNameDQ.validationOrderFound("Neogastropoda",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		
+		result = DwCSciNameDQ.validationOrderFound("Neogastropoda",null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 	}
@@ -534,24 +582,31 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationGenusNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationGenusNotfound() {
+	public void testValidationGenusFound() {
 		
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus 
-        // was found as a value at the rank of genus by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:genus 
+        // is EMPTY; COMPLIANT if the value of dwc:genus was found 
+        // as a value at the rank of genus by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+		
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 	
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationGenusNotfound(null,authority);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationGenusFound(null,authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
-		result = DwCSciNameDQ.validationGenusNotfound("a3555144X",authority);
+		result = DwCSciNameDQ.validationGenusFound("a3555144X",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationGenusNotfound("Murex",authority);
+		result = DwCSciNameDQ.validationGenusFound("Murex",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 		
@@ -561,10 +616,13 @@ public class DwCSciNameDQ_IT {
 			fail(e.getMessage());
 		}
 		
-		result = DwCSciNameDQ.validationGenusNotfound("Murex",authority);
+		result = DwCSciNameDQ.validationGenusFound("Murex",authority);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 		
+		result = DwCSciNameDQ.validationGenusFound("Murex",null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 	}
 
 	/**

@@ -38,21 +38,21 @@ public class TestDwCSciNameDQ {
 	private static final Log logger = LogFactory.getLog(TestDwCSciNameDQ.class);
 
 	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameEmpty(java.lang.String)}.
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameNotempty(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationScientificnameEmpty() {
+	public void testValidationScientificnameNotempty() {
 		
 		// COMPLIANT if dwc:scientificName is not EMPTY; otherwise NOT_COMPLIANT 
 		
 		String scientificName = "Murex pecten";
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationScientificnameEmpty(scientificName);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		scientificName = "";
-		result = DwCSciNameDQ.validationScientificnameEmpty(scientificName);
+		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());

@@ -42,6 +42,15 @@ import org.datakurator.ffdq.api.result.*;
 /**
  * Implementation of the TDWG TG2 NAME (scientific name) related data quality tests.
  * 
+ * #82 VALIDATION_SCIENTIFICNAME_NOTEMPTY 7c4b9498-a8d9-4ebb-85f1-9f200c788595
+ * 
+ * #81 VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
+ * #22 VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
+ * #77 VALIDATION_CLASS_FOUND 2cd6884e-3d14-4476-94f7-1191cfff309b
+ * #83 VALIDATION_ORDER_FOUND 81cc974d-43cc-4c0f-a5e0-afa23b455aa3
+ * #28 VALIDATION_FAMILY_FOUND 3667556d-d8f5-454c-922b-af8af38f613c
+ * #122 VALIDATION_GENUS_FOUND f2ce7d55-5b1d-426a-b00e-6d4efe3058ec
+ * 
  * @author mole
  *
  */
@@ -51,54 +60,82 @@ public class DwCSciNameDQ {
 	
 	private static final Log logger = LogFactory.getLog(DwCSciNameDQ.class);
 	
+    public static DQResponse<ComplianceValue> validationPhylumFound(@ActedUpon("dwc:phylum") String phylum) {
+    	return validationPhylumFound(phylum, null);
+    }
 
 	/**
-     * #22 Validation SingleRecord Conformance: phylum notfound
+     * Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_PHYLUM_NOTFOUND
+     * Provides: #22 VALIDATION_PHYLUM_FOUND
      *
      * @param phylum the provided dwc:phylum to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_PHYLUM_FOUND", description="Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?")
     @Provides("eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f")
-    public static DQResponse<ComplianceValue> validationPhylumNotfound(@ActedUpon("dwc:phylum") String phylum, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationPhylumFound(@ActedUpon("dwc:phylum") String phylum, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum 
-        // was found as a value at the rank of phylum by the bdq:sourceAuthority 
-        // service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum 
+        // is EMPTY; COMPLIANT if the value of dwc:phylum was found 
+        // as a value at the rank of Phylum by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
         return validateHigherTaxonAtRank(phylum, "Phylum", sourceAuthority);
     }
 
+    public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family) {
+    	return validationFamilyFound(family, null);
+    }
     /**
-     * #28 Validation SingleRecord Conformance: family notfound
-     *
-     * Provides: VALIDATION_FAMILY_NOTFOUND
+     * Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?
+     * 
+     * Provides: #28 VALIDATION_FAMILY_FOUND
      *
      * @param family the provided dwc:family to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_FAMILY_FOUND", description="Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?")
     @Provides("3667556d-d8f5-454c-922b-af8af38f613c")
-    public static DQResponse<ComplianceValue> validationFamilyNotfound(@ActedUpon("dwc:family") String family, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:family is EMPTY; COMPLIANT if the value of dwc:family 
-        // was found as a value at the rank of family by the bdq:sourceAuthority 
-        // service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:family 
+        // is EMPTY; COMPLIANT if the value of dwc:family was found 
+        // as a value at the rank of Family by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
         return validateHigherTaxonAtRank(family, "Family", sourceAuthority);
     }
 
@@ -435,70 +472,101 @@ public class DwCSciNameDQ {
         return result;
     }
 
+    public static DQResponse<ComplianceValue> validationClassFound(@ActedUpon("dwc:class") String taxonomic_class) {
+    	return validationClassFound(taxonomic_class, null);
+    }
+    
     /**
-     * #77 Validation SingleRecord Conformance: class notfound
+     * Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_CLASS_NOTFOUND
+     * Provides: #77 VALIDATION_CLASS_FOUND
      *
      * @param taxonomic_class the provided dwc:class to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_CLASS_FOUND", description="Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?")
     @Provides("2cd6884e-3d14-4476-94f7-1191cfff309b")
-    public static DQResponse<ComplianceValue> validationClassNotfound(@ActedUpon("dwc:class") String taxonomic_class, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationClassFound(@ActedUpon("dwc:class") String taxonomic_class, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:class is EMPTY; COMPLIANT if the value of dwc:class 
-        // was found as a value at the rank of class by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:class 
+        // is EMPTY; COMPLIANT if the value of dwc:class was found 
+        // as a value at the rank of Class in the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
         return validateHigherTaxonAtRank(taxonomic_class, "Class", sourceAuthority);
     }
 
+    public static DQResponse<ComplianceValue> validationKingdomFound(@ActedUpon("dwc:kingdom") String kingdom) {
+        return validationKingdomFound(kingdom, null);
+    }
+    
     /**
-     * #81 Validation SingleRecord Conformance: kingdom notfound
+     * Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_KINGDOM_NOTFOUND
+     * Provides: #81 VALIDATION_KINGDOM_FOUND
      *
      * @param kingdom the provided dwc:kingdom to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_KINGDOM_FOUND", description="Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?")
     @Provides("125b5493-052d-4a0d-a3e1-ed5bf792689e")
-    public static DQResponse<ComplianceValue> validationKingdomNotfound(@ActedUpon("dwc:kingdom") String kingdom, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationKingdomFound(@ActedUpon("dwc:kingdom") String kingdom, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:kingdom is EMPTY; COMPLIANT if the value of dwc:kingdom 
-        // was found as a value at the rank of kingdom by the bdq:sourceAuthority 
-        // service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:kingdom 
+        // is EMPTY; COMPLIANT if the value of dwc:kingdom was found 
+        // as a value at the rank of kingdom by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
 
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
         return validateHigherTaxonAtRank(kingdom, "Kingdom", sourceAuthority);
     }
 
     /**
-     * #82 Validation SingleRecord Completeness: scientificname empty
+     * Is there a value in dwc:scientificName?
      *
-     * Provides: VALIDATION_SCIENTIFICNAME_EMPTY
+     * Provides: #82 VALIDATION_SCIENTIFICNAME_NOTEMPTY
      *
      * @param scientificName the provided dwc:scientificName to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("urn:uuid:7c4b9498-a8d9-4ebb-85f1-9f200c788595")
-    public static DQResponse<ComplianceValue> validationScientificnameEmpty(@ActedUpon("dwc:scientificName") String scientificName) {
+    @Validation(label="VALIDATION_SCIENTIFICNAME_NOTEMPTY", description="Is there a value in dwc:scientificName?")
+    @Provides("7c4b9498-a8d9-4ebb-85f1-9f200c788595")
+    public static DQResponse<ComplianceValue> validationScientificnameNotempty(@ActedUpon("dwc:scientificName") String scientificName) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // COMPLIANT if dwc:scientificName is not EMPTY; otherwise 
-        //NOT_COMPLIANT 
+        // NOT_COMPLIANT 
 
 		if (SciNameUtils.isEmpty(scientificName)) {
 			result.addComment("No value provided for scientificName.");
@@ -513,28 +581,42 @@ public class DwCSciNameDQ {
         
     }
 
+    public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order) {
+    	return validationOrderFound(order,null);
+    }
     /**
-     * #83 Validation SingleRecord Conformance: order notfound
+     * Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_ORDER_NOTFOUND
+     * Provides: #83 VALIDATION_ORDER_FOUND
      *
      * @param order the provided dwc:order to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("urn:uuid:81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
-    public static DQResponse<ComplianceValue> validationOrderNotfound(@ActedUpon("dwc:order") String order,  @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    @Validation(label="VALIDATION_ORDER_FOUND", description="Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?")
+    @Provides("81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
+    public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order,  @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:order is EMPTY; COMPLIANT if the value of dwc:order 
-        // was found as a value at the rank of order by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:order 
+        // is EMPTY; COMPLIANT if the value of dwc:order was found 
+        // as a value at the rank of Order by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
         
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
         if (sourceAuthority==null) { 
         	sourceAuthority = new SciNameSourceAuthority();
         }
@@ -763,28 +845,43 @@ public class DwCSciNameDQ {
         return result;
     }
 
+    public DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus) {
+    	return validationGenusFound(genus, null);
+    }
+
     /**
-     * #122 Validation SingleRecord Conformance: genus notfound
+     * Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_GENUS_NOTFOUND
+     * Provides: #122 VALIDATION_GENUS_FOUND
      *
      * @param genus the provided dwc:genus to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_GENUS_FOUND", description="Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?")
     @Provides("f2ce7d55-5b1d-426a-b00e-6d4efe3058ec")
-    public static DQResponse<ComplianceValue> validationGenusNotfound(@ActedUpon("dwc:genus") String genus, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus 
-        // was found as a value at the rank of genus by the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:genus 
+        // is EMPTY; COMPLIANT if the value of dwc:genus was found 
+        // as a value at the rank of genus by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-        
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+    
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
         if (sourceAuthority==null) { 
         	sourceAuthority = new SciNameSourceAuthority();
         }
