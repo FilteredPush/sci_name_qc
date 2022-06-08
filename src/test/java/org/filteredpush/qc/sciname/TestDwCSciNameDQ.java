@@ -37,6 +37,71 @@ public class TestDwCSciNameDQ {
 
 	private static final Log logger = LogFactory.getLog(TestDwCSciNameDQ.class);
 
+	@Test 
+	public void testvalidationTaxonidComplete() { 
+		// TODO: specification needs work.
+		
+		String taxonID = "";
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "3256236";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "urn:lsid:marinespecies.org:taxname:148";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "urn:lsid:marinespecies.org:taxname:";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "https://www.gbif.org/species/2529789";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "https://www.gbif.org/";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "https://www.gbif.org/species/";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "urn:uuid:c65c3ede-484f-45af-813e-65f606dff750";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "c65c3ede-484f-45af-813e-65f606dff750";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "gbif:2529789";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+	}
+	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameNotempty(java.lang.String)}.
 	 */
@@ -137,20 +202,20 @@ public class TestDwCSciNameDQ {
 	}
 
 	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonidEmpty(java.lang.String)}.
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonidNotempty(java.lang.String)}.
 	 */
 	@Test
 	public void testValidationTaxonidEmpty() {
 		// COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT
 		
 		String taxonId = "foo";
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidEmpty(taxonId);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidNotempty(taxonId);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonId = "";
-		result = DwCSciNameDQ.validationTaxonidEmpty(taxonId);
+		result = DwCSciNameDQ.validationTaxonidNotempty(taxonId);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());		

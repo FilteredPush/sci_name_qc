@@ -19,6 +19,8 @@
 package org.filteredpush.qc.sciname;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +45,7 @@ import org.datakurator.ffdq.api.result.*;
  * Implementation of the TDWG TG2 NAME (scientific name) related data quality tests.
  * 
  * #82 VALIDATION_SCIENTIFICNAME_NOTEMPTY 7c4b9498-a8d9-4ebb-85f1-9f200c788595
+ * #120 VALIDATION_TAXONID_NOTEMPTY 401bf207-9a55-4dff-88a5-abcd58ad97fa
  * 
  * #81 VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
  * #22 VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
@@ -76,11 +79,13 @@ public class DwCSciNameDQ {
      * Provides: #22 VALIDATION_PHYLUM_FOUND
      *
      * @param phylum the provided dwc:phylum to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_PHYLUM_FOUND", description="Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?")
     @Provides("eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f")
-    public static DQResponse<ComplianceValue> validationPhylumFound(@ActedUpon("dwc:phylum") String phylum, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationPhylumFound(@ActedUpon("dwc:phylum") String phylum, 
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -115,11 +120,13 @@ public class DwCSciNameDQ {
      * Provides: #28 VALIDATION_FAMILY_FOUND
      *
      * @param family the provided dwc:family to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_FAMILY_FOUND", description="Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?")
     @Provides("3667556d-d8f5-454c-922b-af8af38f613c")
-    public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family, 
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -536,32 +543,67 @@ public class DwCSciNameDQ {
 
         return result;
     }
+    
+    public static DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(
+    		@Consulted("dwc:taxonID") String taxonID, 
+    		@ActedUpon("dwc:scientificName") String scientificName
+    	) {
+    	return amendmentScientificnameFromTaxonid(taxonID, scientificName, null);
+    }
 
     /**
-     * #71 Amendment SingleRecord Completeness: scientificname from taxonid
+     * Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.
      *
-     * Provides: AMENDMENT_SCIENTIFICNAME_FROM_TAXONID
+     * Provides: #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type AmendmentValue to return
      */
+    @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_TAXONID", description="Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.")
     @Provides("f01fb3f9-2f7e-418b-9f51-adf50f202aea")
-    public DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(@ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:scientificName") String scientificName) {
+    public static DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(
+    		@Consulted("dwc:taxonID") String taxonID, 
+    		@ActedUpon("dwc:scientificName") String scientificName,
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
+    	) {
+    	
         DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
         //TODO:  Implement specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:taxonID is EMPTY, the value of dwc:taxonID is ambiguous 
-        // or dwc:scientificName was not EMPTY; AMENDED if dwc:scientificName 
-        // was added from a successful lookup of dwc:taxonID in the 
-        //bdq:sourceAuthority; otherwise NOT_AMENDED 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID 
+        // is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName 
+        // was not EMPTY; FILLED_IN the value of dwc:scientificName 
+        // if the value of dwc:taxonID could be unambiguously interpreted 
+        // as a value in bdq:sourceAuthority; otherwise NOT_AMENDED 
+        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
+        // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
         //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
+        if (SciNameUtils.isEmpty(taxonID)) { 
+			result.addComment("dwc:taxonID does not contains a value.");
+			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else if (!SciNameUtils.isEmpty(scientificName)) { 
+			result.addComment("dwc:scientificName already contains a value ["+ scientificName +"].");
+			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else { 
+        	
+        }
 
         return result;
+        
     }
 
     public static DQResponse<ComplianceValue> validationClassFound(@ActedUpon("dwc:class") String taxonomic_class) {
@@ -574,11 +616,14 @@ public class DwCSciNameDQ {
      * Provides: #77 VALIDATION_CLASS_FOUND
      *
      * @param taxonomic_class the provided dwc:class to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_CLASS_FOUND", description="Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?")
     @Provides("2cd6884e-3d14-4476-94f7-1191cfff309b")
-    public static DQResponse<ComplianceValue> validationClassFound(@ActedUpon("dwc:class") String taxonomic_class, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationClassFound(
+    		@ActedUpon("dwc:class") String taxonomic_class, 
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -614,11 +659,13 @@ public class DwCSciNameDQ {
      * Provides: #81 VALIDATION_KINGDOM_FOUND
      *
      * @param kingdom the provided dwc:kingdom to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_KINGDOM_FOUND", description="Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?")
     @Provides("125b5493-052d-4a0d-a3e1-ed5bf792689e")
-    public static DQResponse<ComplianceValue> validationKingdomFound(@ActedUpon("dwc:kingdom") String kingdom, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationKingdomFound(@ActedUpon("dwc:kingdom") String kingdom, 
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -682,11 +729,13 @@ public class DwCSciNameDQ {
      * Provides: #83 VALIDATION_ORDER_FOUND
      *
      * @param order the provided dwc:order to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_ORDER_FOUND", description="Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?")
     @Provides("81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
-    public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order,  @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order,  
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -889,17 +938,19 @@ public class DwCSciNameDQ {
     }
 
     /**
-     * #120 Validation SingleRecord Completeness: taxonid empty
+     * Is there a value in dwc:taxonID?
      *
-     * Provides: VALIDATION_TAXONID_EMPTY
+     * Provides: #120 VALIDATION_TAXONID_NOTEMPTY
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("urn:uuid:401bf207-9a55-4dff-88a5-abcd58ad97fa")
-    public static DQResponse<ComplianceValue> validationTaxonidEmpty(@ActedUpon("dwc:taxonID") String taxonID) {
+    @Validation(label="VALIDATION_TAXONID_NOTEMPTY", description="Is there a value in dwc:taxonID?")
+    @Provides("401bf207-9a55-4dff-88a5-abcd58ad97fa")
+    public static DQResponse<ComplianceValue> validationTaxonidNotempty(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
+        // Specification
         // COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT 
         //
 
@@ -916,28 +967,105 @@ public class DwCSciNameDQ {
     }
 
     /**
-     * #121 Validation SingleRecord Conformance: taxonid ambiguous
+     * Does the value of dwc:taxonID contain both a URI and namespace indicator?
      *
-     * Provides: VALIDATION_TAXONID_AMBIGUOUS
+     * Provides: #121 VALIDATION_TAXONID_COMPLETE
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_TAXONID_COMPLETE", description="Does the value of dwc:taxonID contain both a URI and namespace indicator?")
     @Provides("a82c7e3a-3a50-4438-906c-6d0fefa9e984")
-    public DQResponse<ComplianceValue> validationTaxonidAmbiguous(@ActedUpon("dwc:taxonID") String taxonID) {
+    public static DQResponse<ComplianceValue> validationTaxonidComplete(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
+        //TODO: Specification needs work.
+        // something like COMPLIANT if taxonID is a validly formed LSID, or taxonID
+        // is a validly formed URN with at least NID and NSS, or taxonID is a 
+        // validly formed URI with host and path where path consists of 
+        // more than just "/", and if host is www.gbif.org and path begins with 
+        // "/species/", the path contains additional trailing characters, otherwise
+        // NOT_COMPLIANT
+        
         //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the GBIF backbone taxonomy 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:taxonID is EMPTY or does not include the resolving 
-        // authority; COMPLIANT if the value of dwc:taxonID is resolvable; 
-        //otherwise NOT_COMPLIANT 
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; 
+        // COMPLIANT if dwc:taxonID contains both a URI and a namespace 
+        // indicator; otherwise NOT_COMPLIANT 
 
+        
+        if (SciNameUtils.isEmpty(taxonID)) { 
+        	result.addComment("No value provided for taxonId.");
+        	result.setResultState(ResultState.RUN_HAS_RESULT);
+        	result.setValue(ComplianceValue.NOT_COMPLIANT);
+        } else { 
+        	try { 
+        		RFC8141URN urn = new RFC8141URN(taxonID);
+        		if (urn.getNid().equalsIgnoreCase("lsid")) { 
+        			try { 
+        				LSID lsid = new LSID(taxonID);
+        				lsid.getAuthority();
+        				lsid.getNamespace();
+        				lsid.getObjectID();
+        				result.addComment("Provided taxonID recognized as an LSID.");
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        				result.setValue(ComplianceValue.COMPLIANT);
+        			} catch (URNFormatException e2) { 
+        				logger.debug(e2.getMessage());
+        				result.addComment("Provided value for taxonID ["+taxonID+"] claims to be an lsid, but is not correctly formatted as such.");
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        			}
+        		} else { 
+        			logger.debug(urn.getNid());
+        			logger.debug(urn.getNss());
+        			if (urn.getNid().length()>0 && urn.getNss().length()>0) { 
+        				result.addComment("Provided taxonID recognized as an URN.");
+       					result.setResultState(ResultState.RUN_HAS_RESULT);
+       					result.setValue(ComplianceValue.COMPLIANT);
+        			} else { 
+        				result.addComment("Provided taxonID appears to be a URN, but doesn't have both NID and NSS");
+       					result.setResultState(ResultState.RUN_HAS_RESULT);
+       					result.setValue(ComplianceValue.NOT_COMPLIANT);
+        			}
+        		}
+        	} catch (URNFormatException e) { 
+        		logger.debug(e.getMessage());
+        		try {
+					URI uri = new URI(taxonID);
+					logger.debug(uri.getScheme());
+					logger.debug(uri.getAuthority());
+					logger.debug(uri.getHost());
+					logger.debug(uri.getPath());
+        			if (uri.getHost()!=null && uri.getPath()!=null 
+        					&& uri.getHost().length()>0 && uri.getPath().length()>0
+        					&& !uri.getPath().equals("/")) {
+        				if (uri.getHost().equalsIgnoreCase("www.gbif.org") && uri.getPath().equals("/species/")) { 
+        					result.addComment("Provided taxonID recognized as GBIF species URL, but lacks the ID ["+taxonID+"]");
+        					result.setResultState(ResultState.RUN_HAS_RESULT);
+        					result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				} else { 
+        					result.addComment("Provided taxonID recognized as an URI with host, and path.");
+        					result.setResultState(ResultState.RUN_HAS_RESULT);
+        					result.setValue(ComplianceValue.COMPLIANT);
+        				}
+        			} else { 
+        				result.addComment("Provided taxonID may be a URI, but doesn't have host and path ["+taxonID+"]");
+       					result.setResultState(ResultState.RUN_HAS_RESULT);
+       					result.setValue(ComplianceValue.NOT_COMPLIANT);
+        			}
+				} catch (URISyntaxException e1) {
+					logger.debug(e1);
+					result.addComment("Provided value for taxonID ["+taxonID+"] is not a URN or a URI.");
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+				}
+        	}
+        	
+        }
         return result;
     }
 
-    public DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus) {
+    public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus) {
     	return validationGenusFound(genus, null);
     }
 
@@ -947,11 +1075,13 @@ public class DwCSciNameDQ {
      * Provides: #122 VALIDATION_GENUS_FOUND
      *
      * @param genus the provided dwc:genus to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_GENUS_FOUND", description="Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?")
     @Provides("f2ce7d55-5b1d-426a-b00e-6d4efe3058ec")
-    public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus, @Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
+    public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus, 
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -1135,6 +1265,7 @@ public class DwCSciNameDQ {
      * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
      *
      * @param taxonRank the provided dwc:taxonRank to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type AmendmentValue to return
      */
     @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
