@@ -52,7 +52,7 @@ import org.datakurator.ffdq.api.result.*;
  * 
  * #82 VALIDATION_SCIENTIFICNAME_NOTEMPTY 7c4b9498-a8d9-4ebb-85f1-9f200c788595
  * #120 VALIDATION_TAXONID_NOTEMPTY 401bf207-9a55-4dff-88a5-abcd58ad97fa
- * #46 VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
+ * #161 VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * 
  * #81 VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
  * #22 VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
@@ -60,6 +60,7 @@ import org.datakurator.ffdq.api.result.*;
  * #83 VALIDATION_ORDER_FOUND 81cc974d-43cc-4c0f-a5e0-afa23b455aa3
  * #28 VALIDATION_FAMILY_FOUND 3667556d-d8f5-454c-922b-af8af38f613c
  * #122 VALIDATION_GENUS_FOUND f2ce7d55-5b1d-426a-b00e-6d4efe3058ec
+ * #46 VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
  * 
  * #57 AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  *
@@ -967,13 +968,12 @@ public class DwCSciNameDQ {
     }
 
     /**
-     * #105 Validation SingleRecord Completeness: taxon empty
+     * Is there a value in any of the terms needed to determine that the taxon exists?
      *
-     * Provides: VALIDATION_TAXON_EMPTY
+     * Provides: #105 VALIDATION_TAXON_NOTEMPTY
      *
      * @param taxonomic_class the provided dwc:class to evaluate
      * @param genus the provided dwc:genus to evaluate
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
      * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
      * @param phylum the provided dwc:phylum to evaluate
      * @param scientificNameID the provided dwc:scientificNameID to evaluate
@@ -987,15 +987,17 @@ public class DwCSciNameDQ {
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param family the provided dwc:family to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
+     * @param genericName the provided dwc:genericName to evaluate
+     * @param infragenericEpithet the provided dwc:infragenericEpithet to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
+     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
      * @param order the provided dwc:order to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
-    public static DQResponse<ComplianceValue> validationTaxonEmpty(
+    public static DQResponse<ComplianceValue> validationTaxonNotempty(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:genus") String genus, 
-    		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, 
     		@ActedUpon("dwc:taxonConceptID") String taxonConceptID, 
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:scientificNameID") String scientificNameID, 
@@ -1009,10 +1011,15 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:family") String family, 
     		@ActedUpon("dwc:scientificName") String scientificName, 
+    		@ActedUpon("dwc:genericName") String genericName,
+    		@ActedUpon("dwc:infragenericEpithet") String infragenericEpithet, 
     		@ActedUpon("dwc:specificEpithet") String specificEpithet, 
+    		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, 
     		@ActedUpon("dwc:order") String order) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
+        // TODO: Specification needs work, higher taxon terms shouldn't be included.
+        
         // Specification
         // COMPLIANT if at least one term needed to determine the taxon 
         // of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT 
@@ -1027,6 +1034,8 @@ public class DwCSciNameDQ {
 			SciNameUtils.isEmpty(genus) &&
 			SciNameUtils.isEmpty(subgenus) &&
 			SciNameUtils.isEmpty(scientificName) &&
+			SciNameUtils.isEmpty(genericName) &&
+			SciNameUtils.isEmpty(infragenericEpithet) &&
 			SciNameUtils.isEmpty(specificEpithet) &&
 			SciNameUtils.isEmpty(infraspecificEpithet) &&
 			SciNameUtils.isEmpty(scientificNameID) &&
@@ -1320,17 +1329,19 @@ public class DwCSciNameDQ {
     }
 
     /**
-     * #161 Validation SingleRecord Completeness: taxonrank empty
+     * Is there a value in dwc:taxonRank?
      *
-     * Provides: VALIDATION_TAXONRANK_EMPTY
+     * Provides: #161 VALIDATION_TAXONRANK_NOTEMPTY
      *
      * @param taxonRank the provided dwc:taxonRank to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Provides("urn:uuid:14da5b87-8304-4b2b-911d-117e3c29e890")
-    public static DQResponse<ComplianceValue> validationTaxonrankEmpty(@ActedUpon("dwc:taxonRank") String taxonRank) {
+    @Validation(label="VALIDATION_TAXONRANK_NOTEMPTY", description="Is there a value in dwc:taxonRank?")
+    @Provides("14da5b87-8304-4b2b-911d-117e3c29e890")
+    public static DQResponse<ComplianceValue> validationTaxonrankNotempty(@ActedUpon("dwc:taxonRank") String taxonRank) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-        
+      
+        // Specification
         // COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT 
         //
 

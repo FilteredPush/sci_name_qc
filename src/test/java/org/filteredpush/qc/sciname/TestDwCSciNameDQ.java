@@ -138,64 +138,70 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonEmpty() {
-		DQResponse<ComplianceValue> result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		DQResponse<ComplianceValue> result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty("class", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty("class", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null);
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A");
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
-		result =DwCSciNameDQ.validationTaxonEmpty("A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A");
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "A");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		result =DwCSciNameDQ.validationTaxonNotempty("A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A");
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
 		
@@ -224,19 +230,19 @@ public class TestDwCSciNameDQ {
 
 
 	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonrankEmpty(java.lang.String)}.
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonrankNotempty(java.lang.String)}.
 	 */
 	@Test
 	public void testValidationTaxonrankEmpty() {
 		//COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT 
 		
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonrankEmpty(null);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonrankNotempty(null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
-		result = DwCSciNameDQ.validationTaxonrankEmpty("string");
+		result = DwCSciNameDQ.validationTaxonrankNotempty("string");
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
-		result = DwCSciNameDQ.validationTaxonrankEmpty("species");
+		result = DwCSciNameDQ.validationTaxonrankNotempty("species");
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 	}
