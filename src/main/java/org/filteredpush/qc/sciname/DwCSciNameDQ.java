@@ -32,7 +32,13 @@ import org.datakurator.ffdq.annotations.*;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.model.ResultState;
 import org.filteredpush.qc.sciname.services.GBIFService;
+import org.filteredpush.qc.sciname.services.ServiceException;
+import org.filteredpush.qc.sciname.services.Validator;
 import org.filteredpush.qc.sciname.services.WoRMSService;
+import org.gbif.nameparser.NameParserGBIF;
+import org.gbif.nameparser.api.ParsedName;
+import org.gbif.nameparser.api.Rank;
+import org.gbif.nameparser.api.UnparsableNameException;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
@@ -46,6 +52,7 @@ import org.datakurator.ffdq.api.result.*;
  * 
  * #82 VALIDATION_SCIENTIFICNAME_NOTEMPTY 7c4b9498-a8d9-4ebb-85f1-9f200c788595
  * #120 VALIDATION_TAXONID_NOTEMPTY 401bf207-9a55-4dff-88a5-abcd58ad97fa
+ * #46 VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
  * 
  * #81 VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
  * #22 VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
@@ -152,27 +159,132 @@ public class DwCSciNameDQ {
         return validateHigherTaxonAtRank(family, "Family", sourceAuthority);
     }
 
+    @Provides("3f335517-f442-4b98-b149-1e87ff16de45")
+    public static DQResponse<ComplianceValue> validationScientificnameFound(@ActedUpon("dwc:scientificName") String scientificName) {
+        return validationScientificnameFound(scientificName, null);
+    }
+    
     /**
-     * #46 Validation SingleRecord Conformance: scientificname notfound
+     * Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_SCIENTIFICNAME_NOTFOUND
+     * Provides: #46 VALIDATION_SCIENTIFICNAME_FOUND
      *
      * @param scientificName the provided dwc:scientificName to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_SCIENTIFICNAME_FOUND", description="Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?")
     @Provides("3f335517-f442-4b98-b149-1e87ff16de45")
-    public DQResponse<ComplianceValue> validationScientificnameNotfound(@ActedUpon("dwc:scientificName") String scientificName) {
+    public static DQResponse<ComplianceValue> validationScientificnameFound(
+    		@ActedUpon("dwc:scientificName") String scientificName,
+    		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
+    	) {
+    	
+
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:scientificName is EMPTY; COMPLIANT if there is a 
-        // match of the contents of dwc:scientificName with the bdq:sourceAuthority 
-        //service; otherwise NOT_COMPLIANT 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName 
+        // is EMPTY; COMPLIANT if there is a match of the contents 
+        // of dwc:scientificName with the bdq:sourceAuthority; otherwise 
+        // NOT_COMPLIANT bdq:sourceAuthority default = "GBIF Backbone 
+        // Taxonomy" [https://doi.org/10.15468/39omei], "API endpoint" 
+        // [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        
+        if (sourceAuthority==null) { 
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
+        }
+        if (SciNameUtils.isEmpty(scientificName)) { 
+        	result.addComment("No value provided for dwc:scientificName.");
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else { 
+        	Validator service = null;
+        	if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
+        		try {
+        			service= new GBIFService(false);
+        		} catch (IOException e) { 
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}
+        	} else if (sourceAuthority.isGBIFChecklist()) { 
+        		try {
+        			service = new GBIFService(sourceAuthority.getAuthoritySubDataset(), false);
+        		} catch (IOException e) {
+        			result.addComment("GBIF API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		}        		
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
+        		try {
+        			service = new WoRMSService(false);
+        		} catch (IOException e) {
+        			result.addComment("Error setting up WoRMS aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}
+        	} 
+        	if (service==null) { 
+        		result.addComment("Source Authority Not Implemented.");
+        		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        	} else { 
+        		NameUsage toValidate = new NameUsage();
+        		boolean set = false;
+        		try { 
+        			NameParserGBIF parser = new NameParserGBIF();
+        			ParsedName parsedName = parser.parse(scientificName, Rank.UNRANKED, null);
+        			toValidate.setScientificName(parsedName.canonicalNameWithoutAuthorship());
+        			toValidate.setAuthorship(parsedName.authorshipComplete());
+        			logger.debug(parsedName.canonicalNameWithoutAuthorship());
+        			logger.debug(parsedName.authorshipComplete());
+        			parser.close();
+        			set = true;
+        		} catch (UnparsableNameException e) { 
+        			result.addComment("Unable to parse authorship out of provided scientificName");
+        			result.addComment(e.getMessage());
+        		} catch (Exception e) {
+        			logger.error(e.getMessage(), e);
+				}
+        		if (!set) { 
+        			toValidate.setScientificName(scientificName);
+        		}
+        		try {
+					NameUsage validationResponse = service.validate(toValidate);
+					if (validationResponse==null) { 
+						result.addComment("No Match found for ["+scientificName+"] in ["+sourceAuthority.getName()+"]");
+						result.setResultState(ResultState.RUN_HAS_RESULT);
+						result.setValue(ComplianceValue.NOT_COMPLIANT);
+					} else { 
+						logger.debug(validationResponse.getMatchDescription());
+						if (validationResponse.getMatchDescription().equals(NameComparison.MATCH_EXACT)) { 
+							result.addComment("Exact Match found for ["+scientificName+"] to ["+validationResponse.getGuid()+"]");
+							result.setResultState(ResultState.RUN_HAS_RESULT);
+							result.setValue(ComplianceValue.COMPLIANT);
+						} else { 
+							result.addComment("No Exact Match found for ["+scientificName+"] in ["+sourceAuthority.getName()+"]");
+							result.addComment("Non-Exact match ["+ validationResponse.getScientificName() + " " + validationResponse.getAuthorship() +"]");
+							result.addComment("Match on canonical name is: " + validationResponse.getNameMatchDescription()  );
+							result.addComment("Match on canonical name+authorship is " + validationResponse.getMatchDescription());
+							result.addComment("Canonical name string edit distance is " + validationResponse.getScientificNameStringEditDistance());
+							result.addComment("Authorship string edit distance is " + validationResponse.getAuthorshipStringEditDistance());
+							result.setResultState(ResultState.RUN_HAS_RESULT);
+							result.setValue(ComplianceValue.NOT_COMPLIANT);
+						}
+					}
+				} catch (ServiceException e) {
+					logger.debug(e.getMessage());
+					result.addComment("Error Invoking Remote Service");
+					result.addComment(e.getMessage());
+					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+				}
+        	}
+        }
 
         return result;
     }

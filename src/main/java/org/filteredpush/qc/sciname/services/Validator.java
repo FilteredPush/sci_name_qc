@@ -17,7 +17,7 @@ import edu.harvard.mcz.nametools.NameUsage;
  */
 public interface Validator {
 
-	public NameUsage validate(NameUsage taxonToValidate);
+	public NameUsage validate(NameUsage taxonToValidate) throws ServiceException;
 	
 	public List<String> supportedExtensionTerms();
 	

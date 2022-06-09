@@ -143,8 +143,48 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameNotfound(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationScientificnameNotfound() {
-// TODO:		fail("Not yet implemented");
+	public void testValidationScientificnameFound() {
+		
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName 
+        // is EMPTY; COMPLIANT if there is a match of the contents 
+        // of dwc:scientificName with the bdq:sourceAuthority; otherwise 
+        // NOT_COMPLIANT bdq:sourceAuthority default = "GBIF Backbone 
+        // Taxonomy" [https://doi.org/10.15468/39omei], "API endpoint" 
+        // [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+		
+		SciNameSourceAuthority defaultAuthority = new SciNameSourceAuthority();
+		SciNameSourceAuthority wormsAuthority = null;
+		try {
+			wormsAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail("Unexpected exception:" +  e.getMessage());
+		}
+		
+		String scientificName = null;
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		
+		scientificName = "Murex brevispina Lamarck, 1822";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Murex brevispina Lamarck, 1822";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,wormsAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "not a scientific name";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 	}
 
 	/**

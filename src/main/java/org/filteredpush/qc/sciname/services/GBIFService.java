@@ -83,6 +83,17 @@ public class GBIFService implements Validator {
 		test();
 	}
 	
+	public GBIFService(boolean test)  throws IOException  { 
+		super();
+		targetKey = GBIFService.KEY_GBIFBACKBONE;
+		targetDataSetName = "GBIF Backbone Taxonomy";
+		fetchSynonymsAboveSpecies = true;
+		initSciName();
+		if (test) { 
+			test();
+		}
+	}
+	
 	public GBIFService(String targetKey)  throws IOException  { 
 		this.targetKey = targetKey;
 		fetchSynonymsAboveSpecies = true;
@@ -99,6 +110,26 @@ public class GBIFService implements Validator {
 		}
 		initSciName();
 		test();
+	}
+	
+	public GBIFService(String targetKey, boolean test)  throws IOException  { 
+		this.targetKey = targetKey;
+		fetchSynonymsAboveSpecies = true;
+		//TODO: Lookup title for dataset from targetKey (and check that datset exists).
+		targetDataSetName = "GBIF Dataset" + targetKey; 
+		if (targetKey.equals(KEY_IPNI)) { 
+		    targetDataSetName = "GBIF IPNI Dataset"; 
+		}
+		if (targetKey.equals(KEY_COL)) { 
+		    targetDataSetName = "GBIF COL Dataset"; 
+		}
+		if (targetKey.equals(KEY_INDEXFUNGORUM)) { 
+		    targetDataSetName = "GBIF IndexFungorum Dataset"; 
+		}
+		initSciName();
+		if (test) { 
+			test();
+		}
 	}
 	
 	
@@ -534,7 +565,7 @@ public class GBIFService implements Validator {
 
 	@SuppressWarnings("static-access")
 	@Override
-	public NameUsage validate(NameUsage taxonNameToValidate) {
+	public NameUsage validate(NameUsage taxonNameToValidate) throws ServiceException {
 		NameUsage result = null;
 		if (taxonNameToValidate!=null) {
 			ScientificNameComparator nameComparator = new ScientificNameComparator();
@@ -594,7 +625,7 @@ public class GBIFService implements Validator {
 						logger.debug(potentialMatch.getKey());
 						logger.debug(potentialMatch.getAuthorship());
 						logger.debug(potentialMatch.getTaxonomicStatus());
-						if (potentialMatch.getScientificName().equals(taxonName)) {
+						if (potentialMatch.getCanonicalName().equals(taxonName)) {
 							if (potentialMatch.getAuthorship().equals(authorship)) {
 								// If one of the results is an exact match on scientific name and authorship, pick that one. 
 								result = potentialMatch;
@@ -640,6 +671,7 @@ public class GBIFService implements Validator {
 				}
 			} catch (IOException e) { 
 				logger.error(e.getMessage());
+				throw new ServiceException(e.getMessage());
 			}
 		}
 		if (result!=null) { 
@@ -647,7 +679,7 @@ public class GBIFService implements Validator {
 			// result.setScientificName(result.getScientificName().replaceAll(result.getAuthorship() + "$", ""));
 			result.setScientificName(result.getCanonicalName());
 			// set a guid for the gbif records
-			result.setGuid("http://api.gbif.org/v1/species/" + Integer.toString(result.getKey()));
+			result.setGuid("https://www.gbif.org/species/" + Integer.toString(result.getKey()));
 		}
 		return result;
 

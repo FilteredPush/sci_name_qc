@@ -56,6 +56,7 @@ import java.util.Map;
 public class WoRMSService implements Validator {
 
 	private static final Log logger = LogFactory.getLog(WoRMSService.class);
+	private static int MAX_RETRIES = 3;
 	
 	private TaxonomicDataApi wormsService;
 	protected AuthorNameComparator authorNameComparator;
@@ -66,9 +67,11 @@ public class WoRMSService implements Validator {
 	public WoRMSService(boolean test) throws IOException {
 		super();
 		wormsService = new TaxonomicDataApi();
+		depth = MAX_RETRIES;  // on test failure, don't retry
 		if (test) { 
 			test();
 		}
+		depth = 0;
 	}
 	
 	protected void test()  throws IOException { 
@@ -514,7 +517,7 @@ public class WoRMSService implements Validator {
 	}
 
 	@Override
-	public NameUsage validate(NameUsage taxonNameToValidate) {
+	public NameUsage validate(NameUsage taxonNameToValidate) throws ServiceException {
 		logger.debug("Checking: " + taxonNameToValidate.getScientificName() + " " + taxonNameToValidate.getAuthorship());
 		NameUsage result = null;
 		depth++;   
@@ -688,9 +691,12 @@ public class WoRMSService implements Validator {
 			} else {
 				logger.error(e.getMessage(), e);
 			}
-			if (depth<4) {
-				// Try again, up to three times.
+			if (depth<=MAX_RETRIES) {
+				// Try again, up to MAX_RETRIES times.
 				result = this.validate(taxonNameToValidate);
+			} else { 
+				depth = 1;
+				throw new ServiceException(e.getMessage());
 			}
 		}
 		depth--;

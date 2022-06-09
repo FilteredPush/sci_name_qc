@@ -36,6 +36,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.QuoteMode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.services.ServiceException;
 import org.filteredpush.qc.sciname.services.Validator;
 
 import edu.harvard.mcz.nametools.NameUsage;
@@ -82,7 +83,7 @@ public class BatchRunner {
 			
 			BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 			CSVParser records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
-			
+
 			List<String> headerNames = new ArrayList<String>();
 			headerNames.add("dbpk");
 			headerNames.add("scientificName");
@@ -97,11 +98,11 @@ public class BatchRunner {
 			if (validator.supportedExtensionTerms().size() > 0) {
 				headerNames.addAll(validator.supportedExtensionTerms());
 			}
-			
+
 			BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 			CSVPrinter printer = new CSVPrinter(writer, 
 					CSVFormat.DEFAULT.withQuoteMode(QuoteMode.ALL).withHeader(headerNames.toArray(new String[headerNames.size()])));
-			
+
 			Iterator<CSVRecord> recordIterator = records.iterator();
 			while (recordIterator.hasNext()) {
 				CSVRecord line = recordIterator.next();
@@ -116,58 +117,63 @@ public class BatchRunner {
 				if (line.toMap().containsKey("family")) { 
 					usage.setFamily(line.get("family"));
 				} 
-				
-				NameUsage vUsage = validator.validate(usage);
-				if (validator.supportedExtensionTerms().size() > 0) {
-					List<String> columns = new ArrayList<String>();
-					if (vUsage!=null) {
-						Map<String,String> terms = vUsage.getExtension();
-						//String[] added = terms.values().toArray(new String[terms.size()]);
-						logger.debug(vUsage.getGuid());
-						columns.add(Integer.valueOf(vUsage.getInputDbPK()).toString());
-						columns.add(vUsage.getScientificName());
-						columns.add(vUsage.getAuthorship());
-						columns.add(vUsage.getGuid());
-						columns.add(vUsage.getMatchDescription());
-						columns.add(vUsage.getNameMatchDescription());
-						columns.add(vUsage.getOriginalScientificName());
-						columns.add(vUsage.getOriginalAuthorship());
-						columns.add(Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString());
-						columns.add(Double.valueOf(vUsage.getScientificNameStringEditDistance()).toString());
-						Iterator<String> addedTermIterator = validator.supportedExtensionTerms().iterator();
-						while (addedTermIterator.hasNext()) { 
-							// add in the order of the supportedExtenstionTerms list, to match the header.
-							columns.add(terms.get(addedTermIterator.next()));
-						}
-						printer.printRecord(columns);
-						//printer.printRecord(Integer.valueOf(vUsage.getInputDbPK()).toString(),vUsage.getScientificName(),vUsage.getAuthorship(),vUsage.getGuid(),vUsage.getMatchDescription(),vUsage.getOriginalScientificName(), vUsage.getOriginalAuthorship(), Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString(), added);
+
+				try { 
+					NameUsage vUsage = validator.validate(usage);
+					if (validator.supportedExtensionTerms().size() > 0) {
+						List<String> columns = new ArrayList<String>();
+						if (vUsage!=null) {
+							Map<String,String> terms = vUsage.getExtension();
+							//String[] added = terms.values().toArray(new String[terms.size()]);
+							logger.debug(vUsage.getGuid());
+							columns.add(Integer.valueOf(vUsage.getInputDbPK()).toString());
+							columns.add(vUsage.getScientificName());
+							columns.add(vUsage.getAuthorship());
+							columns.add(vUsage.getGuid());
+							columns.add(vUsage.getMatchDescription());
+							columns.add(vUsage.getNameMatchDescription());
+							columns.add(vUsage.getOriginalScientificName());
+							columns.add(vUsage.getOriginalAuthorship());
+							columns.add(Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString());
+							columns.add(Double.valueOf(vUsage.getScientificNameStringEditDistance()).toString());
+							Iterator<String> addedTermIterator = validator.supportedExtensionTerms().iterator();
+							while (addedTermIterator.hasNext()) { 
+								// add in the order of the supportedExtenstionTerms list, to match the header.
+								columns.add(terms.get(addedTermIterator.next()));
+							}
+							printer.printRecord(columns);
+							//printer.printRecord(Integer.valueOf(vUsage.getInputDbPK()).toString(),vUsage.getScientificName(),vUsage.getAuthorship(),vUsage.getGuid(),vUsage.getMatchDescription(),vUsage.getOriginalScientificName(), vUsage.getOriginalAuthorship(), Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString(), added);
+						} else { 
+							String[] added = new String[validator.supportedExtensionTerms().size()];
+							usage.setMatchDescription("Not Found");
+							logger.debug("Not found");
+							columns.add(Integer.valueOf(usage.getInputDbPK()).toString());
+							columns.add(usage.getScientificName());
+							columns.add(usage.getAuthorship());
+							columns.add(usage.getGuid());
+							columns.add(usage.getMatchDescription());
+							columns.add("");
+							columns.add(usage.getOriginalScientificName());
+							columns.add(usage.getOriginalAuthorship());
+							columns.add(Double.valueOf(usage.getAuthorshipStringEditDistance()).toString());
+							columns.add(Double.valueOf(usage.getScientificNameStringEditDistance()).toString());
+							columns.addAll(Arrays.asList(added));
+							printer.printRecord(columns);
+							//printer.printRecord(Integer.valueOf(usage.getInputDbPK()).toString(),usage.getScientificName(),usage.getAuthorship(),usage.getGuid(),usage.getMatchDescription(),usage.getOriginalScientificName(), usage.getOriginalAuthorship(), Double.valueOf(usage.getAuthorshipStringEditDistance()).toString(), added);
+						}	
 					} else { 
-						String[] added = new String[validator.supportedExtensionTerms().size()];
-						usage.setMatchDescription("Not Found");
-						logger.debug("Not found");
-						columns.add(Integer.valueOf(usage.getInputDbPK()).toString());
-						columns.add(usage.getScientificName());
-						columns.add(usage.getAuthorship());
-						columns.add(usage.getGuid());
-						columns.add(usage.getMatchDescription());
-						columns.add("");
-						columns.add(usage.getOriginalScientificName());
-						columns.add(usage.getOriginalAuthorship());
-						columns.add(Double.valueOf(usage.getAuthorshipStringEditDistance()).toString());
-						columns.add(Double.valueOf(usage.getScientificNameStringEditDistance()).toString());
-						columns.addAll(Arrays.asList(added));
-						printer.printRecord(columns);
-						//printer.printRecord(Integer.valueOf(usage.getInputDbPK()).toString(),usage.getScientificName(),usage.getAuthorship(),usage.getGuid(),usage.getMatchDescription(),usage.getOriginalScientificName(), usage.getOriginalAuthorship(), Double.valueOf(usage.getAuthorshipStringEditDistance()).toString(), added);
-					}	
-				} else { 
-					if (vUsage!=null) {
-						logger.debug(vUsage.getGuid());
-						printer.printRecord(Integer.valueOf(vUsage.getInputDbPK()).toString(),vUsage.getScientificName(),vUsage.getAuthorship(),vUsage.getGuid(),vUsage.getMatchDescription(),vUsage.getOriginalScientificName(), vUsage.getOriginalAuthorship(), Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString());
-					} else { 
-						usage.setMatchDescription("Not Found");
-						logger.debug("Not found");
-						printer.printRecord(Integer.valueOf(usage.getInputDbPK()).toString(),usage.getScientificName(),usage.getAuthorship(),usage.getGuid(),usage.getMatchDescription(),usage.getOriginalScientificName(), usage.getOriginalAuthorship(), Double.valueOf(usage.getAuthorshipStringEditDistance()).toString());
-					}	
+						if (vUsage!=null) {
+							logger.debug(vUsage.getGuid());
+							printer.printRecord(Integer.valueOf(vUsage.getInputDbPK()).toString(),vUsage.getScientificName(),vUsage.getAuthorship(),vUsage.getGuid(),vUsage.getMatchDescription(),vUsage.getOriginalScientificName(), vUsage.getOriginalAuthorship(), Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString(),Double.valueOf(usage.getScientificNameStringEditDistance()).toString());
+						} else { 
+							usage.setMatchDescription("Not Found");
+							logger.debug("Not found");
+							printer.printRecord(Integer.valueOf(usage.getInputDbPK()).toString(),usage.getScientificName(),usage.getAuthorship(),usage.getGuid(),usage.getMatchDescription(),usage.getOriginalScientificName(), usage.getOriginalAuthorship(), Double.valueOf(usage.getAuthorshipStringEditDistance()).toString(),Double.valueOf(usage.getScientificNameStringEditDistance()).toString());
+						}	
+					}
+				} catch (ServiceException ex) { 
+					logger.error(ex.getMessage());
+					printer.printRecord(Integer.valueOf(usage.getInputDbPK()).toString(),"","","","Error, Lookup Failed.",usage.getOriginalScientificName(), usage.getOriginalAuthorship(),"");
 				}
 				
 				printer.flush();

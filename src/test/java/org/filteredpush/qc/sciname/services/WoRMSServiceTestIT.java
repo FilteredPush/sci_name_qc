@@ -217,12 +217,17 @@ public class WoRMSServiceTestIT {
 		NameUsage toTest = new NameUsage("WoRMS", AuthorNameComparator.authorNameComparatorFactory(authorship, "Animalia"), sciName, authorship); 
 		toTest.setScientificName(sciName);
 		toTest.setAuthorship(authorship);
-		NameUsage result =  service.validate(toTest);
-		assertEquals("urn:lsid:marinespecies.org:taxname:986771",result.getGuid());
-		assertEquals("Exact Match",result.getMatchDescription());
-		assertEquals("Exact Match",result.getNameMatchDescription());
-		assertEquals("true",result.getExtension().get("terrestrial"));
-		assertEquals("false",result.getExtension().get("marine"));
+		NameUsage result;
+		try {
+			result = service.validate(toTest);
+			assertEquals("urn:lsid:marinespecies.org:taxname:986771",result.getGuid());
+			assertEquals("Exact Match",result.getMatchDescription());
+			assertEquals("Exact Match",result.getNameMatchDescription());
+			assertEquals("true",result.getExtension().get("terrestrial"));
+			assertEquals("false",result.getExtension().get("marine"));
+		} catch (ServiceException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
 	}
 
 	
