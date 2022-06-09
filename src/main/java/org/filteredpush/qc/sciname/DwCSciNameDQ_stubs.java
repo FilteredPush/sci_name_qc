@@ -74,36 +74,6 @@ public class DwCSciNameDQ_stubs {
         return result;
     }
 
-
-
-    
-    /**
-     * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
-     *
-     * Provides: VALIDATION_POLYNOMIAL_CONSISTENT
-     *
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
-     * @param genericName the provided dwc:genericName to evaluate
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @param specificEpithet the provided dwc:specificEpithet to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_POLYNOMIAL_CONSISTENT", description="Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?")
-    @Provides("17f03f1f-f74d-40c0-8071-2927cfc9487b")
-    public DQResponse<ComplianceValue> validationPolynomialConsistent(@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:genericName") String genericName, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:specificEpithet") String specificEpithet) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is 
-        // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
-        // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
-        // as represented in dwc:scientificName, is consistent with 
-        // dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; 
-        // otherwise NOT_COMPLIANT 
-
-        return result;
-    }
-
     
     /**
      * Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?

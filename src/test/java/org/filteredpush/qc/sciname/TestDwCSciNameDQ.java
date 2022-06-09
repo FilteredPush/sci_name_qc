@@ -126,11 +126,162 @@ public class TestDwCSciNameDQ {
 
 
 	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPolynomialInconsistent(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPolynomialConsistent(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
 	 */
 	@Test
-	public void testValidationPolynomialInconsistent() {
-// TODD:		fail("Not yet implemented");
+	public void testValidationPolynomialConsistent() {
+		// Specification:
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is 
+        // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
+        // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
+        // as represented in dwc:scientificName, is consistent with 
+        // dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; 
+        // otherwise NOT_COMPLIANT 
+		
+		String scientificName = "Aus bus cus";
+		String genericName = "Aus";
+		String specificEpithet = "bus";
+		String infraspecificEpithet = "cus";
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus cus";
+		genericName = "Aus";
+		specificEpithet = "somethingelse";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Ausareum bus cus";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Ausareum bus Cuvier";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus Cuvier";
+		genericName = "Ausareum";
+		specificEpithet = "bus";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus cus Lamarck";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus var. cus Lamarck";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus f. cus  Lamarck, 1822";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus Lamarck, 1822";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Solanum lycopersicum L. \"VAUGHN'S EARLY\"";
+		genericName = "Solanum";
+		specificEpithet = "lycopersicum";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Indigofera charlieriana subsp. sessilis var. scaberrima (Schinz) J.B. Gillett";
+		genericName = "Indigofera";
+		specificEpithet = "charlieriana";
+		infraspecificEpithet = "scaberrima";   // per definition, dwc:infraspecificEpithet is the terminal epithet
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Indigofera charlieriana subsp. sessilis var. scaberrima (Schinz) J.B. Gillett";
+		genericName = "Indigofera";
+		specificEpithet = "charlieriana";
+		infraspecificEpithet = "sessilis";  // not correct per definition
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Indigofera charlieriana subsp. sessilis var. scaberrima (Schinz) J.B. Gillett";
+		genericName = "Indigofera";
+		specificEpithet = "charlieriana";
+		infraspecificEpithet = "var. scaberrima";  // not correct per definition, rank is not included in term
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus";
+		genericName = "";
+		specificEpithet = "";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		
+		scientificName = "";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		
 	}
 
 	/**

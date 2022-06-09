@@ -198,7 +198,12 @@ public class ScientificNameComparator {
 	    			}
 	    		} catch (UnparsableNameException e) {
 	    			log.error(e.getMessage());
-	    		}	
+	    		}
+	    		try {
+					nameParser.close();
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}	
 			}
 		}
 		return result;

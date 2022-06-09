@@ -133,6 +133,11 @@ public class SciNameUtils {
 			e.printStackTrace();
 		}
 		logger.debug(result);
+		try { 
+			parser.close();
+		} catch (Exception e) { 
+			logger.error(e.getMessage(), e);
+		}
 		
 		return result;
 	}
@@ -155,6 +160,11 @@ public class SciNameUtils {
 			logger.error(e);
 			e.printStackTrace();
 		}
+		try { 
+			parser.close();
+		} catch (Exception e) { 
+			logger.error(e.getMessage(), e);
+		}		
 		
 		return result;
 	}	

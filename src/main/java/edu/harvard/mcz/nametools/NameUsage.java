@@ -857,6 +857,11 @@ public class NameUsage implements LinneanClassification {
 			} catch (UnparsableNameException e) {
 				// couldn't parse
 			}	
+    		try {
+				parser.close();
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}	
 	                
 		}
 		

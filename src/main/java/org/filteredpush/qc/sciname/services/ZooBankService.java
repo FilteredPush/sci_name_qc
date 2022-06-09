@@ -118,6 +118,11 @@ public class ZooBankService implements Validator {
 		    		} catch (UnparsableNameException e) {
 		    			log.error(e.getMessage());
 		    		}
+		    		try {
+						nameParser.close();
+					} catch (Exception e) {
+						log.error(e.getMessage(), e);
+					}
 		    		NameComparison nameComparison = sciComp.compare(taxonToValidate.getScientificName(), scientificName);
 		    		if (nameComparison.equals(NameComparison.MATCH_EXACT)) { 
 		    			usage.setScientificName(scientificName);

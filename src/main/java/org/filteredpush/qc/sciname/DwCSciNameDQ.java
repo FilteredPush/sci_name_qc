@@ -36,6 +36,7 @@ import org.filteredpush.qc.sciname.services.ServiceException;
 import org.filteredpush.qc.sciname.services.Validator;
 import org.filteredpush.qc.sciname.services.WoRMSService;
 import org.gbif.nameparser.NameParserGBIF;
+import org.gbif.nameparser.api.NameParser;
 import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.Rank;
 import org.gbif.nameparser.api.UnparsableNameException;
@@ -54,6 +55,7 @@ import org.datakurator.ffdq.api.result.*;
  * #120 VALIDATION_TAXONID_NOTEMPTY 401bf207-9a55-4dff-88a5-abcd58ad97fa
  * #161 VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * #105 VALIDATION_TAXON_NOTEMPTY ** needs work **
+ * #101 VALIDATION_POLYNOMIAL_CONSISTENT 17f03f1f-f74d-40c0-8071-2927cfc9487b
  * 
  * #81 VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
  * #22 VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
@@ -944,27 +946,99 @@ public class DwCSciNameDQ {
     }
 
     /**
-     * #101 Validation SingleRecord Consistency: polynomial inconsistent
+     * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
-     * Provides: VALIDATION_POLYNOMIAL_INCONSISTENT
+     * Provides: #101 VALIDATION_POLYNOMIAL_CONSISTENT
      *
-     * @param genus the provided dwc:genus to evaluate
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
+     * @param genericName the provided dwc:genericName to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
+     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_POLYNOMIAL_CONSISTENT", description="Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?")
     @Provides("17f03f1f-f74d-40c0-8071-2927cfc9487b")
-    public DQResponse<ComplianceValue> validationPolynomialInconsistent(@ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:specificEpithet") String specificEpithet) {
+    public static DQResponse<ComplianceValue> validationPolynomialConsistent(
+    		@ActedUpon("dwc:scientificName") String scientificName, 
+    		@ActedUpon("dwc:genericName") String genericName, 
+    		@ActedUpon("dwc:specificEpithet") String specificEpithet,
+    		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet 
+    ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // INTERNAL_PREREQUISITES_NOT_MET if all of the component terms 
-        // are EMPTY; COMPLIANT if the polynomial, as represented in 
-        // dwc:scientificName, is consistent with the atomic parts 
-        // dwc:genus, dwc:specificEpithet, dwc:infraspecificEpithet; 
-        //otherwise NOT_COMPLIANT 
-
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is 
+        // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
+        // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
+        // as represented in dwc:scientificName, is consistent with 
+        // dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; 
+        // otherwise NOT_COMPLIANT 
+        
+        if (SciNameUtils.isEmpty(scientificName)) { 
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        	result.addComment("No value was provided for dwc:scientificName.");
+        } else if (SciNameUtils.isEmpty(genericName) && SciNameUtils.isEmpty(specificEpithet) && SciNameUtils.isEmpty(infraspecificEpithet)) { 
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        	result.addComment("No value was provided for any of dwc:genericName, dwc:specificEpithet, or dwc:infraspecificEpithet.");
+        } else { 
+        	if (genericName==null) { genericName = ""; }
+        	if (specificEpithet==null) { specificEpithet = ""; }
+        	if (infraspecificEpithet==null) { infraspecificEpithet = ""; }
+        	if (scientificName.equals(genericName+" "+specificEpithet+" "+infraspecificEpithet)) { 
+        		// simple trinomial match
+   				result.addComment("Exact match of scientificName to genericName+specificEpithet+infraspecificEpithet.");
+  				result.setValue(ComplianceValue.COMPLIANT);
+  				result.setResultState(ResultState.RUN_HAS_RESULT);
+        	} else if (infraspecificEpithet.equals("") && scientificName.equals(genericName+" "+specificEpithet)) { 
+        		// simple binomial match
+   				result.addComment("Exact match of scientificName to genericName+specificEpithet.");
+  				result.setValue(ComplianceValue.COMPLIANT);
+  				result.setResultState(ResultState.RUN_HAS_RESULT);
+        	} else if (genericName.length()>0 && !scientificName.startsWith(genericName+" ")) { 
+        		// failure case, doesn't start with generic name
+   				result.addComment("Provided dwc:scientificName does not start with genericName");
+  				result.setValue(ComplianceValue.NOT_COMPLIANT);
+  				result.setResultState(ResultState.RUN_HAS_RESULT);
+        	} else { 
+	    		NameParser nameParser = new NameParserGBIF();
+	    		try {
+	    			ParsedName parse = nameParser.parse(scientificName,Rank.UNRANKED, null);
+	    			String parseGeneric = parse.getGenus();
+	    			if (parseGeneric==null) { parseGeneric = ""; }
+	    			String parseSpecific = parse.getSpecificEpithet();
+	    			if (parseSpecific==null) { parseSpecific = ""; }
+	    			String parseInfraspecific = parse.getInfraspecificEpithet();
+	    			if (parseInfraspecific==null) { parseInfraspecific = ""; }
+	    			if (!SciNameUtils.isEmpty(genericName) && !parseGeneric.equals(genericName)) { 
+	    				result.addComment("Genus parsed out of dwc:scientificName does not match dwc:genericName.");
+	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
+	    				result.setResultState(ResultState.RUN_HAS_RESULT);
+	    			} else if (!SciNameUtils.isEmpty(specificEpithet) && !parseSpecific.equals(specificEpithet)) { 
+	    				result.addComment("Specific Epithet parsed out of dwc:scientificName does not match dwc:specificEpithet.");
+	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
+	    				result.setResultState(ResultState.RUN_HAS_RESULT);
+	    			} else if (!SciNameUtils.isEmpty(infraspecificEpithet) && !parseInfraspecific.equals(infraspecificEpithet)) { 
+	    				result.addComment("Infraspecific Epithet parsed out of dwc:scientificName does not match dwc:infraspecificEpithet.");
+	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
+	    				result.setResultState(ResultState.RUN_HAS_RESULT);
+	    			} else { 
+	    				if (parseGeneric.equals(genericName) && parseSpecific.equals(specificEpithet) && parseInfraspecific.equals(infraspecificEpithet)) { 
+	    					result.addComment("The values of dwc:genericName, specificEpithet, and infraspecificEpithet are pasrsed out of dwc:scientificName in their expected positions.");
+	    					result.setValue(ComplianceValue.COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    				}
+	    			}
+	    		} catch (UnparsableNameException e) {
+	    			logger.error(e.getMessage());
+	    		}
+	    		try {
+					nameParser.close();
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+				}
+        	}
+        }
+        
         return result;
     }
 
