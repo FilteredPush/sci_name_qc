@@ -66,6 +66,7 @@ import org.datakurator.ffdq.api.result.*;
  * #46 VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
  * 
  * #57 AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
+ * #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
  *
  * Also, with amendmentTaxonidFromTaxon(taxon, sourceAuthority, replaceExisting) provides
  * a variant of #57 that allows existing taxonID values to be conformed to a specified sourceAuthority
@@ -687,7 +688,7 @@ public class DwCSciNameDQ {
     	
         DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID 
         // is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName 
@@ -714,7 +715,12 @@ public class DwCSciNameDQ {
         } else if (!SciNameUtils.isEmpty(scientificName)) { 
 			result.addComment("dwc:scientificName already contains a value ["+ scientificName +"].");
 			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else if (taxonID.matches("^[0-9]+$")) { 
+			result.addComment("dwc:taxonID is a bare integer and thus inherently ambiguous.");
+			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         } else { 
+        	// GBIF doesn't explicitly define what form the taxonID should take, correct form is 
+        	// probably https://www.gbif.org/species/{integer}, but http and api references might also be used.
         	if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY.getName())) { 
         		if (taxonID.startsWith("https://www.gbif.org/species/") ||
         			 taxonID.startsWith("http://www.gbif.org/species/") ||
@@ -741,14 +747,51 @@ public class DwCSciNameDQ {
 						}
         			} else { 
 						result.addComment("dwc:taxonID not interpretable as an identifier for " + sourceAuthority.getName() +" ["+ taxonID +"].");
-						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+						result.setResultState(ResultState.NOT_AMENDED);
         			}
         		} else { 
 					result.addComment("dwc:taxonID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ taxonID +"].");
-					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					result.setResultState(ResultState.NOT_AMENDED);
         		}
-        	} else if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.WORMS.getName())) { 
-        		// TODO: Lookup aphiaId, obtain scientificName
+        	} else if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.WORMS.getName())) {
+        		// WoRMS guid is the LSID.
+        		if (taxonID.startsWith("urn:lsid:marinespecies.org:taxname:") ) { 
+        			String id = taxonID.replaceFirst("urn:lsid:marinespecies.org:taxname:", "");
+        			logger.debug(id);
+        			if (id.matches("^[0-9]+$")) { 
+        				try {
+							NameUsage nameUsage = WoRMSService.lookupTaxonByID(id);
+							if (SciNameUtils.isEmpty(nameUsage.getScientificName())) { 
+								result.setResultState(ResultState.NOT_AMENDED);
+								result.addComment("Unable to find scientificName for provided taxonID in " + sourceAuthority.getName());
+							} else { 
+								if (nameUsage.getGuid().equals(taxonID)) { 
+									result.setResultState(ResultState.FILLED_IN);
+									Map<String,String> amend = new HashMap<String,String>();
+									amend.put("dwc:scientificName", nameUsage.getScientificName());
+									result.setValue(new AmendmentValue(amend));
+								} else { 
+									result.setResultState(ResultState.NOT_AMENDED);
+									result.addComment("Query on taxonID ["+taxonID+"] in " + sourceAuthority.getName() + " returned a different taxonID ["+ nameUsage.getGuid() +"]");
+								}
+							}
+ 						} catch (IDFormatException e) {
+							logger.error(e.getMessage(),e);
+							result.addComment("Error extracting the integer AphiaID from provided taxonID ["+ taxonID +"].");
+							result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+						} catch (ApiException ex) {
+							logger.debug(ex.getMessage());
+							result.addComment("Error looking up scientific name in sourceAuthority: "+ ex.getMessage() );
+							result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+						}
+        			} else { 
+        				result.addComment("Unable to extract the integer AphiaID from provided taxonID ["+ taxonID +"].");
+        				result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        			}
+        		} else { 
+					result.addComment("dwc:taxonID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ taxonID +"].");
+					result.setResultState(ResultState.NOT_AMENDED);
+        		}
         	} else { 
 				result.addComment("Unsupported Source Authority: " + sourceAuthority +".");
 				result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);

@@ -643,7 +643,40 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
-	//	fail("Not yet implemented");
+		scientificName = ""; 
+		taxonId = "5219243";  // bare integer is ambiguous.
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
+		scientificName = ""; 
+		taxonId = "urn:lsid:marinespecies.org:taxname:390090";
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+	
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e1) {
+			fail(e1.getMessage());
+		}
+		
+		scientificName = ""; 
+		taxonId = "urn:lsid:marinespecies.org:taxname:390090";
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("Perkinsus honshuensis Dungan & Reece, 2006",response.getValue().getObject().get("dwc:scientificName"));
+	
+		scientificName = ""; 
+		taxonId = "390090";  // bare integer is ambiguous.
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
 	}
 
 	/**

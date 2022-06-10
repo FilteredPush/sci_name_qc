@@ -24,7 +24,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.IDFormatException;
 import org.junit.Test;
+import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
 import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
@@ -49,6 +51,30 @@ public class WoRMSServiceTestIT {
 			logger.error(e.getMessage(),e);
 		}
 	}
+	
+	@Test
+	public void testlookupTaxonByID() { 
+		try {
+			NameUsage response = service.lookupTaxonByID("216786");
+			assertEquals("Cypraea argus Linnaeus, 1758", response.getScientificName());
+			assertEquals("urn:lsid:marinespecies.org:taxname:216786", response.getGuid());
+		} catch (IDFormatException e) {
+			fail("Threw unexpected IDFormatException");
+		} catch (ApiException e) {
+			logger.error(e.getMessage(),e);
+			fail("Threw unexpected APException");
+		}
+		
+		try {
+			NameUsage response = service.lookupTaxonByID("urn:lsid:marinespecies.org:taxname:216786");
+			fail("failed to throw expected IDFormatException");
+		} catch (IDFormatException e) {
+			assertEquals(e.getClass(), IDFormatException.class);
+		} catch (ApiException e) {
+			logger.error(e.getMessage(),e);
+			fail("Threw unexpected APException");
+		}
+	} 
 	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.services.WoRMSService#simpleNameSearch(java.lang.String, java.lang.String, boolean)}.

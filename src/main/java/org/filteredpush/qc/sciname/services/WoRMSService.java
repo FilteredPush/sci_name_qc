@@ -26,6 +26,7 @@ import edu.harvard.mcz.nametools.ScientificNameComparator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.IDFormatException;
 import org.filteredpush.qc.sciname.SciNameUtils;
 import org.marinespecies.aphia.v1_0.model.AphiaRecord;
 import org.marinespecies.aphia.v1_0.model.AphiaRecordsArray;
@@ -79,6 +80,38 @@ public class WoRMSService implements Validator {
 		URL test = new URL(wormsService.getApiClient().getBasePath());
 		URLConnection conn = test.openConnection();
 		conn.connect();
+	}
+	
+	/**
+	 * Given an AphiaID, look up the Aphia record.
+	 * 
+	 * @param aphiaID the AphiaID to look up, should be parsable as an integer.
+	 * @return a NameUsage containing the returned information
+	 * @throws IDFormatException if the provided aphiaID is not an integer.
+	 * @throws ApiException if there is a problem invoking the service.
+	 */
+	public static NameUsage lookupTaxonByID(String aphiaID) throws IDFormatException, ApiException { 
+		NameUsage result = new NameUsage();
+		if (!SciNameUtils.isEmpty(aphiaID)) { 
+			if (!aphiaID.matches("^[0-9]+$")) { 
+				throw new IDFormatException("provided aphiaID is not an integer");
+			}
+			Integer intAphiaID = Integer.parseInt(aphiaID);
+			TaxonomicDataApi wormsService = new TaxonomicDataApi();
+			AphiaRecord ar = wormsService.aphiaRecordByAphiaID(intAphiaID);
+			if (ar !=null && ar.getScientificname()!=null ) { 
+				logger.debug(ar.getScientificname());
+				logger.debug(ar.getAuthority());
+				result.setAuthorship(ar.getAuthority());
+				result.setCanonicalName(ar.getScientificname());
+				result.setGuid(ar.getLsid());
+				result.setRank(ar.getRank());
+				result.setKingdom(ar.getKingdom());
+				result.setScientificName(ar.getScientificname() + " " + ar.getAuthority());
+			}
+		}
+		
+		return result;
 	}
 	
 	public static  List<NameUsage> lookupTaxon(String taxon,  String authorship) throws ApiException { 
