@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.IDFormatException;
 import org.filteredpush.qc.sciname.SciNameUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -167,6 +168,34 @@ public class GBIFService implements Validator {
 		}
 
 
+		return result.toString();
+	}
+	
+	public static String fetchTaxonByID(String taxonID, String targetChecklist) throws IDFormatException { 
+		StringBuilder result = new StringBuilder();
+		String datasetKey = "";
+		if (targetChecklist!=null) { 
+			datasetKey = "?datasetKey=" + targetChecklist;
+		}
+		URL url;
+		if (!SciNameUtils.isEmpty(taxonID)) { 
+			if (!taxonID.matches("^[0-9]+$")) { 
+				throw new IDFormatException("provided aphiaID is not an integer");
+			}
+		try {
+			url = new URL(GBIF_SERVICE + "/species/" + taxonID + datasetKey);
+			URLConnection connection = url.openConnection();
+			String line;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			while((line = reader.readLine()) != null) {
+				result.append(line);
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		} else { 
+			throw new IDFormatException("An empty value was provided for taxonID");
+		}
 		return result.toString();
 	}
 	
