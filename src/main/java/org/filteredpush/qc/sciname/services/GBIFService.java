@@ -369,11 +369,11 @@ public class GBIFService implements Validator {
         		//System.out.println(o.get("limit"));
         		//System.out.println(o.get("endOfRecords"));
         		//System.out.println(o.get("count"));
-        		String eor = (String) o.get("endOfRecords");
-        		if (eor!=null && eor.equals("false")) { 
+        		if (o.get("endOfRecords")!=null && o.get("endOfRecords").equals("false")) { 
         			gotAll = false;
         		}
         	} catch (ClassCastException e) { 
+        		logger.debug(e.getMessage(), e);
         		array = (JSONArray)parser.parse(json);
         	}
 
