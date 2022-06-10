@@ -715,6 +715,44 @@ public class DwCSciNameDQ {
 			result.addComment("dwc:scientificName already contains a value ["+ scientificName +"].");
 			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         } else { 
+        	if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY.getName())) { 
+        		if (taxonID.startsWith("https://www.gbif.org/species/") ||
+        			 taxonID.startsWith("http://www.gbif.org/species/") ||
+        			 taxonID.startsWith("https://api.gbif.org/v1/species/") ||
+        			 taxonID.startsWith("http://api.gbif.org/v1/species/")
+        		) { 
+        			String id = taxonID.replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "");
+        			logger.debug(id);
+        			if (id.matches("^[0-9]+$")) { 
+        				try {
+							String sciNameLookup = GBIFService.lookupScientificNameByID(id);
+							if (!SciNameUtils.isEmpty(sciNameLookup)) { 
+								result.setResultState(ResultState.FILLED_IN);
+								Map<String,String> amend = new HashMap<String,String>();
+								amend.put("dwc:scientificName", sciNameLookup);
+ 								result.setValue(new AmendmentValue(amend));
+							} else { 
+								result.setResultState(ResultState.NOT_AMENDED);
+								result.addComment("Unable to find scientificName for provided taxonID in " + sourceAuthority.getName());
+							}
+						} catch (IOException e) {
+							result.addComment("Error looking up scientific name in sourceAuthority: "+ e.getMessage() );
+							result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+						}
+        			} else { 
+						result.addComment("dwc:taxonID not interpretable as an identifier for " + sourceAuthority.getName() +" ["+ taxonID +"].");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        			}
+        		} else { 
+					result.addComment("dwc:taxonID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ taxonID +"].");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        		}
+        	} else if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.WORMS.getName())) { 
+        		// TODO: Lookup aphiaId, obtain scientificName
+        	} else { 
+				result.addComment("Unsupported Source Authority: " + sourceAuthority +".");
+				result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        	}
         	
         }
 

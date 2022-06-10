@@ -231,6 +231,35 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}	
 	
+	public static NameUsage lookupNameByID(String id) throws IOException { 
+		NameUsage result = new NameUsage();
+		StringBuilder gbifLookup = new StringBuilder();
+		
+		URL url = new URL(GBIF_SERVICE + "/species/" + URLEncoder.encode(id,"UTF-8"));
+		logger.debug(url.toString());
+		URLConnection connection = url.openConnection();
+		String line;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		while((line = reader.readLine()) != null) {
+			gbifLookup.append(line);
+			logger.debug(line);
+		}
+		
+		List<NameUsage> resultList = GBIFService.parseAllNameUsagesFromJSON(gbifLookup.toString());
+		if (resultList.size()==1) { 
+			result = resultList.get(0);
+		}
+		return result;
+	}
+	
+	public static String lookupScientificNameByID(String id) throws IOException { 
+		StringBuilder result = new StringBuilder();
+		NameUsage lookupName = lookupNameByID(id);
+		result.append(lookupName.getScientificName());
+		
+		return result.toString();
+	}
+	
 	public static List<NameUsage> lookupGenus(String name, String targetChecklist, int limit) throws IOException { 
 		List<NameUsage> returnvalue = new ArrayList<NameUsage>();
 		if (!SciNameUtils.isEmpty(name)) { 
@@ -332,26 +361,33 @@ public class GBIFService implements Validator {
 
         try {
         	JSONArray array = new JSONArray();
+        	JSONObject o = null;
         	try {
-        	    JSONObject o = (JSONObject)parser.parse(json);
-			    array = (JSONArray)o.get("results");
-			    //System.out.println(o.get("offset"));
-			    //System.out.println(o.get("limit"));
-			    //System.out.println(o.get("endOfRecords"));
-			    //System.out.println(o.get("count"));
-			    if (o.get("endOfRecords").equals("false")) { 
-			    	gotAll = false;
-			    }
+        		o = (JSONObject)parser.parse(json);
+        		array = (JSONArray)o.get("results");
+        		//System.out.println(o.get("offset"));
+        		//System.out.println(o.get("limit"));
+        		//System.out.println(o.get("endOfRecords"));
+        		//System.out.println(o.get("count"));
+        		String eor = (String) o.get("endOfRecords");
+        		if (eor!=null && eor.equals("false")) { 
+        			gotAll = false;
+        		}
         	} catch (ClassCastException e) { 
-    			array = (JSONArray)parser.parse(json);
+        		array = (JSONArray)parser.parse(json);
         	}
-    			 
-			Iterator i = array.iterator();
-			while (i.hasNext()) { 
-				JSONObject obj = (JSONObject)i.next();
-				NameUsage name = new NameUsage(obj);
-				result.add(name);
-			}
+
+        	if (array ==null && o!=null) { 
+        		NameUsage name = new NameUsage(o);
+        		result.add(name);
+        	} else { 
+        		Iterator i = array.iterator();
+        		while (i.hasNext()) { 
+        			JSONObject obj = (JSONObject)i.next();
+        			NameUsage name = new NameUsage(obj);
+        			result.add(name);
+        		}
+        	}
  
 		} catch (ParseException e) {
 			logger.error(e.getMessage());

@@ -595,7 +595,55 @@ public class DwCSciNameDQ_IT {
 	 */
 	@Test
 	public void testAmendmentScientificnameFromTaxonid() {
-// TODO:		fail("Not yet implemented");
+		
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID 
+        // is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName 
+        // was not EMPTY; FILLED_IN the value of dwc:scientificName 
+        // if the value of dwc:taxonID could be unambiguously interpreted 
+        // as a value in bdq:sourceAuthority; otherwise NOT_AMENDED 
+        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
+        // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+		
+		SciNameSourceAuthority authority = null;
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+		} catch (SourceAuthorityException e1) {
+			fail(e1.getMessage());
+		}
+		
+		String scientificName = "Murex pecten"; 
+		String taxonId = null;
+		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+
+		scientificName = ""; 
+		taxonId = "https://www.gbif.org/species/5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
+		
+		scientificName = ""; 
+		taxonId = "https://api.gbif.org/v1/species/5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
+		
+		scientificName = "Vulpes vulpes"; 
+		taxonId = "https://www.gbif.org/species/5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
+		fail("Not yet implemented");
 	}
 
 	/**
