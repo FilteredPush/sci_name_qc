@@ -81,9 +81,6 @@ public class DwCSciNameDQ {
 	
 	private static final Log logger = LogFactory.getLog(DwCSciNameDQ.class);
 	
-    public static DQResponse<ComplianceValue> validationPhylumFound(@ActedUpon("dwc:phylum") String phylum) {
-    	return validationPhylumFound(phylum, null);
-    }
 
 	/**
      * Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?
@@ -123,9 +120,6 @@ public class DwCSciNameDQ {
         return validateHigherTaxonAtRank(phylum, "Phylum", sourceAuthority);
     }
 
-    public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family) {
-    	return validationFamilyFound(family, null);
-    }
     /**
      * Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?
      * 
@@ -164,17 +158,13 @@ public class DwCSciNameDQ {
         return validateHigherTaxonAtRank(family, "Family", sourceAuthority);
     }
 
-    @Provides("3f335517-f442-4b98-b149-1e87ff16de45")
-    public static DQResponse<ComplianceValue> validationScientificnameFound(@ActedUpon("dwc:scientificName") String scientificName) {
-        return validationScientificnameFound(scientificName, null);
-    }
-    
     /**
      * Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?
      *
      * Provides: #46 VALIDATION_SCIENTIFICNAME_FOUND
      *
      * @param scientificName the provided dwc:scientificName to evaluate
+	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_SCIENTIFICNAME_FOUND", description="Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?")
@@ -358,7 +348,9 @@ public class DwCSciNameDQ {
 	}
 
 	/**
-     * Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms.
+     * Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority 
+     * using the available taxon terms.  Utility method using a Taxon object as input instead of a separate annotated
+     * parameters for each taxon term.
      *
      * Provides: #57 AMENDMENT_TAXONID_FROM_TAXON
      * 
@@ -368,8 +360,8 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type AmendmentValue to return
      */
 	public static  DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
-			@ActedUpon("dwc:Taxon") Taxon taxon, 
-			@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
+			Taxon taxon, 
+			SciNameSourceAuthority sourceAuthority
 			){
 		return amendmentTaxonidFromTaxon(taxon,sourceAuthority,false);
 	}
@@ -618,71 +610,6 @@ public class DwCSciNameDQ {
      *
      * Provides: #70 VALIDATION_TAXON_UNAMBIGUOUS
      *
-     * Uses the default sourceAuthority.
-     *
-     * @param class the provided dwc:class to evaluate
-     * @param genus the provided dwc:genus to evaluate
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
-     * @param cultivarEpithet the provided dwc:cultivarEpithet to evaluate
-     * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
-     * @param phylum the provided dwc:phylum to evaluate
-     * @param subfamily the provided dwc:subfamily to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
-     * @param infragenericEpithet the provided dwc:infragenericEpithet to evaluate
-     * @param taxonID the provided dwc:taxonID to evaluate
-     * @param subgenus the provided dwc:subgenus to evaluate
-     * @param higherClassification the provided dwc:higherClassification to evaluate
-     * @param vernacularName the provided dwc:vernacularName to evaluate
-     * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
-     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
-     * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
-     * @param genericName the provided dwc:genericName to evaluate
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-     * @param kingdom the provided dwc:kingdom to evaluate
-     * @param family the provided dwc:family to evaluate
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @param specificEpithet the provided dwc:specificEpithet to evaluate
-     * @param order the provided dwc:order to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_TAXON_UNAMBIGUOUS", description="Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?")
-    @Provides("4c09f127-737b-4686-82a0-7c8e30841590")
-    public static DQResponse<ComplianceValue> validationTaxonUnambiguous(
-    		@ActedUpon("dwc:class") String taxonomic_class, 
-    		@ActedUpon("dwc:genus") String genus, 
-    		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, 
-    		@ActedUpon("dwc:cultivarEpithet") String cultivarEpithet, 
-    		@ActedUpon("dwc:taxonConceptID") String taxonConceptID, 
-    		@ActedUpon("dwc:phylum") String phylum, 
-    		@ActedUpon("dwc:subfamily") String subfamily, 
-    		@ActedUpon("dwc:scientificNameID") String scientificNameID, 
-    		@ActedUpon("dwc:infragenericEpithet") String infragenericEpithet, 
-    		@ActedUpon("dwc:taxonID") String taxonID, 
-    		@ActedUpon("dwc:subgenus") String subgenus, 
-    		@ActedUpon("dwc:higherClassification") String higherClassification, 
-    		@ActedUpon("dwc:vernacularName") String vernacularName, 
-    		@ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, 
-    		@ActedUpon("dwc:scientificNameAuthorship") String scientificNameAuthorship, 
-    		@ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, 
-    		@ActedUpon("dwc:genericName") String genericName, 
-    		@ActedUpon("dwc:taxonRank") String taxonRank, 
-    		@ActedUpon("dwc:kingdom") String kingdom, 
-    		@ActedUpon("dwc:family") String family, 
-    		@ActedUpon("dwc:scientificName") String scientificName, 
-    		@ActedUpon("dwc:specificEpithet") String specificEpithet, 
-    		@ActedUpon("dwc:order") String order
-		){
-		return validationTaxonUnambiguous(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
-				genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
-				infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
-				scientificNameID, originalNameUsageID, acceptedNameUsageID), null);
-    }
- 
-    /**
-     * Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?
-     *
-     * Provides: #70 VALIDATION_TAXON_UNAMBIGUOUS
-     *
      * @param class the provided dwc:class to evaluate
      * @param genus the provided dwc:genus to evaluate
      * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
@@ -745,6 +672,8 @@ public class DwCSciNameDQ {
     
     /**
      * Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?
+     * Utility method using a Taxon object as input instead of a separate annotated
+     * parameters for each taxon term.
      *
      * Provides: #70 VALIDATION_TAXON_UNAMBIGUOUS
      * 
@@ -753,8 +682,8 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     public static DQResponse<ComplianceValue> validationTaxonUnambiguous(
-			@ActedUpon("dwc:Taxon") Taxon taxon, 
-			@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
+    		Taxon taxon, 
+			SciNameSourceAuthority sourceAuthority
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
@@ -1014,13 +943,6 @@ public class DwCSciNameDQ {
         return result;
     }
     
-    public static DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(
-    		@Consulted("dwc:taxonID") String taxonID, 
-    		@ActedUpon("dwc:scientificName") String scientificName
-    	) {
-    	return amendmentScientificnameFromTaxonid(taxonID, scientificName, null);
-    }
-
     /**
      * Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.
      *
@@ -1156,10 +1078,6 @@ public class DwCSciNameDQ {
         
     }
 
-    public static DQResponse<ComplianceValue> validationClassFound(@ActedUpon("dwc:class") String taxonomic_class) {
-    	return validationClassFound(taxonomic_class, null);
-    }
-    
     /**
      * Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?
      *
@@ -1199,10 +1117,6 @@ public class DwCSciNameDQ {
         return validateHigherTaxonAtRank(taxonomic_class, "Class", sourceAuthority);
     }
 
-    public static DQResponse<ComplianceValue> validationKingdomFound(@ActedUpon("dwc:kingdom") String kingdom) {
-        return validationKingdomFound(kingdom, null);
-    }
-    
     /**
      * Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?
      *
@@ -1270,9 +1184,6 @@ public class DwCSciNameDQ {
         
     }
 
-    public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order) {
-    	return validationOrderFound(order,null);
-    }
     /**
      * Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?
      *
@@ -1695,10 +1606,6 @@ public class DwCSciNameDQ {
         return result;
     }
 
-    public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus) {
-    	return validationGenusFound(genus, null);
-    }
-
     /**
      * Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?
      *
@@ -1805,37 +1712,6 @@ public class DwCSciNameDQ {
         return result;
     }
 
-    /**
-     * #123 Validation SingleRecord Conformance: classification ambiguous
-     *
-     * Provides: VALIDATION_CLASSIFICATION_AMBIGUOUS
-     *
-     * @param taxonomic_class the provided dwc:class to evaluate
-     * @param phylum the provided dwc:phylum to evaluate
-     * @param kingdom the provided dwc:kingdom to evaluate
-     * @param family the provided dwc:family to evaluate
-     * @param order the provided dwc:order to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Provides("78640f09-8353-411a-800e-9b6d498fb1c9")
-    public DQResponse<ComplianceValue> validationClassificationAmbiguous(@ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:order") String order) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if all of the fields dwc:kingdom dwc:phylum, dwc:class, 
-        // dwc:order, dwc:family are EMPTY; COMPLIANT if the combination 
-        // of values of higher classification taxonomic terms (dwc:kingdom, 
-        // dwc:phylum, dwc:class, dwc:order, dwc:family) can be unambiguously 
-        // resolved by the specified source authority service; otherwise 
-        //NOT_COMPLIANT 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-
-        return result;
-    }
 
     /**
      * Is there a value in dwc:taxonRank?
@@ -1866,62 +1742,6 @@ public class DwCSciNameDQ {
         return result;
     }
 
-    /**
-     * #162 Validation SingleRecord Conformance: taxonrank notstandard
-     *
-     * Provides: VALIDATION_TAXONRANK_NOTSTANDARD
-     *
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
-    public DQResponse<ComplianceValue> validationTaxonrankNotstandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; INTERNAL_PREREQUISITES_NOT_MET 
-        // if dwc:taxonRank is EMPTY; COMPLIANT if the value of dwc:taxonRank 
-        // is in the bdq:sourceAuthority; otherwise NOT_COMPLIANT. 
-        //
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-
-        return result;
-    }
-
-    /**
-     * #163 Amendment SingleRecord Conformance: taxonrank standardized
-     *
-     * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
-     *
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
-     * @return DQResponse the response of type AmendmentValue to return
-     */
-    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
-    public DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
-        DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // service was not available; AMENDED if the value of dwc:taxonRank 
-        // was standardized using the bdq:sourceAuthority service; 
-        //otherwise NOT_AMENDED 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-        
-        // NOTES: Default sourceAuthority is https://rs.gbif.org/vocabulary/gbif/rank.xml
-        //  meaning that "using" must be interpreted as "to a value in", as this is a static xml 
-        //  document not a service which itself can perform transformations
-        
-        
-
-        return result;
-    }
-    
     /**
      * Provides internals for validationKingdomNotFound etc.
      * 
