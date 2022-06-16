@@ -23,6 +23,10 @@ import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.api.result.AmendmentValue;
 import org.datakurator.ffdq.api.result.ComplianceValue;
 import org.datakurator.ffdq.model.ResultState;
+import org.gbif.nameparser.NameParserGBIF;
+import org.gbif.nameparser.api.ParsedName;
+import org.gbif.nameparser.api.Rank;
+import org.gbif.nameparser.api.UnparsableNameException;
 import org.junit.Test;
 
 /**
@@ -184,6 +188,13 @@ public class DwCSciNameDQ_IT {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// failing to parse when passed from coldfusion, but not here.
+		scientificName = "Babelomurex dalli (Emerson & D'Attilio, 1963)";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 	}
 

@@ -27,6 +27,7 @@ import org.filteredpush.qc.sciname.SciNameUtils;
 import org.gbif.api.vocabulary.TaxonomicStatus;
 import org.junit.Test;
 
+import edu.harvard.mcz.nametools.NameAuthorshipParse;
 import edu.harvard.mcz.nametools.NameUsage;
 
 /**
@@ -51,6 +52,37 @@ public class GBIFServiceTestIT {
 	 */
 	@Test
 	public void testSearchForTaxon() {
+		
+		String scientificName = "Wallabia bicolor (Desmarest, 1804)";
+		try {
+			String response = GBIFService.searchForTaxon(scientificName, GBIFService.KEY_GBIFBACKBONE);
+			logger.debug(response);
+			assertEquals("{\"offset\":0,\"limit\":100,\"endOfRecords\":true,\"results\":[]}", response);
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+		
+		scientificName = "Wallabia bicolor";
+		try {
+			String response = GBIFService.searchForTaxon(scientificName, GBIFService.KEY_GBIFBACKBONE);
+			logger.debug(response);
+			List<NameUsage> hits = GBIFService.parseAllNameUsagesFromJSON(response);
+			assertTrue(hits.size()>0);
+			Iterator<NameUsage> i = hits.iterator();
+			boolean hasMatch = false;
+			while (i.hasNext()) { 
+				NameUsage hit = i.next();
+			 	logger.debug(hit.getScientificName());
+			 	logger.debug(hit.getAuthorship());
+			 	if (hit.getScientificName().equals("Wallabia bicolor (Desmarest, 1804)")) { 
+			 		hasMatch = true;
+			 	}
+			}
+			assertEquals(true, hasMatch);
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+		
 	 // TODO	fail("Not yet implemented");
 	}
 
@@ -230,6 +262,16 @@ public class GBIFServiceTestIT {
 	@Test
 	public void testFetchSynonyms() {
 	// TODO:	fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testParseName() { 
+		String scientificName = "Babelomurex dalli (Emerson & D'Attilio, 1963)";
+		
+		NameAuthorshipParse parsedName = GBIFService.parseAuthorshipFromNameString(scientificName);
+		assertEquals("Babelomurex dalli (Emerson & D'Attilio, 1963)", parsedName.getNameWithAuthorship());
+		assertEquals("Babelomurex dalli", parsedName.getNameWithoutAuthorship());
+		assertEquals("(Emerson & D'Attilio, 1963)", parsedName.getAuthorship());
 	}
 
 }

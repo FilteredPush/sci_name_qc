@@ -43,6 +43,7 @@ import org.gbif.nameparser.api.UnparsableNameException;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
+import edu.harvard.mcz.nametools.NameAuthorshipParse;
 import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
 
@@ -232,7 +233,7 @@ public class DwCSciNameDQ {
         		NameUsage toValidate = new NameUsage();
         		boolean set = false;
         		try { 
-        			NameParserGBIF parser = new NameParserGBIF();
+        			NameParser parser = new NameParserGBIF();
         			ParsedName parsedName = parser.parse(scientificName, Rank.UNRANKED, null);
         			toValidate.setScientificName(parsedName.canonicalNameWithoutAuthorship());
         			toValidate.setAuthorship(parsedName.authorshipComplete());
@@ -241,18 +242,33 @@ public class DwCSciNameDQ {
         			parser.close();
         			set = true;
         		} catch (UnparsableNameException e) { 
-        			result.addComment("Unable to parse authorship out of provided scientificName");
-        			result.addComment(e.getMessage());
+        			result.addComment("Unable to parse authorship out of provided scientificName, trying GBIF parser service with ["+scientificName+"].");
+        			logger.debug(e.getMessage(), e);
+        			// If local parse fails, try a parse via the GBIF service.
+        			// This supports embedding the library in coldfusion for MCZbase, where 
+        			// there is a library version conflict with the guava version provided
+        			// by coldfusion and the version needed by the GBIF name parser.
+        			try { 
+        				NameAuthorshipParse parsedName = GBIFService.parseAuthorshipFromNameString(scientificName);
+        				toValidate.setScientificName(parsedName.getNameWithoutAuthorship());
+        				toValidate.setAuthorship(parsedName.getAuthorship());
+        				set = true;
+        			} catch (Exception ex) {
+        				// simple failover handler, try the full name
+        				result.addComment("Unable to parse authorship out of provided scientificName, looking up full name.");
+        				result.addComment(e.getMessage());	
+        			} 
         		} catch (Exception e) {
+       				// could be thrown from parser.close()
         			logger.error(e.getMessage(), e);
-				}
+        		}
         		if (!set) { 
         			toValidate.setScientificName(scientificName);
         		}
         		try {
 					NameUsage validationResponse = service.validate(toValidate);
 					if (validationResponse==null) { 
-						result.addComment("No Match found for ["+scientificName+"] in ["+sourceAuthority.getName()+"]");
+						result.addComment("No Match found for ["+toValidate.getScientificName()+"]["+toValidate.getAuthorship()+"] in ["+sourceAuthority.getName()+"]");
 						result.setResultState(ResultState.RUN_HAS_RESULT);
 						result.setValue(ComplianceValue.NOT_COMPLIANT);
 					} else { 

@@ -21,9 +21,12 @@ package org.filteredpush.qc.sciname.services;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,14 +35,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.IDFormatException;
 import org.filteredpush.qc.sciname.SciNameUtils;
+import org.gbif.api.model.checklistbank.ParsedName;
+import org.gbif.api.vocabulary.NamePart;
+import org.gbif.api.vocabulary.NameType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.google.common.primitives.Bytes;
+
 import edu.harvard.mcz.nametools.AuthorNameComparator;
 import edu.harvard.mcz.nametools.ICNafpAuthorNameComparator;
 import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
+import edu.harvard.mcz.nametools.NameAuthorshipParse;
 import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
 import edu.harvard.mcz.nametools.ScientificNameComparator;
@@ -145,6 +154,88 @@ public class GBIFService implements Validator {
 
 	protected String getServiceImplementationName() {
 		return targetDataSetName;
+	}
+	
+	/**
+	 * Invoke the GBIF Name Parser service 
+	 * @param nameString to parse
+	 * @return the parsed name list as a json string
+	 */
+	public static String runNameParser(String nameString) { 
+		StringBuilder result = new StringBuilder();
+		String datasetKey = "";
+		URL url;
+		try {
+			url = new URL(GBIF_SERVICE + "/parser/name");
+			logger.debug(url.toString());
+			URLConnection connection = url.openConnection();
+			HttpURLConnection httpConnection = (HttpURLConnection)connection;
+			httpConnection.setRequestMethod("POST");
+			httpConnection.setDoOutput(true);
+			nameString = "[\"" + nameString + "\"]";
+			byte[] output = nameString.getBytes(StandardCharsets.UTF_8);
+			int length = output.length;
+			logger.debug(new String(output));
+			httpConnection.setFixedLengthStreamingMode(length);
+			httpConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			httpConnection.connect();
+			OutputStream outputStream = httpConnection.getOutputStream();
+			outputStream.write(output);
+			String line;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
+			while((line = reader.readLine()) != null) {
+				result.append(line);
+			}
+		} catch (IOException e) {
+			logger.error(e.getMessage(),e);
+		}
+
+		return result.toString();
+	}
+	
+	/** use the GBIF parser service to separate out the authorship part of a 
+	 * scientific name string from the 
+	 * 	  
+	 * @param nameString to parse
+	 * @return a NameAuthorshipObject containing the separated authorship and name.
+	 */
+	public static NameAuthorshipParse parseAuthorshipFromNameString(String nameString) { 
+		NameAuthorshipParse response = new NameAuthorshipParse();
+		
+		String json = GBIFService.runNameParser(nameString);
+		logger.debug(json);
+		if (json.length()>0) { 
+		
+        JSONParser parser=new JSONParser();
+
+        try {
+        	JSONArray array = new JSONArray();
+        	try {
+        		array = (JSONArray)parser.parse(json);
+        	} catch (ClassCastException e) { 
+        		logger.debug(e.getMessage(),e);
+    			array = (JSONArray)parser.parse(json);
+        	}
+    			 
+			Iterator<JSONObject> i = array.iterator();
+			while (i.hasNext()) { 
+				JSONObject obj = i.next();
+				logger.debug(obj.toJSONString());
+				if (NameUsage.getValFromKey(obj, "type")!="NO_NAME") {
+					String fullNameString = NameUsage.getValFromKey(obj,"canonicalNameComplete");
+					String canonicalName = NameUsage.getValFromKey(obj,"canonicalName");
+					response.setAuthorship(fullNameString.replace(canonicalName, "").trim());
+					response.setNameWithoutAuthorship(canonicalName);
+					response.setNameWithAuthorship(nameString);
+				}
+			}
+ 
+		} catch (ParseException e) {
+        	logger.debug(e.getMessage(),e);
+		}
+		
+		}
+		return response;
 	}
 	
 	public static String fetchTaxon(String taxon, String targetChecklist) { 
