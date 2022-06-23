@@ -808,7 +808,7 @@ public class GBIFService implements Validator {
 								NameComparison nameComparison = nameComparator.compare(taxonName, current.getScientificName());
 								if (NameComparison.isPlausible(nameComparison.getMatchType())) { 
 									names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
-									if (taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+									if (closest == null || taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
 										closest = current;
 									}
 								}
