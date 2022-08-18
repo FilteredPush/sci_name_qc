@@ -196,6 +196,20 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		// Historical capitalized specific epithet.
+		scientificName = "Pentagonaster Alexandri Perrier, 1881";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// Historical capitalized specific epithet.
+		scientificName = "Ophiocoma Alexandri Lyman, 1860";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 	}
 
 	/**

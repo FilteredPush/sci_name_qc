@@ -272,6 +272,14 @@ public class GBIFServiceTestIT {
 		assertEquals("Babelomurex dalli (Emerson & D'Attilio, 1963)", parsedName.getNameWithAuthorship());
 		assertEquals("Babelomurex dalli", parsedName.getNameWithoutAuthorship());
 		assertEquals("(Emerson & D'Attilio, 1963)", parsedName.getAuthorship());
+		
+		// historical capitalized specific epithet derived from name of a person.
+		scientificName = "Ophiocoma Alexandri Lyman, 1860";
+		parsedName = GBIFService.parseAuthorshipFromNameString(scientificName);
+		assertEquals("Ophiocoma Alexandri Lyman, 1860", parsedName.getNameWithAuthorship());
+		assertEquals("Ophiocoma Alexandri", parsedName.getNameWithoutAuthorship());
+		assertEquals("Lyman, 1860", parsedName.getAuthorship());
+		
 	}
 
 }
