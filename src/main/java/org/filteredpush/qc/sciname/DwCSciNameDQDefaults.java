@@ -466,6 +466,21 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     }
     
     /**
+    * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
+    *
+    * Provides: VALIDATION_TAXONRANK_STANDARD
+    *
+    * @param taxonRank the provided dwc:taxonRank to evaluate
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+   @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
+   @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
+   public DQResponse<ComplianceValue> validationTaxonrankStandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
+       DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+       return DwCSciNameDQ.validationTaxonrankStandard(taxonRank, null);
+   }
+    
+    /**
      * Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?
 	 * where bdq:sourceAuthority is the default GBIF Backbone Taxonomy.
      *

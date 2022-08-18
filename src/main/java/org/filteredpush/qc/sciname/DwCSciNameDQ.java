@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,7 @@ import org.datakurator.ffdq.api.result.*;
  * #28 VALIDATION_FAMILY_FOUND 3667556d-d8f5-454c-922b-af8af38f613c
  * #122 VALIDATION_GENUS_FOUND f2ce7d55-5b1d-426a-b00e-6d4efe3058ec
  * #46 VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
+ * #162 VALIDATION_TAXONRANK_STANDARD 7bdb13a4-8a51-4ee5-be7f-20693fdb183e
  * 
  * #57 AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
@@ -72,6 +74,9 @@ import org.datakurator.ffdq.api.result.*;
  * Also, with amendmentTaxonidFromTaxon(taxon, sourceAuthority, replaceExisting) provides
  * a variant of #57 that allows existing taxonID values to be conformed to a specified sourceAuthority
  * based on a lookup of the taxon terms on that authority.
+ * 
+ * Incomplete:
+ * #123 VALIDATION_CLASSIFICATION_UNAMBIGUOUS 78640f09-8353-411a-800e-9b6d498fb1c9
  * 
  * @author mole
  *
@@ -1454,8 +1459,6 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:order") String order) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        // TODO: Specification needs work, higher taxon terms shouldn't be included.
-        
         // Specification
         // COMPLIANT if at least one term needed to determine the taxon 
         // of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT 
@@ -1757,6 +1760,107 @@ public class DwCSciNameDQ {
 		}
         return result;
     }
+    
+    /**
+    * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
+    *
+    * Provides: VALIDATION_TAXONRANK_STANDARD
+    *
+    * @param taxonRank the provided dwc:taxonRank to evaluate
+    * @param sourceAuthority the authority for taxonRank values
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+   @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
+   @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
+   public static DQResponse<ComplianceValue> validationTaxonrankStandard(
+		   @ActedUpon("dwc:taxonRank") String taxonRank,
+		   @Parameter(name="bdq:sourceAuthority") String sourceAuthority
+		   ) {
+       DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+       // Specification
+       // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+       // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank 
+       // is EMPTY; COMPLIANT if the value of dwc:taxonRank is in 
+       // the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority 
+       // default = "Taxonomic Rank GBIF Vocabulary" [https://rs.gbif.org/vocabulary/gbif/rank.xml] 
+       // 
+
+       // Parameters. This test is defined as parameterized.
+       // bdq:sourceAuthority
+
+       if (sourceAuthority==null) { 
+    	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
+       }
+       if (SciNameUtils.isEmpty(taxonRank)) { 
+    	   result.addComment("No value provided value for taxonRank");
+    	   result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+       } else { 
+
+    	   try { 
+    		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 
+    			   // TODO: Lookup and cache file
+    			   HashSet<String> values = new HashSet<String>();
+    			   values.add("domain");
+    			   values.add("kingdom");
+    			   values.add("subkingdom");
+    			   values.add("superphylum");
+    			   values.add("phylum");
+    			   values.add("subphylum");
+    			   values.add("superclass");
+    			   values.add("class");
+    			   values.add("subclass");
+    			   values.add("supercohort");
+    			   values.add("cohort");
+    			   values.add("subcohort");
+    			   values.add("superorder");
+    			   values.add("order");
+    			   values.add("suborder");
+    			   values.add("infraorder");
+    			   values.add("superfamily");
+    			   values.add("family");
+    			   values.add("subfamily");
+    			   values.add("tribe");
+    			   values.add("subtribe");
+    			   values.add("genus");
+    			   values.add("subgenus");
+    			   values.add("section");
+    			   values.add("subsection");
+    			   values.add("series");
+    			   values.add("subseries");
+    			   values.add("speciesAggregate");
+    			   values.add("species");
+    			   values.add("subspecificAggregate");
+    			   values.add("subspecies");
+    			   values.add("variety");
+    			   values.add("subvariety");
+    			   values.add("form");
+    			   values.add("subform");
+    			   values.add("cultivarGroup");
+    			   values.add("cultivar");
+    			   values.add("strain");
+
+    			   if (values.contains(taxonRank)) {
+    				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found in the GBIF taxon rank vocabulary.");
+    				   result.setValue(ComplianceValue.COMPLIANT);
+    				   result.setResultState(ResultState.RUN_HAS_RESULT);
+    			   } else { 
+    				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] not found in the GBIF taxon rank vocabulary.");
+    				   result.setValue(ComplianceValue.NOT_COMPLIANT);
+    				   result.setResultState(ResultState.RUN_HAS_RESULT);
+    			   }
+    		   } else { 
+    			   throw new UnsupportedSourceAuthorityException("Specified bdq:sourceAuthority not supported");
+    		   }
+    	   } catch (UnsupportedSourceAuthorityException e) { 
+    		   result.addComment("Unable to process:" + e.getMessage());
+    		   result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+    	   }
+       }
+       
+       return result;
+    }
+    
 
     /**
      * Provides internals for validationKingdomNotFound etc.

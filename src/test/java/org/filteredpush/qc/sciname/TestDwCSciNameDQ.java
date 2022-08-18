@@ -403,7 +403,33 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testValidationTaxonrankNotstandard() {
-// TODO:		fail("Not yet implemented");
+		
+		// Default source authority, has local copy, so tests should run even if service is unavailable.
+		
+		DQResponse<ComplianceValue> result= DwCSciNameDQ.validationTaxonrankStandard("kingdom", null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		result = DwCSciNameDQ.validationTaxonrankStandard("subspecies", null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		result = DwCSciNameDQ.validationTaxonrankStandard("", null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertEquals(null, result.getValue());
+		
+		result = DwCSciNameDQ.validationTaxonrankStandard("invalidvalue", null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		result = DwCSciNameDQ.validationTaxonrankStandard("kingdom", "https://example.com/example");
+		logger.debug(result.getComment());
+		assertEquals(ResultState.EXTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertEquals(null, result.getValue());
 	}
 
 	/**

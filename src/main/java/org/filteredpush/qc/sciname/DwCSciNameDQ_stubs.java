@@ -48,33 +48,6 @@ public class DwCSciNameDQ_stubs {
 
 
     /**
-     * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
-     *
-     * Provides: VALIDATION_TAXONRANK_STANDARD
-     *
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
-    @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
-    public DQResponse<ComplianceValue> validationTaxonrankStandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank 
-        // is EMPTY; COMPLIANT if the value of dwc:taxonRank is in 
-        // the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority 
-        // default = "Taxonomic Rank GBIF Vocabulary" [https://rs.gbif.org/vocabulary/gbif/rank.xml] 
-        // 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-
-        return result;
-    }
-
-    /**
      * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
      *
      * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
