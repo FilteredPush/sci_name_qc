@@ -465,4 +465,31 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     	return DwCSciNameDQ.validationTaxonrankNotempty(taxonRank);
     }
     
+    /**
+     * Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?
+	 * where bdq:sourceAuthority is the default GBIF Backbone Taxonomy.
+     *
+     * Provides: VALIDATION_CLASSIFICATION_UNAMBIGUOUS
+     *
+     * @param class the provided dwc:class to evaluate
+     * @param phylum the provided dwc:phylum to evaluate
+     * @param kingdom the provided dwc:kingdom to evaluate
+     * @param family the provided dwc:family to evaluate
+     * @param order the provided dwc:order to evaluate
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
+    @Validation(label="VALIDATION_CLASSIFICATION_UNAMBIGUOUS", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
+    @Provides("78640f09-8353-411a-800e-9b6d498fb1c9")
+    public DQResponse<ComplianceValue> validationClassificationUnambiguous(
+    		@ActedUpon("dwc:kingdom") String kingdom, 
+    		@ActedUpon("dwc:phylum") String phylum, 
+    		@ActedUpon("dwc:class") String taxonmic_class, 
+    		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:family") String family 
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+        
+        return DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, taxonmic_class, order, family, null);
+    }
+    
 }
