@@ -47,31 +47,4 @@ public class DwCSciNameDQ_stubs {
     }
 
 
-    /**
-     * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
-     *
-     * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
-     *
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-     * @return DQResponse the response of type AmendmentValue to return
-     */
-    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
-    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
-    public DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
-        DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // is not available; AMENDED the value of dwc:taxonRank if 
-        // it could be unambiguously interpreted as a value in bdq:sourceAuthority; 
-        // otherwise NOT_AMENDED bdq:sourceAuthority default = "Taxonomic 
-        // Rank GBIF Vocabulary" [https://rs.gbif.org/vocabulary/gbif/rank.xml] 
-        // 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="Taxonomic Rank GBIF Vocabulary"
-
-        return result;
-    }
-
 }

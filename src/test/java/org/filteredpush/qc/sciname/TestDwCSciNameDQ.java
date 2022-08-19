@@ -437,7 +437,23 @@ public class TestDwCSciNameDQ {
 	 */
 	@Test
 	public void testAmendmentTaxonrankStandardized() {
-// TODO:		fail("Not yet implemented");
+		String taxonRank = "species"; 
+		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
+		assertNull(response.getValue());
+		
+		taxonRank = "Species"; 
+		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
+		assertEquals("species",response.getValue().getObject().get("dwc:taxonRank"));
+		
+		taxonRank = "kingdom";
+		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, "https://www.example.com/example");
+		logger.debug(response.getComment());
+		assertEquals(ResultState.EXTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
+		
 	}
 
 }

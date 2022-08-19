@@ -467,6 +467,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     
     /**
     * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
+    * where bdq:sourceAuthority is the default GBIF taxon rank vocabulary.
     *
     * Provides: VALIDATION_TAXONRANK_STANDARD
     *
@@ -478,6 +479,21 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
    public DQResponse<ComplianceValue> validationTaxonrankStandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
        return DwCSciNameDQ.validationTaxonrankStandard(taxonRank, null);
+   }
+   
+   /**
+    * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
+	* where bdq:sourceAuthority is the default GBIF taxon rank vocabulary.
+    *
+    * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
+    *
+    * @param taxonRank the provided dwc:taxonRank to evaluate
+    * @return DQResponse the response of type AmendmentValue to return
+    */
+   @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
+   @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
+   public DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
+	   return DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
    }
     
     /**

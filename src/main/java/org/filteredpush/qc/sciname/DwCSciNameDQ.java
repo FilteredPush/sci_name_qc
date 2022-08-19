@@ -70,6 +70,7 @@ import org.datakurator.ffdq.api.result.*;
  * 
  * #57 AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
+ * #163 AMENDMENT_TAXONRANK_STANDARDIZED e39098df-ef46-464c-9aef-bcdeee2a88cb
  *
  * Also, with amendmentTaxonidFromTaxon(taxon, sourceAuthority, replaceExisting) provides
  * a variant of #57 that allows existing taxonID values to be conformed to a specified sourceAuthority
@@ -1860,8 +1861,139 @@ public class DwCSciNameDQ {
        
        return result;
     }
-    
+   
+   /**
+    * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
+    *
+    * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
+    *
+    * @param taxonRank the provided dwc:taxonRank to evaluate
+    * @return DQResponse the response of type AmendmentValue to return
+    */
+   @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
+   @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
+   public static DQResponse<AmendmentValue> amendmentTaxonrankStandardized(
+		   @ActedUpon("dwc:taxonRank") String taxonRank,
+   			@Parameter(name="bdq:sourceAuthority") String sourceAuthority
+   ){
+       DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
+       // Specification
+       // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+       // is not available; AMENDED the value of dwc:taxonRank if 
+       // it could be unambiguously interpreted as a value in bdq:sourceAuthority; 
+       // otherwise NOT_AMENDED bdq:sourceAuthority default = "Taxonomic 
+       // Rank GBIF Vocabulary" [https://rs.gbif.org/vocabulary/gbif/rank.xml] 
+
+       // Parameters. This test is defined as parameterized.
+       // bdq:sourceAuthority default="Taxonomic Rank GBIF Vocabulary"
+       if (sourceAuthority==null) { 
+    	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
+       }
+       if (SciNameUtils.isEmpty(taxonRank)) { 
+    	   result.addComment("No value provided value for taxonRank");
+    	   result.setResultState(ResultState.NOT_AMENDED);
+       } else { 
+    	   try { 
+    		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 
+    			   // TODO: Lookup and cache file
+    			   HashSet<String> values = new HashSet<String>();
+    			   values.add("domain");
+    			   values.add("kingdom");
+    			   values.add("subkingdom");
+    			   values.add("superphylum");
+    			   values.add("phylum");
+    			   values.add("subphylum");
+    			   values.add("superclass");
+    			   values.add("class");
+    			   values.add("subclass");
+    			   values.add("supercohort");
+    			   values.add("cohort");
+    			   values.add("subcohort");
+    			   values.add("superorder");
+    			   values.add("order");
+    			   values.add("suborder");
+    			   values.add("infraorder");
+    			   values.add("superfamily");
+    			   values.add("family");
+    			   values.add("subfamily");
+    			   values.add("tribe");
+    			   values.add("subtribe");
+    			   values.add("genus");
+    			   values.add("subgenus");
+    			   values.add("section");
+    			   values.add("subsection");
+    			   values.add("series");
+    			   values.add("subseries");
+    			   values.add("speciesAggregate");
+    			   values.add("species");
+    			   values.add("subspecificAggregate");
+    			   values.add("subspecies");
+    			   values.add("variety");
+    			   values.add("subvariety");
+    			   values.add("form");
+    			   values.add("subform");
+    			   values.add("cultivarGroup");
+    			   values.add("cultivar");
+    			   values.add("strain");
+
+    			   if (values.contains(taxonRank)) {
+    				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found in the GBIF taxon rank vocabulary.");
+    				   result.setResultState(ResultState.NOT_AMENDED);
+    			   } else { 
+    				   if (values.contains(taxonRank.trim().toLowerCase())) { 
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] matched to value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.AMENDED);
+    					   Map<String,String> keyValue = new HashMap<String,String>();
+    					   keyValue.put("dwc:taxonRank", taxonRank.toLowerCase());
+    					   AmendmentValue amendment = new AmendmentValue(keyValue);
+    					   result.setValue(amendment);
+    				   } else if (taxonRank.trim().equals("var.")) {
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] matched to value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.AMENDED);
+    					   Map<String,String> keyValue = new HashMap<String,String>();
+    					   keyValue.put("dwc:taxonRank", "variety");
+    					   AmendmentValue amendment = new AmendmentValue(keyValue);
+    				   } else if (taxonRank.trim().toLowerCase().equals("forma")) {
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] matched to value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.AMENDED);
+    					   Map<String,String> keyValue = new HashMap<String,String>();
+    					   keyValue.put("dwc:taxonRank", "form");
+    					   AmendmentValue amendment = new AmendmentValue(keyValue);
+    				   } else if (taxonRank.trim().toLowerCase().equals("cultivar group")) {
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] matched to value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.AMENDED);
+    					   Map<String,String> keyValue = new HashMap<String,String>();
+    					   keyValue.put("dwc:taxonRank", "cultivarGroup");
+    					   AmendmentValue amendment = new AmendmentValue(keyValue);
+    				   } else if (taxonRank.trim().toLowerCase().equals("species aggregate")) {
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] matched to value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.AMENDED);
+    					   Map<String,String> keyValue = new HashMap<String,String>();
+    					   keyValue.put("dwc:taxonRank", "speciesAggregate");
+    					   AmendmentValue amendment = new AmendmentValue(keyValue);
+    				   } else if (taxonRank.trim().toLowerCase().equals("subspecific aggregate") || taxonRank.trim().toLowerCase().equals("subspecies aggregate")) {
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] matched to value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.AMENDED);
+    					   Map<String,String> keyValue = new HashMap<String,String>();
+    					   keyValue.put("dwc:taxonRank", "subspecificAggregate");
+    					   AmendmentValue amendment = new AmendmentValue(keyValue);
+    				   } else {
+    					   result.addComment("Provided value for taxonRank ["+ taxonRank+"] not matched to a value in the GBIF taxon rank vocabulary.");
+    					   result.setResultState(ResultState.NOT_AMENDED);
+    				   }
+    			   }
+    		   } else { 
+    			   throw new UnsupportedSourceAuthorityException("Specified bdq:sourceAuthority not supported");
+    		   }
+    	   } catch (UnsupportedSourceAuthorityException e) { 
+    		   result.addComment("Unable to process:" + e.getMessage());
+    		   result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+    	   }
+       }
+    
+       return result;
+   }
     /**
      * Provides internals for validationKingdomNotFound etc.
      * 
