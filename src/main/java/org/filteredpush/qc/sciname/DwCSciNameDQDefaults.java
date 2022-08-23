@@ -518,7 +518,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     		@ActedUpon("dwc:order") String order,
     		@ActedUpon("dwc:family") String family 
     ) {
-        return DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, taxonmic_class, order, family, null);
+        return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, family, null);
     }
     
 }

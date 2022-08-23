@@ -1023,7 +1023,7 @@ public class DwCSciNameDQ_IT {
 		String phylclass=""; 
 		String order=""; 
 		String family="";
-		DQResponse<ComplianceValue>result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		DQResponse<ComplianceValue>result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
@@ -1032,7 +1032,7 @@ public class DwCSciNameDQ_IT {
 		phylclass="";
 		order="";
 		family="";
-		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1042,7 +1042,7 @@ public class DwCSciNameDQ_IT {
 		phylclass="Mamalia";
 		order="Carnivora";
 		family="Muricidae";
-		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1052,7 +1052,7 @@ public class DwCSciNameDQ_IT {
 		phylclass="Insecta";
 		order="Coleoptera"; 
 		family="Curculionidae";
-		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1061,10 +1061,33 @@ public class DwCSciNameDQ_IT {
 		phylclass="Magnoliopsida"; 
 		order="Myrtales"; 
 		family="";
-		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom=""; 
+		phylum="Magnoliophyta";
+		phylclass="Magnoliopsida";
+		order="";
+		family="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+
+		// TODO: Not Working yet.
+		/*
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Magnoliopsida";
+		order="Coleoptera";
+		family="Curculionidae";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		*/
 		
 	}
 

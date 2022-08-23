@@ -2103,7 +2103,7 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
     @Provides("78640f09-8353-411a-800e-9b6d498fb1c9")
-    public static DQResponse<ComplianceValue> validationClassificationUnambiguous(
+    public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:class") String taxonomic_class, 
@@ -2187,33 +2187,32 @@ public class DwCSciNameDQ {
     					logger.debug(aResult.getClazz());
     					logger.debug(aResult.getOrder());
     					logger.debug(aResult.getFamily());
+    					// TODO: Check if returned values are synonyms of values present.
     					if (lowestRank.equalsIgnoreCase("Kingdom")) { 
     						hasMatch=true;
     					} else if (lowestRank.equalsIgnoreCase("Phylum")) {
-    						if (aResult.getKingdom().equals(kingdom)) { 
-    							hasMatch=true;
-    						} else if (SciNameUtils.isEmpty(kingdom) || SciNameUtils.isEmpty(aResult.getKingdom())) {
+    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
     							hasMatch=true;
     						} 
     					} else if (lowestRank.equalsIgnoreCase("Class")) {
-    						if (aResult.getKingdom().equals(kingdom) || SciNameUtils.isEmpty(kingdom) || SciNameUtils.isEmpty(aResult.getKingdom())) {
-    							if (aResult.getPhylum().equals(phylum) || SciNameUtils.isEmpty(phylum) || SciNameUtils.isEmpty(aResult.getPhylum())) {
+    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynoym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								hasMatch=true;
     							}
     						} 
     					} else if (lowestRank.equalsIgnoreCase("Order")) {
-    						if (aResult.getKingdom().equals(kingdom) || SciNameUtils.isEmpty(kingdom) || SciNameUtils.isEmpty(aResult.getKingdom())) {
-    							if (aResult.getPhylum().equals(phylum) || SciNameUtils.isEmpty(phylum) || SciNameUtils.isEmpty(aResult.getPhylum())) {
-    								if (aResult.getClass().equals(taxonomic_class) || SciNameUtils.isEmpty(taxonomic_class) || SciNameUtils.isEmpty(aResult.getClazz())) {
+    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynoym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynoym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									hasMatch=true;
     								}
     							}
     						} 
     					} else if (lowestRank.equalsIgnoreCase("Family")) {
-    						if (aResult.getKingdom().equals(kingdom) || SciNameUtils.isEmpty(kingdom) || SciNameUtils.isEmpty(aResult.getKingdom())) {
-    							if (aResult.getPhylum().equals(phylum) || SciNameUtils.isEmpty(phylum) || SciNameUtils.isEmpty(aResult.getPhylum())) {
-    								if (aResult.getClass().equals(taxonomic_class) || SciNameUtils.isEmpty(taxonomic_class) || SciNameUtils.isEmpty(aResult.getClazz())) {
-    									if (aResult.getOrder().equals(order) || SciNameUtils.isEmpty(order) || SciNameUtils.isEmpty(aResult.getOrder())) {
+    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynoym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynoym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynoym(order, aResult.getOrder(), "Order", sourceAuthority)) {
     										hasMatch=true;
     									}
     								}

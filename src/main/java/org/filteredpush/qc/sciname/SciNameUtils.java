@@ -19,6 +19,8 @@ package org.filteredpush.qc.sciname;
 
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -34,6 +36,7 @@ import org.filteredpush.qc.sciname.services.WoRMSService;
 import org.filteredpush.qc.sciname.services.ZooBankService;
 import org.gbif.nameparser.NameParserGBIF;
 import org.gbif.nameparser.api.ParsedName;
+import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.LookupResult;
 import edu.harvard.mcz.nametools.NameUsage;
@@ -51,6 +54,65 @@ public class SciNameUtils {
 	public SciNameUtils() { 
 		
 	} 
+	
+	/**
+	 * Check to see if a name is the same as another name or the other name's synonyms.
+	 * 
+	 * @param name the name being checked
+	 * @param compareToName the name returned from the authority to compare with name, including synonyms
+	 * @param atRank the rank of the two names being compared
+	 * @param sourceAuthority in which to lookup compareToName for synonyms.
+	 * @return true if either name is empty, the two are the same, or if a synonym of compareToName found in sourceAuthority is the same as name. Otherwise false.
+	 * @throws IOException on lookup error
+	 * @throws ApiException on lookup error
+	 */
+	public static boolean sameOrSynoym(String name, String compareToName, String atRank, SciNameSourceAuthority sourceAuthority) throws IOException, ApiException {
+		logger.debug(name);
+		logger.debug(compareToName);
+		boolean result = false;
+		if (SciNameUtils.isEmpty(name) || SciNameUtils.isEmpty(compareToName)) { 
+			result = true;
+		} else if (name.equalsIgnoreCase(compareToName)) { 
+			result = true;
+		} else { 
+			List<NameUsage> lookupResults = null;
+			List<NameUsage> synonymResults = null;
+			if (sourceAuthority.isGBIFChecklist()) { 
+				lookupResults = GBIFService.lookupTaxonAtRank(compareToName, sourceAuthority.getAuthoritySubDataset(), atRank, 50);
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
+				lookupResults = WoRMSService.lookupTaxonAtRank(compareToName, atRank);
+			}
+			if (lookupResults!=null) { 
+				Iterator<NameUsage> i = lookupResults.iterator();
+				while (i.hasNext()) { 
+					NameUsage value = i.next();
+					logger.debug(value.getCanonicalName());
+					if (value.getCanonicalName().equals(name)) { 
+						result = true;
+					} else { 
+						if (sourceAuthority.isGBIFChecklist()) { 
+							synonymResults= GBIFService.parseAllNameUsagesFromJSON(GBIFService.fetchSynonyms(value.getKey(), sourceAuthority.getAuthoritySubDataset()));
+						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
+							// TODO: needs implementation
+						}
+						if (synonymResults!=null) { 
+							logger.debug(synonymResults.size());
+							Iterator<NameUsage> is = synonymResults.iterator();
+							while (is.hasNext() && !result) { 
+								NameUsage synValue = is.next();
+								logger.debug(synValue.getCanonicalName());
+								if (synValue.getCanonicalName().equals(name)) { 
+									result = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return result;
+	}
 	
     /**
      * Does a string contain a non-blank value.

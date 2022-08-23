@@ -470,7 +470,7 @@ public class GBIFService implements Validator {
 			logger.error(e.getMessage());
 		}
 
-
+		logger.debug(result.toString());
 		return result.toString();
 	}		
 	
