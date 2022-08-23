@@ -1017,7 +1017,55 @@ public class DwCSciNameDQ_IT {
 	 */
 	@Test
 	public void testValidationClassificationAmbiguous() {
-// TODO: 		fail("Not yet implemented");
+		
+		String kingdom=""; 
+		String phylum=""; 
+		String phylclass=""; 
+		String order=""; 
+		String family="";
+		DQResponse<ComplianceValue>result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		
+		kingdom="Plantae";
+		phylum="Magnoliophyta";
+		phylclass="";
+		order="";
+		family="";
+		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+
+		kingdom="Plantae";
+		phylum="Magnoliophyta";
+		phylclass="Mamalia";
+		order="Carnivora";
+		family="Muricidae";
+		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Coleoptera"; 
+		family="Curculionidae";
+		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+				
+		kingdom=""; phylum=""; 
+		phylclass="Magnoliopsida"; 
+		order="Myrtales"; 
+		family="";
+		result = DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, phylclass, order, family, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 	}
 
 
