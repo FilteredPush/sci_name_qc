@@ -476,7 +476,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     */
    @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
    @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
-   public DQResponse<ComplianceValue> validationTaxonrankStandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
+   public static DQResponse<ComplianceValue> validationTaxonrankStandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
        return DwCSciNameDQ.validationTaxonrankStandard(taxonRank, null);
    }
@@ -492,7 +492,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     */
    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
-   public DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
+   public static DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
 	   return DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
    }
     
@@ -511,15 +511,13 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_CLASSIFICATION_UNAMBIGUOUS", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
     @Provides("78640f09-8353-411a-800e-9b6d498fb1c9")
-    public DQResponse<ComplianceValue> validationClassificationUnambiguous(
+    public static DQResponse<ComplianceValue> validationClassificationUnambiguous(
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:class") String taxonmic_class, 
     		@ActedUpon("dwc:order") String order,
     		@ActedUpon("dwc:family") String family 
     ) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-        
         return DwCSciNameDQ.validationClassificationUnambiguous(kingdom, phylum, taxonmic_class, order, family, null);
     }
     

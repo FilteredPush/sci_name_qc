@@ -44,8 +44,12 @@ public class TestDwCSciNameDQ {
 		String taxonID = "";
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
-		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		
+		taxonID = " ";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
 		taxonID = "3256236";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
@@ -100,6 +104,13 @@ public class TestDwCSciNameDQ {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "https://invalid/99999999";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 	}
 	
 	/**
@@ -155,6 +166,54 @@ public class TestDwCSciNameDQ {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Hakea";
+		genericName = "Hakea";
+		specificEpithet = "";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+	
+		scientificName="Hakea decurrens physocarpa";
+		genericName="";
+		specificEpithet="decurrens";
+		infraspecificEpithet="physocarpa";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		scientificName="Hakea decurrens ssp. ? physocarpa";
+		genericName="Hakea";
+		specificEpithet="decurrens";
+		infraspecificEpithet="";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		scientificName="Hakea decurrens ssp. Aff. physocarpa";
+		genericName="Hakea";
+		specificEpithet="decurrens";
+		infraspecificEpithet="";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		// TODO: In spreadsheet of validation data, may be in error there, confirm what correct expectation should be.
+		/*
+		scientificName="Hakea decurrens ssp. physocarpa";
+		genericName="";
+		specificEpithet="decurrens";
+		infraspecificEpithet="pyhsocarpa";    //  ??? Error ???
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+		*/
 		
 		scientificName = "Ausareum bus cus";
 		genericName = "Aus";

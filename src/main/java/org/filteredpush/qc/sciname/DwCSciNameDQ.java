@@ -1356,6 +1356,11 @@ public class DwCSciNameDQ {
    				result.addComment("Exact match of scientificName to genericName+specificEpithet+infraspecificEpithet.");
   				result.setValue(ComplianceValue.COMPLIANT);
   				result.setResultState(ResultState.RUN_HAS_RESULT);
+        	} else if (scientificName.equals(genericName) && specificEpithet.equals("") && infraspecificEpithet.equals("") ) { 
+        		// simple uninomial match
+   				result.addComment("Exact match of scientificName to genericName");
+  				result.setValue(ComplianceValue.COMPLIANT);
+  				result.setResultState(ResultState.RUN_HAS_RESULT);
         	} else if (infraspecificEpithet.equals("") && scientificName.equals(genericName+" "+specificEpithet)) { 
         		// simple binomial match
    				result.addComment("Exact match of scientificName to genericName+specificEpithet.");
@@ -1376,6 +1381,9 @@ public class DwCSciNameDQ {
 	    			if (parseSpecific==null) { parseSpecific = ""; }
 	    			String parseInfraspecific = parse.getInfraspecificEpithet();
 	    			if (parseInfraspecific==null) { parseInfraspecific = ""; }
+	    			logger.debug(parseGeneric);
+	    			logger.debug(parseSpecific);
+	    			logger.debug(parseInfraspecific);
 	    			if (!SciNameUtils.isEmpty(genericName) && !parseGeneric.equals(genericName)) { 
 	    				result.addComment("Genus parsed out of dwc:scientificName does not match dwc:genericName.");
 	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
@@ -1385,12 +1393,27 @@ public class DwCSciNameDQ {
 	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
 	    				result.setResultState(ResultState.RUN_HAS_RESULT);
 	    			} else if (!SciNameUtils.isEmpty(infraspecificEpithet) && !parseInfraspecific.equals(infraspecificEpithet)) { 
+	    				logger.debug(parseInfraspecific);
 	    				result.addComment("Infraspecific Epithet parsed out of dwc:scientificName does not match dwc:infraspecificEpithet.");
 	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
 	    				result.setResultState(ResultState.RUN_HAS_RESULT);
 	    			} else { 
 	    				if (parseGeneric.equals(genericName) && parseSpecific.equals(specificEpithet) && parseInfraspecific.equals(infraspecificEpithet)) { 
 	    					result.addComment("The values of dwc:genericName, specificEpithet, and infraspecificEpithet are pasrsed out of dwc:scientificName in their expected positions.");
+	    					result.setValue(ComplianceValue.COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    				} else if (genericName.equals("") && parseSpecific.equals(specificEpithet) && parseInfraspecific.equals(infraspecificEpithet)) { 
+	    					result.addComment("The value of genericName is empty while the values of specificEpithet, and infraspecificEpithet are pasrsed out of dwc:scientificName in their expected positions.");
+	    					result.setValue(ComplianceValue.COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    				} else if (
+	    						(parseGeneric.equals(genericName) || genericName.equals(""))
+	    						&& 
+	    						(parseSpecific.equals(specificEpithet) || specificEpithet.equals(""))
+	    						&& 
+	    						(parseInfraspecific.equals(infraspecificEpithet) || infraspecificEpithet.equals("") )
+	    						) { 
+	    					result.addComment("The values of genericName, specificEpithet, and infraspecificEpithet are empty or match values pasrsed out of dwc:scientificName in their expected positions.");
 	    					result.setValue(ComplianceValue.COMPLIANT);
 	    					result.setResultState(ResultState.RUN_HAS_RESULT);
 	    				}
@@ -1540,15 +1563,7 @@ public class DwCSciNameDQ {
     public static DQResponse<ComplianceValue> validationTaxonidComplete(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO: Specification needs work.
-        // something like COMPLIANT if taxonID is a validly formed LSID, or taxonID
-        // is a validly formed URN with at least NID and NSS, or taxonID is a 
-        // validly formed URI with host and path where path consists of 
-        // more than just "/", and if host is www.gbif.org and path begins with 
-        // "/species/", the path contains additional trailing characters, otherwise
-        // NOT_COMPLIANT
-        
-        //TODO:  Implement specification
+        // Specification
         // INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; 
         // COMPLIANT if dwc:taxonID contains both a URI and a namespace 
         // indicator; otherwise NOT_COMPLIANT 
@@ -1556,8 +1571,7 @@ public class DwCSciNameDQ {
         
         if (SciNameUtils.isEmpty(taxonID)) { 
         	result.addComment("No value provided for taxonId.");
-        	result.setResultState(ResultState.RUN_HAS_RESULT);
-        	result.setValue(ComplianceValue.NOT_COMPLIANT);
+        	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         } else { 
         	try { 
         		RFC8141URN urn = new RFC8141URN(taxonID);
