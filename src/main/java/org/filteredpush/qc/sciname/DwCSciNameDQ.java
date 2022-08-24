@@ -58,7 +58,7 @@ import org.datakurator.ffdq.api.result.*;
  * #161 VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * #105 VALIDATION_TAXON_NOTEMPTY 06851339-843f-4a43-8422-4e61b9a00e75
  * #101 VALIDATION_POLYNOMIAL_CONSISTENT 17f03f1f-f74d-40c0-8071-2927cfc9487b
- * #123 VALIDATION_CLASSIFICATION_CONSISTENT 78640f09-8353-411a-800e-9b6d498fb1c9
+ * #123 VALIDATION_CLASSIFICATION_CONSISTENT 2750c040-1d4a-4149-99fe-0512785f2d5f
  * #81 VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
  * #22 VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
  * #77 VALIDATION_CLASS_FOUND 2cd6884e-3d14-4476-94f7-1191cfff309b
@@ -2102,7 +2102,7 @@ public class DwCSciNameDQ {
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
-    @Provides("78640f09-8353-411a-800e-9b6d498fb1c9")
+    @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
     public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:phylum") String phylum, 

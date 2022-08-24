@@ -509,9 +509,9 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * @param order the provided dwc:order to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Validation(label="VALIDATION_CLASSIFICATION_UNAMBIGUOUS", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
-    @Provides("78640f09-8353-411a-800e-9b6d498fb1c9")
-    public static DQResponse<ComplianceValue> validationClassificationUnambiguous(
+    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
+    @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
+    public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:class") String taxonmic_class, 
