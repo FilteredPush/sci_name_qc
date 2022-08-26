@@ -250,15 +250,15 @@ public class DwCSciNameDQ_IT {
 		}
 		
 		String family = null;
-		String scientificName = "Murex pecten";  // GBIF returns two matches, we can't tell which to use.
+		String scientificName = "Murex pecten";  // GBIF returns two matches, pick the one that is accepted by the other
 		String taxonId = null;
 		String scientificNameAuthorship = null;
 		Taxon taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
-		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
-		assertNull(response.getValue());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:5726736", response.getValue().getObject().get("dwc:taxonID"));
 
 		family = null;
 		scientificName = "Vulpes vulpes";  // no authorship provided
@@ -368,7 +368,49 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));			
+		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
+		
+		taxonId=""; 
+		scientificName="Chicoreus palmarosae (Lamarck, 1822)"; 
+		String kingdom="Animalia"; 
+		String phylum="Mollusca"; 
+		String taxonomic_class="Gastropoda"; 
+		String order=""; 
+		family="Muricidae"; 
+		String subfamily=""; 
+		String genus="Chicoreus"; 
+		String genericName="Chicoreus"; 
+		String subgenus=""; 
+		String infragenericEpithet=""; 
+		String specificEpithet="palmarosae"; 
+		String infraspecificEpithet=""; 
+		String cultivarEpithet=""; 
+		String vernacularName=""; 
+		scientificNameAuthorship="(Lamarck, 1822)"; 
+		String taxonRank="";
+		taxon = new Taxon();
+		taxon.setTaxonID(taxonId);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		taxon.setKingdom(kingdom);
+		taxon.setPhylum(phylum);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setFamily(family);
+		taxon.setGenus(subgenus);
+		taxon.setGenericName(genericName);
+		taxon.setSpecificEpithet(specificEpithet);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("gbif:4365662",response.getValue().getObject().get("dwc:taxonID"));	
+		
+		/*
+		 * TODO: Failing from two returned records for name.
+		{"offset":0,"limit":100,"endOfRecords":true,"results":[
+		  {"key":4365662,"nubKey":4365662,"nameKey":2358672,"taxonID":"gbif:4365662","sourceTaxonKey":172468900,"kingdom":"Animalia","phylum":"Mollusca","order":"Neogastropoda","family":"Muricidae","genus":"Chicoreus","species":"Chicoreus palmarosae","kingdomKey":1,"phylumKey":52,"classKey":225,"orderKey":982,"familyKey":2304120,"genusKey":2304298,"speciesKey":4365662,"datasetKey":"d7dddbf4-2cf0-4f39-9b2a-bb099caae36c","constituentKey":"7ddf754f-d193-4cc9-b351-99906754a03b","parentKey":2304298,"parent":"Chicoreus",                                                                        "basionymKey":5726652,"basionym":"Murex palmarosae Lamarck, 1822","scientificName":"Chicoreus palmarosae (Lamarck, 1822)","canonicalName":"Chicoreus palmarosae","vernacularName":"rose-branch murex","authorship":"(Lamarck, 1822) ","nameType":"SCIENTIFIC","rank":"SPECIES","origin":"SOURCE","taxonomicStatus":"ACCEPTED","nomenclaturalStatus":[],"remarks":"","numDescendants":0,"lastCrawled":"2021-11-29T13:11:38.124+00:00","lastInterpreted":"2021-11-29T12:25:55.066+00:00","issues":["ORIGINAL_NAME_DERIVED"],"synonym":false,"class":"Gastropoda"},
+		  {"key":8154161,                 "nameKey":2358672,"taxonID":"gbif:8154161",                           "kingdom":"Animalia","phylum":"Mollusca","order":"Neogastropoda","family":"Muricidae","genus":"Chicoreus","species":"Chicoreus palmarosae","kingdomKey":1,"phylumKey":52,"classKey":225,"orderKey":982,"familyKey":2304120,"genusKey":2304298,"speciesKey":4365662,"datasetKey":"d7dddbf4-2cf0-4f39-9b2a-bb099caae36c","constituentKey":"7ddf754f-d193-4cc9-b351-99906754a03b","parentKey":2304298,"parent":"Chicoreus","acceptedKey":4365662,"accepted":"Chicoreus palmarosae (Lamarck, 1822)","basionymKey":5726652,"basionym":"Murex palmarosae Lamarck, 1822","scientificName":"Chicoreus palmarosae (Lamarck, 1822)","canonicalName":"Chicoreus palmarosae",                                     "authorship":"(Lamarck, 1822) ","nameType":"SCIENTIFIC","rank":"SPECIES","origin":"SOURCE","taxonomicStatus":"SYNONYM", "nomenclaturalStatus":[],"remarks":"","numDescendants":0,"lastCrawled":"2021-11-29T13:11:38.124+00:00","lastInterpreted":"2021-11-29T12:25:55.080+00:00","issues":["ORIGINAL_NAME_DERIVED"],"synonym":true, "class":"Gastropoda"}]
+	    }
+		*/
 		
 		try {
 			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
@@ -555,6 +597,42 @@ public class DwCSciNameDQ_IT {
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
+		
+		
+		taxonId=""; 
+		scientificName="Chicoreus palmarosae (Lamarck, 1822)"; 
+		kingdom="Animalia"; 
+		phylum="Mollusca"; 
+		taxonomic_class="Gastropoda"; 
+		order=""; 
+		family="Muricidae"; 
+		subfamily=""; 
+		genus="Chicoreus"; 
+		genericName="Chicoreus"; 
+		subgenus=""; 
+		infragenericEpithet=""; 
+		specificEpithet="palmarosae"; 
+		infraspecificEpithet=""; 
+		cultivarEpithet=""; 
+		vernacularName=""; 
+		scientificNameAuthorship="(Lamarck, 1822)"; 
+		taxonRank="";
+		taxon = new Taxon();
+		taxon.setTaxonID(taxonId);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		taxon.setKingdom(kingdom);
+		taxon.setPhylum(phylum);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setFamily(family);
+		taxon.setGenus(subgenus);
+		taxon.setGenericName(genericName);
+		taxon.setSpecificEpithet(specificEpithet);
+		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("urn:lsid:marinespecies.org:taxname:208134",response.getValue().getObject().get("dwc:taxonID"));		
+		
 		
         // TODO: Debug, returning lookup taxonID for taxon NOT_AMENDED No exact match found for provided taxon in WORMS.
         // for Babelomurex benoiti (Tiberi, 1855)  should be urn:lsid:marinespecies.org:taxname:234156
@@ -1023,7 +1101,9 @@ public class DwCSciNameDQ_IT {
 		String phylclass=""; 
 		String order=""; 
 		String family="";
-		DQResponse<ComplianceValue>result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		String subfamily="";
+		String genus="";
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
@@ -1032,7 +1112,9 @@ public class DwCSciNameDQ_IT {
 		phylclass="";
 		order="";
 		family="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1042,7 +1124,9 @@ public class DwCSciNameDQ_IT {
 		phylclass="Mamalia";
 		order="Carnivora";
 		family="Muricidae";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1052,7 +1136,9 @@ public class DwCSciNameDQ_IT {
 		phylclass="Insecta";
 		order="Coleoptera"; 
 		family="Curculionidae";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1061,7 +1147,9 @@ public class DwCSciNameDQ_IT {
 		phylclass="Magnoliopsida"; 
 		order="Myrtales"; 
 		family="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1071,7 +1159,9 @@ public class DwCSciNameDQ_IT {
 		phylclass="Magnoliopsida";
 		order="";
 		family="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1083,7 +1173,9 @@ public class DwCSciNameDQ_IT {
 		phylclass="Magnoliopsida";
 		order="Coleoptera";
 		family="Curculionidae";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, null);
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());

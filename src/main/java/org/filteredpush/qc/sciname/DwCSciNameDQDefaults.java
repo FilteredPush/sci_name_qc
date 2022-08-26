@@ -516,9 +516,12 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:class") String taxonmic_class, 
     		@ActedUpon("dwc:order") String order,
-    		@ActedUpon("dwc:family") String family 
+    		@ActedUpon("dwc:family") String family,
+    		@ActedUpon("dwc:subfamily") String subfamily,
+    		@ActedUpon("dwc:genus") String genus
+    		
     ) {
-        return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, family, null);
+        return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, family, subfamily, genus, null);
     }
     
 }

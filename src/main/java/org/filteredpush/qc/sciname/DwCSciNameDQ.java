@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -502,10 +503,12 @@ public class DwCSciNameDQ {
 					} 
 					logger.debug(matchList.size());
 					if (matchList.size()>0) {
+						result.addComment(matchList.size() + " potential matches returned from authority.");
 						boolean hasMatch = false;
 						int matchCounter = 0;
 						Map<String,String> kvp = new HashMap<String,String>();
 						Iterator<NameUsage> i = matchList.iterator();
+						Set<String> matchedGUIDS = new HashSet<String>();   // to handle duplicate identical records in GBIF
 						while (i.hasNext()) { 
 							NameUsage match = i.next();
 							logger.debug(match.getCanonicalName());
@@ -522,6 +525,7 @@ public class DwCSciNameDQ {
 								logger.debug(match.getCanonicalName());
 								logger.debug(match.getAuthorship());
 								logger.debug(match.getAuthorshipStringSimilarity());
+								logger.debug(taxon.getScientificNameAuthorship());
 								boolean authorshipOK = false;
 								if (!SciNameUtils.isEmpty(taxon.getScientificNameAuthorship())) { 
 									if (match.getAuthorComparator()==null) { 
@@ -558,10 +562,48 @@ public class DwCSciNameDQ {
 									authorshipOK = true; // no basis to compare, assume ok.
 								}
 								logger.debug(match.getGuid());
-								if (!SciNameUtils.isEmpty(match.getGuid()) && authorshipOK) { 
-									hasMatch=true;
-									matchCounter++;
-									kvp.put("dwc:taxonID", match.getGuid());
+								if (!SciNameUtils.isEmpty(match.getGuid()) && authorshipOK) {
+									if (sourceAuthority.isGBIFChecklist()) { 
+										logger.debug(match.getKey());
+										logger.debug(match.getAcceptedKey());
+										// handle duplicate records in GBIF
+										// assuming that GBIF results are sorted so that the accepted name comes before identical synonym records.
+										if (!matchedGUIDS.contains(Integer.toString(match.getAcceptedKey()))) {
+											hasMatch=true;
+											matchCounter++;
+											kvp.put("dwc:taxonID", match.getGuid());
+											matchedGUIDS.add(Integer.toString(match.getKey()));
+										} else {  
+											logger.debug("Additional potential match has accepted key of previous match, skipping.");
+											result.addComment("Match has accepted key of a previous match, treating as duplicate.");
+										}
+									} else { 
+										hasMatch=true;
+										matchCounter++;
+										kvp.put("dwc:taxonID", match.getGuid());
+									}
+								}
+							} else { 
+								if (! SciNameUtils.isEqualOrNonEmptyES(taxon.getKingdom(), match.getKingdom())) { 
+									result.addComment("Mismatch in Kingdom [" + taxon.getKingdom() + "] authority has [" + match.getKingdom() +"]");
+								}
+								if (!(SciNameUtils.isEqualOrNonEmptyES(taxon.getPhylum(), match.getPhylum()))) { 
+									result.addComment("Mismatch in Phylum [" + taxon.getPhylum() + "] authority has [" + match.getPhylum() +"]");
+								}
+								if (!(SciNameUtils.isEqualOrNonEmptyES(taxon.getTaxonomic_class(), match.getClazz()))) { 
+									result.addComment("Mismatch in Class [" + taxon.getTaxonomic_class() + "] authority has [" + match.getClazz() +"]");
+								}
+								if (!(SciNameUtils.isEqualOrNonEmptyES(taxon.getOrder(), match.getOrder()))) { 
+									result.addComment("Mismatch in Order [" + taxon.getOrder() + "] authority has [" + match.getOrder() +"]");
+								}
+								if (!(SciNameUtils.isEqualOrNonEmptyES(taxon.getFamily(), match.getFamily()))) { 
+									result.addComment("Mismatch in Family [" + taxon.getFamily() + "] authority has [" + match.getFamily() +"]");
+								}
+								if (!(SciNameUtils.isEqualOrNonEmptyES(taxon.getGenus(), match.getGenus()))) { 
+									result.addComment("Mismatch in Genus [" + taxon.getGenus() + "] authority has [" + match.getGenus() +"]");
+								}
+								if (!(SciNameUtils.isEqualOrNonEmpty(lookMeUp, match.getCanonicalName()))) { 
+									result.addComment("Mismatch in Name [" + lookMeUp + "] authority has [" + match.getCanonicalName() +"]");
 								}
 							}
 						}
@@ -2109,6 +2151,8 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:order") String order,
     		@ActedUpon("dwc:family") String family, 
+    		@ActedUpon("dwc:subfamily") String subfamily,
+    		@ActedUpon("dwc:genus") String genus,
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
     ) {
     	DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
@@ -2134,10 +2178,14 @@ public class DwCSciNameDQ {
 
     	String lowestRankingTaxon = null;
     	String lowestRank = null;
-    	if (!SciNameUtils.isEmpty(family)) { 
-    		lowestRankingTaxon = family;
-    		lowestRank = "Family";
+    	if (!SciNameUtils.isEmpty(genus)) { 
+    		lowestRankingTaxon = genus;
+    		lowestRank = "Genus";
     	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(subfamily)) { 
+    		lowestRankingTaxon = subfamily;
+    		lowestRank = "Subfamily";
+    	}     	
     	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(family)) { 
     		lowestRankingTaxon = family;
     		lowestRank = "Family";
