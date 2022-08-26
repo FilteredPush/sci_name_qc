@@ -31,14 +31,20 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.services.GBIFService;
+import org.filteredpush.qc.sciname.services.GNIService;
 import org.filteredpush.qc.sciname.services.Validator;
 import org.filteredpush.qc.sciname.services.WoRMSService;
 import org.filteredpush.qc.sciname.services.ZooBankService;
 import org.gbif.nameparser.NameParserGBIF;
+import org.gbif.nameparser.api.NameParser;
+import org.gbif.nameparser.api.NameType;
 import org.gbif.nameparser.api.ParsedName;
+import org.gbif.nameparser.api.Rank;
+import org.gbif.nameparser.api.UnparsableNameException;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.LookupResult;
+import edu.harvard.mcz.nametools.NameAuthorshipParse;
 import edu.harvard.mcz.nametools.NameUsage;
 
 /**
@@ -344,4 +350,54 @@ public class SciNameUtils {
 		
 		System.out.println(simpleGBIFGuidLookup("Buccinum canetae","Clench & Aguayo"));
 	}
+	
+	/**
+	 * Attempt to parse the authorship and the canonical name (name without authorship) out of a scientific name
+	 * by first checking for matches in GNI where the parse is known, and if not found, failing over to using
+	 * GBIF's name parser code.
+	 * 
+	 * @param scientificName the string to attempt to parse
+	 * @return a NameAuthorshipParse object containing the separate canonical name and authorship string parts 
+	 *    of the provided scientific name
+	 * @throws UnparsableNameException if unable to parse
+	 */
+	public static NameAuthorshipParse getNameWithoutAuthorship(String scientificName) throws UnparsableNameException {
+		NameAuthorshipParse result = null;
+
+		boolean parsed = false;
+		try {
+			NameAuthorshipParse gniLookup = GNIService.obtainNameAuthorParse(scientificName);
+			if (gniLookup!=null) { 
+				result = gniLookup;
+				parsed = true;
+			}
+		} catch (IOException e) {
+			logger.debug(e.getMessage(),e);
+		} catch (org.json.simple.parser.ParseException e) {
+			logger.debug(e.getMessage(),e);
+		}
+
+		if (!parsed) { 
+			NameParser parser = new NameParserGBIF();
+			ParsedName parsedName = parser.parse(scientificName, Rank.UNRANKED, null);
+			result = new NameAuthorshipParse();
+			result.setNameWithAuthorship(scientificName);
+			result.setNameWithoutAuthorship(parsedName.canonicalNameWithoutAuthorship());
+			result.setAuthorship(parsedName.authorshipComplete());
+			logger.debug(parsedName.canonicalNameWithoutAuthorship());
+			logger.debug(parsedName.authorshipComplete());
+			try {
+				parser.close();
+				parsed = true;
+			} catch (Exception e) {
+				logger.debug(e);
+			}
+		}
+		if (!parsed) {
+			throw new UnparsableNameException(NameType.SCIENTIFIC, scientificName, "Unable to parse authorship out of scientific name");
+		}
+
+		return result;
+	}
+	
 }

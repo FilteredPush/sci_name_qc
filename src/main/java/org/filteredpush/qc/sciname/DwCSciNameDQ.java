@@ -237,16 +237,14 @@ public class DwCSciNameDQ {
         		NameUsage toValidate = new NameUsage();
         		boolean set = false;
         		try { 
-        			NameParser parser = new NameParserGBIF();
-        			ParsedName parsedName = parser.parse(scientificName, Rank.UNRANKED, null);
-        			toValidate.setScientificName(parsedName.canonicalNameWithoutAuthorship());
-        			toValidate.setAuthorship(parsedName.authorshipComplete());
-        			logger.debug(parsedName.canonicalNameWithoutAuthorship());
-        			logger.debug(parsedName.authorshipComplete());
-        			parser.close();
+        			NameAuthorshipParse parsedName = SciNameUtils.getNameWithoutAuthorship(scientificName);
+        			toValidate.setScientificName(parsedName.getNameWithoutAuthorship());
+        			toValidate.setAuthorship(parsedName.getAuthorship());
+        			logger.debug(parsedName.getNameWithoutAuthorship());
+        			logger.debug(parsedName.getAuthorship());
         			set = true;
         		} catch (UnparsableNameException e) { 
-        			result.addComment("Unable to parse authorship out of provided scientificName, trying GBIF parser service with ["+scientificName+"].");
+        			result.addComment("Unable to parse authorship out of provided scientificName, trying GNI and GBIF parser service with ["+scientificName+"].");
         			logger.debug(e.getMessage(), e);
         			// If local parse fails, try a parse via the GBIF service.
         			// This supports embedding the library in coldfusion for MCZbase, where 
