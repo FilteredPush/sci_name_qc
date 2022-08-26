@@ -81,12 +81,12 @@ Implements the TDWG BDQ TG2 Scientific Name (NAME) tests.
 
 # Include using maven
 
-Not yet available in Maven Central.  
+Available in Maven Central.  
 
     <dependency>
         <groupId>org.filteredpush</groupId>
         <artifactId>sci_name_qc</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </dependency>
 
 
