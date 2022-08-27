@@ -3,6 +3,10 @@ Data Quality library for dwc:scientificName and dwc:scientificNameAuthorship and
 
 Abstracted from the FilteredPush FP-KurationServices Scientific Name Service classes.
 
+DOI: 10.5281/zenodo.7026712
+
+[![DOI](https://zenodo.org/badge/7026712.svg)](https://zenodo.org/badge/latestdoi/7026712)
+
 ## Primitives
 
 ### AuthorNameComparator
