@@ -17,7 +17,13 @@
  */
 package org.filteredpush.qc.sciname;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.datakurator.ffdq.api.DQResponse;
+import org.datakurator.ffdq.api.result.AmendmentValue;
 import org.filteredpush.qc.sciname.services.GBIFService;
+
+import com.squareup.okhttp.logging.HttpLoggingInterceptor.Logger;
 
 /**
  * Identify source authorities for scientific names, handling both specific services
@@ -31,6 +37,8 @@ public class SciNameSourceAuthority {
 	
 	private EnumSciNameSourceAuthority authority;
 	private String authoritySubDataset;
+	
+	private static final Log logger = LogFactory.getLog(SciNameSourceAuthority.class);
 	
 	/**
 	 * Create a SciNameSourceAuthority for the GBIF Backbone Taxonomy.
@@ -63,7 +71,8 @@ public class SciNameSourceAuthority {
 	 * @throws SourceAuthorityException if the string is not matched to the enumeration, or if the specified
 	 *   source authority requires the specification of an authoritySubDataset.
 	 */
-	public SciNameSourceAuthority(String authorityString) throws SourceAuthorityException { 
+	public SciNameSourceAuthority(String authorityString) throws SourceAuthorityException {
+		logger.debug(authorityString);
 	    if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName())) {
 	    	throw new SourceAuthorityException("You must specify which GBIF checklist you wish to use with " + EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName());
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.WORMS.getName())) {
@@ -84,6 +93,8 @@ public class SciNameSourceAuthority {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_ITIS;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_UKSI.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_UKSI;	
+	    } else if (authorityString.toUpperCase().startsWith("HTTPS://INVALID/")) { 
+	    	throw new SourceAuthorityException("Invalid SourceAuthority [" + authorityString);
 	    } else { 
 	    	throw new SourceAuthorityException("Unable to construct a SourceAuthority from string [" + authorityString);
 	    }
