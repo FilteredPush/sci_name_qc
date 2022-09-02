@@ -68,6 +68,7 @@ import org.datakurator.ffdq.api.result.*;
  * #122 VALIDATION_GENUS_FOUND f2ce7d55-5b1d-426a-b00e-6d4efe3058ec
  * #46 VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
  * #162 VALIDATION_TAXONRANK_STANDARD 7bdb13a4-8a51-4ee5-be7f-20693fdb183e
+ * #70 VALIDATION_TAXON_UNAMBIGUOUS 4c09f127-737b-4686-82a0-7c8e30841590
  * 
  * #57 AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
@@ -357,12 +358,22 @@ public class DwCSciNameDQ {
 			@Consulted("dwc:scientificNameID") String scientificNameID, 
 			@Consulted("dwc:originalNameUsageID") String originalNameUsageID, 
 			@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID,
-			@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
+			@Parameter(name="bdq:sourceAuthority") String sourceAuthority
 	){
-		return amendmentTaxonidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
-				genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
-				infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
-				scientificNameID, originalNameUsageID, acceptedNameUsageID), sourceAuthority);
+		DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
+		SciNameSourceAuthority sourceAuthorityObject;
+		try {
+			sourceAuthorityObject = new SciNameSourceAuthority(sourceAuthority);
+			result = amendmentTaxonidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
+			genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
+			infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
+			scientificNameID, originalNameUsageID, acceptedNameUsageID), sourceAuthorityObject);
+		} catch (SourceAuthorityException e) {
+			logger.error(e.getMessage());
+			result.addComment("Unable to process:" + e.getMessage());
+			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+		}
+		return result;
 	}
 
 	/**
@@ -464,6 +475,7 @@ public class DwCSciNameDQ {
 				result.addComment("No value provided for any of dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, or dwc:cultivarEpithet.");
 				result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
 			} else { 
+				result.addComment("Provided taxon [" + taxon.toString() + "]");
 				String lookMeUp = taxon.getScientificName();
 				if (SciNameUtils.isEmpty(lookMeUp)) { 
 					lookMeUp = taxon.getGenericName();
@@ -617,6 +629,7 @@ public class DwCSciNameDQ {
 									result.setResultState(ResultState.NOT_AMENDED);
 								} else  {
 									if (replaceExisting) { 
+										logger.debug("Non-standard behavior, may overwrite value and assert AMENDED");
 										// **********
 										// Non-standard behaviour, allows replacement of existing value
 										result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ".");
@@ -630,6 +643,7 @@ public class DwCSciNameDQ {
 										}
 										//  ************
 									} else { 
+										logger.debug("Standard behavior, only asserts FILLED_IN");
 										// Specification states that amendment is to be provided only for an empty taxonID
 										// test for empty dwc:taxonID provided in outermost if statement.
 										result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ".");
@@ -818,6 +832,7 @@ public class DwCSciNameDQ {
 			}
 
 			try {
+				result.addComment("Provided taxon ["+taxon.toString()+"]");
 				if (!SciNameUtils.isEmpty(taxon.getTaxonID())) { 
 					List<NameUsage> matchList = null;
 					if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
@@ -2073,7 +2088,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			} else { 
-        				result.addComment("No exact match to provided " + rank + " found in GBIF backbone taxonomy at rank " + rank + ".");
+        				result.addComment("No exact match to provided " + rank + " ["+ taxon + "] found in GBIF backbone taxonomy at rank " + rank + ".");
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
@@ -2090,7 +2105,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			} else { 
-        				result.addComment("No exact match to provided " + rank +  " found  " + sourceAuthority.getAuthority().getName() + " at rank " + rank + ".");
+        				result.addComment("No exact match to provided " + rank +  "  ["+ taxon + "] found  " + sourceAuthority.getAuthority().getName() + " at rank " + rank + ".");
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
@@ -2106,7 +2121,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			} else { 
-        				result.addComment("No exact match to provided " + rank + " found in WoRMS at rank " + rank + ".");
+        				result.addComment("No exact match to provided " + rank + "  ["+ taxon + "] found in WoRMS at rank " + rank + ".");
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
