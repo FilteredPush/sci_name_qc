@@ -264,4 +264,31 @@ public class Taxon {
 	public void setAcceptedNameUsageID(String acceptedNameUsageID) {
 		this.acceptedNameUsageID = acceptedNameUsageID;
 	}
+	
+	public String toString() { 
+		StringBuilder result = new StringBuilder();
+		result.append(taxonID).append(":");
+		result.append(kingdom).append(":");
+		result.append(phylum).append(":");
+		result.append(taxonomic_class).append(":");
+		result.append(order).append(":");
+		result.append(family).append(":");
+		result.append(subfamily).append(":");
+		result.append(genus).append(":");
+		result.append(subgenus).append(":");
+		result.append(scientificName).append(":");
+		result.append(scientificNameAuthorship).append(":");
+		result.append(genericName).append(":");
+		result.append(specificEpithet).append(":");
+		result.append(infraspecificEpithet).append(":");
+		result.append(taxonRank).append(":");
+		result.append(cultivarEpithet).append(":");
+		result.append(higherClassification).append(":");
+		result.append(vernacularName).append(":");
+		result.append(taxonConceptID).append(":");
+		result.append(scientificNameID).append(":");
+		result.append(originalNameUsageID).append(":");
+		result.append(acceptedNameUsageID).append(":");
+		return result.toString().replaceAll(":[:]+",":");
+	}
 }
