@@ -93,9 +93,11 @@ public class IRMNGService implements Validator {
 				throw new IDFormatException("provided aphiaID is not an integer");
 			}
 			Integer intAphiaID = Integer.parseInt(aphiaID);
+			logger.debug(intAphiaID);
 			TaxonomicDataApi irmngService = new TaxonomicDataApi();
 			irmngService.getApiClient().setBasePath(IRMNGBASEPATH);
 			AphiaRecord ar = irmngService.aphiaRecordByAphiaID(intAphiaID);
+			logger.debug(ar);
 			if (ar !=null && ar.getScientificname()!=null ) { 
 				logger.debug(ar.getScientificname());
 				logger.debug(ar.getAuthority());

@@ -678,13 +678,22 @@ public class DwCSciNameDQ_IT {
         // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
         // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 		
-		SciNameSourceAuthority defaultAuthority = new SciNameSourceAuthority();
-		SciNameSourceAuthority wormsAuthority = null;
+		SciNameSourceAuthority defaultAuthorityAuth = new SciNameSourceAuthority();
+		String defaultAuthority = defaultAuthorityAuth.getName();
+		SciNameSourceAuthority wormsAuthorityAuth = null;
 		try {
-			wormsAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+			wormsAuthorityAuth = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
 		} catch (SourceAuthorityException e) {
 			fail("Unexpected exception:" +  e.getMessage());
 		}
+		String wormsAuthority = wormsAuthorityAuth.getName();
+		SciNameSourceAuthority irmngAuthorityAuth = null;
+		try {
+			irmngAuthorityAuth = new SciNameSourceAuthority(EnumSciNameSourceAuthority.IRMNG);
+		} catch (SourceAuthorityException e) {
+			fail("Unexpected exception:" +  e.getMessage());
+		}
+		String irmngAuthority = irmngAuthorityAuth.getName();
 		
 		String scientificName = "";
 		String kingdom = "";
@@ -788,6 +797,29 @@ public class DwCSciNameDQ_IT {
 		kingdom = "Plantae";
 		taxonomic_class = "Magnoliopsida";
 		scientificName = "Gaimardia Gaudichaud-Beaupré, 1825";  // plant  
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("urn:lsid:marinespecies.org:taxname:216786");
+		taxon.setScientificName("");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,wormsAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// TODO: Implement IRMNG service client, distinct from WORMS client, method names vary. 
+		taxon = new Taxon();
+		taxon.setTaxonID("urn:lsid:irmng.org:taxname:1361721");
+		taxon.setScientificName("");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
+		logger.debug(result.getComment());
+		//assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	
 		// TODO: Specification needs work.  When settled, need coverage of all paths in specification. 
 		
