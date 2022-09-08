@@ -34,6 +34,7 @@ import org.datakurator.ffdq.annotations.*;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.model.ResultState;
 import org.filteredpush.qc.sciname.services.GBIFService;
+import org.filteredpush.qc.sciname.services.IRMNGService;
 import org.filteredpush.qc.sciname.services.ServiceException;
 import org.filteredpush.qc.sciname.services.Validator;
 import org.filteredpush.qc.sciname.services.WoRMSService;
@@ -230,7 +231,15 @@ public class DwCSciNameDQ {
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         			logger.error(e.getMessage(),e);
         		}
-        	} 
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+        		try {
+        			service = new IRMNGService(false);
+        		} catch (IOException e) {
+        			result.addComment("Error setting up IRMNG aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}
+        	}         	
         	if (service==null) { 
         		result.addComment("Source Authority Not Implemented.");
         		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
@@ -508,6 +517,8 @@ public class DwCSciNameDQ {
 						matchList = GBIFService.parseAllNameUsagesFromJSON(matches);					
 					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 						matchList = WoRMSService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
+					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+						matchList = IRMNGService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
 					} else { 
 						throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
 					} 
@@ -888,6 +899,19 @@ public class DwCSciNameDQ {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+						NameUsage taxonAtID;
+						try {
+							taxonAtID = IRMNGService.lookupTaxonByID(lookMeUp);
+							if (taxonAtID.getScientificName().equals(taxon.getScientificName())) { 
+								// matched
+							} else { 
+								// not matched
+							}
+						} catch (IDFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}						
 					} else { 
 						throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
 					} 
@@ -1110,6 +1134,45 @@ public class DwCSciNameDQ {
         			if (id.matches("^[0-9]+$")) { 
         				try {
 							NameUsage nameUsage = WoRMSService.lookupTaxonByID(id);
+							if (SciNameUtils.isEmpty(nameUsage.getScientificName())) { 
+								result.setResultState(ResultState.NOT_AMENDED);
+								result.addComment("Unable to find scientificName for provided taxonID in " + sourceAuthority.getName());
+							} else { 
+								if (nameUsage.getGuid().equals(taxonID)) { 
+									result.setResultState(ResultState.FILLED_IN);
+									Map<String,String> amend = new HashMap<String,String>();
+									amend.put("dwc:scientificName", nameUsage.getScientificName());
+									result.setValue(new AmendmentValue(amend));
+								} else { 
+									result.setResultState(ResultState.NOT_AMENDED);
+									result.addComment("Query on taxonID ["+taxonID+"] in " + sourceAuthority.getName() + " returned a different taxonID ["+ nameUsage.getGuid() +"]");
+								}
+							}
+ 						} catch (IDFormatException e) {
+							logger.error(e.getMessage(),e);
+							result.addComment("Error extracting the integer AphiaID from provided taxonID ["+ taxonID +"].");
+							result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+						} catch (ApiException ex) {
+							logger.debug(ex.getMessage());
+							result.addComment("Error looking up scientific name in sourceAuthority: "+ ex.getMessage() );
+							result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+						}
+        			} else { 
+        				result.addComment("Unable to extract the integer AphiaID from provided taxonID ["+ taxonID +"].");
+        				result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        			}
+        		} else { 
+					result.addComment("dwc:taxonID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ taxonID +"].");
+					result.setResultState(ResultState.NOT_AMENDED);
+        		}
+        	} else if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.IRMNG.getName())) {
+        		// IRMNG guid is the LSID.
+        		if (taxonID.startsWith("urn:lsid:irmng.org:taxname:") ) { 
+        			String id = taxonID.replaceFirst("urn:lsid:irmng.org:taxname:", "");
+        			logger.debug(id);
+        			if (id.matches("^[0-9]+$")) { 
+        				try {
+							NameUsage nameUsage = IRMNGService.lookupTaxonByID(id);
 							if (SciNameUtils.isEmpty(nameUsage.getScientificName())) { 
 								result.setResultState(ResultState.NOT_AMENDED);
 								result.addComment("Unable to find scientificName for provided taxonID in " + sourceAuthority.getName());
@@ -1789,6 +1852,26 @@ public class DwCSciNameDQ {
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         			logger.error(e.getMessage(),e);
         		}
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+        		try {
+        			List<NameUsage> matches = IRMNGService.lookupGenus(genus);
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided genus found in IRMNG as a genus.");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided genus found in IRMNG as a genus.");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (ApiException e) {
+        			result.addComment("IRMNG aphia API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		} catch (Exception e) {
+        			result.addComment("Error using IRMNG aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}        		
         	} else { 
         		result.addComment("Source Authority Not Implemented.");
         		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
@@ -2133,6 +2216,26 @@ public class DwCSciNameDQ {
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         			logger.error(e.getMessage(),e);
         		}
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+        		try {
+        			List<NameUsage> matches = IRMNGService.lookupTaxonAtRank(taxon,rank);
+        			if (matches.size()>0) { 
+        				result.addComment("Exact match to provided "+rank+" found in IRMNG at rank " + rank + ".");
+        				result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			} else { 
+        				result.addComment("No exact match to provided " + rank + "  ["+ taxon + "] found in IRMNG at rank " + rank + ".");
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        			}
+        		} catch (ApiException e) {
+        			result.addComment("IRMNG aphia API not available:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        		} catch (Exception e) {
+        			result.addComment("Error using IRMNG aphia API:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+        			logger.error(e.getMessage(),e);
+        		}        		
         	} else { 
         		result.addComment("Source Authority Not Implemented.");
         		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);

@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.IDFormatException;
 import org.junit.Test;
+import org.marinespecies.aphia.v1_0.handler.ApiClient;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
@@ -54,6 +55,12 @@ public class WoRMSServiceTestIT {
 	
 	@Test
 	public void testlookupTaxonByID() { 
+		try { 
+			service = new WoRMSService(false);
+		} catch (IOException e) {
+			logger.error(e.getMessage(),e);
+			fail(e.getMessage());
+		}
 		try {
 			NameUsage response = service.lookupTaxonByID("216786");
 			assertEquals("Cypraea argus Linnaeus, 1758", response.getScientificName());
@@ -248,6 +255,7 @@ public class WoRMSServiceTestIT {
 		NameUsage result;
 		try {
 			result = service.validate(toTest);
+			assertNotNull(result);
 			assertEquals("urn:lsid:marinespecies.org:taxname:986771",result.getGuid());
 			assertEquals("Exact Match",result.getMatchDescription());
 			assertEquals("Exact Match",result.getNameMatchDescription());

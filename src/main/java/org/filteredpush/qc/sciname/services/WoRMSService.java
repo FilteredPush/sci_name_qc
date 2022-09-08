@@ -31,6 +31,7 @@ import org.filteredpush.qc.sciname.SciNameUtils;
 import org.marinespecies.aphia.v1_0.model.AphiaRecord;
 import org.marinespecies.aphia.v1_0.model.AphiaRecordsArray;
 import org.marinespecies.aphia.v1_0.api.TaxonomicDataApi;
+import org.marinespecies.aphia.v1_0.handler.ApiClient;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import java.io.IOException;
@@ -68,6 +69,7 @@ public class WoRMSService implements Validator {
 	public WoRMSService(boolean test) throws IOException {
 		super();
 		wormsService = new TaxonomicDataApi();
+		wormsService.setApiClient(new ApiClient());
 		depth = MAX_RETRIES;  // on test failure, don't retry
 		if (test) { 
 			test();
@@ -98,6 +100,7 @@ public class WoRMSService implements Validator {
 			}
 			Integer intAphiaID = Integer.parseInt(aphiaID);
 			TaxonomicDataApi wormsService = new TaxonomicDataApi();
+			wormsService.setApiClient(new ApiClient());
 			AphiaRecord ar = wormsService.aphiaRecordByAphiaID(intAphiaID);
 			if (ar !=null && ar.getScientificname()!=null ) { 
 				logger.debug(ar.getScientificname());
@@ -119,6 +122,7 @@ public class WoRMSService implements Validator {
 		
 		if (!SciNameUtils.isEmpty(taxon)) { 
 			TaxonomicDataApi wormsService = new TaxonomicDataApi();
+			wormsService.setApiClient(new ApiClient());
 
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, false, 1);
 			if (results!=null && results.size()>0) { 
@@ -166,6 +170,7 @@ public class WoRMSService implements Validator {
 		String id  = null;
 
 		TaxonomicDataApi wormsService = new TaxonomicDataApi();
+		wormsService.setApiClient(new ApiClient());
 
 		try {
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
@@ -218,6 +223,7 @@ public class WoRMSService implements Validator {
 		
 		if (!SciNameUtils.isEmpty(genus)) { 
 			TaxonomicDataApi wormsService = new TaxonomicDataApi();
+			wormsService.setApiClient(new ApiClient());
 
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(genus, false, false, 1);
 			if (results!=null && results.size()>0) { 
@@ -252,6 +258,7 @@ public class WoRMSService implements Validator {
 		
 		if (!SciNameUtils.isEmpty(taxon)) { 
 			TaxonomicDataApi wormsService = new TaxonomicDataApi();
+			wormsService.setApiClient(new ApiClient());
 
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, false, 1);
 			if (results!=null && results.size()>0) { 
@@ -514,6 +521,7 @@ public class WoRMSService implements Validator {
 		LookupResult result  = null;
 
 		TaxonomicDataApi wormsService = new TaxonomicDataApi();
+		wormsService.setApiClient(new ApiClient());
 
 		try {
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
@@ -560,6 +568,7 @@ public class WoRMSService implements Validator {
 			authorNameComparator = AuthorNameComparator.authorNameComparatorFactory(authorship, taxonNameToValidate.getKingdom());
 			ScientificNameComparator scientificNameComparator = new ScientificNameComparator();
 			taxonNameToValidate.setAuthorComparator(authorNameComparator);
+			wormsService.setApiClient(new ApiClient());
 			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxonName, false, false, 1);
 			if (results!=null && results.size()>0) { 
 				// We got at least one result
@@ -750,6 +759,7 @@ public class WoRMSService implements Validator {
 	protected Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
 		Map<String,String> attributes = new HashMap<String,String>();
 		if (ar!=null)  {
+			wormsService.setApiClient(new ApiClient());
 			AphiaRecord wormsRecord = wormsService.aphiaRecordByAphiaID(ar.getAphiaID());
 			if (wormsRecord.isIsBrackish()==null) { 
 				attributes.put("brackish", "");
