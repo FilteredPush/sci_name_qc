@@ -77,6 +77,16 @@ public class SciNameSourceAuthority {
 	    	throw new SourceAuthorityException("You must specify which GBIF checklist you wish to use with " + EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName());
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.WORMS.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
+	    } else if (authorityString.toUpperCase().equals("MARINESPECIES.ORG")) {
+	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
+	    } else if (authorityString.toUpperCase().equals("WORMS")) {
+	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
+	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.IRMNG.getName())) {
+	    	this.authority = EnumSciNameSourceAuthority.IRMNG;	
+	    } else if (authorityString.toUpperCase().equals("IRMNG.ORG")) {
+	    	this.authority = EnumSciNameSourceAuthority.IRMNG;	
+	    } else if (authorityString.toUpperCase().equals("IRMNG")) {
+	    	this.authority = EnumSciNameSourceAuthority.IRMNG;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY;
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_COL.getName())) {
@@ -90,13 +100,13 @@ public class SciNameSourceAuthority {
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_ITIS.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_ITIS;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_PALEOBIOLOGY_DATABASE.getName())) {
-	    	this.authority = EnumSciNameSourceAuthority.GBIF_ITIS;	
+	    	this.authority = EnumSciNameSourceAuthority.GBIF_PALEOBIOLOGY_DATABASE;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_UKSI.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_UKSI;	
 	    } else if (authorityString.toUpperCase().startsWith("HTTPS://INVALID/")) { 
 	    	throw new SourceAuthorityException("Invalid SourceAuthority [" + authorityString);
 	    } else { 
-	    	throw new SourceAuthorityException("Unable to construct a SourceAuthority from string [" + authorityString);
+	    	throw new SourceAuthorityException("Unable to construct a SourceAuthority from string [" + authorityString + "]");
 	    }
 		authoritySubDataset = null;
 		updateDefaultSubAuthorities();

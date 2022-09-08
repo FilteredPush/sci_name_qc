@@ -102,6 +102,8 @@ public class WoRMSServiceTestIT {
 				NameUsage match = i.next();
 				assertEquals(genus,match.getCanonicalName());
 				assertEquals("Genus",match.getRank());
+				assertEquals("urn:lsid:marinespecies.org:taxname:",match.getGuid().substring(0, 35));
+				logger.debug(match.getGuid());
 			}
 
 			genus = "M99995RRx";
