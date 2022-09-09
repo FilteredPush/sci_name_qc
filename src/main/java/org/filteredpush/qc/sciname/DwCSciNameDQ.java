@@ -681,6 +681,9 @@ public class DwCSciNameDQ {
 				} catch (ApiException e) {
 					result.addComment(sourceAuthority.getName() + " API invocation error:" + e.getMessage());
 					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+				} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -934,6 +937,9 @@ public class DwCSciNameDQ {
 								// not matched
 							}
 						} catch (IDFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}						
@@ -1217,7 +1223,7 @@ public class DwCSciNameDQ {
 							logger.error(e.getMessage(),e);
 							result.addComment("Error extracting the integer AphiaID from provided taxonID ["+ taxonID +"].");
 							result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
-						} catch (ApiException ex) {
+						} catch (org.irmng.aphia.v1_0.handler.ApiException ex) {
 							logger.debug(ex.getMessage());
 							result.addComment("Error looking up scientific name in sourceAuthority: "+ ex.getMessage() );
 							result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
@@ -1890,7 +1896,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
-        		} catch (ApiException e) {
+        		} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
         			result.addComment("IRMNG aphia API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		} catch (Exception e) {
@@ -2254,7 +2260,7 @@ public class DwCSciNameDQ {
         				result.setValue(ComplianceValue.NOT_COMPLIANT);
         				result.setResultState(ResultState.RUN_HAS_RESULT);
         			}
-        		} catch (ApiException e) {
+        		} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
         			result.addComment("IRMNG aphia API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		} catch (Exception e) {

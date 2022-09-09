@@ -577,7 +577,7 @@ public class IRMNGService implements Validator {
 					    AphiaRecord ar = i.next();
 					    matches.add(ar);
 					    logger.debug(ar.getScientificname());
-					    logger.debug(ar.getAphiaID());
+					    logger.debug(ar.getIRMNGID());
 					    logger.debug(ar.getAuthority());
 					    logger.debug(ar.getUnacceptreason());
 					    logger.debug(ar.getStatus());
@@ -754,7 +754,7 @@ public class IRMNGService implements Validator {
 	protected Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
 		Map<String,String> attributes = new HashMap<String,String>();
 		if (ar!=null)  {
-			AphiaRecord wormsRecord = irmngService.aphiaRecordByAphiaID(ar.getAphiaID());
+			AphiaRecord wormsRecord = irmngService.aphiaRecordByIRMNGID(ar.getIRMNGID());
 			if (wormsRecord.isIsBrackish()==null) { 
 				attributes.put("brackish", "");
 			} else { 
