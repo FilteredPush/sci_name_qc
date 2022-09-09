@@ -25,7 +25,7 @@ import java.io.IOException;
  * Vernacular
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T18:49:13.673Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:01:52.800Z[GMT]")
 public class Vernacular {
   @SerializedName("vernacular")
   private String vernacular = null;

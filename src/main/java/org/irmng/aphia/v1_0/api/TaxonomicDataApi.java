@@ -1002,7 +1002,7 @@ public class TaxonomicDataApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -1052,10 +1052,12 @@ public class TaxonomicDataApi {
      * @param like Add a &#x27;%&#x27;-sign added after the ScientificName (SQL LIKE function). Default&#x3D;true (optional, default to true)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
+     * @return List&lt;AphiaRecord&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void aphiaRecordsByName(String scientificName, Boolean like, Boolean marineOnly, Integer offset) throws ApiException {
-        aphiaRecordsByNameWithHttpInfo(scientificName, like, marineOnly, offset);
+    public List<AphiaRecord> aphiaRecordsByName(String scientificName, Boolean like, Boolean marineOnly, Integer offset) throws ApiException {
+        ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByNameWithHttpInfo(scientificName, like, marineOnly, offset);
+        return resp.getData();
     }
 
     /**
@@ -1065,12 +1067,13 @@ public class TaxonomicDataApi {
      * @param like Add a &#x27;%&#x27;-sign added after the ScientificName (SQL LIKE function). Default&#x3D;true (optional, default to true)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> aphiaRecordsByNameWithHttpInfo(String scientificName, Boolean like, Boolean marineOnly, Integer offset) throws ApiException {
+    public ApiResponse<List<AphiaRecord>> aphiaRecordsByNameWithHttpInfo(String scientificName, Boolean like, Boolean marineOnly, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByNameValidateBeforeCall(scientificName, like, marineOnly, offset, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<List<AphiaRecord>>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -1084,7 +1087,7 @@ public class TaxonomicDataApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call aphiaRecordsByNameAsync(String scientificName, Boolean like, Boolean marineOnly, Integer offset, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call aphiaRecordsByNameAsync(String scientificName, Boolean like, Boolean marineOnly, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -1106,7 +1109,8 @@ public class TaxonomicDataApi {
         }
 
         com.squareup.okhttp.Call call = aphiaRecordsByNameValidateBeforeCall(scientificName, like, marineOnly, offset, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<List<AphiaRecord>>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
