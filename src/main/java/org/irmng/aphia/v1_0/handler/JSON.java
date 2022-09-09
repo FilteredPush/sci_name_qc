@@ -47,7 +47,7 @@ public class JSON {
     private SqlDateTypeAdapter sqlDateTypeAdapter = new SqlDateTypeAdapter();
     private OffsetDateTimeTypeAdapter offsetDateTimeTypeAdapter = new OffsetDateTimeTypeAdapter();
     private LocalDateTypeAdapter localDateTypeAdapter = new LocalDateTypeAdapter();
-	private BooleanTypeAdapter booleanTypeAdapter new BooleanTypeAdapter();
+	private BooleanTypeAdapter booleanTypeAdapter = new BooleanTypeAdapter();
 
     public static GsonBuilder createGson() {
         GsonFireBuilder fireBuilder = new GsonFireBuilder()

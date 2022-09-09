@@ -96,7 +96,7 @@ public class IRMNGService implements Validator {
 			logger.debug(intAphiaID);
 			TaxonomicDataApi irmngService = new TaxonomicDataApi();
 			irmngService.getApiClient().setBasePath(IRMNGBASEPATH);
-			AphiaRecord ar = irmngService.aphiaRecordByAphiaID(intAphiaID);
+			AphiaRecord ar = irmngService.aphiaRecordByIRMNGID(intAphiaID);
 			logger.debug(ar);
 			if (ar !=null && ar.getScientificname()!=null ) { 
 				logger.debug(ar.getScientificname());
