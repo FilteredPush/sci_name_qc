@@ -32,10 +32,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.IDFormatException;
 import org.filteredpush.qc.sciname.SciNameUtils;
-import org.marinespecies.aphia.v1_0.api.TaxonomicDataApi;
-import org.marinespecies.aphia.v1_0.handler.ApiException;
-import org.marinespecies.aphia.v1_0.model.AphiaRecord;
-import org.marinespecies.aphia.v1_0.model.AphiaRecordsArray;
+import org.irmng.aphia.v1_0.api.TaxonomicDataApi;
+import org.irmng.aphia.v1_0.handler.ApiException;
+import org.irmng.aphia.v1_0.model.AphiaRecord;
+import org.irmng.aphia.v1_0.model.AphiaRecordsArray;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
 import edu.harvard.mcz.nametools.ICZNAuthorNameComparator;
