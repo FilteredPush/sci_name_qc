@@ -21,7 +21,7 @@ import org.irmng.aphia.v1_0.model.AphiaRecord;
  * AphiaRecordsArray
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:01:52.800Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")
 public class AphiaRecordsArray extends ArrayList<AphiaRecord> {
 
   @Override

@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import org.irmng.aphia.v1_0.model.AphiaRank;
 import org.irmng.aphia.v1_0.model.AphiaRecord;
+import org.irmng.aphia.v1_0.model.AphiaRecordsArray;
 import org.irmng.aphia.v1_0.model.Classification;
 import org.threeten.bp.OffsetDateTime;
 
@@ -913,11 +914,11 @@ public class TaxonomicDataApi {
      * For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.&lt;br/&gt;This allows you to (fuzzy) match multiple names in one call. Limited to 50 names at once for performance reasons
      * @param scientificnames Names to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
-     * @return List&lt;AphiaRecord&gt;
+     * @return List&lt;AphiaRecordsArray&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<AphiaRecord> aphiaRecordsByMatchNames(List<String> scientificnames, Boolean marineOnly) throws ApiException {
-        ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByMatchNamesWithHttpInfo(scientificnames, marineOnly);
+    public List<AphiaRecordsArray> aphiaRecordsByMatchNames(List<String> scientificnames, Boolean marineOnly) throws ApiException {
+        ApiResponse<List<AphiaRecordsArray>> resp = aphiaRecordsByMatchNamesWithHttpInfo(scientificnames, marineOnly);
         return resp.getData();
     }
 
@@ -926,12 +927,12 @@ public class TaxonomicDataApi {
      * For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.&lt;br/&gt;This allows you to (fuzzy) match multiple names in one call. Limited to 50 names at once for performance reasons
      * @param scientificnames Names to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
-     * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
+     * @return ApiResponse&lt;List&lt;AphiaRecordsArray&gt;&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<AphiaRecord>> aphiaRecordsByMatchNamesWithHttpInfo(List<String> scientificnames, Boolean marineOnly) throws ApiException {
+    public ApiResponse<List<AphiaRecordsArray>> aphiaRecordsByMatchNamesWithHttpInfo(List<String> scientificnames, Boolean marineOnly) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByMatchNamesValidateBeforeCall(scientificnames, marineOnly, null, null);
-        Type localVarReturnType = new TypeToken<List<AphiaRecord>>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<AphiaRecordsArray>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -944,7 +945,7 @@ public class TaxonomicDataApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call aphiaRecordsByMatchNamesAsync(List<String> scientificnames, Boolean marineOnly, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
+    public com.squareup.okhttp.Call aphiaRecordsByMatchNamesAsync(List<String> scientificnames, Boolean marineOnly, final ApiCallback<List<AphiaRecordsArray>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -966,7 +967,7 @@ public class TaxonomicDataApi {
         }
 
         com.squareup.okhttp.Call call = aphiaRecordsByMatchNamesValidateBeforeCall(scientificnames, marineOnly, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<List<AphiaRecord>>(){}.getType();
+        Type localVarReturnType = new TypeToken<List<AphiaRecordsArray>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

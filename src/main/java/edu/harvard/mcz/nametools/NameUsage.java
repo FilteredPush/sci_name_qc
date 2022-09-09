@@ -249,12 +249,12 @@ public class NameUsage implements LinneanClassification {
 	}	
 	
 	/**
-	 * Construct a NameUsage instance from an AphiaRecord instance,
+	 * Construct a NameUsage instance from an marinespecies.org AphiaRecord instance,
 	 * assumes that the source authority is WoRMS.
 	 * 
 	 * @param record an AphiaRecord from WoRMS.
 	 */
-	public NameUsage(AphiaRecord record) {
+	public NameUsage(org.marinespecies.aphia.v1_0.model.AphiaRecord record) {
 		init();
 		authorComparator = new ICZNAuthorNameComparator(.75d,.5d);
 		this.setSourceAuthority("WoRMS (World Register of Marine Species)");
@@ -274,6 +274,33 @@ public class NameUsage implements LinneanClassification {
 		fixAuthorship();
         nullBlanks();
 	}	
+	
+	/**
+	 * Construct a NameUsage instance from an irmng.org AphiaRecord instance,
+	 * assumes that the source authority is IRMNG.
+	 * 
+	 * @param record an AphiaRecord from IRMNG.
+	 */
+	public NameUsage(org.irmng.aphia.v1_0.model.AphiaRecord record) {
+		init();
+		authorComparator = new ICZNAuthorNameComparator(.75d,.5d);
+		this.setSourceAuthority("IRMNG (Interim Register Marine and Non-marine Genera)");
+		this.setScientificName(record.getScientificname());
+		this.setRank(record.getRank());
+		this.setAuthorship(record.getAuthority());
+		this.setAcceptedName(record.getValidName());
+		this.setKingdom(record.getKingdom());
+		this.setPhylum(record.getPhylum());
+		this.setTclass(record.getPropertyClass());
+		this.setOrder(record.getOrder());
+		this.setFamily(record.getFamily());
+		this.setGenus(record.getGenus());
+		this.setGuid("urn:lsid:irmng.org:taxname:" + Integer.toString(record.getIRMNGID()));
+		this.setTaxonomicStatus(record.getStatus());
+		this.setUnacceptReason(record.getUnacceptreason());
+		fixAuthorship();
+        nullBlanks();
+	}		
 	
 	public static String csvHeaderLine() { 
 		return "\"scientificName\",\"canonicalName\",\"authorship\"," +

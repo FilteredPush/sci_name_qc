@@ -25,7 +25,7 @@ import java.io.IOException;
  * AphiaRank
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:01:52.800Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")
 public class AphiaRank {
   @SerializedName("taxonRankID")
   private Integer taxonRankID = null;
