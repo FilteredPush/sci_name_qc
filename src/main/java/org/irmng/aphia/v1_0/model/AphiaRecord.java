@@ -52,7 +52,7 @@ public class AphiaRecord {
   private String unacceptreason = null;
 
   @SerializedName("valid_IRMNG_ID")
-  private Boolean validIRMNGID = null;
+  private Integer validIRMNGID = null;
 
   @SerializedName("valid_name")
   private String validName = null;
@@ -252,7 +252,7 @@ public class AphiaRecord {
     this.unacceptreason = unacceptreason;
   }
 
-  public AphiaRecord validIRMNGID(Boolean validIRMNGID) {
+  public AphiaRecord validIRMNGID(Integer validIRMNGID) {
     this.validIRMNGID = validIRMNGID;
     return this;
   }
@@ -262,11 +262,11 @@ public class AphiaRecord {
    * @return validIRMNGID
   **/
   @Schema(description = "the IRMNG_ID (for the scientificname) of the currently accepted taxon. NULL if there is no currently accepted taxon.")
-  public Boolean isValidIRMNGID() {
+  public Integer getValidIRMNGID() {
     return validIRMNGID;
   }
 
-  public void setValidIRMNGID(Boolean validIRMNGID) {
+  public void setValidIRMNGID(Integer validIRMNGID) {
     this.validIRMNGID = validIRMNGID;
   }
 

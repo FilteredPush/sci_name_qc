@@ -47,6 +47,7 @@ public class JSON {
     private SqlDateTypeAdapter sqlDateTypeAdapter = new SqlDateTypeAdapter();
     private OffsetDateTimeTypeAdapter offsetDateTimeTypeAdapter = new OffsetDateTimeTypeAdapter();
     private LocalDateTypeAdapter localDateTypeAdapter = new LocalDateTypeAdapter();
+	private BooleanTypeAdapter booleanTypeAdapter new BooleanTypeAdapter();
 
     public static GsonBuilder createGson() {
         GsonFireBuilder fireBuilder = new GsonFireBuilder()
@@ -76,6 +77,7 @@ public class JSON {
             .registerTypeAdapter(java.sql.Date.class, sqlDateTypeAdapter)
             .registerTypeAdapter(OffsetDateTime.class, offsetDateTimeTypeAdapter)
             .registerTypeAdapter(LocalDate.class, localDateTypeAdapter)
+            .registerTypeAdapter(Boolean.class, booleanTypeAdapter)
             .create();
     }
 
@@ -358,6 +360,41 @@ public class JSON {
     public JSON setSqlDateFormat(DateFormat dateFormat) {
         sqlDateTypeAdapter.setFormat(dateFormat);
         return this;
+    }
+
+    /**
+     * Gson TypeAdapter for Boolean serialized as 0/1/null
+     */
+    public class BooleanTypeAdapter extends TypeAdapter<Boolean> {
+
+        @Override
+        public void write(JsonWriter out, Boolean value) throws IOException {
+            if (value == null) {
+                out.nullValue();
+            } else {
+            	if (value) { 
+            		out.value(1);
+            	} else { 
+            		out.value(0);
+            	}
+            }
+        }
+
+        @Override
+        public Boolean read(JsonReader in) throws IOException {
+            switch (in.peek()) {
+                case NULL:
+                    in.nextNull();
+                    return null;
+                default:
+                    Integer inValue = in.nextInt();
+                    Boolean returnValue = true;
+                    if (inValue == 0) { 
+                    	returnValue = false;
+                    }
+                    return returnValue;
+            }
+        }
     }
 
 }
