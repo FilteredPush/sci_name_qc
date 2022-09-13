@@ -821,8 +821,8 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
 		logger.debug(result.getComment());
-		//assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
-		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	
 		// TODO: Specification needs work.  When settled, need coverage of all paths in specification. 
 		

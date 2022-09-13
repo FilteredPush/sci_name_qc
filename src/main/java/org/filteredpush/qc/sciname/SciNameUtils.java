@@ -64,6 +64,38 @@ public class SciNameUtils {
 		
 	} 
 	
+	public static boolean validateTaxonID(String taxonID, SciNameSourceAuthority sourceAuthority) throws IDFormatException, UnsupportedSourceAuthorityException, ApiException, org.irmng.aphia.v1_0.handler.ApiException { 
+		boolean result = false;
+		if (sourceAuthority.isGBIFChecklist()) { 
+			String id = taxonID.replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "");
+			id = id.replace("https://www.gbif.org/species/", "");
+			String matches = GBIFService.fetchTaxonByID(id, sourceAuthority.getAuthoritySubDataset());
+        	List<NameUsage>matchList = GBIFService.parseAllNameUsagesFromJSON(matches);
+        	if (matchList.size()==1) { 
+        		logger.debug(matchList.get(0).getScientificName());
+        		result = true;
+        	}
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
+			String id = taxonID.replace("urn:lsid:marinespecies.org:taxname:", "");
+			NameUsage match = WoRMSService.lookupTaxonByID(id);
+			if (match!=null) { 
+				logger.debug(match.getScientificName());
+				result=true;
+			}
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+			String id = taxonID.replace("urn:lsid:irmng.org:taxname:", "");
+			NameUsage match = IRMNGService.lookupTaxonByID(id);
+			if (match!=null) { 
+				logger.debug(match.getScientificName());
+				result=true;
+			}
+		} else { 
+			throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
+		} 
+        	
+		return result;
+	}
+	
 	/**
 	 * Check to see if a name is the same as another name or the other name's synonyms.
 	 * 

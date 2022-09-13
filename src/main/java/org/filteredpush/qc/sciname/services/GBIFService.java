@@ -271,19 +271,19 @@ public class GBIFService implements Validator {
 		URL url;
 		if (!SciNameUtils.isEmpty(taxonID)) { 
 			if (!taxonID.matches("^[0-9]+$")) { 
-				throw new IDFormatException("provided aphiaID is not an integer");
+				throw new IDFormatException("provided taxonID is not an integer");
 			}
-		try {
-			url = new URL(GBIF_SERVICE + "/species/" + taxonID + datasetKey);
-			URLConnection connection = url.openConnection();
-			String line;
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			while((line = reader.readLine()) != null) {
-				result.append(line);
+			try {
+				url = new URL(GBIF_SERVICE + "/species/" + taxonID + datasetKey);
+				URLConnection connection = url.openConnection();
+				String line;
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				while((line = reader.readLine()) != null) {
+					result.append(line);
+				}
+			} catch (IOException e) {
+				logger.error(e.getMessage());
 			}
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-		}
 		} else { 
 			throw new IDFormatException("An empty value was provided for taxonID");
 		}
