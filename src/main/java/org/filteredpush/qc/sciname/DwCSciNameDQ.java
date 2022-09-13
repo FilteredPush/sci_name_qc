@@ -2304,7 +2304,7 @@ public class DwCSciNameDQ {
     ) {
     	DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-    	//TODO:  Implement specification
+    	// Specification
     	// EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
     	// is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
     	// of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
@@ -2325,6 +2325,7 @@ public class DwCSciNameDQ {
 
     	String lowestRankingTaxon = null;
     	String lowestRank = null;
+    	Map<String,String> parentsOfHighers = new HashMap<String,String>();
     	if (!SciNameUtils.isEmpty(genus)) { 
     		lowestRankingTaxon = genus;
     		lowestRank = "Genus";
@@ -2344,6 +2345,7 @@ public class DwCSciNameDQ {
     	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(taxonomic_class)) { 
     		lowestRankingTaxon = taxonomic_class;
     		lowestRank = "Class";
+
     	} 
     	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(phylum)) { 
     		lowestRankingTaxon = phylum;
@@ -2369,6 +2371,8 @@ public class DwCSciNameDQ {
     					lookupResult = GBIFService.lookupTaxonAtRank(lowestRankingTaxon, sourceAuthority.getAuthoritySubDataset(), lowestRank, 10);
     				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
     					lookupResult = WoRMSService.lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
+    				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) { 
+    					lookupResult = IRMNGService.lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
     				} else {
     					throw new UnsupportedSourceAuthorityException("Authority " + sourceAuthority.getName() + " Not implemented.");
     				}
@@ -2386,28 +2390,28 @@ public class DwCSciNameDQ {
     					if (lowestRank.equalsIgnoreCase("Kingdom")) { 
     						hasMatch=true;
     					} else if (lowestRank.equalsIgnoreCase("Phylum")) {
-    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
     							hasMatch=true;
     						} 
     					} else if (lowestRank.equalsIgnoreCase("Class")) {
-    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
-    							if (SciNameUtils.sameOrSynoym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								hasMatch=true;
     							}
     						} 
     					} else if (lowestRank.equalsIgnoreCase("Order")) {
-    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
-    							if (SciNameUtils.sameOrSynoym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
-    								if (SciNameUtils.sameOrSynoym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									hasMatch=true;
     								}
     							}
     						} 
     					} else if (lowestRank.equalsIgnoreCase("Family")) {
-    						if (SciNameUtils.sameOrSynoym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
-    							if (SciNameUtils.sameOrSynoym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
-    								if (SciNameUtils.sameOrSynoym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
-    									if (SciNameUtils.sameOrSynoym(order, aResult.getOrder(), "Order", sourceAuthority)) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
     										hasMatch=true;
     									}
     								}
@@ -2415,9 +2419,15 @@ public class DwCSciNameDQ {
     						} 
     					}
     					if (hasMatch) { 
-    						result.addComment("Matching classification found in " + sourceAuthority.getAuthority().getName());
+    						result.addComment("Matches to higher ranks found in " + sourceAuthority.getAuthority().getName());
+    						BooleanWithComment checkHierarchy = SciNameUtils.isSameClassificationInAuthority(kingdom, phylum, taxonomic_class, order, family, subfamily, genus, sourceAuthority);
     						result.setResultState(ResultState.RUN_HAS_RESULT);
-    						result.setValue(ComplianceValue.COMPLIANT);
+    						result.addComment(checkHierarchy.getComment());
+    						if (checkHierarchy.getBooleanValue()) { 
+    							result.setValue(ComplianceValue.COMPLIANT);
+    						} else { 
+    							result.setValue(ComplianceValue.NOT_COMPLIANT);
+    						}
     					} else { 
     						result.addComment("No matching classification found in " + sourceAuthority.getAuthority().getName());
     						result.setResultState(ResultState.RUN_HAS_RESULT);
@@ -2431,6 +2441,9 @@ public class DwCSciNameDQ {
     				result.addComment("Lookup in source Authority " + sourceAuthority.getAuthority().getName() + " Not implemented");
     				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				} catch (ApiException e) {
+    				result.addComment("Error looking up taxon in " + sourceAuthority.getAuthority().getName());
+    				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+				} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
     				result.addComment("Error looking up taxon in " + sourceAuthority.getAuthority().getName());
     				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				}

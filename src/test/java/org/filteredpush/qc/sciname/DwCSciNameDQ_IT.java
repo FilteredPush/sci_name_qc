@@ -17,6 +17,8 @@ package org.filteredpush.qc.sciname;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.api.DQResponse;
@@ -28,6 +30,7 @@ import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.Rank;
 import org.gbif.nameparser.api.UnparsableNameException;
 import org.junit.Test;
+import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 /**
  * Tests of DwCSciNameDQ which require online access to remote services, named, to fit the expectations of the
@@ -1175,7 +1178,8 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 				
-		kingdom=""; phylum=""; 
+		kingdom=""; 
+		phylum=""; 
 		phylclass="Magnoliopsida"; 
 		order="Myrtales"; 
 		family="";
@@ -1198,8 +1202,6 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 
-		// TODO: Not Working yet.
-		/*
 		kingdom="Animalia";
 		phylum="Arthropoda";
 		phylclass="Magnoliopsida";
@@ -1211,9 +1213,9 @@ public class DwCSciNameDQ_IT {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
-		*/
 		
 	}
+	
 
 
 }

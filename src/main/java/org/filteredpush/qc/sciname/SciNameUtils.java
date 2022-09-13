@@ -19,8 +19,10 @@ package org.filteredpush.qc.sciname;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -32,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.GNIService;
+import org.filteredpush.qc.sciname.services.IRMNGService;
 import org.filteredpush.qc.sciname.services.Validator;
 import org.filteredpush.qc.sciname.services.WoRMSService;
 import org.filteredpush.qc.sciname.services.ZooBankService;
@@ -71,8 +74,13 @@ public class SciNameUtils {
 	 * @return true if either name is empty, the two are the same, or if a synonym of compareToName found in sourceAuthority is the same as name. Otherwise false.
 	 * @throws IOException on lookup error
 	 * @throws ApiException on lookup error
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException 
 	 */
-	public static boolean sameOrSynoym(String name, String compareToName, String atRank, SciNameSourceAuthority sourceAuthority) throws IOException, ApiException {
+	public static boolean sameOrSynonym(String name, String compareToName, String atRank, SciNameSourceAuthority sourceAuthority) throws IOException, ApiException, org.irmng.aphia.v1_0.handler.ApiException {
+			return sameOrSynonym(compareToName, name, atRank, sourceAuthority, true);
+	}
+	
+	private static boolean sameOrSynonym(String name, String compareToName, String atRank, SciNameSourceAuthority sourceAuthority, boolean tryReversed) throws IOException, ApiException, org.irmng.aphia.v1_0.handler.ApiException {
 		logger.debug(name);
 		logger.debug(compareToName);
 		boolean result = false;
@@ -87,6 +95,8 @@ public class SciNameUtils {
 				lookupResults = GBIFService.lookupTaxonAtRank(compareToName, sourceAuthority.getAuthoritySubDataset(), atRank, 50);
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
 				lookupResults = WoRMSService.lookupTaxonAtRank(compareToName, atRank);
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) { 
+				lookupResults = IRMNGService.lookupTaxonAtRank(compareToName, atRank);
 			}
 			if (lookupResults!=null) { 
 				Iterator<NameUsage> i = lookupResults.iterator();
@@ -115,6 +125,10 @@ public class SciNameUtils {
 					}
 				}
 			}
+		}
+		
+		if (result==false && tryReversed) { 
+			result = sameOrSynonym(compareToName, name, atRank, sourceAuthority, false);
 		}
 		
 		return result;
@@ -397,6 +411,246 @@ public class SciNameUtils {
 			throw new UnparsableNameException(NameType.SCIENTIFIC, scientificName, "Unable to parse authorship out of scientific name");
 		}
 
+		return result;
+	}
+	
+	public static BooleanWithComment isSameClassificationInAuthority(String kingdom, String phylum, String taxonomic_class, String order, String family, String subfamily, String genus, SciNameSourceAuthority sourceAuthority)
+			throws IOException, ApiException, org.irmng.aphia.v1_0.handler.ApiException, UnsupportedSourceAuthorityException 
+	{ 
+		BooleanWithComment result = new BooleanWithComment(false, "");
+		if (kingdom==null) { kingdom = ""; }
+		if (phylum==null) { phylum = ""; }
+		if (taxonomic_class==null) { taxonomic_class = ""; }
+		if (order==null) { order = ""; }
+		if (family==null) { family = ""; }
+		if (subfamily==null) { subfamily = ""; }
+		if (genus==null) { genus = ""; }
+		
+    	String lowestRankingTaxon = null;
+    	String lowestRank = null;
+    	if (!SciNameUtils.isEmpty(genus)) { 
+    		lowestRankingTaxon = genus;
+    		lowestRank = "Genus";
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(subfamily)) { 
+    		lowestRankingTaxon = subfamily;
+    		lowestRank = "Subfamily";
+    	}     	
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(family)) { 
+    		lowestRankingTaxon = family;
+    		lowestRank = "Family";
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(order)) { 
+    		lowestRankingTaxon = order;
+    		lowestRank = "Order";
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(taxonomic_class)) { 
+    		lowestRankingTaxon = taxonomic_class;
+    		lowestRank = "Class";
+
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(phylum)) { 
+    		lowestRankingTaxon = phylum;
+    		lowestRank = "Phylum";
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(kingdom)) { 
+    		lowestRankingTaxon = kingdom;
+    		lowestRank = "Kingdom";
+    	} 
+    	logger.debug(lowestRank);
+    	logger.debug(lowestRankingTaxon);
+		List<NameUsage> lookupResult = null;
+		if (sourceAuthority.isGBIFChecklist()) { 
+			lookupResult = GBIFService.lookupTaxonAtRank(lowestRankingTaxon, sourceAuthority.getAuthoritySubDataset(), lowestRank, 10);
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
+			lookupResult = WoRMSService.lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) { 
+			lookupResult = IRMNGService.lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
+		} else {
+			throw new UnsupportedSourceAuthorityException("Authority " + sourceAuthority.getName() + " Not implemented.");
+		}
+		if (lookupResult!=null) { 
+			logger.debug(lookupResult.size());
+			if (lowestRank=="Kingdom") { 
+				result.setBooleanValue(true);
+				result.addComment("Matched Kingdom");
+			} else { 
+				Boolean hasKingdomMissmatch = null;
+				Boolean hasKingdomMatch = null;
+				Boolean hasPhylumMissmatch = null;
+				Boolean hasPhylumMatch = null;
+				Boolean hasClassMissmatch = null;
+				Boolean hasClassMatch = null;
+				Boolean hasOrderMissmatch = null;
+				Boolean hasOrderMatch = null;
+				Boolean hasFamilyMissmatch = null;
+				Boolean hasFamilyMatch = null;
+				String matchKingdom = null;
+				String matchPhylum = null;
+				String matchClass = null;
+				String matchOrder = null;
+				String matchFamily = null;
+				Iterator<NameUsage> i = lookupResult.iterator();
+				while (i.hasNext()) {
+					NameUsage match = i.next();
+					logger.debug(match.getCanonicalName());
+					if (SciNameUtils.isEqualOrNonEmptyES(lowestRankingTaxon, match.getCanonicalName())) {
+						matchKingdom = match.getKingdom();
+						if (!SciNameUtils.isEmpty(matchKingdom) && !SciNameUtils.isEmpty(kingdom) && !kingdom.equals(matchKingdom)) { 
+							hasKingdomMissmatch = true;
+							logger.debug(matchKingdom);
+						} else if (!SciNameUtils.isEmpty(matchKingdom) && !SciNameUtils.isEmpty(kingdom) && kingdom.equals(matchKingdom)) { 
+							hasKingdomMatch = true;
+						}
+						if (lowestRank!="Kingdom" && lowestRank!="Phylum") { 
+							matchPhylum = match.getPhylum();
+							if (!SciNameUtils.isEmpty(matchPhylum) && !SciNameUtils.isEmpty(phylum) && !phylum.equals(matchPhylum)) { 
+								hasPhylumMissmatch = true;
+								logger.debug(matchPhylum);
+							} else if (!SciNameUtils.isEmpty(matchPhylum) && !SciNameUtils.isEmpty(phylum) && phylum.equals(matchPhylum)) { 
+								hasPhylumMatch = true;
+							}
+						}
+						if (lowestRank!="Kingdom" && lowestRank!="Phylum" && lowestRank!="Class") { 
+							matchClass = match.getClazz();
+							if (!SciNameUtils.isEmpty(matchClass) && !SciNameUtils.isEmpty(taxonomic_class) && !taxonomic_class.equals(matchClass)) { 
+								hasClassMissmatch = true;
+								logger.debug(matchClass);
+							} else if (!SciNameUtils.isEmpty(matchClass) && !SciNameUtils.isEmpty(taxonomic_class) && taxonomic_class.equals(matchClass)) { 
+								hasClassMatch = true;
+							}
+						}
+						if (lowestRank!="Kingdom" && lowestRank!="Phylum" && lowestRank!="Class" && lowestRank!="Order") { 
+							matchOrder = match.getOrder();
+							if (!SciNameUtils.isEmpty(matchOrder) && !SciNameUtils.isEmpty(order) && !order.equals(matchOrder)) { 
+								hasOrderMissmatch = true;
+								logger.debug(matchOrder);
+							} else if (!SciNameUtils.isEmpty(matchOrder) && !SciNameUtils.isEmpty(order) && order.equals(matchOrder)) { 
+								hasOrderMatch = true;
+							}
+						}
+						if (lowestRank!="Kingdom" && lowestRank!="Phylum" && lowestRank!="Class" && lowestRank!="Order" && lowestRank!="Family") { 
+							matchFamily = match.getFamily();
+							if (!SciNameUtils.isEmpty(matchFamily) && !SciNameUtils.isEmpty(family) && !family.equals(matchFamily)) { 
+								hasFamilyMissmatch = true;
+								logger.debug(matchFamily);
+							} else if (!SciNameUtils.isEmpty(matchFamily) && !SciNameUtils.isEmpty(family) && family.equals(matchFamily)) { 
+								hasFamilyMatch = true;
+							}
+						}
+						// no subfamily returned in match, can't check its parentage
+					}
+				}
+				logger.debug(hasKingdomMatch);
+				logger.debug(hasKingdomMissmatch);
+				Boolean workUpTree = null;
+				if (hasKingdomMatch!=null && hasKingdomMatch) { 
+					// ok
+					if (workUpTree==null) { 
+						workUpTree = true;
+					}
+				} else if (hasKingdomMatch==null && hasKingdomMissmatch!=null && hasKingdomMissmatch) { 
+					if (SciNameUtils.sameOrSynonym(kingdom, matchKingdom, "Kingdom", sourceAuthority)) { 
+						result.addComment("Kingdom ["+ kingdom+"] matched synonym ["+matchKingdom+"] in " + sourceAuthority.getName());
+						if (workUpTree==null) { workUpTree = true; }
+					} else { 
+						// failed
+						result.setBooleanValue(false);
+						result.addComment("Missmatched Kingdom for ["+kingdom+"] authority has ["+matchKingdom+"]");
+						workUpTree = false;
+					}
+				}
+				if (hasPhylumMatch!=null && hasPhylumMatch) { 
+					// ok
+					if (workUpTree==null) { 
+						workUpTree = true;
+					}
+				} else if (hasPhylumMatch==null && hasPhylumMissmatch!=null && hasPhylumMissmatch) { 
+					if (SciNameUtils.sameOrSynonym(phylum, matchPhylum, "Phylum", sourceAuthority)) { 
+						result.addComment("Phylum ["+ phylum+"] matched synonym ["+matchPhylum+"] in " + sourceAuthority.getName());
+						if (workUpTree==null) { workUpTree = true; }
+					} else { 
+						// failed
+						result.setBooleanValue(false);
+						result.addComment("Missmatched Phylum for ["+phylum+"] authority has ["+matchPhylum+"]");
+						workUpTree = false;
+					}
+				}
+				if (hasClassMatch!=null && hasClassMatch) { 
+					// ok
+					if (workUpTree==null) { 
+						workUpTree = true;
+					}
+				} else if (hasClassMatch==null && hasClassMissmatch!=null && hasClassMissmatch) { 
+					if (SciNameUtils.sameOrSynonym(taxonomic_class, matchClass, "Class", sourceAuthority)) { 
+						result.addComment("Class ["+ taxonomic_class +"] matched synonym ["+matchClass+"] in " + sourceAuthority.getName());
+						if (workUpTree==null) { workUpTree = true; }
+					} else { 
+						// failed
+						result.setBooleanValue(false);
+						result.addComment("Missmatched Class for ["+taxonomic_class+"] authority has ["+matchClass+"]");
+						workUpTree = false;
+					}
+				}
+				if (hasOrderMatch!=null && hasOrderMatch) { 
+					// ok
+					if (workUpTree==null) { 
+						workUpTree = true;
+					}
+				} else if (hasOrderMatch==null && hasOrderMissmatch!=null && hasOrderMissmatch) { 
+					if (SciNameUtils.sameOrSynonym(order, matchOrder, "Order", sourceAuthority)) { 
+						result.addComment("Order ["+ order+"] matched synonym ["+matchOrder+"] in " + sourceAuthority.getName());
+						if (workUpTree==null) { workUpTree = true; }
+					} else { 
+						// failed
+						result.setBooleanValue(false);
+						result.addComment("Missmatched Order for ["+order+"] authority has ["+matchOrder+"]");
+						workUpTree = false;
+					}
+				}
+				if (hasFamilyMatch!=null && hasFamilyMatch) { 
+					// ok
+					if (workUpTree==null) { 
+						workUpTree = true;
+					}
+				} else if (hasFamilyMatch==null && hasFamilyMissmatch!=null && hasFamilyMissmatch) { 
+					if (SciNameUtils.sameOrSynonym(family, matchFamily, "Family", sourceAuthority)) { 
+						result.addComment("Family ["+ family+"] matched synonym ["+matchFamily+"] in " + sourceAuthority.getName());
+						if (workUpTree==null) { workUpTree = true; }
+					} else { 
+						// failed
+						result.setBooleanValue(false);
+						result.addComment("Missmatched Family for ["+family+"] authority has ["+matchFamily+"]");
+						workUpTree = false;
+					}
+				}
+				logger.debug(result.getBooleanValue());
+				logger.debug(result.getComment());
+				logger.debug(workUpTree);
+				
+				if (workUpTree!=null && workUpTree) { 
+					if (lowestRank.equals("Genus")) { 
+						result = isSameClassificationInAuthority(kingdom, phylum, taxonomic_class, order, family, subfamily, null, sourceAuthority);
+					} else if (lowestRank.equals("Subfamily")) { 
+						result = isSameClassificationInAuthority(kingdom, phylum, taxonomic_class, order, family, null, null, sourceAuthority);
+					} else if (lowestRank.equals("Family")) { 
+						result = isSameClassificationInAuthority(kingdom, phylum, taxonomic_class, order, null, null, null, sourceAuthority);
+					} else if (lowestRank.equals("Order")) { 
+						result = isSameClassificationInAuthority(kingdom, phylum, taxonomic_class, null, null, null, null, sourceAuthority);
+					} else if (lowestRank.equals("Class")) { 
+						result = isSameClassificationInAuthority(kingdom, phylum, null, null, null, null, null, sourceAuthority);
+					} else if (lowestRank.equals("Phylum")) { 
+						result = isSameClassificationInAuthority(kingdom, null, null, null, null, null, null, sourceAuthority);
+					} else {
+						result.setBooleanValue(true);
+					}
+				} else if (workUpTree==null) { 
+					result.setBooleanValue(true);
+					result.addComment("No more higher ranks found to compare");
+				}
+			} 
+		}
+		
 		return result;
 	}
 	

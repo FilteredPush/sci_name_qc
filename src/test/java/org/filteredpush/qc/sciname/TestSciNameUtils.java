@@ -55,4 +55,6 @@ public class TestSciNameUtils {
 		assertEquals(false,SciNameUtils.isEqualOrNonEmpty("", " "));
 	}
 
+	
+	
 }
