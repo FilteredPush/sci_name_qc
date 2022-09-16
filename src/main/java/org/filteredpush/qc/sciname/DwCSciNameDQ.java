@@ -2010,6 +2010,15 @@ public class DwCSciNameDQ {
     	   try { 
     		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 
     			   // TODO: Lookup and cache file
+    			   POCAuthorityLoader loader = new POCAuthorityLoader();
+    			   try {
+    				   loader.load();
+    			   } catch (IOException | ParserConfigurationException | SAXException e) {
+    				   logger.debug(e.getMessage(), e);
+    			   }
+
+    			   Map<String,String> mapping = loader.getValuesCopy();
+    			   
     			   HashSet<String> values = new HashSet<String>();
     			   values.add("domain");
     			   values.add("kingdom");
@@ -2052,6 +2061,10 @@ public class DwCSciNameDQ {
 
     			   if (values.contains(taxonRank)) {
     				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found in the GBIF taxon rank vocabulary.");
+    				   result.setValue(ComplianceValue.COMPLIANT);
+    				   result.setResultState(ResultState.RUN_HAS_RESULT);
+    			   } else if (mapping.containsKey(taxonRank)) {
+    				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found as an alternative form for [" + mapping.get(taxonRank) + "] in the GBIF taxon rank vocabulary.");
     				   result.setValue(ComplianceValue.COMPLIANT);
     				   result.setResultState(ResultState.RUN_HAS_RESULT);
     			   } else { 
@@ -2112,7 +2125,6 @@ public class DwCSciNameDQ {
     			   } catch (IOException | ParserConfigurationException | SAXException e) {
     				   logger.debug(e.getMessage(), e);
     			   }
-    			   loader.getValuesCopy();
 
     			   Map<String,String> mapping = loader.getValuesCopy();
     			   // TODO: Lookup and cache file
