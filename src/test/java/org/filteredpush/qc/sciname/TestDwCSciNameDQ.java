@@ -513,6 +513,18 @@ public class TestDwCSciNameDQ {
 		logger.debug(response.getComment());
 		assertEquals(ResultState.EXTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		
+		taxonRank = "familia"; 
+		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
+		assertEquals("family",response.getValue().getObject().get("dwc:taxonRank"));
+		
+		taxonRank = "Familia "; 
+		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
+		assertEquals("family",response.getValue().getObject().get("dwc:taxonRank"));
+		
 	}
 
 }

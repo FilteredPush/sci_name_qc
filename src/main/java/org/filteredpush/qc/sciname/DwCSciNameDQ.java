@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.annotations.*;
@@ -44,6 +46,7 @@ import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.Rank;
 import org.gbif.nameparser.api.UnparsableNameException;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
+import org.xml.sax.SAXException;
 
 import edu.harvard.mcz.nametools.AuthorNameComparator;
 import edu.harvard.mcz.nametools.NameAuthorshipParse;
@@ -2102,7 +2105,16 @@ public class DwCSciNameDQ {
        } else { 
     	   try { 
     		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 
-    			   HashMap<String,String> mapping = new HashMap<String,String>();
+
+    			   POCAuthorityLoader loader = new POCAuthorityLoader();
+    			   try {
+    				   loader.load();
+    			   } catch (IOException | ParserConfigurationException | SAXException e) {
+    				   logger.debug(e.getMessage(), e);
+    			   }
+    			   loader.getValuesCopy();
+
+    			   Map<String,String> mapping = loader.getValuesCopy();
     			   // TODO: Lookup and cache file
     			   HashSet<String> values = new HashSet<String>();
     			   values.add("domain");
