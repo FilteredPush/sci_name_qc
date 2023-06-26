@@ -490,28 +490,6 @@ public class DwCSciNameDQ_stubs {
         return result;
     }
 
-    /**
-     * Is there a value in dwc:taxonID?
-     *
-     * Provides: VALIDATION_TAXONID_NOTEMPTY
-     * Version: 2020-04-09
-     *
-     * @param taxonID the provided dwc:taxonID to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_TAXONID_NOTEMPTY", description="Is there a value in dwc:taxonID?")
-    @Provides("401bf207-9a55-4dff-88a5-abcd58ad97fa")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/401bf207-9a55-4dff-88a5-abcd58ad97fa/2020-04-09")
-    @Specification("COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationTaxonidNotempty(@ActedUpon("dwc:taxonID") String taxonID) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT 
-        // 
-
-        return result;
-    }
 
     /**
      * Does the value of dwc:taxonID contain a complete identifier?
@@ -610,29 +588,6 @@ public class DwCSciNameDQ_stubs {
 
         //TODO: Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority
-
-        return result;
-    }
-
-    /**
-     * Is there a value in dwc:taxonRank?
-     *
-     * Provides: VALIDATION_TAXONRANK_NOTEMPTY
-     * Version: 2020-04-09
-     *
-     * @param taxonRank the provided dwc:taxonRank to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_TAXONRANK_NOTEMPTY", description="Is there a value in dwc:taxonRank?")
-    @Provides("14da5b87-8304-4b2b-911d-117e3c29e890")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/14da5b87-8304-4b2b-911d-117e3c29e890/2020-04-09")
-    @Specification("COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationTaxonrankNotempty(@ActedUpon("dwc:taxonRank") String taxonRank) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT 
-        // 
 
         return result;
     }
