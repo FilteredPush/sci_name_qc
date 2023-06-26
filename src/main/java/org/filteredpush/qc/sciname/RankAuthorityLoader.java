@@ -87,6 +87,9 @@ public class RankAuthorityLoader {
 	}
 	
 	public void load() throws IOException, ParserConfigurationException, SAXException { 
+		
+		//TODO: Implement local file cache.
+		
 		URL target = new URL(targetURI);
 		InputStream file = target.openStream();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
