@@ -73,6 +73,7 @@ public class SciNameSourceAuthority {
 	 */
 	public SciNameSourceAuthority(String authorityString) throws SourceAuthorityException {
 		logger.debug(authorityString);
+		if (authorityString==null) { authorityString = ""; }
 	    if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName())) {
 	    	throw new SourceAuthorityException("You must specify which GBIF checklist you wish to use with " + EnumSciNameSourceAuthority.GBIF_ARBITRARY.getName());
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.WORMS.getName())) {
