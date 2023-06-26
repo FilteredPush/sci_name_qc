@@ -1374,12 +1374,15 @@ public class DwCSciNameDQ {
      * Is there a value in dwc:scientificName?
      *
      * Provides: #82 VALIDATION_SCIENTIFICNAME_NOTEMPTY
+     * Version: 2022-03-22
      *
      * @param scientificName the provided dwc:scientificName to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_SCIENTIFICNAME_NOTEMPTY", description="Is there a value in dwc:scientificName?")
     @Provides("7c4b9498-a8d9-4ebb-85f1-9f200c788595")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/7c4b9498-a8d9-4ebb-85f1-9f200c788595/2022-03-22")
+    @Specification("COMPLIANT if dwc:scientificName is not EMPTY; otherwise NOT_COMPLIANT ")
     public static DQResponse<ComplianceValue> validationScientificnameNotempty(@ActedUpon("dwc:scientificName") String scientificName) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 

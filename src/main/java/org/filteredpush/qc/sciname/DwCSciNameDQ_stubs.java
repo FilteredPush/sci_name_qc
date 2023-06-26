@@ -210,53 +210,6 @@ public class DwCSciNameDQ_stubs {
     }
 
     /**
-     * Is there a value in dwc:dataGeneralizations?
-     *
-     * Provides: ISSUE_DATAGENERALIZATIONS_NOTEMPTY
-     * Version: 2022-05-16
-     *
-     * @param dataGeneralizations the provided dwc:dataGeneralizations to evaluate
-     * @return DQResponse the response of type IssueValue to return
-     */
-    @Issue(label="ISSUE_DATAGENERALIZATIONS_NOTEMPTY", description="Is there a value in dwc:dataGeneralizations?")
-    @Provides("13d5a10e-188e-40fd-a22c-dbaa87b91df2")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/13d5a10e-188e-40fd-a22c-dbaa87b91df2/2022-05-16")
-    @Specification("POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; otherwise NOT_ISSUE ")
-    public DQResponse<IssueValue> issueDatageneralizationsNotempty(@ActedUpon("dwc:dataGeneralizations") String dataGeneralizations) {
-        DQResponse<IssueValue> result = new DQResponse<IssueValue>();
-
-        //TODO:  Implement specification
-        // POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; 
-        // otherwise NOT_ISSUE 
-
-        return result;
-    }
-
-    /**
-     * Is there a value in dwc:scientificName?
-     *
-     * Provides: VALIDATION_SCIENTIFICNAME_NOTEMPTY
-     * Version: 2022-03-22
-     *
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_SCIENTIFICNAME_NOTEMPTY", description="Is there a value in dwc:scientificName?")
-    @Provides("7c4b9498-a8d9-4ebb-85f1-9f200c788595")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/7c4b9498-a8d9-4ebb-85f1-9f200c788595/2022-03-22")
-    @Specification("COMPLIANT if dwc:scientificName is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationScientificnameNotempty(@ActedUpon("dwc:scientificName") String scientificName) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:scientificName is not EMPTY; otherwise 
-        // NOT_COMPLIANT 
-
-        return result;
-    }
-
-
-    /**
      * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
      * Provides: VALIDATION_POLYNOMIAL_CONSISTENT
