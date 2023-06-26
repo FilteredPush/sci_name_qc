@@ -138,6 +138,7 @@ public class DwCSciNameDQ {
      * Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?
      * 
      * Provides: #28 VALIDATION_FAMILY_FOUND
+     * Version: 2022-03-25
      *
      * @param family the provided dwc:family to evaluate
 	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
@@ -145,6 +146,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_FAMILY_FOUND", description="Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?")
     @Provides("3667556d-d8f5-454c-922b-af8af38f613c")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/3667556d-d8f5-454c-922b-af8af38f613c/2022-03-25")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:family is EMPTY; COMPLIANT if the value of dwc:family was found as a value at the rank of Family by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei], 'API endpoint' [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family, 
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
@@ -1279,10 +1282,17 @@ public class DwCSciNameDQ {
         
     }
 
+        //TODO:  Implement specification
+        // 
+
+        //TODO: Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority
+    
     /**
      * Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?
      *
      * Provides: #77 VALIDATION_CLASS_FOUND
+     * Version: 2022-04-22
      *
      * @param taxonomic_class the provided dwc:class to evaluate
 	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
@@ -1290,6 +1300,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_CLASS_FOUND", description="Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?")
     @Provides("2cd6884e-3d14-4476-94f7-1191cfff309b")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2cd6884e-3d14-4476-94f7-1191cfff309b/2022-04-22")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:class is EMPTY; COMPLIANT if the value of dwc:class was found as a value at the rank of Class in the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationClassFound(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
@@ -1301,9 +1313,8 @@ public class DwCSciNameDQ {
         // is EMPTY; COMPLIANT if the value of dwc:class was found 
         // as a value at the rank of Class in the bdq:sourceAuthority; 
         // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
-        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
-        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
-        // 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 
         // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
@@ -1392,6 +1403,7 @@ public class DwCSciNameDQ {
      * Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?
      *
      * Provides: #83 VALIDATION_ORDER_FOUND
+     * Version: 2022-03-25
      *
      * @param order the provided dwc:order to evaluate
 	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
@@ -1399,6 +1411,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_ORDER_FOUND", description="Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?")
     @Provides("81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/81cc974d-43cc-4c0f-a5e0-afa23b455aa3/2022-03-25")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:order is EMPTY; COMPLIANT if the value of dwc:order was found as a value at the rank of Order by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order,  
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
@@ -1409,8 +1423,8 @@ public class DwCSciNameDQ {
         // is EMPTY; COMPLIANT if the value of dwc:order was found 
         // as a value at the rank of Order by the bdq:sourceAuthority; 
         // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
-        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
-        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
@@ -1839,6 +1853,7 @@ public class DwCSciNameDQ {
      * Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?
      *
      * Provides: #122 VALIDATION_GENUS_FOUND
+     * Version: 2022-03-22
      *
      * @param genus the provided dwc:genus to evaluate
 	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
@@ -1846,6 +1861,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_GENUS_FOUND", description="Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?")
     @Provides("f2ce7d55-5b1d-426a-b00e-6d4efe3058ec")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f2ce7d55-5b1d-426a-b00e-6d4efe3058ec/2022-03-22")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available;  INTERNAL_PREREQUISITES_NOT_MET if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus was found as a value at the rank of genus by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus, 
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
@@ -1856,8 +1873,8 @@ public class DwCSciNameDQ {
         // is EMPTY; COMPLIANT if the value of dwc:genus was found 
         // as a value at the rank of genus by the bdq:sourceAuthority; 
         // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
-        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
-        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
