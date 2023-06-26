@@ -692,8 +692,8 @@ public class DwCSciNameDQ {
 					result.addComment(sourceAuthority.getName() + " API invocation error:" + e.getMessage());
 					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					result.addComment(sourceAuthority.getName() + " IRMNG API invocation error:" + e.getMessage());
+					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				}
 			}
 		}
@@ -1282,12 +1282,6 @@ public class DwCSciNameDQ {
         
     }
 
-        //TODO:  Implement specification
-        // 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-    
     /**
      * Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?
      *
@@ -2062,15 +2056,14 @@ public class DwCSciNameDQ {
     	   try { 
     		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 
     			   // TODO: Lookup and cache file
-    			   POCAuthorityLoader loader = new POCAuthorityLoader();
+    			   
+    			   RankAuthorityLoader loader = new RankAuthorityLoader();
     			   try {
     				   loader.load();
     			   } catch (IOException | ParserConfigurationException | SAXException e) {
     				   logger.debug(e.getMessage(), e);
     			   }
 
-    			   Map<String,String> mapping = loader.getValuesCopy();
-    			   
     			   HashSet<String> values = new HashSet<String>();
     			   values.add("domain");
     			   values.add("kingdom");
@@ -2115,8 +2108,8 @@ public class DwCSciNameDQ {
     				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found in the GBIF taxon rank vocabulary.");
     				   result.setValue(ComplianceValue.COMPLIANT);
     				   result.setResultState(ResultState.RUN_HAS_RESULT);
-    			   } else if (mapping.containsKey(taxonRank)) {
-    				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found as an alternative form for [" + mapping.get(taxonRank) + "] in the GBIF taxon rank vocabulary.");
+    			   } else if (SciNameSingleton.getInstance().checkRankKnown(taxonRank)) {
+    				   result.addComment("Provided value for taxonRank ["+ taxonRank+"] found as an alternative form for [" + SciNameSingleton.getInstance().getRank(taxonRank) + "] in the GBIF taxon rank vocabulary.");
     				   result.setValue(ComplianceValue.COMPLIANT);
     				   result.setResultState(ResultState.RUN_HAS_RESULT);
     			   } else { 
@@ -2171,7 +2164,7 @@ public class DwCSciNameDQ {
     	   try { 
     		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 
 
-    			   POCAuthorityLoader loader = new POCAuthorityLoader();
+    			   RankAuthorityLoader loader = new RankAuthorityLoader();
     			   try {
     				   loader.load();
     			   } catch (IOException | ParserConfigurationException | SAXException e) {

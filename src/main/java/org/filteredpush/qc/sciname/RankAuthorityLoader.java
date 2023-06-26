@@ -1,5 +1,5 @@
 /** 
- * POCAuthorityLoader.java
+ * RankAuthorityLoader.java
  * 
  * Copyright 2022 President and Fellows of Harvard College
  *
@@ -40,20 +40,21 @@ import org.xml.sax.SAXException;
  * @author mole
  *
  */
-public class POCAuthorityLoader {
+public class RankAuthorityLoader {
 
-	private static final Log logger = LogFactory.getLog(POCAuthorityLoader.class);
+	private static final Log logger = LogFactory.getLog(RankAuthorityLoader.class);
 
 	private Map<String,String> values;
 	
 	private String targetURI;
 	
-	public POCAuthorityLoader() { 
+	public RankAuthorityLoader() { 
 		targetURI ="https://rs.gbif.org/vocabulary/gbif/rank.xml";
 		values = new HashMap<String,String>();
 	}
 	
-	public POCAuthorityLoader(String uriForVocabularyXML) { 
+	@Deprecated
+	public RankAuthorityLoader(String uriForVocabularyXML) { 
 		targetURI = uriForVocabularyXML;
 		values = new HashMap<String,String>();
 	}
@@ -62,7 +63,7 @@ public class POCAuthorityLoader {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		POCAuthorityLoader loader = new POCAuthorityLoader();
+		RankAuthorityLoader loader = new RankAuthorityLoader();
 		try {
 			loader.load();
 		} catch (IOException | ParserConfigurationException | SAXException e) {
