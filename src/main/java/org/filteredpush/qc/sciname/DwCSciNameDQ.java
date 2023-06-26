@@ -1611,6 +1611,7 @@ public class DwCSciNameDQ {
      * Is there a value in any of the terms needed to determine that the taxon exists?
      *
      * Provides: #105 VALIDATION_TAXON_NOTEMPTY
+     * Version: 2022-03-22
      *
      * @param taxonomic_class the provided dwc:class to evaluate
      * @param genus the provided dwc:genus to evaluate
@@ -1632,9 +1633,14 @@ public class DwCSciNameDQ {
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
      * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
      * @param order the provided dwc:order to evaluate
+     * @param cultivarEpithet the provided dwc:cultivarEpithet to evaluate
+     * @param subfamily the provided dwc:subfamily to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
+    @Validation(label="VALIDATION_TAXON_NOTEMPTY", description="Is there a value in any of the terms needed to determine that the taxon exists?")
     @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2022-03-22")
+    @Specification("COMPLIANT if at least one term needed to determine the taxon of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT ")
     public static DQResponse<ComplianceValue> validationTaxonNotempty(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:genus") String genus, 
@@ -1655,20 +1661,23 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:infragenericEpithet") String infragenericEpithet, 
     		@ActedUpon("dwc:specificEpithet") String specificEpithet, 
     		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, 
-    		@ActedUpon("dwc:order") String order) {
+    		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:cultivarEpithet") String cultivarEpithet,
+    		@ActedUpon("dwc:subfamily") String subfamily) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // COMPLIANT if at least one term needed to determine the taxon 
         // of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT 
         //
-
+        
 		if (SciNameUtils.isEmpty(taxonID) &&
 			SciNameUtils.isEmpty(kingdom) &&
 			SciNameUtils.isEmpty(phylum) &&
 			SciNameUtils.isEmpty(taxonomic_class) &&
 			SciNameUtils.isEmpty(order) &&
 			SciNameUtils.isEmpty(family) &&
+			SciNameUtils.isEmpty(subfamily) &&
 			SciNameUtils.isEmpty(genus) &&
 			SciNameUtils.isEmpty(subgenus) &&
 			SciNameUtils.isEmpty(scientificName) &&
@@ -1682,7 +1691,8 @@ public class DwCSciNameDQ {
 			SciNameUtils.isEmpty(acceptedNameUsageID) &&
 			SciNameUtils.isEmpty(originalNameUsageID) &&
 			SciNameUtils.isEmpty(higherClassification) &&
-			SciNameUtils.isEmpty(vernacularName)
+			SciNameUtils.isEmpty(vernacularName) &&
+			SciNameUtils.isEmpty(cultivarEpithet)
 			) {
 			result.addComment("No value provided for any Taxon term.");
 			result.setValue(ComplianceValue.NOT_COMPLIANT);
