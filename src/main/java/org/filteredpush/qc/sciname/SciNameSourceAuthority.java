@@ -104,7 +104,7 @@ public class SciNameSourceAuthority {
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_UKSI.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_UKSI;	
 	    } else if (authorityString.toUpperCase().startsWith("HTTPS://INVALID/")) { 
-	    	throw new SourceAuthorityException("Invalid SourceAuthority [" + authorityString + "]");
+	    	this.authority = EnumSciNameSourceAuthority.INVALID;	
 	    } else { 
 	    	throw new SourceAuthorityException("Unable to construct a SourceAuthority from string [" + authorityString + "]");
 	    }

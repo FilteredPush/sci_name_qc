@@ -128,7 +128,7 @@ public class DwCSciNameDQ {
         	try {
 				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
 			} catch (SourceAuthorityException e) {
-				logger.error(e.getMessage(),e);
+				logger.error(e.getMessage());
 			}
         }
         return validateHigherTaxonAtRank(phylum, "Phylum", sourceAuthority);
@@ -2319,6 +2319,9 @@ public class DwCSciNameDQ {
         			result.addComment("GBIF API not available:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		}        		
+        	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.INVALID)) {
+        		result.addComment("Invalid service is not available.");
+        		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         	} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
         		try {
         			List<NameUsage> matches = WoRMSService.lookupTaxonAtRank(taxon,rank);

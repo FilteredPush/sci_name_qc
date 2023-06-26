@@ -35,7 +35,8 @@ public enum EnumSciNameSourceAuthority {
     GBIF_UKSI,
     GBIF_ARBITRARY,
     WORMS,
-    IRMNG;
+    IRMNG,
+    INVALID;
 
 	public String getName() {
 		// return the exact name of the enum instance.
