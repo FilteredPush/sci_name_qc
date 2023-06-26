@@ -1515,6 +1515,7 @@ public class DwCSciNameDQ {
      * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
      * Provides: #101 VALIDATION_POLYNOMIAL_CONSISTENT
+     * Version: 2022-04-03
      *
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param genericName the provided dwc:genericName to evaluate
@@ -1524,6 +1525,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_POLYNOMIAL_CONSISTENT", description="Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?")
     @Provides("17f03f1f-f74d-40c0-8071-2927cfc9487b")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2022-04-03")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY, or all of dwc:genericName, dwc:specificEpithet and dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, as represented in dwc:scientificName, is consistent with NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. ")
     public static DQResponse<ComplianceValue> validationPolynomialConsistent(
     		@ActedUpon("dwc:scientificName") String scientificName, 
     		@ActedUpon("dwc:genericName") String genericName, 
@@ -1539,6 +1542,12 @@ public class DwCSciNameDQ {
         // as represented in dwc:scientificName, is consistent with 
         // dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; 
         // otherwise NOT_COMPLIANT 
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is 
+        // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
+        // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
+        // as represented in dwc:scientificName, is consistent with 
+        // NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, 
+        // dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. 
         
         if (SciNameUtils.isEmpty(scientificName)) { 
         	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);

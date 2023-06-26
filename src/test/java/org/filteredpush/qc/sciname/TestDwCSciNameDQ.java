@@ -146,8 +146,8 @@ public class TestDwCSciNameDQ {
         // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
         // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
         // as represented in dwc:scientificName, is consistent with 
-        // dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; 
-        // otherwise NOT_COMPLIANT 
+        // NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, 
+        // dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. 
 		
 		String scientificName = "Aus bus cus";
 		String genericName = "Aus";
@@ -166,6 +166,7 @@ public class TestDwCSciNameDQ {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertNotNull(result.getComment());
 		
 		scientificName = "Hakea";
 		genericName = "Hakea";
@@ -340,6 +341,34 @@ public class TestDwCSciNameDQ {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
+		
+		// test NOT_EMPTY compliance, data compared with not-data passes
+		scientificName = "Aus bus cus";
+		genericName = "Aus";
+		specificEpithet = "";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus cus";
+		genericName = "";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Aus bus cus";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 	}
 

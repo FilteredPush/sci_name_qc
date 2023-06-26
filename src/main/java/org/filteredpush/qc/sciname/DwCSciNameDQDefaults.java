@@ -348,28 +348,6 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     }
 
     /**
-     * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
-     *
-     * Provides: #101 VALIDATION_POLYNOMIAL_CONSISTENT
-     *
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @param genericName the provided dwc:genericName to evaluate
-     * @param specificEpithet the provided dwc:specificEpithet to evaluate
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_POLYNOMIAL_CONSISTENT", description="Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?")
-    @Provides("17f03f1f-f74d-40c0-8071-2927cfc9487b")
-    public static DQResponse<ComplianceValue> validationPolynomialConsistent(
-    		@ActedUpon("dwc:scientificName") String scientificName, 
-    		@ActedUpon("dwc:genericName") String genericName, 
-    		@ActedUpon("dwc:specificEpithet") String specificEpithet,
-    		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet 
-    ) {
-        return DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
-    }
-
-    /**
      * Is there a value in any of the terms needed to determine that the taxon exists?
      *
      * Provides: #105 VALIDATION_TAXON_NOTEMPTY
