@@ -1534,12 +1534,6 @@ public class DwCSciNameDQ {
         // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
         // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
         // as represented in dwc:scientificName, is consistent with 
-        // dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; 
-        // otherwise NOT_COMPLIANT 
-        // INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is 
-        // EMPTY, or all of dwc:genericName, dwc:specificEpithet and 
-        // dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, 
-        // as represented in dwc:scientificName, is consistent with 
         // NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, 
         // dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. 
         
@@ -1550,6 +1544,7 @@ public class DwCSciNameDQ {
         	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         	result.addComment("No value was provided for any of dwc:genericName, dwc:specificEpithet, or dwc:infraspecificEpithet.");
         } else { 
+        	String sciNameTrailingSpace = scientificName+" ";
         	if (genericName==null) { genericName = ""; }
         	if (specificEpithet==null) { specificEpithet = ""; }
         	if (infraspecificEpithet==null) { infraspecificEpithet = ""; }
@@ -1558,17 +1553,17 @@ public class DwCSciNameDQ {
    				result.addComment("Exact match of scientificName to genericName+specificEpithet+infraspecificEpithet.");
   				result.setValue(ComplianceValue.COMPLIANT);
   				result.setResultState(ResultState.RUN_HAS_RESULT);
-        	} else if (scientificName.equals(genericName) && specificEpithet.equals("") && infraspecificEpithet.equals("") ) { 
+        	} else if (scientificName.equals(genericName) && SciNameUtils.isEmpty(specificEpithet) && SciNameUtils.isEmpty(infraspecificEpithet) ) { 
         		// simple uninomial match
    				result.addComment("Exact match of scientificName to genericName");
   				result.setValue(ComplianceValue.COMPLIANT);
   				result.setResultState(ResultState.RUN_HAS_RESULT);
-        	} else if (infraspecificEpithet.equals("") && scientificName.equals(genericName+" "+specificEpithet)) { 
+        	} else if (SciNameUtils.isEmpty(infraspecificEpithet) && scientificName.equals(genericName+" "+specificEpithet)) { 
         		// simple binomial match
    				result.addComment("Exact match of scientificName to genericName+specificEpithet.");
   				result.setValue(ComplianceValue.COMPLIANT);
   				result.setResultState(ResultState.RUN_HAS_RESULT);
-        	} else if (genericName.length()>0 && !scientificName.startsWith(genericName+" ")) { 
+        	} else if (!SciNameUtils.isEmpty(genericName) &&  !sciNameTrailingSpace.startsWith(genericName+" ")) { 
         		// failure case, doesn't start with generic name
    				result.addComment("Provided dwc:scientificName does not start with genericName");
   				result.setValue(ComplianceValue.NOT_COMPLIANT);
@@ -1577,6 +1572,7 @@ public class DwCSciNameDQ {
 	    		NameParser nameParser = new NameParserGBIF();
 	    		try {
 	    			ParsedName parse = nameParser.parse(scientificName,Rank.UNRANKED, null);
+	    			logger.debug(parse.toString());
 	    			String parseGeneric = parse.getGenus();
 	    			if (parseGeneric==null) { parseGeneric = ""; }
 	    			String parseSpecific = parse.getSpecificEpithet();
@@ -1586,20 +1582,47 @@ public class DwCSciNameDQ {
 	    			logger.debug(parseGeneric);
 	    			logger.debug(parseSpecific);
 	    			logger.debug(parseInfraspecific);
-	    			if (!SciNameUtils.isEmpty(genericName) && !parseGeneric.equals(genericName)) { 
+	    			logger.debug(parse.getRank());
+	    			String uninomial = parse.getUninomial();
+	    			boolean done = false;
+	    			if (parse.getRank().equals(Rank.UNRANKED) && !SciNameUtils.isEmpty(uninomial)) { 
+	    				logger.debug(uninomial);
+	    				if (uninomial.equals(scientificName) && uninomial.equals(genericName) && SciNameUtils.isEmpty(specificEpithet) && SciNameUtils.isEmpty(infraspecificEpithet)) { 
+	    					result.addComment("Parsed uninomial matches generic name.");
+	    					result.setValue(ComplianceValue.COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    					done = true;
+	    				} else if (uninomial.equals(scientificName) && uninomial.equals(genericName) && (!SciNameUtils.isEmpty(specificEpithet) || !SciNameUtils.isEmpty(infraspecificEpithet))) { 
+	    					result.addComment("Parsed uninomial matches generic name, but specific or infraspecific epithet are populated.");
+	    					result.setValue(ComplianceValue.NOT_COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    					done = true;
+	    				} else if (scientificName.startsWith(uninomial) && uninomial.equals(genericName) && SciNameUtils.isEmpty(specificEpithet) && SciNameUtils.isEmpty(infraspecificEpithet)) { 
+	    					result.addComment("Parsed uninomial matches generic name, scientific name contains unparsed text");
+	    					result.setValue(ComplianceValue.COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    					done = true;
+	    				} else if (!uninomial.equals(genericName) ) { 
+	    					result.addComment("Uninomial parsed out of dwc:scientificName does not match dwc:genericName.");
+	    					result.setValue(ComplianceValue.NOT_COMPLIANT);
+	    					result.setResultState(ResultState.RUN_HAS_RESULT);
+	    					done = true;
+	    				}
+	    			}
+	    			if (!done && !SciNameUtils.isEmpty(genericName) && !parseGeneric.equals(genericName)) { 
 	    				result.addComment("Genus parsed out of dwc:scientificName does not match dwc:genericName.");
 	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
 	    				result.setResultState(ResultState.RUN_HAS_RESULT);
-	    			} else if (!SciNameUtils.isEmpty(specificEpithet) && !parseSpecific.equals(specificEpithet)) { 
+	    			} else if (!done && !SciNameUtils.isEmpty(specificEpithet) && !parseSpecific.equals(specificEpithet)) { 
 	    				result.addComment("Specific Epithet parsed out of dwc:scientificName does not match dwc:specificEpithet.");
 	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
 	    				result.setResultState(ResultState.RUN_HAS_RESULT);
-	    			} else if (!SciNameUtils.isEmpty(infraspecificEpithet) && !parseInfraspecific.equals(infraspecificEpithet)) { 
+	    			} else if (!done && !SciNameUtils.isEmpty(infraspecificEpithet) && !parseInfraspecific.equals(infraspecificEpithet)) { 
 	    				logger.debug(parseInfraspecific);
 	    				result.addComment("Infraspecific Epithet parsed out of dwc:scientificName does not match dwc:infraspecificEpithet.");
 	    				result.setValue(ComplianceValue.NOT_COMPLIANT);
 	    				result.setResultState(ResultState.RUN_HAS_RESULT);
-	    			} else { 
+	    			} else if (!done) { 
 	    				if (parseGeneric.equals(genericName) && parseSpecific.equals(specificEpithet) && parseInfraspecific.equals(infraspecificEpithet)) { 
 	    					result.addComment("The values of dwc:genericName, specificEpithet, and infraspecificEpithet are pasrsed out of dwc:scientificName in their expected positions.");
 	    					result.setValue(ComplianceValue.COMPLIANT);

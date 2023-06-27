@@ -370,6 +370,57 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		// problem case from validation data
+		scientificName = "Hakea";
+		genericName = "Hakea";
+		specificEpithet = "";
+		infraspecificEpithet = null;
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Hakea";
+		genericName = "Hakea";
+		specificEpithet = "";
+		infraspecificEpithet = String.valueOf(Character.toChars(0));
+		logger.debug(infraspecificEpithet);
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "Hakea";
+		genericName = "Hakea";
+		specificEpithet = "";
+		infraspecificEpithet = "foo";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		// wrong path in test
+		assertNotEquals("Genus parsed out of dwc:scientificName does not match dwc:genericName.", result.getComment());
+		
+		scientificName = "Hakea";
+		genericName = "Hakea";
+		specificEpithet = "foo";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		// wrong path in test
+		assertNotEquals("Genus parsed out of dwc:scientificName does not match dwc:genericName.", result.getComment());
+		
+		scientificName = "Hakea [sp]";
+		genericName = "Hakea";
+		specificEpithet = "";
+		infraspecificEpithet = "";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 	}
 
 	/**
