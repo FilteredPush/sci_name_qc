@@ -179,6 +179,7 @@ public class DwCSciNameDQ {
      * Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?
      *
      * Provides: #46 VALIDATION_SCIENTIFICNAME_FOUND
+     * Version: 2022-03-22
      *
      * @param scientificName the provided dwc:scientificName to evaluate
 	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
@@ -186,6 +187,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_SCIENTIFICNAME_FOUND", description="Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?")
     @Provides("3f335517-f442-4b98-b149-1e87ff16de45")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/3f335517-f442-4b98-b149-1e87ff16de45/2022-03-22")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY; COMPLIANT if there is a match of the contents of dwc:scientificName with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationScientificnameFound(
     		@ActedUpon("dwc:scientificName") String scientificName,
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
@@ -199,13 +202,12 @@ public class DwCSciNameDQ {
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName 
         // is EMPTY; COMPLIANT if there is a match of the contents 
         // of dwc:scientificName with the bdq:sourceAuthority; otherwise 
-        // NOT_COMPLIANT bdq:sourceAuthority default = "GBIF Backbone 
-        // Taxonomy" [https://doi.org/10.15468/39omei], "API endpoint" 
-        // [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
-        // 
+        // NOT_COMPLIANT 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" 
+        // [https://doi.org/10.15468/39omei], "API endpoint" 
+        // [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         
         if (sourceAuthority==null) { 
         	try {
