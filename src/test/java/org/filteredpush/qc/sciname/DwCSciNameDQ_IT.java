@@ -878,6 +878,13 @@ public class DwCSciNameDQ_IT {
 		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
 		
 		scientificName = ""; 
+		taxonId = "gbif:5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
+		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
+		
+		scientificName = ""; 
 		taxonId = "https://api.gbif.org/v1/species/5219243";
 		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
 		logger.debug(response.getComment());

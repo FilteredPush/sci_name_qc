@@ -1120,6 +1120,7 @@ public class DwCSciNameDQ {
      * Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.
      *
      * Provides: #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID
+     * Version: 2022-04-19
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
@@ -1128,6 +1129,8 @@ public class DwCSciNameDQ {
      */
     @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_TAXONID", description="Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.")
     @Provides("f01fb3f9-2f7e-418b-9f51-adf50f202aea")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-04-19")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName was not EMPTY; FILLED_IN the value of dwc:scientificName if the value of dwc:taxonID could be unambiguously interpreted as a value in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(
     		@Consulted("dwc:taxonID") String taxonID, 
     		@ActedUpon("dwc:scientificName") String scientificName,
@@ -1143,13 +1146,25 @@ public class DwCSciNameDQ {
         // was not EMPTY; FILLED_IN the value of dwc:scientificName 
         // if the value of dwc:taxonID could be unambiguously interpreted 
         // as a value in bdq:sourceAuthority; otherwise NOT_AMENDED 
-        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
-        // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
-        // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         
+        // Notes:
+		// When referencing a GBIF taxon by
+		// GBIF's identifier for that taxon, use the the pseudo-namespace "gbif:" and
+		// the form "gbif:{integer}" as the value for dwc:taxonID. Implementors can be
+		// aware of the current GBIF api endpoint that can replace the pseduo-namespace
+		// gbif: when looking up the taxonID, e.g.
+		// s/gbif:/https:\/\/api.gbif.org\/v1\/species\// will transform the value
+		// dwc:taxonID=gbif:8102122 to the resolvable endpoint
+		// https://api.gbif.org/v1/species/8102122 The pseudo-namespace gbif: is
+		// recommeded by GBIF for use in taxonID to reference GBIF taxon records. Where
+		// resolvable persistent identifiers exist for taxonID values, they should be
+		// used in full, but implementors will need to support at least the gbif:
+		// pseudo-namespace.
+
         if (sourceAuthority==null) { 
         	try {
 				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
@@ -1167,15 +1182,19 @@ public class DwCSciNameDQ {
 			result.addComment("dwc:taxonID is a bare integer and thus inherently ambiguous.");
 			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         } else { 
-        	// GBIF doesn't explicitly define what form the taxonID should take, correct form is 
-        	// probably https://www.gbif.org/species/{integer}, but http and api references might also be used.
+        	// GBIF recommends the pseudo-namespace gbif with taxonID values in the form "gbif:{integer}"
+        	// But https://www.gbif.org/species/{integer}, http and api references might also be used.
         	if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY.getName())) { 
         		if (taxonID.startsWith("https://www.gbif.org/species/") ||
         			 taxonID.startsWith("http://www.gbif.org/species/") ||
         			 taxonID.startsWith("https://api.gbif.org/v1/species/") ||
-        			 taxonID.startsWith("http://api.gbif.org/v1/species/")
+        			 taxonID.startsWith("http://api.gbif.org/v1/species/") ||
+        			 taxonID.startsWith("gbif:") ||
+        			 taxonID.startsWith("GBIF:")
         		) { 
-        			String id = taxonID.replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "");
+        			String id = taxonID.replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "gbif:");
+        			id = id.replace("gbif:", "");  // preferred form
+        			id = id.replace("GBIF:", "");  // possible case variation
         			logger.debug(id);
         			if (id.matches("^[0-9]+$")) { 
         				try {
