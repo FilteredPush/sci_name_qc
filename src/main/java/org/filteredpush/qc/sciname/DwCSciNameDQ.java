@@ -293,7 +293,7 @@ public class DwCSciNameDQ {
         			logger.debug(toValidate.getAuthorship());
 					NameUsage validationResponse = service.validate(toValidate);
 					if (validationResponse==null) { 
-						result.addComment("No Match found for ["+toValidate.getScientificName()+"]["+toValidate.getAuthorship()+"] in ["+sourceAuthority.getName()+"]");
+						result.addComment("No Match found for dwc:scientificName["+scientificName+"] parsed as name=["+toValidate.getScientificName()+"], authorship=["+toValidate.getAuthorship()+"] in ["+sourceAuthority.getName()+"]");
 						result.setResultState(ResultState.RUN_HAS_RESULT);
 						result.setValue(ComplianceValue.NOT_COMPLIANT);
 					} else { 
