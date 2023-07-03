@@ -156,7 +156,9 @@ public class DwCSciNameDQ_IT {
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName 
         // is EMPTY; COMPLIANT if there is a match of the contents 
         // of dwc:scientificName with the bdq:sourceAuthority; otherwise 
-        // NOT_COMPLIANT bdq:sourceAuthority default = "GBIF Backbone 
+        // NOT_COMPLIANT
+		
+        // bdq:sourceAuthority default = "GBIF Backbone 
         // Taxonomy" [https://doi.org/10.15468/39omei], "API endpoint" 
         // [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
@@ -208,6 +210,13 @@ public class DwCSciNameDQ_IT {
 		
 		// Historical capitalized specific epithet.
 		scientificName = "Ophiocoma Alexandri Lyman, 1860";
+		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// name without authorship and multiple GBIF records
+		scientificName = "Eucalyptus camaldulensis";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());

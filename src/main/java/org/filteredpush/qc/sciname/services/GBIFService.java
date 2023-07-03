@@ -799,17 +799,32 @@ public class GBIFService implements Validator {
 					if (!exactMatch) {
 						// If we didn't find an exact match on scientific name and authorship in the list, pick the 
 						// closest authorship and list all of the potential matches.  
+						logger.debug(matches.size());
 						Iterator<NameUsage> im = matches.iterator();
 						if (im.hasNext()) { 
 							NameUsage closest = null;
 							StringBuffer names = new StringBuffer();
 							while (im.hasNext()) { 
 								NameUsage current = im.next();
-								NameComparison nameComparison = nameComparator.compare(taxonName, current.getScientificName());
-								if (NameComparison.isPlausible(nameComparison.getMatchType())) { 
-									names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
-									if (closest == null || taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
-										closest = current;
+								logger.debug(taxonName);
+								logger.debug(current.getScientificName());
+								NameComparison nameComparison;
+								if (SciNameUtils.isEmpty(authorship)) { 
+									nameComparison = nameComparator.compare(taxonName, current.getCanonicalName());
+									if (nameComparison.getMatchType().equals(NameComparison.MATCH_EXACT) || NameComparison.isPlausible(nameComparison.getMatchType())) { 
+										names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
+										if (closest == null || taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+											closest = current;
+										}
+									}
+								} else { 
+									nameComparison = nameComparator.compare(taxonName, current.getScientificName());
+									logger.debug(nameComparison.getMatchType());
+									if (NameComparison.isPlausible(nameComparison.getMatchType())) { 
+										names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
+										if (closest == null || taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
+											closest = current;
+										}
 									}
 								}
 							}
@@ -821,6 +836,9 @@ public class GBIFService implements Validator {
 								result.setOriginalScientificName(taxonNameToValidate.getCanonicalName());
 								result.setScientificNameStringEditDistance(1d);
 								result.setAuthorshipStringEditDistance(taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(taxonNameToValidate.getAuthorship(), result.getAuthorship()));
+								if (SciNameUtils.isEmpty(authorship)) { 
+									result.setNameMatchDescription(NameComparison.MATCH_EXACT);
+								}
 							}
 						}
 					}

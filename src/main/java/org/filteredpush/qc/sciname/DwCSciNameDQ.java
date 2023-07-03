@@ -193,7 +193,6 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:scientificName") String scientificName,
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
     	) {
-    	
 
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
@@ -290,6 +289,8 @@ public class DwCSciNameDQ {
         			toValidate.setScientificName(scientificName);
         		}
         		try {
+        			logger.debug(toValidate.getScientificName());
+        			logger.debug(toValidate.getAuthorship());
 					NameUsage validationResponse = service.validate(toValidate);
 					if (validationResponse==null) { 
 						result.addComment("No Match found for ["+toValidate.getScientificName()+"]["+toValidate.getAuthorship()+"] in ["+sourceAuthority.getName()+"]");
@@ -297,8 +298,13 @@ public class DwCSciNameDQ {
 						result.setValue(ComplianceValue.NOT_COMPLIANT);
 					} else { 
 						logger.debug(validationResponse.getMatchDescription());
+						logger.debug(validationResponse.getNameMatchDescription());
 						if (validationResponse.getMatchDescription().equals(NameComparison.MATCH_EXACT)) { 
 							result.addComment("Exact Match found for ["+scientificName+"] to ["+validationResponse.getGuid()+"]");
+							result.setResultState(ResultState.RUN_HAS_RESULT);
+							result.setValue(ComplianceValue.COMPLIANT);
+						} else if (validationResponse.getMatchDescription().startsWith(NameComparison.MATCH_MULTIPLE) && SciNameUtils.isEmpty(toValidate.getAuthorship()) && validationResponse.getNameMatchDescription().equals(NameComparison.MATCH_EXACT)) { 
+							result.addComment("Exact Match found for ["+scientificName+"] where authorship is empty to ["+validationResponse.getAcceptedName()+"]");
 							result.setResultState(ResultState.RUN_HAS_RESULT);
 							result.setValue(ComplianceValue.COMPLIANT);
 						} else { 
