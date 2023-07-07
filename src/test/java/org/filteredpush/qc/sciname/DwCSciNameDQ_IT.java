@@ -17,20 +17,13 @@ package org.filteredpush.qc.sciname;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.api.result.AmendmentValue;
 import org.datakurator.ffdq.api.result.ComplianceValue;
 import org.datakurator.ffdq.model.ResultState;
-import org.gbif.nameparser.NameParserGBIF;
-import org.gbif.nameparser.api.ParsedName;
-import org.gbif.nameparser.api.Rank;
-import org.gbif.nameparser.api.UnparsableNameException;
 import org.junit.Test;
-import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 /**
  * Tests of DwCSciNameDQ which require online access to remote services, named, to fit the expectations of the
@@ -415,14 +408,6 @@ public class DwCSciNameDQ_IT {
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:4365662",response.getValue().getObject().get("dwc:taxonID"));	
-		
-		/*
-		 * TODO: Failing from two returned records for name.
-		{"offset":0,"limit":100,"endOfRecords":true,"results":[
-		  {"key":4365662,"nubKey":4365662,"nameKey":2358672,"taxonID":"gbif:4365662","sourceTaxonKey":172468900,"kingdom":"Animalia","phylum":"Mollusca","order":"Neogastropoda","family":"Muricidae","genus":"Chicoreus","species":"Chicoreus palmarosae","kingdomKey":1,"phylumKey":52,"classKey":225,"orderKey":982,"familyKey":2304120,"genusKey":2304298,"speciesKey":4365662,"datasetKey":"d7dddbf4-2cf0-4f39-9b2a-bb099caae36c","constituentKey":"7ddf754f-d193-4cc9-b351-99906754a03b","parentKey":2304298,"parent":"Chicoreus",                                                                        "basionymKey":5726652,"basionym":"Murex palmarosae Lamarck, 1822","scientificName":"Chicoreus palmarosae (Lamarck, 1822)","canonicalName":"Chicoreus palmarosae","vernacularName":"rose-branch murex","authorship":"(Lamarck, 1822) ","nameType":"SCIENTIFIC","rank":"SPECIES","origin":"SOURCE","taxonomicStatus":"ACCEPTED","nomenclaturalStatus":[],"remarks":"","numDescendants":0,"lastCrawled":"2021-11-29T13:11:38.124+00:00","lastInterpreted":"2021-11-29T12:25:55.066+00:00","issues":["ORIGINAL_NAME_DERIVED"],"synonym":false,"class":"Gastropoda"},
-		  {"key":8154161,                 "nameKey":2358672,"taxonID":"gbif:8154161",                           "kingdom":"Animalia","phylum":"Mollusca","order":"Neogastropoda","family":"Muricidae","genus":"Chicoreus","species":"Chicoreus palmarosae","kingdomKey":1,"phylumKey":52,"classKey":225,"orderKey":982,"familyKey":2304120,"genusKey":2304298,"speciesKey":4365662,"datasetKey":"d7dddbf4-2cf0-4f39-9b2a-bb099caae36c","constituentKey":"7ddf754f-d193-4cc9-b351-99906754a03b","parentKey":2304298,"parent":"Chicoreus","acceptedKey":4365662,"accepted":"Chicoreus palmarosae (Lamarck, 1822)","basionymKey":5726652,"basionym":"Murex palmarosae Lamarck, 1822","scientificName":"Chicoreus palmarosae (Lamarck, 1822)","canonicalName":"Chicoreus palmarosae",                                     "authorship":"(Lamarck, 1822) ","nameType":"SCIENTIFIC","rank":"SPECIES","origin":"SOURCE","taxonomicStatus":"SYNONYM", "nomenclaturalStatus":[],"remarks":"","numDescendants":0,"lastCrawled":"2021-11-29T13:11:38.124+00:00","lastInterpreted":"2021-11-29T12:25:55.080+00:00","issues":["ORIGINAL_NAME_DERIVED"],"synonym":true, "class":"Gastropoda"}]
-	    }
-		*/
 		
 		try {
 			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
@@ -1085,14 +1070,6 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
 	}
 
-
-	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonidAmbiguous(java.lang.String)}.
-	 */
-	@Test
-	public void testValidationTaxonidAmbiguous() {
-// TODO: 		fail("Not yet implemented");
-	}
 
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationGenusNotfound(java.lang.String)}.

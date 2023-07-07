@@ -11,8 +11,11 @@ public class Taxon {
 	private String phylum;
 	private String taxonomic_class;
 	private String order;
+	private String superfamily;
 	private String family;
 	private String subfamily;
+	private String tribe;
+	private String subtribe;
 	private String genus;
 	private String subgenus;
 	private String scientificName;
