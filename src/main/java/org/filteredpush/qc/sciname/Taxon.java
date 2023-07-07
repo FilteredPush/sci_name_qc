@@ -1,11 +1,19 @@
 package org.filteredpush.qc.sciname;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import edu.harvard.mcz.nametools.NameUsage;
+
 /** A utility class containing the dwc:Taxon terms.   
  * 
  * @author mole
  *
  */
 public class Taxon {
+	
+	private static final Log logger = LogFactory.getLog(Taxon.class);
+	
 	private String taxonID;
 	private String kingdom;
 	private String phylum;
@@ -293,5 +301,32 @@ public class Taxon {
 		result.append(originalNameUsageID).append(":");
 		result.append(acceptedNameUsageID).append(":");
 		return result.toString().replaceAll(":[:]+",":");
+	}
+
+	public boolean sameHigherAs(NameUsage match) {
+		boolean result = true;
+		logger.debug(taxonomic_class);
+		logger.debug(match.getTclass());
+		if (!SciNameUtils.isEmpty(kingdom) && !match.getKingdom().equals("") && !kingdom.trim().toLowerCase().equals(match.getKingdom().trim().toLowerCase()) ) {
+			logger.debug("Missmatch: " + kingdom + " " + match.getKingdom());
+			result = false;
+		}
+		if (!SciNameUtils.isEmpty(phylum) && !match.getPhylum().equals("") && !phylum.trim().toLowerCase().equals(match.getPhylum().trim().toLowerCase()) ) {
+			logger.debug("Missmatch: " + phylum + " " + match.getPhylum());
+			result = false;
+		}
+		if (!SciNameUtils.isEmpty(taxonomic_class) && !match.getTclass().equals("") && !taxonomic_class.trim().toLowerCase().equals(match.getTclass().trim().toLowerCase()) ) {
+			logger.debug("Missmatch: " + taxonomic_class+ " " + match.getTclass());
+			result = false;
+		}
+		if (!SciNameUtils.isEmpty(order) && !match.getOrder().equals("") && !order.trim().toLowerCase().equals(match.getOrder().trim().toLowerCase()) ) {
+			logger.debug("Missmatch: " + order + " " + match.getOrder());
+			result = false;
+		}
+		if (!SciNameUtils.isEmpty(family) && !match.getFamily().equals("") && !family.trim().toLowerCase().equals(match.getFamily().trim().toLowerCase()) ) {
+			logger.debug("Missmatch: " + family + " " + match.getFamily());
+			result = false;
+		}
+		return result;
 	}
 }

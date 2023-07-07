@@ -714,6 +714,7 @@ public class DwCSciNameDQ {
      * Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?
      *
      * Provides: #70 VALIDATION_TAXON_UNAMBIGUOUS
+     * Version: 2022-06-24
      *
      * @param class the provided dwc:class to evaluate
      * @param genus the provided dwc:genus to evaluate
@@ -743,6 +744,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_TAXON_UNAMBIGUOUS", description="Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?")
     @Provides("4c09f127-737b-4686-82a0-7c8e30841590")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2022-06-24")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of dwc:taxonID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:taxonId references a single taxon record in the bdq:sourceAuthority, or (2) dwc:taxonID is empty and dwc:scientificName references a single taxon record in the bdq:sourceAuthority, or (3) if dwc:scientificName and dwc:taxonID are EMPTY and if a combination of the values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, or (4) if ambiguity produced by multiple matches in (2) or (3) can be disambiguated to a unique Taxon using the values of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationTaxonUnambiguous(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:genus") String genus, 
@@ -775,6 +778,7 @@ public class DwCSciNameDQ {
 				scientificNameID, originalNameUsageID, acceptedNameUsageID), sourceAuthorityString);
     }
     
+    
     /**
      * Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?
      * Utility method using a Taxon object as input instead of a separate annotated
@@ -798,27 +802,31 @@ public class DwCSciNameDQ {
         // of dwc:taxonID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, 
         // dwc:infraspecificEpithet, dwc:scientificNameAuthorship, 
         // dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:taxonId 
-        // or dwc:scientificName reference a single taxon record in 
-        // the bdq:sourceAuthority, or (2) if dwc:scientificName and 
-        // dwc:taxonID are EMPTY and if a combination of the values 
-        // of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, 
-        // dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship 
-        // can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, 
-        // or (3) if ambiguity produced by multiple matches in (2) 
-        // can be disambiguated to a unique Taxon using the values 
+        // references a single taxon record in the bdq:sourceAuthority, 
+        // or (2) dwc:taxonID is empty and dwc:scientificName references 
+        // a single taxon record in the bdq:sourceAuthority, or (3) 
+        // if dwc:scientificName and dwc:taxonID are EMPTY and if a 
+        // combination of the values of the terms dwc:genericName, 
+        // dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, 
+        // dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously 
+        // resolved to a unique taxon in the bdq:sourceAuthority, or 
+        // (4) if ambiguity produced by multiple matches in (2) or 
+        // (3) can be disambiguated to a unique Taxon using the values 
         // of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, 
         // dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, 
         // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
         // dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT 
-        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
-        // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
+        
+        // TODO: dwc:cultivarEpithet not handled yet
+        // TODO: Disambiguation not done yet on dwc:higherClassification, 
+        // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
+        // dwc:taxonConceptID and dwc:vernacularName
+        
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
-        
-        // TODO: Specification needs clarification.  
-        // TODO: Not all paths settled here, needs work. 
+        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 
         if (SciNameUtils.isEmpty(taxon.getTaxonID()) &&
         		SciNameUtils.isEmpty(taxon.getScientificName()) &&
@@ -842,6 +850,9 @@ public class DwCSciNameDQ {
         	} else {
         		try {
         			sourceAuthority = new SciNameSourceAuthority(sourceAuthorityString);
+// TDOO: Implement https://biodiversity.org.au/nsl/services/rest/name/apni/
+// Invoking: https://biodiversity.org.au/nsl/services/api/name/taxon-search.json?q=Solanum%20tuberosum       			
+        			
         		} catch (SourceAuthorityException e) {
         			logger.debug(e.getMessage());
         			result.addComment("Unsupported Source Authority: " + e.getMessage());
@@ -902,12 +913,14 @@ public class DwCSciNameDQ {
         					List<NameUsage> matchList = null;
         					if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY)) { 
         						String id = taxon.getTaxonID().replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "");
+        						id = id.replaceFirst("^gbif:", ""); // expected case of gbif:{integer}
         						logger.debug(id);
         						if (id.matches("^[0-9]+$")) { 
         							try {
         								String matches = GBIFService.fetchTaxonByID(id, GBIFService.KEY_GBIFBACKBONE);
         								logger.debug(matches);
         								matchList = GBIFService.parseAllNameUsagesFromJSON(matches);
+        								logger.debug(matchList.size());
         								if (matchList.size()==1) { 
         									logger.debug(matchList.get(0).getScientificName());
         									if (taxon.getScientificName().equals(matchList.get(0).getScientificName())) { 
@@ -918,17 +931,49 @@ public class DwCSciNameDQ {
         										result.addComment("Exact match to provided taxonID found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName is empty");
         										result.setValue(ComplianceValue.COMPLIANT);
         										result.setResultState(ResultState.RUN_HAS_RESULT);
+        									} else {
+        										// Check for authorship present/absent
+        										if (SciNameUtils.isEmpty(taxon.getScientificNameAuthorship())) { 
+        											try {
+        												NameAuthorshipParse nameParse = SciNameUtils.getNameWithoutAuthorship(matchList.get(0).getScientificName());
+        												if (nameParse.getNameWithoutAuthorship().equals(taxon.getScientificName())) { 
+        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName matches value known to authority [" + matchList.get(0).getScientificName() + "] but without authorship");
+        													result.setValue(ComplianceValue.COMPLIANT);
+        													result.setResultState(ResultState.RUN_HAS_RESULT);
+        												} else { 
+        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName does not match value known to authority [" + matchList.get(0).getScientificName() + "] without authorship");
+        													result.setValue(ComplianceValue.NOT_COMPLIANT);
+        													result.setResultState(ResultState.RUN_HAS_RESULT);
+        												}
+        											} catch (UnparsableNameException e) {
+        												// TODO Auto-generated catch block
+        												e.printStackTrace();
+        											}
+        											
+        										} else { 
+        											if (taxon.getScientificName().contains(taxon.getScientificNameAuthorship())) { 
+        												//TODO
+        											}
+        										}
         									}
+        								} else if (matchList.size()==0){ 
+       										result.addComment("No match to provided taxonID [" + taxon.getTaxonID() + "] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName is empty");
+       										result.setValue(ComplianceValue.NOT_COMPLIANT);
+       										result.setResultState(ResultState.RUN_HAS_RESULT);
+        								} else { 
+        									// TODO: disambiguate multiple matches
         								}
         							} catch (IDFormatException e) {
-        								// TODO Auto-generated catch block
-        								e.printStackTrace();
+        								result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] does not conform to the expecations for " + sourceAuthority.getName() + ".");
+        								result.setValue(ComplianceValue.NOT_COMPLIANT);
+        								result.setResultState(ResultState.RUN_HAS_RESULT);
         							}
         						} else { 
 
         						}
         					} else if (sourceAuthority.isGBIFChecklist()) { 
         						String id = taxon.getTaxonID().replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "");
+        						id = id.replaceFirst("^gbif:", ""); // expected gbif:{integer} form
         						logger.debug(id);
         						if (id.matches("^[0-9]+$")) { 
         							try {
@@ -936,8 +981,9 @@ public class DwCSciNameDQ {
         								logger.debug(matches);
         								matchList = GBIFService.parseAllNameUsagesFromJSON(matches);
         							} catch (IDFormatException e) {
-        								// TODO Auto-generated catch block
-        								e.printStackTrace();
+        								result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] does not conform to the expecations for " + sourceAuthority.getName() + ".");
+        								result.setValue(ComplianceValue.NOT_COMPLIANT);
+        								result.setResultState(ResultState.RUN_HAS_RESULT);
         							}
         						} 
         					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
@@ -963,8 +1009,9 @@ public class DwCSciNameDQ {
         								}
         							}
         						} catch (IDFormatException e) {
-        							// TODO Auto-generated catch block
-        							e.printStackTrace();
+   									result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] does not conform to the expecations for " + sourceAuthority.getName() + ".");
+  									result.setValue(ComplianceValue.NOT_COMPLIANT);
+   									result.setResultState(ResultState.RUN_HAS_RESULT);
         						}
         					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
         						NameUsage taxonAtID;
@@ -974,15 +1021,24 @@ public class DwCSciNameDQ {
         							taxonAtID = IRMNGService.lookupTaxonByID(id);
         							if (taxonAtID.getScientificName().equals(taxon.getScientificName())) { 
         								// matched
+       									result.addComment("Match to provided taxonID found in " + sourceAuthority.getName() + ".");
+       									result.setValue(ComplianceValue.COMPLIANT);
+       									result.setResultState(ResultState.RUN_HAS_RESULT);
         							} else { 
         								// not matched
+       									result.addComment("Match to provided taxonID ["+taxon.getTaxonID()+"] not found in " + sourceAuthority.getName() + ".");
+       									result.setValue(ComplianceValue.NOT_COMPLIANT);
+       									result.setResultState(ResultState.RUN_HAS_RESULT);
         							}
         						} catch (IDFormatException e) {
-        							// TODO Auto-generated catch block
-        							e.printStackTrace();
+   									result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] does not conform to the expecations for " + sourceAuthority.getName() + ".");
+  									result.setValue(ComplianceValue.NOT_COMPLIANT);
+   									result.setResultState(ResultState.RUN_HAS_RESULT);
         						} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
-        							// TODO Auto-generated catch block
-        							e.printStackTrace();
+        							//  Could be server error or failure to deserialize the response body, 
+        							// likely but not certain to be remote problem
+        							result.addComment("Error looking up provided taxonID [" +taxon.getTaxonID() + "] in sourceAuthority " +sourceAuthority.getName() + ".  " + e.getMessage());
+   									result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         						}						
         					} else { 
         						throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
@@ -1006,21 +1062,24 @@ public class DwCSciNameDQ {
         					if (matchList.size()>0) {
         						boolean hasMatch = false;
         						int matchCounter = 0;
+        						Integer matchedKey = null; 
         						Map<String,String> kvp = new HashMap<String,String>();
         						Iterator<NameUsage> i = matchList.iterator();
         						while (i.hasNext()) { 
         							NameUsage match = i.next();
         							logger.debug(match.getCanonicalName());
-        							if (
-        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getKingdom(), match.getKingdom())) &&
-        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getPhylum(), match.getPhylum())) &&
-        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getTaxonomic_class(), match.getClazz())) &&
-        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getOrder(), match.getOrder())) &&
-        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getFamily(), match.getFamily())) &&
-        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getGenus(), match.getGenus())) &&
-        									(SciNameUtils.isEqualOrNonEmpty(lookMeUp, match.getCanonicalName())) 
-        									) 
-        							{ 
+        							logger.debug(match.getTaxonomicStatus());
+        							logger.debug(match.getAcceptedKey());
+        							if ( taxon.sameHigherAs(match) ) { 
+//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getKingdom(), match.getKingdom())) &&
+//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getPhylum(), match.getPhylum())) &&
+//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getTaxonomic_class(), match.getClazz())) &&
+//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getOrder(), match.getOrder())) &&
+//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getFamily(), match.getFamily())) &&
+//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getGenus(), match.getGenus())) &&
+//        									(SciNameUtils.isEqualOrNonEmpty(lookMeUp, match.getCanonicalName())) 
+//        									) 
+//        							{ 
         								logger.debug(match.getCanonicalName());
         								logger.debug(match.getAuthorship());
         								logger.debug(match.getAuthorshipStringSimilarity());
@@ -1060,10 +1119,36 @@ public class DwCSciNameDQ {
         									authorshipOK = true; // no basis to compare, assume ok.
         								}
         								logger.debug(match.getGuid());
-        								if (!SciNameUtils.isEmpty(match.getGuid()) && authorshipOK) { 
-        									hasMatch=true;
-        									matchCounter++;
-        									kvp.put("dwc:taxonID", match.getGuid());
+        								if (!SciNameUtils.isEmpty(match.getGuid()) && authorshipOK) {
+        									if (taxon.sameHigherAs(match)) { 
+        										if (hasMatch) { 
+        											logger.debug(match.getAuthorship());
+        											logger.debug(match.getAuthorComparator());
+        											NameComparison authorshipComparison = match.getAuthorComparator().compare(taxon.getScientificNameAuthorship(), match.getAuthorship());
+        											if (match.getAcceptedKey()==matchedKey && 
+        													match.getTaxonomicStatus().equals("SYNONYM") && (
+        															authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACT) ||
+        															authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACTADDSYEAR) || 
+        															authorshipComparison.getMatchType().equals(NameComparison.MATCH_L_EXACTYEAR)
+        													)
+        												) 
+        											{ 
+        												// already exact match and this is an identical synonym entry
+        											} else { 
+        												hasMatch=true;
+        												matchedKey = match.getKey();
+        												matchCounter++;
+        												kvp.put("dwc:taxonID", match.getGuid());
+        											}
+        										} else { 
+        											hasMatch=true;
+        											matchedKey = match.getKey();
+        											matchCounter++;
+        											kvp.put("dwc:taxonID", match.getGuid());
+        										} 
+        									} else {
+        										logger.debug("Higher taxonomy not matched, excluding " + match.getKey());
+        									}
         								}
         							}
         						}

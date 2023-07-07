@@ -205,7 +205,11 @@ public class NameUsage implements LinneanClassification {
 			rank = getValFromKey(json,"rank");
 			kingdom = getValFromKey(json,"kingdom");
 			phylum = getValFromKey(json,"phylum");
-			tclass = getValFromKey(json,"clazz");
+			if (getValFromKey(json,"class") != null) { 
+				tclass = getValFromKey(json,"class");
+			} else { 
+				tclass = getValFromKey(json,"clazz");
+			}
 			order = getValFromKey(json,"order");
 			family = getValFromKey(json,"family");
 			genus = getValFromKey(json,"genus");
@@ -215,6 +219,9 @@ public class NameUsage implements LinneanClassification {
             guid = getValFromKey(json,"taxonID");
             fixAuthorship();
             nullBlanks();
+            if (authorComparator==null ) { 
+            	authorComparator = AuthorNameComparator.authorNameComparatorFactory(authorship, kingdom);
+            }
 		}
 	}
 	

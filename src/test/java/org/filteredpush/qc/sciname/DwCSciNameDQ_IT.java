@@ -660,18 +660,21 @@ public class DwCSciNameDQ_IT {
         // of dwc:taxonID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, 
         // dwc:infraspecificEpithet, dwc:scientificNameAuthorship, 
         // dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:taxonId 
-        // or dwc:scientificName reference a single taxon record in 
-        // the bdq:sourceAuthority, or (2) if dwc:scientificName and 
-        // dwc:taxonID are EMPTY and if a combination of the values 
-        // of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, 
-        // dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship 
-        // can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, 
-        // or (3) if ambiguity produced by multiple matches in (2) 
-        // can be disambiguated to a unique Taxon using the values 
+        // references a single taxon record in the bdq:sourceAuthority, 
+        // or (2) dwc:taxonID is empty and dwc:scientificName references 
+        // a single taxon record in the bdq:sourceAuthority, or (3) 
+        // if dwc:scientificName and dwc:taxonID are EMPTY and if a 
+        // combination of the values of the terms dwc:genericName, 
+        // dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, 
+        // dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously 
+        // resolved to a unique taxon in the bdq:sourceAuthority, or 
+        // (4) if ambiguity produced by multiple matches in (2) or 
+        // (3) can be disambiguated to a unique Taxon using the values 
         // of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, 
         // dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, 
         // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
         // dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT 
+		
         // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
         // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 		
@@ -726,6 +729,93 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:5726780");
+		taxon.setScientificName("Murex brevispina");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:5726780");
+		taxon.setScientificName("Murex brevispiaria");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:5726780");
+		taxon.setScientificName("Murex");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("");
+		taxon.setGenus("Murex");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		taxon.setScientificName("Murex brevispina Lamarck, 1822");
+		taxon.setScientificNameAuthorship("Lamarck, 1822");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	
+		// dataID:524
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		taxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// dataID: 525
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		taxon.setScientificName("Chicoreus palmarosae (Lamarck)");
+		taxon.setScientificNameAuthorship("(Lamarck)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// dataID: 526
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		taxon.setScientificName("Chicoreus palmarosae (L., 1822)");
+		taxon.setScientificNameAuthorship("(L., 1822)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		
 		// ambiregnal homonyms 
 		scientificName = "Graphis";  // gastropod and lichen
 		taxon = new Taxon();
@@ -740,6 +830,26 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setScientificName("Graphis");
 		taxon.setKingdom("Fungi");
+		taxon.setTaxonomic_class("Lecanoromycetes");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setScientificName("Graphis");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("Lecanoromycetes");
+		taxon.setFamily("Graphidaceae");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// dataID:522
+		taxon = new Taxon();
+		taxon.setScientificName("Graphis");
+		taxon.setKingdom("");
 		taxon.setTaxonomic_class("Lecanoromycetes");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
