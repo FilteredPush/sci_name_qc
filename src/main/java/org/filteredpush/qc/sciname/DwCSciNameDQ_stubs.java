@@ -145,34 +145,6 @@ public class DwCSciNameDQ_stubs {
 
 
     /**
-     * Does the value of dwc:taxonID contain a complete identifier?
-     *
-     * Provides: VALIDATION_TAXONID_COMPLETE
-     * Version: 2022-11-07
-     *
-     * @param taxonID the provided dwc:taxonID to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_TAXONID_COMPLETE", description="Does the value of dwc:taxonID contain a complete identifier?")
-    @Provides("a82c7e3a-3a50-4438-906c-6d0fefa9e984")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2022-11-07")
-    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; COMPLIANT if (1) taxonID is a validly formed LSID, or (2) taxonID is a validly formed URN with at least NID and NSS present, or (3) taxonID is in the form scope:value, or (4) taxonID is a validly formed URI with host and path where path consists of more than just '/'; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationTaxonidComplete(@ActedUpon("dwc:taxonID") String taxonID) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; 
-        // COMPLIANT if (1) taxonID is a validly formed LSID, or (2) 
-        // taxonID is a validly formed URN with at least NID and NSS 
-        // present, or (3) taxonID is in the form scope:value, or (4) 
-        // taxonID is a validly formed URI with host and path where 
-        // path consists of more than just "/"; otherwise NOT_COMPLIANT 
-        // 
-
-        return result;
-    }
-
-    /**
      * Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?
      *
      * Provides: VALIDATION_CLASSIFICATION_CONSISTENT

@@ -1815,28 +1815,45 @@ public class DwCSciNameDQ {
         return result;
     }
 
+
+        // 
+    
     /**
-     * Does the value of dwc:taxonID contain both a URI and namespace indicator?
+     * Does the value of dwc:taxonID contain a complete identifier?
      *
      * Provides: #121 VALIDATION_TAXONID_COMPLETE
+     * Version: 2022-11-07
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Validation(label="VALIDATION_TAXONID_COMPLETE", description="Does the value of dwc:taxonID contain both a URI and namespace indicator?")
+    @Validation(label="VALIDATION_TAXONID_COMPLETE", description="Does the value of dwc:taxonID contain a complete identifier?")
     @Provides("a82c7e3a-3a50-4438-906c-6d0fefa9e984")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2022-11-07")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; COMPLIANT if (1) taxonID is a validly formed LSID, or (2) taxonID is a validly formed URN with at least NID and NSS present, or (3) taxonID is in the form scope:value, or (4) taxonID is a validly formed URI with host and path where path consists of more than just '/'; otherwise NOT_COMPLIANT ")
     public static DQResponse<ComplianceValue> validationTaxonidComplete(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
         // INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; 
-        // COMPLIANT if dwc:taxonID contains both a URI and a namespace 
-        // indicator; otherwise NOT_COMPLIANT 
-
+        // COMPLIANT if (1) taxonID is a validly formed LSID, or (2) 
+        // taxonID is a validly formed URN with at least NID and NSS 
+        // present, or (3) taxonID is in the form scope:value, or (4) 
+        // taxonID is a validly formed URI with host and path where 
+        // path consists of more than just "/"; otherwise NOT_COMPLIANT 
+        
         
         if (SciNameUtils.isEmpty(taxonID)) { 
         	result.addComment("No value provided for taxonId.");
         	result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+        } else if (taxonID.matches("^gbif:[0-9]+$")) { 
+        	result.addComment("Provided taxonID recognized as a GBIF taxon identifier using the pseudo-namespace gbif:");
+        	result.setResultState(ResultState.RUN_HAS_RESULT);
+        	result.setValue(ComplianceValue.COMPLIANT);
+        } else if (taxonID.matches("^[0-9]+$")) { 
+        	result.addComment("Provided taxonID ["+ taxonID +"] is a bare integer without an authority and this is incomplete.");
+        	result.setResultState(ResultState.RUN_HAS_RESULT);
+        	result.setValue(ComplianceValue.NOT_COMPLIANT);
         } else { 
         	try { 
         		RFC8141URN urn = new RFC8141URN(taxonID);
@@ -1860,45 +1877,55 @@ public class DwCSciNameDQ {
         			logger.debug(urn.getNss());
         			if (urn.getNid().length()>0 && urn.getNss().length()>0) { 
         				result.addComment("Provided taxonID recognized as an URN.");
-       					result.setResultState(ResultState.RUN_HAS_RESULT);
-       					result.setValue(ComplianceValue.COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        				result.setValue(ComplianceValue.COMPLIANT);
         			} else { 
         				result.addComment("Provided taxonID appears to be a URN, but doesn't have both NID and NSS");
-       					result.setResultState(ResultState.RUN_HAS_RESULT);
-       					result.setValue(ComplianceValue.NOT_COMPLIANT);
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
         			}
         		}
         	} catch (URNFormatException e) { 
         		logger.debug(e.getMessage());
-        		try {
-					URI uri = new URI(taxonID);
-					logger.debug(uri.getScheme());
-					logger.debug(uri.getAuthority());
-					logger.debug(uri.getHost());
-					logger.debug(uri.getPath());
-        			if (uri.getHost()!=null && uri.getPath()!=null 
-        					&& uri.getHost().length()>0 && uri.getPath().length()>0
-        					&& !uri.getPath().equals("/")) {
-        				if (uri.getHost().equalsIgnoreCase("www.gbif.org") && uri.getPath().equals("/species/")) { 
-        					result.addComment("Provided taxonID recognized as GBIF species URL, but lacks the ID ["+taxonID+"]");
+        		if (taxonID.toLowerCase().matches("^[a-z]+:[0-9]+$")) { 
+        			result.addComment("Provided taxonID ["+taxonID+"] matches the pattern scope:value where value is an integer.");
+        			result.setResultState(ResultState.RUN_HAS_RESULT);
+        			result.setValue(ComplianceValue.COMPLIANT);
+        		} else if (taxonID.toLowerCase().matches("^[a-z]+:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")) { 
+        			result.addComment("Provided taxonID ["+taxonID+"] matches the pattern scope:value where value is a uuid.");
+        			result.setResultState(ResultState.RUN_HAS_RESULT);
+        			result.setValue(ComplianceValue.COMPLIANT);
+        		} else { 
+        			try {
+        				URI uri = new URI(taxonID);
+        				logger.debug(uri.getScheme());
+        				logger.debug(uri.getAuthority());
+        				logger.debug(uri.getHost());
+        				logger.debug(uri.getPath());
+        				if (uri.getHost()!=null && uri.getPath()!=null 
+        						&& uri.getHost().length()>0 && uri.getPath().length()>0
+        						&& !uri.getPath().equals("/")) {
+        					if (uri.getHost().equalsIgnoreCase("www.gbif.org") && uri.getPath().equals("/species/")) { 
+        						result.addComment("Provided taxonID recognized as GBIF species URL, but lacks the ID ["+taxonID+"]");
+        						result.setResultState(ResultState.RUN_HAS_RESULT);
+        						result.setValue(ComplianceValue.NOT_COMPLIANT);
+        					} else { 
+        						result.addComment("Provided taxonID recognized as an URI with host, and path.");
+        						result.setResultState(ResultState.RUN_HAS_RESULT);
+        						result.setValue(ComplianceValue.COMPLIANT);
+        					}
+        				} else { 
+        					result.addComment("Provided taxonID may be a URI, but doesn't have host and path ["+taxonID+"]");
         					result.setResultState(ResultState.RUN_HAS_RESULT);
         					result.setValue(ComplianceValue.NOT_COMPLIANT);
-        				} else { 
-        					result.addComment("Provided taxonID recognized as an URI with host, and path.");
-        					result.setResultState(ResultState.RUN_HAS_RESULT);
-        					result.setValue(ComplianceValue.COMPLIANT);
         				}
-        			} else { 
-        				result.addComment("Provided taxonID may be a URI, but doesn't have host and path ["+taxonID+"]");
-       					result.setResultState(ResultState.RUN_HAS_RESULT);
-       					result.setValue(ComplianceValue.NOT_COMPLIANT);
+        			} catch (URISyntaxException e1) {
+        				logger.debug(e1);
+        				result.addComment("Provided value for taxonID ["+taxonID+"] is not a LSID, URN, URI, or identifier in the form scope:value.");
+        				result.setResultState(ResultState.RUN_HAS_RESULT);
+        				result.setValue(ComplianceValue.NOT_COMPLIANT);
         			}
-				} catch (URISyntaxException e1) {
-					logger.debug(e1);
-					result.addComment("Provided value for taxonID ["+taxonID+"] is not a URN or a URI.");
-					result.setResultState(ResultState.RUN_HAS_RESULT);
-					result.setValue(ComplianceValue.NOT_COMPLIANT);
-				}
+        		}
         	}
         	
         }
