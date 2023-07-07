@@ -257,17 +257,15 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
-		// TODO: In spreadsheet of validation data, may be in error there, confirm what correct expectation should be.
-		/*
+		// Validation dataID: 812
 		scientificName="Hakea decurrens ssp. physocarpa";
 		genericName="";
 		specificEpithet="decurrens";
-		infraspecificEpithet="pyhsocarpa";    //  ??? Error ???
+		infraspecificEpithet="physocarpa";  
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
-		*/
 		
 		scientificName = "Ausareum bus cus";
 		genericName = "Aus";
