@@ -143,40 +143,6 @@ public class DwCSciNameDQ_stubs {
         return result;
     }
 
-    /**
-     * Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.
-     *
-     * Provides: AMENDMENT_SCIENTIFICNAME_FROM_TAXONID
-     * Version: 2022-04-19
-     *
-     * @param taxonID the provided dwc:taxonID to evaluate
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @return DQResponse the response of type AmendmentValue to return
-     */
-    @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_TAXONID", description="Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.")
-    @Provides("f01fb3f9-2f7e-418b-9f51-adf50f202aea")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-04-19")
-    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName was not EMPTY; FILLED_IN the value of dwc:scientificName if the value of dwc:taxonID could be unambiguously interpreted as a value in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
-    public DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(@ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:scientificName") String scientificName) {
-        DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID 
-        // is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName 
-        // was not EMPTY; FILLED_IN the value of dwc:scientificName 
-        // if the value of dwc:taxonID could be unambiguously interpreted 
-        // as a value in bdq:sourceAuthority; otherwise NOT_AMENDED 
-        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
-        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
-        // 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-
-        return result;
-    }
-
 
     /**
      * Does the value of dwc:taxonID contain a complete identifier?
