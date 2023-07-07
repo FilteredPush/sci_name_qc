@@ -946,6 +946,7 @@ public class DwCSciNameDQ {
         													result.setResultState(ResultState.RUN_HAS_RESULT);
         												}
         											} catch (UnparsableNameException e) {
+        												// handle gracefully
         												// TODO Auto-generated catch block
         												e.printStackTrace();
         											}

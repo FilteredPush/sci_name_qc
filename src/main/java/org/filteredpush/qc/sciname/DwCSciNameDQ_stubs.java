@@ -4,7 +4,6 @@ package org.filteredpush.qc.sciname;
 
 import org.datakurator.ffdq.annotations.*;
 import org.datakurator.ffdq.api.DQResponse;
-import org.datakurator.ffdq.model.ResultState;
 import org.datakurator.ffdq.api.result.*;
 
 @Mechanism(value="90516df7-838c-4d53-81d9-8131be6ac713",label="Kurator: Scientific Name Validator - DwCSciNameDQ:v1.0.1-SNAPSHOT")
