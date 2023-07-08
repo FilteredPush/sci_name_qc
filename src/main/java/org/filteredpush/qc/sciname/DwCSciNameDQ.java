@@ -823,7 +823,6 @@ public class DwCSciNameDQ {
         // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
         // dwc:taxonConceptID and dwc:vernacularName
         
-
         // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
         // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
@@ -907,6 +906,8 @@ public class DwCSciNameDQ {
         					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         				}
         			} else {  
+        				String providedAuthorBit = taxon.getScientificNameAuthorship();
+        				String providedNameBit = taxon.getScientificName().replace(taxon.getScientificNameAuthorship(), "");
         				result.addComment("Provided taxon ["+taxon.toString()+"]");
         				if (!SciNameUtils.isEmpty(taxon.getTaxonID())) { 
         					logger.debug(taxon.getTaxonID());
@@ -933,27 +934,42 @@ public class DwCSciNameDQ {
         										result.setResultState(ResultState.RUN_HAS_RESULT);
         									} else {
         										// Check for authorship present/absent
-        										if (SciNameUtils.isEmpty(taxon.getScientificNameAuthorship())) { 
+        										logger.debug(providedAuthorBit);
+        										if (SciNameUtils.isEmpty(providedAuthorBit)) { 
+        											// provided taxon doesn't have an authorship, but authority might
+        											logger.debug(matchList.get(0).getAuthorship());
         											try {
         												NameAuthorshipParse nameParse = SciNameUtils.getNameWithoutAuthorship(matchList.get(0).getScientificName());
         												if (nameParse.getNameWithoutAuthorship().equals(taxon.getScientificName())) { 
-        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName matches value known to authority [" + matchList.get(0).getScientificName() + "] but without authorship");
+        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName matches single value known to authority [" + matchList.get(0).getScientificName() + "] but without authorship");
         													result.setValue(ComplianceValue.COMPLIANT);
         													result.setResultState(ResultState.RUN_HAS_RESULT);
         												} else { 
-        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName does not match value known to authority [" + matchList.get(0).getScientificName() + "] without authorship");
+        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName does not match single value known to authority [" + matchList.get(0).getScientificName() + "] without authorship");
         													result.setValue(ComplianceValue.NOT_COMPLIANT);
         													result.setResultState(ResultState.RUN_HAS_RESULT);
         												}
         											} catch (UnparsableNameException e) {
+        												logger.debug(e.getMessage());
         												// handle gracefully
-        												// TODO Auto-generated catch block
-        												e.printStackTrace();
+        												if (taxon.getScientificName().startsWith(matchList.get(0).getScientificName())){
+        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName ["+ taxon.getScientificName() +"] does not match value known to authority [" + matchList.get(0).getScientificName() + "] where name from authority appears to be a longer name.");
+        													result.setValue(ComplianceValue.NOT_COMPLIANT);
+        													result.setResultState(ResultState.RUN_HAS_RESULT);
+        												} else { 
+        													result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName ["+ taxon.getScientificName() +"] does not match value known to authority [" + matchList.get(0).getScientificName() + "].");
+        													result.setValue(ComplianceValue.NOT_COMPLIANT);
+        													result.setResultState(ResultState.RUN_HAS_RESULT);
+        												}
         											}
-        											
         										} else { 
+        											// authorship present in taxon, but not exact match, see if match lacks authorship, or if author is plausible match
         											if (taxon.getScientificName().contains(taxon.getScientificNameAuthorship())) { 
-        												//TODO
+        												if (providedNameBit.equals(matchList.get(0).getScientificName())) { 
+        													// TODO
+        												} else { 
+        													//TODO
+        												}
         											}
         										}
         									}

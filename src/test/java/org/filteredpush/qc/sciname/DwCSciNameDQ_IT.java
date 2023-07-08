@@ -930,7 +930,59 @@ public class DwCSciNameDQ_IT {
 	
 		// TODO: Specification needs work.  When settled, need coverage of all paths in specification. 
 		
-		// TODO:		fail("Not yet implemented");
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// TODO: Failing
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 	}
 
 	/**
