@@ -631,7 +631,6 @@ public class DwCSciNameDQ_IT {
 		assertEquals("urn:lsid:marinespecies.org:taxname:208134",response.getValue().getObject().get("dwc:taxonID"));		
 		
 		
-        // TODO: Debug, returning lookup taxonID for taxon NOT_AMENDED No exact match found for provided taxon in WORMS.
         // for Babelomurex benoiti (Tiberi, 1855)  should be urn:lsid:marinespecies.org:taxname:234156
         // for taxon_name_id=182110 in MCZbase.
 		family = "Muricidae";
