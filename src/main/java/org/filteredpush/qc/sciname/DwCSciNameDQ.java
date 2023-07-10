@@ -386,6 +386,9 @@ public class DwCSciNameDQ {
 			@Consulted("dwc:scientificNameID") String scientificNameID, 
 			@Consulted("dwc:originalNameUsageID") String originalNameUsageID, 
 			@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID,
+			@Consulted("dwc:superfamily") String superfamily,
+			@Consulted("dwc:tribe") String tribe,
+			@Consulted("dwc:subtribe") String subtribe,
 			@Parameter(name="bdq:sourceAuthority") String sourceAuthority
 	){
 		DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
@@ -395,7 +398,7 @@ public class DwCSciNameDQ {
 			result = amendmentTaxonidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
 			genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
 			infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
-			scientificNameID, originalNameUsageID, acceptedNameUsageID), sourceAuthorityObject);
+			scientificNameID, originalNameUsageID, acceptedNameUsageID, superfamily, tribe, subtribe), sourceAuthorityObject);
 		} catch (SourceAuthorityException e) {
 			logger.error(e.getMessage());
 			result.addComment("Unable to process:" + e.getMessage());
@@ -772,12 +775,15 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:scientificName") String scientificName, 
     		@ActedUpon("dwc:specificEpithet") String specificEpithet, 
     		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:superfamily") String superfamily,
+    		@ActedUpon("dwc:tribe") String tribe,
+    		@ActedUpon("dwc:subtribe") String subtribe,
     		@Parameter(name="bdq:sourceAuthority") String sourceAuthorityString
 		){
 		return validationTaxonUnambiguous(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
 				genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
 				infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
-				scientificNameID, originalNameUsageID, acceptedNameUsageID), sourceAuthorityString);
+				scientificNameID, originalNameUsageID, acceptedNameUsageID, superfamily, tribe, subtribe), sourceAuthorityString);
     }
     
     
@@ -1816,13 +1822,15 @@ public class DwCSciNameDQ {
      * @param order the provided dwc:order to evaluate
      * @param cultivarEpithet the provided dwc:cultivarEpithet to evaluate
      * @param subfamily the provided dwc:subfamily to evaluate
+     * @param superfamily the provided dwc:superfamily to evaluate
+     * @param tribe the provided dwc:tribe to evaluate
+     * @param subtribe the provided dwc:subtribe to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_TAXON_NOTEMPTY", description="Is there a value in any of the terms needed to determine that the taxon exists?")
     @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2022-03-22")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2022-07-04")
     @Specification("COMPLIANT if at least one term needed to determine the taxon of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT ")
-// TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2022-07-04 see line: 1822
     public static DQResponse<ComplianceValue> validationTaxonNotempty(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:genus") String genus, 
@@ -1845,7 +1853,10 @@ public class DwCSciNameDQ {
     		@ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, 
     		@ActedUpon("dwc:order") String order,
     		@ActedUpon("dwc:cultivarEpithet") String cultivarEpithet,
-    		@ActedUpon("dwc:subfamily") String subfamily) {
+    		@ActedUpon("dwc:subfamily") String subfamily,
+    		@ActedUpon("dwc:superfamily") String superfamily,
+    		@ActedUpon("dwc:tribe") String tribe,
+    		@ActedUpon("dwc:subtribe") String subtribe) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         // Specification
@@ -1858,8 +1869,11 @@ public class DwCSciNameDQ {
 			SciNameUtils.isEmpty(phylum) &&
 			SciNameUtils.isEmpty(taxonomic_class) &&
 			SciNameUtils.isEmpty(order) &&
+			SciNameUtils.isEmpty(superfamily) &&
 			SciNameUtils.isEmpty(family) &&
 			SciNameUtils.isEmpty(subfamily) &&
+			SciNameUtils.isEmpty(tribe) &&
+			SciNameUtils.isEmpty(subtribe) &&
 			SciNameUtils.isEmpty(genus) &&
 			SciNameUtils.isEmpty(subgenus) &&
 			SciNameUtils.isEmpty(scientificName) &&

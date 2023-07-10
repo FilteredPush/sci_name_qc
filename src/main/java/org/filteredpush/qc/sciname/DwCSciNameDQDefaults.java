@@ -164,12 +164,15 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
 			@Consulted("dwc:taxonConceptID") String taxonConceptID, 
 			@Consulted("dwc:scientificNameID") String scientificNameID, 
 			@Consulted("dwc:originalNameUsageID") String originalNameUsageID, 
-			@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID
+			@Consulted("dwc:acceptedNameUsageID") String acceptedNameUsageID,
+			@Consulted("dwc:superfamily") String superfamily,
+			@Consulted("dwc:tribe") String tribe,
+			@Consulted("dwc:subtribe") String subtribe
 	){
 		return amendmentTaxonidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
 				genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
 				infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
-				scientificNameID, originalNameUsageID, acceptedNameUsageID), null);
+				scientificNameID, originalNameUsageID, acceptedNameUsageID, superfamily, tribe, subtribe), null);
 	}
 
 	
@@ -234,12 +237,15 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     		@ActedUpon("dwc:family") String family, 
     		@ActedUpon("dwc:scientificName") String scientificName, 
     		@ActedUpon("dwc:specificEpithet") String specificEpithet, 
-    		@ActedUpon("dwc:order") String order
+    		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:superfamily") String superfamily,
+    		@ActedUpon("dwc:tribe") String tribe,
+    		@ActedUpon("dwc:subtribe") String subtribe
 		){
 		return validationTaxonUnambiguous(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
 				genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
 				infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
-				scientificNameID, originalNameUsageID, acceptedNameUsageID), null);
+				scientificNameID, originalNameUsageID, acceptedNameUsageID, superfamily, tribe, subtribe), null);
     }
  
     /**

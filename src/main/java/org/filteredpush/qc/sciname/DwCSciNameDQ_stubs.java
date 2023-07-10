@@ -152,57 +152,6 @@ public class DwCSciNameDQ_stubs {
         return result;
     }
 
-
-
-    /**
-     * Is there a value in any of the terms needed to determine that the taxon exists?
-     *
-     * Provides: VALIDATION_TAXON_NOTEMPTY
-     * Version: 2022-07-04
-     *
-     * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
-     * @param infragenericEpithet the provided dwc:infragenericEpithet to evaluate
-     * @param taxonID the provided dwc:taxonID to evaluate
-     * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
-     * @param kingdom the provided dwc:kingdom to evaluate
-     * @param specificEpithet the provided dwc:specificEpithet to evaluate
-     * @param class the provided dwc:class to evaluate
-     * @param genus the provided dwc:genus to evaluate
-     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
-     * @param cultivarEpithet the provided dwc:cultivarEpithet to evaluate
-     * @param phylum the provided dwc:phylum to evaluate
-     * @param subfamily the provided dwc:subfamily to evaluate
-     * @param tribe the provided dwc:tribe to evaluate
-     * @param parentNameUsageID the provided dwc:parentNameUsageID to evaluate
-     * @param subgenus the provided dwc:subgenus to evaluate
-     * @param higherClassification the provided dwc:higherClassification to evaluate
-     * @param vernacularName the provided dwc:vernacularName to evaluate
-     * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
-     * @param subtribe the provided dwc:subtribe to evaluate
-     * @param genericName the provided dwc:genericName to evaluate
-     * @param superfamily the provided dwc:superfamily to evaluate
-     * @param family the provided dwc:family to evaluate
-     * @param scientificName the provided dwc:scientificName to evaluate
-     * @param order the provided dwc:order to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_TAXON_NOTEMPTY", description="Is there a value in any of the terms needed to determine that the taxon exists?")
-    @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2022-07-04")
-    @Specification("COMPLIANT if at least one term needed to determine the taxon of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationTaxonNotempty(@ActedUpon("dwc:taxonConceptID") String taxonConceptID, @ActedUpon("dwc:scientificNameID") String scientificNameID, @ActedUpon("dwc:infragenericEpithet") String infragenericEpithet, @ActedUpon("dwc:taxonID") String taxonID, @ActedUpon("dwc:acceptedNameUsageID") String acceptedNameUsageID, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:specificEpithet") String specificEpithet, @ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet, @ActedUpon("dwc:cultivarEpithet") String cultivarEpithet, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:subfamily") String subfamily, @ActedUpon("dwc:tribe") String tribe, @ActedUpon("dwc:parentNameUsageID") String parentNameUsageID, @ActedUpon("dwc:subgenus") String subgenus, @ActedUpon("dwc:higherClassification") String higherClassification, @ActedUpon("dwc:vernacularName") String vernacularName, @ActedUpon("dwc:originalNameUsageID") String originalNameUsageID, @ActedUpon("dwc:subtribe") String subtribe, @ActedUpon("dwc:genericName") String genericName, @ActedUpon("dwc:superfamily") String superfamily, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:scientificName") String scientificName, @ActedUpon("dwc:order") String order) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // COMPLIANT if at least one term needed to determine the taxon 
-        // of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT 
-        // 
-
-        return result;
-    }
-
-
     /**
      * Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?
      *

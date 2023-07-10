@@ -41,42 +41,138 @@ public class Taxon {
 	private String acceptedNameUsageID;
 
 	public Taxon() { 
-		this.taxonID = "";
-		this.kingdom = "";
-		this.phylum = "";
-		this.taxonomic_class = "";
-		this.order = "";
-		this.family = "";
-		this.subfamily = "";
-		this.genus = "";
-		this.subgenus = "";
-		this.scientificName = "";
-		this.scientificNameAuthorship = "";
-		this.genericName = "";
-		this.specificEpithet = "";
-		this.infraspecificEpithet = "";
-		this.taxonRank = "";
-		this.cultivarEpithet = "";
-		this.higherClassification = "";
-		this.vernacularName = "";
-		this.taxonConceptID = "";
-		this.scientificNameID = "";
-		this.originalNameUsageID = "";
-		this.acceptedNameUsageID = "";
+		setNullValuesToEmptyString();
 	}
 	
+	/**
+	 * Set the value of any properties that are null to an empty string.
+	 */
+	protected void setNullValuesToEmptyString() { 
+		if (this.taxonID==null) { 
+			this.taxonID = "";
+		}
+		if (this.kingdom==null) { 
+			this.kingdom = "";
+		}
+		if (this.phylum==null) { 
+			this.phylum = "";
+		}
+		if (this.taxonomic_class==null) { 
+			this.taxonomic_class = "";
+		}
+		if (this.order==null) { 
+			this.order = "";
+		}
+		if (this.superfamily==null) { 
+			this.superfamily = "";
+		}
+		if (this.family==null) { 
+			this.family = "";
+		}
+		if (this.subfamily==null) { 
+			this.subfamily = "";
+		}
+		if (this.tribe==null) { 
+			this.tribe = "";
+		}
+		if (this.subtribe==null) { 
+			this.subtribe = "";
+		}
+		if (this.genus==null) { 
+			this.genus = "";
+		}
+		if (this.subgenus==null) { 
+			this.subgenus = "";
+		}
+		if (this.scientificName==null) { 
+			this.scientificName = "";
+		}
+		if (this.scientificNameAuthorship==null) { 
+			this.scientificNameAuthorship = "";
+		}
+		if (this.taxonID==null) { 
+			this.taxonID = "";
+		}
+		if (this.genericName==null) { 
+			this.genericName = "";
+		}
+		if (this.specificEpithet==null) { 
+			this.specificEpithet = "";
+		}
+		if (this.infraspecificEpithet==null) { 
+			this.infraspecificEpithet = "";
+		}
+		if (this.taxonRank==null) { 
+			this.taxonRank = "";
+		}
+		if (this.cultivarEpithet==null) { 
+			this.cultivarEpithet = "";
+		}
+		if (this.higherClassification==null) { 
+			this.higherClassification = "";
+		}
+		if (this.vernacularName==null) { 
+			this.vernacularName = "";
+		}
+		if (this.taxonConceptID==null) { 
+			this.taxonConceptID = "";
+		}
+		if (this.scientificNameID==null) { 
+			this.scientificNameID = "";
+		}
+		if (this.originalNameUsageID==null) { 
+			this.originalNameUsageID = "";
+		}
+		if (this.acceptedNameUsageID==null) { 
+			this.acceptedNameUsageID = "";
+		}
+	}
+	
+	/**
+	 * Construct a taxon instance.  Any null values of parameters will be set to an empty string.
+	 * @param taxonID
+	 * @param kingdom
+	 * @param phylum
+	 * @param taxonomic_class
+	 * @param order
+	 * @param family
+	 * @param subfamily
+	 * @param genus
+	 * @param subgenus
+	 * @param scientificName
+	 * @param scientificNameAuthorship
+	 * @param genericName
+	 * @param specificEpithet
+	 * @param infraspecificEpithet
+	 * @param taxonRank
+	 * @param cultivarEpithet
+	 * @param higherClassification
+	 * @param vernacularName
+	 * @param taxonConceptID
+	 * @param scientificNameID
+	 * @param originalNameUsageID
+	 * @param acceptedNameUsageID
+	 * @param superfamily
+	 * @param tribe
+	 * @param subtribe
+	 */
 	public Taxon(String taxonID, String kingdom, String phylum, String taxonomic_class, String order, String family,
 			String subfamily, String genus, String subgenus, String scientificName, String scientificNameAuthorship,
 			String genericName, String specificEpithet, String infraspecificEpithet, String taxonRank,
 			String cultivarEpithet, String higherClassification, String vernacularName, String taxonConceptID,
-			String scientificNameID, String originalNameUsageID, String acceptedNameUsageID) {
+			String scientificNameID, String originalNameUsageID, String acceptedNameUsageID, String superfamily,
+			String tribe, String subtribe
+			) {
 		this.taxonID = taxonID;
 		this.kingdom = kingdom;
 		this.phylum = phylum;
 		this.taxonomic_class = taxonomic_class;
 		this.order = order;
+		this.superfamily = superfamily;
 		this.family = family;
 		this.subfamily = subfamily;
+		this.tribe = tribe;
+		this.subtribe = subtribe;
 		this.genus = genus;
 		this.subgenus = subgenus;
 		this.scientificName = scientificName;
@@ -92,6 +188,7 @@ public class Taxon {
 		this.scientificNameID = scientificNameID;
 		this.originalNameUsageID = originalNameUsageID;
 		this.acceptedNameUsageID = acceptedNameUsageID;
+		setNullValuesToEmptyString();
 	}
 
 	public String getTaxonID() {
@@ -283,8 +380,11 @@ public class Taxon {
 		result.append(phylum).append(":");
 		result.append(taxonomic_class).append(":");
 		result.append(order).append(":");
+		result.append(superfamily).append(":");
 		result.append(family).append(":");
 		result.append(subfamily).append(":");
+		result.append(tribe).append(":");
+		result.append(subtribe).append(":");
 		result.append(genus).append(":");
 		result.append(subgenus).append(":");
 		result.append(scientificName).append(":");
@@ -303,6 +403,16 @@ public class Taxon {
 		return result.toString().replaceAll(":[:]+",":");
 	}
 
+	/**
+	 * Test if the major ranks (kingdom, phylum, class, order, family) are the same between this Taxon and
+	 * a NameUsage instance.  Does not assess tribe, does not assess super/sub ranks.  Only compares properties
+	 * that have non-empty values.  
+	 * 
+	 * @param match NameUsage to compare with.
+	 * 
+	 * @return false if any of the non-empty values of kingdom, phylum, class, order, family are different between the two 
+	 * NameUsages, otherwise returns true.
+	 */
 	public boolean sameHigherAs(NameUsage match) {
 		boolean result = true;
 		logger.debug(taxonomic_class);
@@ -328,5 +438,47 @@ public class Taxon {
 			result = false;
 		}
 		return result;
+	}
+
+	/**
+	 * @return the superfamily
+	 */
+	public String getSuperfamily() {
+		return superfamily;
+	}
+
+	/**
+	 * @param superfamily the superfamily to set
+	 */
+	public void setSuperfamily(String superfamily) {
+		this.superfamily = superfamily;
+	}
+
+	/**
+	 * @return the tribe
+	 */
+	public String getTribe() {
+		return tribe;
+	}
+
+	/**
+	 * @param tribe the tribe to set
+	 */
+	public void setTribe(String tribe) {
+		this.tribe = tribe;
+	}
+
+	/**
+	 * @return the subtribe
+	 */
+	public String getSubtribe() {
+		return subtribe;
+	}
+
+	/**
+	 * @param subtribe the subtribe to set
+	 */
+	public void setSubtribe(String subtribe) {
+		this.subtribe = subtribe;
 	}
 }
