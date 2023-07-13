@@ -369,13 +369,16 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
 	* where bdq:sourceAuthority is the default GBIF taxon rank vocabulary.
     *
-    * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
+    * Provides: #163 AMENDMENT_TAXONRANK_STANDARDIZED
+    * Version: 2023-03-20
     *
     * @param taxonRank the provided dwc:taxonRank to evaluate
     * @return DQResponse the response of type AmendmentValue to return
     */
    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
+   @ProvidesVersion("https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-03-20")
+   @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; AMENDED the value of dwc:taxonRank if it can be unambiguously matched to a term in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]")
    public static DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
 	   return DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
    }

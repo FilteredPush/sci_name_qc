@@ -2331,29 +2331,33 @@ public class DwCSciNameDQ {
    /**
     * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
     *
-    * Provides: AMENDMENT_TAXONRANK_STANDARDIZED
+    * Provides: #163 AMENDMENT_TAXONRANK_STANDARDIZED
+    * Version: 2023-03-20
     *
     * @param taxonRank the provided dwc:taxonRank to evaluate
     * @return DQResponse the response of type AmendmentValue to return
     */
    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
-// TODO: Implementation of AMENDMENT_TAXONRANK_STANDARDIZED is not up to date with current version: https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-03-20 see line: 2333
+   @ProvidesVersion("https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-03-20")
+   @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; AMENDED the value of dwc:taxonRank if it can be unambiguously matched to a term in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]")
    public static DQResponse<AmendmentValue> amendmentTaxonrankStandardized(
-		   @ActedUpon("dwc:taxonRank") String taxonRank,
-   			@Parameter(name="bdq:sourceAuthority") String sourceAuthority
+		@ActedUpon("dwc:taxonRank") String taxonRank,
+   		@Parameter(name="bdq:sourceAuthority") String sourceAuthority
    ){
        DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
        // Specification
        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-       // is not available; AMENDED the value of dwc:taxonRank if 
-       // it could be unambiguously interpreted as a value in bdq:sourceAuthority; 
-       // otherwise NOT_AMENDED bdq:sourceAuthority default = "Taxonomic 
-       // Rank GBIF Vocabulary" [https://rs.gbif.org/vocabulary/gbif/rank.xml] 
+       // is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank 
+       // is EMPTY; AMENDED the value of dwc:taxonRank if it can be 
+       // unambiguously matched to a term in bdq:sourceAuthority; 
+       // otherwise NOT_AMENDED 
 
        // Parameters. This test is defined as parameterized.
-       // bdq:sourceAuthority default="Taxonomic Rank GBIF Vocabulary"
+       // bdq:sourceAuthority default = "GBIF Vocabulary: Taxonomic Rank" 
+       // [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts] 
+       
        if (sourceAuthority==null) { 
     	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
        }
