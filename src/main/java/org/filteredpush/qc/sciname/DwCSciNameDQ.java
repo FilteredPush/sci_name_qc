@@ -2362,7 +2362,7 @@ public class DwCSciNameDQ {
        }
        if (SciNameUtils.isEmpty(taxonRank)) { 
     	   result.addComment("No value provided value for taxonRank");
-    	   result.setResultState(ResultState.NOT_AMENDED);
+    	   result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
        } else { 
     	   try { 
     		   if (sourceAuthority.equals("https://rs.gbif.org/vocabulary/gbif/rank.xml") || sourceAuthority.equals("Taxonomic Rank GBIF Vocabulary")) { 

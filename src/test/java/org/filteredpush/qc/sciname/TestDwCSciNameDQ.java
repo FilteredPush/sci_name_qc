@@ -654,6 +654,11 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("species",response.getValue().getObject().get("dwc:taxonRank"));
 		
+		taxonRank = "";
+		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, "https://www.example.com/example");
+		logger.debug(response.getComment());
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
+		
 		taxonRank = "kingdom";
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, "https://www.example.com/example");
 		logger.debug(response.getComment());
@@ -670,6 +675,11 @@ public class TestDwCSciNameDQ {
 		logger.debug(response.getComment());
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("family",response.getValue().getObject().get("dwc:taxonRank"));
+		
+		taxonRank = "not a rank string"; 
+		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
+		logger.debug(response.getComment());
+		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		
 	}
 
