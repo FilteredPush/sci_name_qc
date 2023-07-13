@@ -1796,11 +1796,12 @@ public class DwCSciNameDQ {
         return result;
     }
 
+    
     /**
      * Is there a value in any of the terms needed to determine that the taxon exists?
      *
      * Provides: #105 VALIDATION_TAXON_NOTEMPTY
-     * Version: 2022-03-22
+     * Version: 2023-07-04
      *
      * @param taxonomic_class the provided dwc:class to evaluate
      * @param genus the provided dwc:genus to evaluate
@@ -1831,9 +1832,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_TAXON_NOTEMPTY", description="Is there a value in any of the terms needed to determine that the taxon exists?")
     @Provides("06851339-843f-4a43-8422-4e61b9a00e75")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2022-07-04")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-07-04")
     @Specification("COMPLIANT if at least one term needed to determine the taxon of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT ")
-// TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-07-04 see line: 1831
     public static DQResponse<ComplianceValue> validationTaxonNotempty(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:genus") String genus, 
