@@ -66,6 +66,12 @@ public class TestICZNAuthorNameComparator {
 		assertEquals(NameComparison.MATCH_L_EXACTYEAR, comparator.compare("L., 1758", "Linné, 1758").getMatchType());
 		assertEquals(NameComparison.MATCH_L_EXACTYEAR, comparator.compare("L., 1758", "Linne, 1758").getMatchType());
 		assertEquals(NameComparison.MATCH_L_EXACTYEAR, comparator.compare("L.", "Lamarck").getMatchType());
+		
+		assertEquals(NameComparison.MATCH_ADDSINITIALEXACTYEAR, comparator.compare("(Adams, 1854)", "(A. Adams, 1854)").getMatchType());
+		assertEquals(NameComparison.MATCH_ADDSINITIALEXACTYEAR, comparator.compare("Adams, 1854", "A. Adams, 1854").getMatchType());
+		assertEquals(NameComparison.MATCH_ADDSINITIALEXACTYEAR, comparator.compare("(Verrill, 1873)", "(A. E. Verrill, 1873)").getMatchType());
+		assertEquals(NameComparison.MATCH_ADDSINITIALEXACTYEAR, comparator.compare("Verrill, 1873)", "A. E. Verrill, 1873)").getMatchType());
+		assertEquals(NameComparison.MATCH_ADDSINITIALEXACTYEAR, comparator.compare("Verrill, 1873)", "A.E. Verrill, 1873)").getMatchType());
 	}
 
 	@Test

@@ -53,6 +53,11 @@ public class NameComparison {
 	 * Does not apply to Botany.
 	 */
 	public static final String MATCH_L = "Ambiguous L.";
+	/** 
+	 * Zoological, authorship differs just by one case adding initials to a single author 
+	 */
+	public static final String MATCH_ADDSINITIALEXACTYEAR = "Authorship adds initial, Year Exact";
+	
 	public static final String MATCH_WEAKEXACTYEAR = "Slightly Similar Author, Year Exact";
 	public static final String MATCH_SIMILAREXACTYEAR = "Similar Author, Year Exact";
 	public static final String MATCH_SIMILARMISSINGYEAR = "Similar Author, Year Removed";
@@ -181,6 +186,13 @@ public class NameComparison {
 		this.remark = remark;
 	}
 	
+	/** 
+	 * Test if a match string for a scientific name (SNMATCH_***) is a plausible match.
+	 * 
+	 * @param match the string to classify for plausiblity
+	 * @return true if the string matches one of the SNMATCH_ constants that can be
+	 * considered a plausible match between names.
+	 */
 	public static boolean isPlausible(String match) {
 		boolean result = false;
 		if (match.equals(SNMATCH_SUBGENUS) || 
@@ -188,6 +200,32 @@ public class NameComparison {
 				match.equals(SNMATCH_GENUSSPECIFIC) || 
 				match.equals(SNMATCH_GENUSSUBSPECIFIC) ||
 				match.equals(SNMATCH_ONHIGHER)
+		) { 
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	/** 
+	 * Test if a match string for a scientific name (SNMATCH_***) is a plausible match.
+	 * 
+	 * @param match the string to classify for plausiblity
+	 * @return true if the string matches one of the SNMATCH_ constants that can be
+	 * considered a plausible match between names.
+	 */
+	public static boolean isPlausibleAuthorMatch(String match) {
+		boolean result = false;
+		if (match.equals(MATCH_ADDSAUTHOR) || 
+				match.equals(MATCH_EXACT) || 
+				match.equals(MATCH_EXACT_BRACKETS) || 
+				match.equals(MATCH_EXACTADDSYEAR) ||
+				match.equals(MATCH_SAMEBUTABBREVIATED) ||
+				match.equals(MATCH_L) ||
+				match.equals(MATCH_L_EXACTYEAR) ||
+				match.equals(MATCH_SOWERBYEXACTYEAR) ||
+				match.equals(MATCH_ADDSINITIALEXACTYEAR) ||
+				match.equals(MATCH_EXACTMISSINGYEAR)
 		) { 
 			result = true;
 		}

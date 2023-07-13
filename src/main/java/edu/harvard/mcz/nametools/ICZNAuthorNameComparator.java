@@ -17,6 +17,7 @@
  */
 package edu.harvard.mcz.nametools;
 
+
 /**
  * Make comparisons between pairs of scientificNameAuthor strings, under the assumption
  * that both strings are from names covered by the zoological code.
@@ -106,6 +107,18 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 					}
 					if (parenSame && (similarityYear==1d) && similarityAlpha > similarityThreshold ) { 
 						result.setMatchType(NameComparison.MATCH_SIMILAREXACTYEAR);
+					}
+					if (parenSame && (similarityYear==1d)) { 
+						String testOne = anAuthor.replaceFirst("^\\(", "");
+						String testTwo = toOtherAuthor.replaceFirst("^\\(", "");
+						testTwo = testTwo.replace(testOne, "");
+						String pattern = "^[A-Z]\\.([ ]{0,1}[A-Z]\\.){0,1} $";
+						System.out.println(pattern);
+						System.out.println(testOne);
+						System.out.println(testTwo);
+						if (testTwo.matches(pattern)) { 
+							result.setMatchType(NameComparison.MATCH_ADDSINITIALEXACTYEAR);
+						}
 					}
 					if (parenSame && (similarityYear==1d) && similarityAlpha < 1d && anAuthor.contains("Sowerby,") && toOtherAuthor.contains("Sowerby I")) { 
 						result.setMatchType(NameComparison.MATCH_SOWERBYEXACTYEAR);
