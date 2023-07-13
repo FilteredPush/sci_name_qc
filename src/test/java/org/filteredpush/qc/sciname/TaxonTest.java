@@ -86,5 +86,78 @@ public class TaxonTest {
 		testTaxon.setFamily("Foo");
 		assertTrue(testTaxon.sameHigherAs(nameUsage));
 	}
+	
+	@Test
+	public void testPlausiblySameNameAs() { 
+		Taxon testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
+		testTaxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		NameUsage nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
+		nameUsage.setAuthorship("(Lamarck, 1822)");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+		
+		testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae");
+		testTaxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae");
+		nameUsage.setAuthorship("(Lamarck, 1822)");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+		
+		testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae");
+		testTaxon.setScientificNameAuthorship("");
+		nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae");
+		nameUsage.setAuthorship("");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+		
+		testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae");
+		testTaxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae");
+		nameUsage.setAuthorship("(Lamarck)");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+		
+		testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
+		testTaxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae");
+		nameUsage.setAuthorship("(Lamarck)");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+		
+		testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae");
+		testTaxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae (Lamarck)");
+		nameUsage.setAuthorship("(Lamarck)");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+		
+		testTaxon = new Taxon();
+		testTaxon.setKingdom("Animalia");
+		testTaxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
+		testTaxon.setScientificNameAuthorship("");
+		nameUsage = new NameUsage();
+		nameUsage.setKingdom("Animaila");
+		nameUsage.setScientificName("Chicoreus palmarosae (Lamarck)");
+		nameUsage.setAuthorship("");
+		assertTrue(testTaxon.plausiblySameNameAs(nameUsage));
+	}
 
 }

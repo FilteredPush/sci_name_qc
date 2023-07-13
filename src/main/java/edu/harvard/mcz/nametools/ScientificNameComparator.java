@@ -32,6 +32,8 @@ import org.gbif.nameparser.api.ParsedName;
 import org.gbif.nameparser.api.UnparsableNameException;
 
 /**
+ * Class for evaluating the similarity between two scientific names.
+ * 
  * @author mole
  *
  */
@@ -39,7 +41,15 @@ public class ScientificNameComparator {
 	
 	private static final Log log = LogFactory.getLog(ScientificNameComparator.class);
 	
-	public NameComparison compare(String aName, String toOtherName) {
+	/**
+	 * Perform a comparison on two strings that are expected to be the scientific name without authorship.
+	 * 
+	 * @param aName one name
+	 * @param toOtherName the name to compare with aName
+	 * @return a name comparison object where the match type will be one of MATCH_EXACT, MATCH_ERROR, or 
+	 *   one of the SNMATCH_ values
+	 */
+	public NameComparison compareWithoutAuthor(String aName, String toOtherName) {
 		
 		NameComparison result = new NameComparison(aName, toOtherName);
 		

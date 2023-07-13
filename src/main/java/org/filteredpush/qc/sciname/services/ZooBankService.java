@@ -123,7 +123,7 @@ public class ZooBankService implements Validator {
 					} catch (Exception e) {
 						log.error(e.getMessage(), e);
 					}
-		    		NameComparison nameComparison = sciComp.compare(taxonToValidate.getScientificName(), scientificName);
+		    		NameComparison nameComparison = sciComp.compareWithoutAuthor(taxonToValidate.getScientificName(), scientificName);
 		    		if (nameComparison.equals(NameComparison.MATCH_EXACT)) { 
 		    			usage.setScientificName(scientificName);
 		    			usage.setAuthorship(foundAuthor);

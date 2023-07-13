@@ -885,24 +885,81 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		
+		taxon = new Taxon();
 		scientificName = "Calotheca"; // beetle, grass, and junior homonym choanoflagellate
 		kingdom = "Protozoa";
 		taxonomic_class = "Choanoflagellatea";
 		scientificName = "Calotheca Thomsen & Moestrup, 1983";
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship("Thomsen & Moestrup, 1983");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
 		kingdom = "Animalia";
 		taxonomic_class = "Insecta";
 		scientificName = "Calotheca Heyden, 1887";
-		kingdom = "Plantae";
-		taxonomic_class = "Magnoliopsida";
-		scientificName = "Calotheca A.M.F.J. Palisot de Beauvois";
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship("Heyden, 1887");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		taxon = new Taxon();
+		kingdom = "Plantae";
+		taxonomic_class = "Liliopsida";
+		// scientificName = "Calotheca A.M.F.J. Palisot de Beauvois";  // one of several plant homonyms
+		scientificName = "Calotheca P.Beauv.";  // one of several plant homonyms
+		String scientificNameAuthorship = "P.Beauv.";
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setOrder("Poales");
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
 		scientificName = "Gaimardia";
 		kingdom = "Animalia";
 		taxonomic_class = "Bivalvia";
 		scientificName = "Gaimardia Gould, 1852"; // clam
+		scientificNameAuthorship = "Gould, 1852"; // clam
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
 		kingdom = "Plantae";
 		taxonomic_class = "Magnoliopsida";
-		scientificName = "Gaimardia Gaudichaud-Beaupré, 1825";  // plant  
+		String phylum = "Tracheophyta";
+		//scientificName = "Gaimardia Gaudichaud-Beaupré, 1825";  // plant  
+		scientificName = "Gaimardia Gaudich.";  // plant  
+		scientificNameAuthorship = "Gaudich.";  // plant  
+		taxon.setKingdom(kingdom);
+		//taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setPhylum(phylum);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxon = new Taxon();
 		taxon.setTaxonID("urn:lsid:marinespecies.org:taxname:216786");
@@ -915,7 +972,7 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
-		// TODO: Implement IRMNG service client, distinct from WORMS client, method names vary. 
+		// IRMNG service client, distinct from WORMS client 
 		taxon = new Taxon();
 		taxon.setTaxonID("urn:lsid:irmng.org:taxname:1361721");
 		taxon.setScientificName("");
@@ -927,8 +984,6 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	
-		// TODO: Specification needs work.  When settled, need coverage of all paths in specification. 
-		
 		taxon = new Taxon();
 		taxon.setTaxonID("");
 		taxon.setScientificName("Chicoreus palmarosae");
@@ -968,7 +1023,6 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
-		// TODO: Failing
 		taxon = new Taxon();
 		taxon.setTaxonID("gbif:8154161");
 		taxon.setScientificName("Chicoreus palmarosae");
@@ -981,6 +1035,105 @@ public class DwCSciNameDQ_IT {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(Lamarck)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(Lamarck)");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(L.)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("");
+		taxon.setSubtribe("Ignored value");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Plantae"); // missmatch ignored as match on taxonID and scientific name
+		taxon.setTaxonomic_class("Crustacea");  // missmatch ignored as match on taxonID and scientific name
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("");
+		taxon.setSubtribe("Ignored value");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		// check just passing genus to genericName, no scientific name or taxonID
+		taxon = new Taxon();
+		kingdom = "Animalia";
+		taxonomic_class = "Bivalvia"; // clam
+		scientificName = "Gaimardia"; 
+		scientificNameAuthorship = ""; 
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName("");
+		taxon.setGenericName(scientificName);  
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		scientificName = "Gaimardia";
+		kingdom = "Animalia";
+		taxonomic_class = "Bivalvia"; // clam
+		scientificName = "Gaimardia"; 
+		scientificNameAuthorship = ""; 
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		scientificName = "Gaimardia";
+		kingdom = "Plantae";
+		taxonomic_class = "Bivalvia"; 
+		scientificName = "Gaimardia"; 
+		scientificNameAuthorship = ""; 
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 	}
 

@@ -596,7 +596,7 @@ public class GBIFService implements Validator {
 						potentialMatch.setMatchDescription(match);
 						validatedNameUsage = potentialMatch;
 						validatedNameUsage.setAuthorshipStringEditDistance(similarity);
-						NameComparison nameComparison = nameComparator.compare(taxonName, potentialMatch.getCanonicalName());
+						NameComparison nameComparison = nameComparator.compareWithoutAuthor(taxonName, potentialMatch.getCanonicalName());
 						validatedNameUsage.setNameMatchDescription(nameComparison.getMatchType());
 						validatedNameUsage.setScientificNameStringEditDistance(nameComparison.getSimilarity());
 						addToComment("Potential match found in found in " + targetDataSetName + ". " + validatedNameUsage.getMatchDescription());
@@ -662,7 +662,7 @@ public class GBIFService implements Validator {
 								StringBuffer names = new StringBuffer();
 								while (im.hasNext()) { 
 									NameUsage current = im.next();
-									NameComparison nameComparison = nameComparator.compare(taxonName, current.getCanonicalName());
+									NameComparison nameComparison = nameComparator.compareWithoutAuthor(taxonName, current.getCanonicalName());
 									if (NameComparison.isPlausible(nameComparison.getMatchType()))  {
 										names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
 										if (toCheck.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < toCheck.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
@@ -760,7 +760,7 @@ public class GBIFService implements Validator {
 						result = potentialMatch;
 						result.setAuthorshipStringEditDistance(similarity);
 					}
-					NameComparison nameComparison = nameComparator.compare(taxonName, potentialMatch.getCanonicalName());
+					NameComparison nameComparison = nameComparator.compareWithoutAuthor(taxonName, potentialMatch.getCanonicalName());
 					result.setNameMatchDescription(nameComparison.getMatchType());
 					result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
 					result.setInputDbPK(taxonNameToValidate.getInputDbPK());
@@ -810,7 +810,7 @@ public class GBIFService implements Validator {
 								logger.debug(current.getScientificName());
 								NameComparison nameComparison;
 								if (SciNameUtils.isEmpty(authorship)) { 
-									nameComparison = nameComparator.compare(taxonName, current.getCanonicalName());
+									nameComparison = nameComparator.compareWithoutAuthor(taxonName, current.getCanonicalName());
 									if (nameComparison.getMatchType().equals(NameComparison.MATCH_EXACT) || NameComparison.isPlausible(nameComparison.getMatchType())) { 
 										names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
 										if (closest == null || taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < taxonNameToValidate.getAuthorComparator().calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
@@ -818,7 +818,7 @@ public class GBIFService implements Validator {
 										}
 									}
 								} else { 
-									nameComparison = nameComparator.compare(taxonName, current.getScientificName());
+									nameComparison = nameComparator.compareWithoutAuthor(taxonName, current.getScientificName());
 									logger.debug(nameComparison.getMatchType());
 									if (NameComparison.isPlausible(nameComparison.getMatchType())) { 
 										names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());

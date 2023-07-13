@@ -972,12 +972,14 @@ public class DwCSciNameDQ {
         											}
         										} else { 
         											// authorship present in taxon, but not exact match, see if match lacks authorship, or if author is plausible match
-        											if (taxon.getScientificName().contains(taxon.getScientificNameAuthorship())) { 
-        												if (providedNameBit.equals(matchList.get(0).getScientificName())) { 
-        													// TODO
-        												} else { 
-        													//TODO
-        												}
+        											if (taxon.plausiblySameNameAs(matchList.get(0))) { 
+        												result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName ["+ taxon.getScientificName() +"] matches value known to authority [" + matchList.get(0).getScientificName() + "] with a plausible match on name and authorship.");
+        												result.setValue(ComplianceValue.COMPLIANT);
+        												result.setResultState(ResultState.RUN_HAS_RESULT);
+        											} else { 
+        												result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] found in " + sourceAuthority.getName() + ", and provided value of dwc:scientificName ["+ taxon.getScientificName() +"] does not match value known to authority [" + matchList.get(0).getScientificName() + "] where name or authorship differs.");
+        												result.setValue(ComplianceValue.NOT_COMPLIANT);
+        												result.setResultState(ResultState.RUN_HAS_RESULT);
         											}
         										}
         									}

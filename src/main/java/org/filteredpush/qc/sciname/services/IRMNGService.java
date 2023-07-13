@@ -606,7 +606,7 @@ public class IRMNGService implements Validator {
 						while (im.hasNext()) { 
 							AphiaRecord ar = im.next();
 							NameUsage current = new NameUsage(ar);
-							NameComparison comparison = scientificNameComparator.compare(taxonName, current.getScientificName());
+							NameComparison comparison = scientificNameComparator.compareWithoutAuthor(taxonName, current.getScientificName());
 							if (NameComparison.isPlausible(comparison.getMatchType())) { 
 								names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
 								if (ICZNAuthorNameComparator.calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < ICZNAuthorNameComparator.calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
@@ -660,7 +660,7 @@ public class IRMNGService implements Validator {
 								result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 								result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 								result.setMatchDescription(match);
-								NameComparison nameComparison = scientificNameComparator.compare(taxonName, ar.getScientificname());
+								NameComparison nameComparison = scientificNameComparator.compareWithoutAuthor(taxonName, ar.getScientificname());
 								result.setNameMatchDescription(nameComparison.getMatchType());
 								result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
 								result.setExtension(lookupHabitat(ar));
@@ -695,7 +695,7 @@ public class IRMNGService implements Validator {
 								logger.debug(match.getScientificName());
 								logger.debug(match.getAuthorship());
 								logger.debug(similarity);
-								NameComparison comparison = scientificNameComparator.compare(taxonName, match.getScientificName());
+								NameComparison comparison = scientificNameComparator.compareWithoutAuthor(taxonName, match.getScientificName());
 								if (NameComparison.isPlausible(comparison.getMatchType())) { 
 									match.setNameMatchDescription(comparison.getMatchType());
 									match.setScientificNameStringEditDistance(comparison.getSimilarity());

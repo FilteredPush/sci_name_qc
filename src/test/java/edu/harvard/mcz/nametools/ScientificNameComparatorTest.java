@@ -32,22 +32,26 @@ public class ScientificNameComparatorTest {
 	private static final Log logger = LogFactory.getLog(ScientificNameComparatorTest.class);
 
 	/**
-	 * Test method for {@link edu.harvard.mcz.nametools.ScientificNameComparator#compare(java.lang.String, java.lang.String)}.
+	 * Test method for {@link edu.harvard.mcz.nametools.ScientificNameComparator#compareWithoutAuthor(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testCompare() {
 		ScientificNameComparator comparator = new ScientificNameComparator();
-		assertEquals(NameComparison.MATCH_EXACT,comparator.compare("Murex murex", "Murex murex").getMatchType());
-		assertEquals(NameComparison.SNMATCH_SUBGENUS,comparator.compare("Murex murex", "Murex (Murex) murex").getMatchType());
-		assertEquals(NameComparison.SNMATCH_ONGENUS,comparator.compare("Murex brunea", "Murex murex").getMatchType());
-		assertEquals(NameComparison.SNMATCH_ONHIGHER,comparator.compare("Murex", "Muricidae").getMatchType());
-		assertEquals(NameComparison.SNMATCH_QUALIFIER,comparator.compare("Chicoreus palmarosae", "Chicoreus aff. palmarosae").getMatchType());
-		assertEquals(NameComparison.SNMATCH_GENUSTOLOWER,comparator.compare("Chicoreus", "Chicoreus palmarosae").getMatchType());
-		assertEquals(NameComparison.SNMATCH_DISSIMILAR,comparator.compare("Murex murex", "Muricidae").getMatchType());
-		assertEquals(NameComparison.SNMATCH_GENUSDIFFERENT,comparator.compare("Murex murex", "Mus murex").getMatchType());
-		assertEquals(NameComparison.SNMATCH_GENUSSUBSPECIFIC,comparator.compare("Murex aus murex", "Murex bus murex").getMatchType());
-		assertEquals(NameComparison.SNMATCH_GENUSSPECIFIC,comparator.compare("Murex murex aus", "Murex murex bus").getMatchType());
-		assertEquals(NameComparison.SNMATCH_DISSIMILAR,comparator.compare("Murex murex", "Chicoreus palmarosae").getMatchType());
+		assertEquals(NameComparison.MATCH_EXACT,comparator.compareWithoutAuthor("Murex murex", "Murex murex").getMatchType());
+		assertEquals(NameComparison.SNMATCH_SUBGENUS,comparator.compareWithoutAuthor("Murex murex", "Murex (Murex) murex").getMatchType());
+		assertEquals(NameComparison.SNMATCH_ONGENUS,comparator.compareWithoutAuthor("Murex brunea", "Murex murex").getMatchType());
+		assertEquals(NameComparison.SNMATCH_ONHIGHER,comparator.compareWithoutAuthor("Murex", "Muricidae").getMatchType());
+		assertEquals(NameComparison.SNMATCH_QUALIFIER,comparator.compareWithoutAuthor("Chicoreus palmarosae", "Chicoreus aff. palmarosae").getMatchType());
+		assertEquals(NameComparison.SNMATCH_GENUSTOLOWER,comparator.compareWithoutAuthor("Chicoreus", "Chicoreus palmarosae").getMatchType());
+		assertEquals(NameComparison.SNMATCH_DISSIMILAR,comparator.compareWithoutAuthor("Murex murex", "Muricidae").getMatchType());
+		assertEquals(NameComparison.SNMATCH_GENUSDIFFERENT,comparator.compareWithoutAuthor("Murex murex", "Mus murex").getMatchType());
+		assertEquals(NameComparison.SNMATCH_GENUSSUBSPECIFIC,comparator.compareWithoutAuthor("Murex aus murex", "Murex bus murex").getMatchType());
+		assertEquals(NameComparison.SNMATCH_GENUSSPECIFIC,comparator.compareWithoutAuthor("Murex murex aus", "Murex murex bus").getMatchType());
+		assertEquals(NameComparison.SNMATCH_DISSIMILAR,comparator.compareWithoutAuthor("Murex murex", "Chicoreus palmarosae").getMatchType());
+		// not intended for authorship, if present and exact will match
+		assertEquals(NameComparison.MATCH_EXACT,comparator.compareWithoutAuthor("Murex murex L.", "Murex murex L.").getMatchType());
+		// if authorship is present but different, report mismatch
+		assertEquals(NameComparison.SNMATCH_DISSIMILAR,comparator.compareWithoutAuthor("Murex murex L.", "Murex murex Linnaeus").getMatchType());
 		
 	}
 
