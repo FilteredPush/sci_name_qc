@@ -1411,7 +1411,7 @@ public class DwCSciNameDQ {
 					result.setResultState(ResultState.NOT_AMENDED);
         		}
         	} else { 
-				result.addComment("Unsupported Source Authority: " + sourceAuthority +".");
+				result.addComment("Unsupported Source Authority: " + sourceAuthority.getName() +".");
 				result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
         	}
         	
