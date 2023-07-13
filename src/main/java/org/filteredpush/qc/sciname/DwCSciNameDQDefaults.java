@@ -400,12 +400,15 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:class") String taxonmic_class, 
     		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:superfamily") String superfamily,
     		@ActedUpon("dwc:family") String family,
     		@ActedUpon("dwc:subfamily") String subfamily,
+    		@ActedUpon("dwc:tribe") String tribe,
+    		@ActedUpon("dwc:subtribe") String subtribe,
     		@ActedUpon("dwc:genus") String genus
     		
     ) {
-        return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, family, subfamily, genus, null);
+        return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
     }
     
 }

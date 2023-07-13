@@ -1442,10 +1442,13 @@ public class DwCSciNameDQ_IT {
 		String phylum=""; 
 		String phylclass=""; 
 		String order=""; 
+		String superfamily = "";
 		String family="";
 		String subfamily="";
+		String tribe="";
+		String subtribe="";
 		String genus="";
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
@@ -1456,7 +1459,7 @@ public class DwCSciNameDQ_IT {
 		family="";
 		subfamily="";
 		genus="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1468,7 +1471,7 @@ public class DwCSciNameDQ_IT {
 		family="Muricidae";
 		subfamily="";
 		genus="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1480,7 +1483,7 @@ public class DwCSciNameDQ_IT {
 		family="Curculionidae";
 		subfamily="";
 		genus="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order,  superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1492,7 +1495,7 @@ public class DwCSciNameDQ_IT {
 		family="";
 		subfamily="";
 		genus="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1504,7 +1507,7 @@ public class DwCSciNameDQ_IT {
 		family="";
 		subfamily="";
 		genus="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1516,7 +1519,20 @@ public class DwCSciNameDQ_IT {
 		family="Curculionidae";
 		subfamily="";
 		genus="";
-		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, family, subfamily, genus, null);
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom=""; 
+		phylum="Magnoliophyta";
+		phylclass="Magnoliopsida";
+		order="";
+		superfamily = "Muricoidea";
+		family="";
+		subfamily="";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());

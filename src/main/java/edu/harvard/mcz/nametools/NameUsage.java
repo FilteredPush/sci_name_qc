@@ -71,7 +71,11 @@ public class NameUsage implements LinneanClassification {
 	private String phylum;   // classification
 	private String tclass;   // classification
 	private String order;    // classification
+	private String superfamily;   // classification
 	private String family;   // classification
+	private String subfamily; // classification
+	private String tribe; 	 // classification
+	private String subtribe; // classification
 	private String genus;    // classification
 	private String subgenus; // classification
 	private String species;  // classification, the binomial
@@ -117,7 +121,11 @@ public class NameUsage implements LinneanClassification {
 		phylum = null;   
 		tclass = null;   
 		order = null;    
+		superfamily = null;
 		family = null;   
+		subfamily = null;
+		tribe = null;
+		subtribe = null;
 		genus = null;
 		subgenus = null;
 		extension = new HashMap<String,String>();
@@ -131,7 +139,11 @@ public class NameUsage implements LinneanClassification {
 		if (phylum!=null && phylum.trim().length()==0) { phylum = null; }
 		if (tclass!=null && tclass.trim().length()==0) { tclass = null; }
 		if (order!=null && order.trim().length()==0) { order = null; }
+		if (superfamily!=null && superfamily.trim().length()==0) { superfamily = null; }
 		if (family!=null && family.trim().length()==0) { family = null; }
+		if (subfamily!=null && subfamily.trim().length()==0) { subfamily = null; }
+		if (tribe!=null && tribe.trim().length()==0) { tribe = null; }
+		if (subtribe!=null && subtribe.trim().length()==0) { subtribe = null; }
 		if (genus!=null && genus.trim().length()==0) { genus = null; }
 		if (subgenus!=null && subgenus.trim().length()==0) { subgenus = null; }
 	}
@@ -211,7 +223,11 @@ public class NameUsage implements LinneanClassification {
 				tclass = getValFromKey(json,"clazz");
 			}
 			order = getValFromKey(json,"order");
+			superfamily = getValFromKey(json,"superfamily");
 			family = getValFromKey(json,"family");
+			subfamily = getValFromKey(json,"subfamily");
+			tribe = getValFromKey(json,"tribe");
+			subtribe = getValFromKey(json,"subtribe");
 			genus = getValFromKey(json,"genus");
 			sourceID = getValFromKey(json,"sourceId");
 			link = getValFromKey(json,"link");
@@ -246,7 +262,11 @@ public class NameUsage implements LinneanClassification {
 		this.setPhylum(record.getPhylum());
 		this.setTclass(record.getClazz());
 		this.setOrder(record.getOrder());
+		this.setSuperfamily(superfamily);
 		this.setFamily(record.getFamily());
+		this.setSubfamily(subfamily);
+		this.setTribe(tribe);
+		this.setSubtribe(subtribe);
 		this.setGenus(record.getGenus());	
 		if (Integer.toString(record.getKey()).length()>0) { 
 			this.setGuid("gbif:" + Integer.toString(record.getKey()));
@@ -890,6 +910,9 @@ public class NameUsage implements LinneanClassification {
 				}
 			} catch (UnparsableNameException e) {
 				// couldn't parse
+			} catch (InterruptedException e) {
+				// threading issue
+				logger.debug(e.getMessage());
 			}	
     		try {
 				parser.close();
@@ -988,6 +1011,74 @@ public class NameUsage implements LinneanClassification {
 
 	public void setNameMatchDescription(String nameMatchDescription) {
 		this.nameMatchDescription = nameMatchDescription;
+	}
+
+	/**
+	 * @return the superfamily
+	 */
+	public String getSuperfamily() {
+		if (superfamily==null) { 
+			return "";
+		}
+		return superfamily;
+	}
+
+	/**
+	 * @param superfamily the superfamily to set
+	 */
+	public void setSuperfamily(String superfamily) {
+		this.superfamily = superfamily;
+	}
+
+	/**
+	 * @return the subfamily
+	 */
+	public String getSubfamily() {
+		if (subfamily==null) { 
+			return "";
+		}
+		return subfamily;
+	}
+
+	/**
+	 * @param subfamily the subfamily to set
+	 */
+	public void setSubfamily(String subfamily) {
+		this.subfamily = subfamily;
+	}
+
+	/**
+	 * @return the tribe
+	 */
+	public String getTribe() {
+		if (tribe==null) { 
+			return "";
+		}
+		return tribe;
+	}
+
+	/**
+	 * @param tribe the tribe to set
+	 */
+	public void setTribe(String tribe) {
+		this.tribe = tribe;
+	}
+
+	/**
+	 * @return the subtribe
+	 */
+	public String getSubtribe() {
+		if (subtribe==null) { 
+			return "";
+		}
+		return subtribe;
+	}
+
+	/**
+	 * @param subtribe the subtribe to set
+	 */
+	public void setSubtribe(String subtribe) {
+		this.subtribe = subtribe;
 	}	
 	
 }

@@ -425,13 +425,26 @@ public class SciNameUtils {
 
 		if (!parsed) { 
 			NameParser parser = new NameParserGBIF();
-			ParsedName parsedName = parser.parse(scientificName, Rank.UNRANKED, null);
-			result = new NameAuthorshipParse();
-			result.setNameWithAuthorship(scientificName);
-			result.setNameWithoutAuthorship(parsedName.canonicalNameWithoutAuthorship());
-			result.setAuthorship(parsedName.authorshipComplete());
-			logger.debug(parsedName.canonicalNameWithoutAuthorship());
-			logger.debug(parsedName.authorshipComplete());
+			ParsedName parsedName;
+			try {
+				parsedName = parser.parse(scientificName, Rank.UNRANKED, null);
+				result = new NameAuthorshipParse();
+				result.setNameWithAuthorship(scientificName);
+				result.setNameWithoutAuthorship(parsedName.canonicalNameWithoutAuthorship());
+				result.setAuthorship(parsedName.authorshipComplete());
+				logger.debug(parsedName.canonicalNameWithoutAuthorship());
+				logger.debug(parsedName.authorshipComplete());
+			} catch (UnparsableNameException e1) {
+				try {
+					parser.close();
+					parsed = true;
+				} catch (Exception e) {
+					logger.debug(e);
+				}
+				throw e1;
+			} catch (InterruptedException e1) {
+				logger.debug(e1.getMessage());
+			}
 			try {
 				parser.close();
 				parsed = true;

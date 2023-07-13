@@ -1784,7 +1784,11 @@ public class DwCSciNameDQ {
 	    			}
 	    		} catch (UnparsableNameException e) {
 	    			logger.error(e.getMessage());
-	    		}
+	    		} catch (InterruptedException e) {
+	    			logger.error(e.getMessage());
+   					result.addComment("Thread Error trying to parse scientific name: " + e.getMessage());
+   					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+				}
 	    		try {
 					nameParser.close();
 				} catch (Exception e) {
@@ -2591,28 +2595,39 @@ public class DwCSciNameDQ {
     
     
     /**
-     * Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?
+     * Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?
      *
-     * Provides: VALIDATION_CLASSIFICATION_CONSISTENT
+     * Provides: #123 VALIDATION_CLASSIFICATION_CONSISTENT
+     * Version: 2023-07-13
      *
-     * @param class the provided dwc:class to evaluate
-     * @param phylum the provided dwc:phylum to evaluate
      * @param kingdom the provided dwc:kingdom to evaluate
-     * @param family the provided dwc:family to evaluate
+     * @param phylum the provided dwc:phylum to evaluate
+     * @param class the provided dwc:class to evaluate
      * @param order the provided dwc:order to evaluate
+     * @param superfamily the provided dwc:superfamily to evaluate
+     * @param family the provided dwc:family to evaluate
+     * @param subfamily the provided dwc:subfamily to evaluate
+     * @param tribe the provided dwc:tribe to evaluate
+     * @param subtribe the provided dwc:subtribe to evaluate
+     * @param genus the provided dwc:genus to evaluate
      * @param sourceAuthority in which to look up the taxon
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
-    @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
 // TODO: Implementation of VALIDATION_CLASSIFICATION_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04 see line: 2604
+    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
+    @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:phylum") String phylum, 
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:superfamily") String superfamily,
     		@ActedUpon("dwc:family") String family, 
     		@ActedUpon("dwc:subfamily") String subfamily,
+    		@ActedUpon("dwc:tribe") String tribe,
+    		@ActedUpon("dwc:subtribe") String subtribe,
     		@ActedUpon("dwc:genus") String genus,
     		@Parameter(name="bdq:sourceAuthority") SciNameSourceAuthority sourceAuthority
     ) {
@@ -2626,12 +2641,20 @@ public class DwCSciNameDQ {
     	// of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, 
     	// dwc:class, dwc:order, dwc:family) can be unambiguously resolved 
     	// by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority 
-    	// default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
-    	// "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
     	// 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
+        // of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
+        // dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, 
+        // dwc:genus are EMPTY; COMPLIANT if the combination 
+        // of values of higher classification taxonomic terms (dwc:kingdom, 
+        // dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, 
+        // dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent 
+        // with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority 
 
     	// Parameters. This test is defined as parameterized.
-    	// bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+    	// bdq:sourceAuthority default = "GBIF Backbone Taxonomy" {[https://doi.org/10.15468/39omei]} 
+    	// {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}
 
     	if (sourceAuthority==null) { 
     		sourceAuthority = new SciNameSourceAuthority();
@@ -2648,9 +2671,21 @@ public class DwCSciNameDQ {
     		lowestRankingTaxon = subfamily;
     		lowestRank = "Subfamily";
     	}     	
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(subtribe)) { 
+    		lowestRankingTaxon = subtribe;
+    		lowestRank = "Subtribe";
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(tribe)) { 
+    		lowestRankingTaxon = tribe;
+    		lowestRank = "Tribe";
+    	} 
     	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(family)) { 
     		lowestRankingTaxon = family;
     		lowestRank = "Family";
+    	} 
+    	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(superfamily)) { 
+    		lowestRankingTaxon = superfamily;
+    		lowestRank = "Superfamily";
     	} 
     	if (lowestRankingTaxon == null && !SciNameUtils.isEmpty(order)) { 
     		lowestRankingTaxon = order;
@@ -2678,7 +2713,6 @@ public class DwCSciNameDQ {
     		DQResponse<ComplianceValue> lowestLookup = validateHigherTaxonAtRank(lowestRankingTaxon,lowestRank,sourceAuthority);
     		if (lowestLookup.getResultState()==ResultState.RUN_HAS_RESULT && lowestLookup.getValue().equals(ComplianceValue.COMPLIANT)) { 
     			result.addComment(lowestRank + " " + lowestRankingTaxon + " found in " + sourceAuthority.getName());
-
     			try {
     				List<NameUsage> lookupResult = null;
     				if (sourceAuthority.isGBIFChecklist()) { 
@@ -2699,7 +2733,12 @@ public class DwCSciNameDQ {
     					logger.debug(aResult.getPhylum());
     					logger.debug(aResult.getClazz());
     					logger.debug(aResult.getOrder());
+    					logger.debug(aResult.getSuperfamily());
     					logger.debug(aResult.getFamily());
+    					logger.debug(aResult.getSubfamily());
+    					logger.debug(aResult.getTribe());
+    					logger.debug(aResult.getSubtribe());
+    					logger.debug(aResult.getGenus());
     					// TODO: Check if returned values are synonyms of values present.
     					if (lowestRank.equalsIgnoreCase("Kingdom")) { 
     						hasMatch=true;
@@ -2721,7 +2760,7 @@ public class DwCSciNameDQ {
     								}
     							}
     						} 
-    					} else if (lowestRank.equalsIgnoreCase("Family")) {
+    					} else if (lowestRank.equalsIgnoreCase("Superfamily")) {
     						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
     							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
@@ -2730,7 +2769,87 @@ public class DwCSciNameDQ {
     									}
     								}
     							}
+    						}     						
+    					} else if (lowestRank.equalsIgnoreCase("Family")) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											hasMatch=true;
+    										}
+    									}
+    								}
+    							}
     						} 
+       					} else if (lowestRank.equalsIgnoreCase("Subfamily")) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
+    												hasMatch=true;
+    											}
+    										}
+    									}
+    								}
+    							}
+    						} 
+      					} else if (lowestRank.equalsIgnoreCase("Tribe")) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
+    												if (SciNameUtils.sameOrSynonym(order, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
+    													hasMatch=true;
+    												}
+    											}
+    										}
+    									}
+    								}
+    							}
+    						} 
+      					} else if (lowestRank.equalsIgnoreCase("Subtribe")) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
+    												if (SciNameUtils.sameOrSynonym(order, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
+    													if (SciNameUtils.sameOrSynonym(order, aResult.getTribe(), "Tribe", sourceAuthority)) {
+    														hasMatch=true;
+    													}
+    												}
+    											}
+    										}
+    									}
+    								}
+    							}
+    						}        						
+    					} else if (lowestRank.equalsIgnoreCase("Genus")) {
+    						if (SciNameUtils.sameOrSynonym(kingdom, aResult.getKingdom(), "Kingdom", sourceAuthority)) {
+    							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
+    								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
+    									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
+    												if (SciNameUtils.sameOrSynonym(order, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
+    													if (SciNameUtils.sameOrSynonym(order, aResult.getTribe(), "Tribe", sourceAuthority)) {
+    														if (SciNameUtils.sameOrSynonym(order, aResult.getSubtribe(), "Subtribe", sourceAuthority)) {
+    															hasMatch=true;
+    														}
+    													}
+    												}
+    											}
+    										}
+    									}
+    								}
+    							}
+    						}     						
     					}
     					if (hasMatch) { 
     						result.addComment("Matches to higher ranks found in " + sourceAuthority.getAuthority().getName());

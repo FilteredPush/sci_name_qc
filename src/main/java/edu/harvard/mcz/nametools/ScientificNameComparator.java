@@ -208,7 +208,9 @@ public class ScientificNameComparator {
 	    			}
 	    		} catch (UnparsableNameException e) {
 	    			log.error(e.getMessage());
-	    		}
+	    		} catch (InterruptedException e) {
+	    			log.error(e.getMessage());
+				}
 	    		try {
 					nameParser.close();
 				} catch (Exception e) {

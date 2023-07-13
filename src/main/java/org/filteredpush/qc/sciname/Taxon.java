@@ -505,7 +505,7 @@ public class Taxon {
 	                  authorOne = parse.authorshipComplete();
 	                  nameOne = nameOne.replace(authorOne, "");
 					}
-				} catch (UnparsableNameException e) {
+				} catch (UnparsableNameException | InterruptedException e) {
 					logger.debug(e.getMessage());
 				}
 			}
@@ -529,7 +529,7 @@ public class Taxon {
 	                  authorTwo = parse.authorshipComplete();
 	                  nameTwo = nameOne.replace(authorOne, "");
 					}
-				} catch (UnparsableNameException e) {
+				} catch (UnparsableNameException | InterruptedException e) {
 					logger.debug(e.getMessage());
 				}
 			}

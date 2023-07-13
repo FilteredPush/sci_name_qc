@@ -115,7 +115,7 @@ public class ZooBankService implements Validator {
 		    			if (act.getValue().startsWith(act.getNamestring())) { 
 		    				foundAuthor = act.getValue().replaceFirst(act.getNamestring(), "").trim();
 		    			}
-		    		} catch (UnparsableNameException e) {
+		    		} catch (UnparsableNameException | InterruptedException e) {
 		    			log.error(e.getMessage());
 		    		}
 		    		try {

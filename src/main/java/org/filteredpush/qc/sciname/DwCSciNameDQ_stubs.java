@@ -80,52 +80,6 @@ public class DwCSciNameDQ_stubs {
     }
 
 
-
-    /**
-     * Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?
-     *
-     * Provides: VALIDATION_CLASSIFICATION_CONSISTENT
-     * Version: 2023-07-04
-     *
-     * @param class the provided dwc:class to evaluate
-     * @param genus the provided dwc:genus to evaluate
-     * @param phylum the provided dwc:phylum to evaluate
-     * @param subfamily the provided dwc:subfamily to evaluate
-     * @param tribe the provided dwc:tribe to evaluate
-     * @param subtribe the provided dwc:subtribe to evaluate
-     * @param superfamily the provided dwc:superfamily to evaluate
-     * @param kingdom the provided dwc:kingdom to evaluate
-     * @param family the provided dwc:family to evaluate
-     * @param order the provided dwc:order to evaluate
-     * @return DQResponse the response of type ComplianceValue  to return
-     */
-    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
-    @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04")
-    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genericName are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
-    public DQResponse<ComplianceValue> validationClassificationConsistent(@ActedUpon("dwc:class") String taxonomic_class, @ActedUpon("dwc:genus") String genus, @ActedUpon("dwc:phylum") String phylum, @ActedUpon("dwc:subfamily") String subfamily, @ActedUpon("dwc:tribe") String tribe, @ActedUpon("dwc:subtribe") String subtribe, @ActedUpon("dwc:superfamily") String superfamily, @ActedUpon("dwc:kingdom") String kingdom, @ActedUpon("dwc:family") String family, @ActedUpon("dwc:order") String order) {
-        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
-
-        //TODO:  Implement specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
-        // of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
-        // dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, 
-        // dwc:genericName are EMPTY; COMPLIANT if the combination 
-        // of values of higher classification taxonomic terms (dwc:kingdom, 
-        // dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, 
-        // dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent 
-        // with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority 
-        // default = "GBIF Backbone Taxonomy" {[https://doi.org/10.15468/39omei]} 
-        // {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]} 
-        // 
-
-        //TODO: Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority
-
-        return result;
-    }
-
     /**
      * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
      *
