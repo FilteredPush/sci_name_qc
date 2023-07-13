@@ -396,8 +396,10 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * @param order the provided dwc:order to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
-    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Can the combination of higher classification taxonomic terms be unambiguously resolved using bdq:sourceAuthority?")
+    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
     @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
     		@ActedUpon("dwc:phylum") String phylum, 

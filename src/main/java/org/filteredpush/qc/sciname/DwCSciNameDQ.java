@@ -827,7 +827,6 @@ public class DwCSciNameDQ {
         // 
         
         // TODO: dwc:cultivarEpithet not handled yet
-        // TODO: Disambiguation not done yet on dwc:higherClassification, 
         // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
         // dwc:taxonConceptID and dwc:vernacularName
         
@@ -2617,7 +2616,6 @@ public class DwCSciNameDQ {
      * @param sourceAuthority in which to look up the taxon
      * @return DQResponse the response of type ComplianceValue  to return
      */
-// TODO: Implementation of VALIDATION_CLASSIFICATION_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04 see line: 2604
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
     @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04")
@@ -2743,7 +2741,7 @@ public class DwCSciNameDQ {
     					logger.debug(aResult.getTribe());
     					logger.debug(aResult.getSubtribe());
     					logger.debug(aResult.getGenus());
-    					// TODO: Check if returned values are synonyms of values present.
+    					// Check if returned values are exact matches or synonyms of values present.
     					if (lowestRank.equalsIgnoreCase("Kingdom")) { 
     						hasMatch=true;
     					} else if (lowestRank.equalsIgnoreCase("Phylum")) {
