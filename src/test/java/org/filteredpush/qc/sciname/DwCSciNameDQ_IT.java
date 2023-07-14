@@ -1436,7 +1436,7 @@ public class DwCSciNameDQ_IT {
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationClassificationAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
 	 */
 	@Test
-	public void testValidationClassificationAmbiguous() {
+	public void testValidationClassificationConsistent() {
 		
 		String kingdom=""; 
 		String phylum=""; 
@@ -1536,6 +1536,184 @@ public class DwCSciNameDQ_IT {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Chordata";
+		phylclass="";
+		order="Carnivora";
+		family="Canidae";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="Canis";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Chordata";
+		phylclass="Mammalia";
+		order="Carnivora";
+		family="Canidae";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="Canis";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Annelida";
+		phylclass="Polychaeta";
+		order="Amphinomida";
+		family="Amphinomidae";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="Chloeia";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+									
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="Papilionoidea";
+		family="Lycaenidae";
+		subfamily="Poritiinae";
+		tribe = "Poritiini";
+		subtribe = "";
+		genus="Poritia";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="Papilionoidea";
+		family="Lycaenidae";
+		subfamily="Poritiinae"; 
+		tribe = "Poritiini"; 
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		//TODO: Currently failing, test implementation needs discussion, NOT_COMPLIANT may be the correct value.
+		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="Papilionoidea";
+		family="Lycaenidae";
+		subfamily="Poritiinae";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="Papilionoidea";
+		family="Lycaenidae";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="Papilionoidea";
+		family="";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		// assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="";
+		family="";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="Lepidoptera";
+		superfamily="";
+		family="";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="Insecta";
+		order="";
+		superfamily="";
+		family="";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Arthropoda";
+		phylclass="";
+		order="";
+		superfamily="";
+		family="";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 	}
 	

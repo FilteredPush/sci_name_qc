@@ -2367,7 +2367,7 @@ public class DwCSciNameDQ {
        // bdq:sourceAuthority default = "GBIF Vocabulary: Taxonomic Rank" 
        // [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts] 
        
-       if (sourceAuthority==null) { 
+       if (SciNameUtils.isEmpty(sourceAuthority)) { 
     	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
        }
        if (SciNameUtils.isEmpty(taxonRank)) { 
@@ -2646,14 +2646,6 @@ public class DwCSciNameDQ {
     	DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
     	// Specification
-    	// EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-    	// is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
-    	// of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
-    	// dwc:family are EMPTY; COMPLIANT if the combination of values 
-    	// of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, 
-    	// dwc:class, dwc:order, dwc:family) can be unambiguously resolved 
-    	// by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority 
-    	// 
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
         // of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
@@ -2738,7 +2730,7 @@ public class DwCSciNameDQ {
     				}
     				boolean hasMatch = false;
     				Iterator<NameUsage> i = lookupResult.iterator();
-    				while (i.hasNext()) { 
+    				while (i.hasNext() && !hasMatch) { 
     					NameUsage aResult = i.next();
     					logger.debug(aResult.getCanonicalName());
     					logger.debug(aResult.getKingdom());
@@ -2787,7 +2779,7 @@ public class DwCSciNameDQ {
     							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
-    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(superfamily, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
     											hasMatch=true;
     										}
     									}
@@ -2799,8 +2791,8 @@ public class DwCSciNameDQ {
     							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
-    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
-    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(superfamily, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(family, aResult.getFamily(), "Family", sourceAuthority)) {
     												hasMatch=true;
     											}
     										}
@@ -2813,9 +2805,9 @@ public class DwCSciNameDQ {
     							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
-    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
-    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
-    												if (SciNameUtils.sameOrSynonym(order, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(superfamily, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(family, aResult.getFamily(), "Family", sourceAuthority)) {
+    												if (SciNameUtils.sameOrSynonym(subfamily, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
     													hasMatch=true;
     												}
     											}
@@ -2829,10 +2821,10 @@ public class DwCSciNameDQ {
     							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
-    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
-    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
-    												if (SciNameUtils.sameOrSynonym(order, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
-    													if (SciNameUtils.sameOrSynonym(order, aResult.getTribe(), "Tribe", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(superfamily, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(family, aResult.getFamily(), "Family", sourceAuthority)) {
+    												if (SciNameUtils.sameOrSynonym(subfamily, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
+    													if (SciNameUtils.sameOrSynonym(tribe, aResult.getTribe(), "Tribe", sourceAuthority)) {
     														hasMatch=true;
     													}
     												}
@@ -2847,11 +2839,11 @@ public class DwCSciNameDQ {
     							if (SciNameUtils.sameOrSynonym(phylum, aResult.getPhylum(), "Phylum", sourceAuthority)) {
     								if (SciNameUtils.sameOrSynonym(taxonomic_class, aResult.getClazz(), "Class", sourceAuthority)) {
     									if (SciNameUtils.sameOrSynonym(order, aResult.getOrder(), "Order", sourceAuthority)) {
-    										if (SciNameUtils.sameOrSynonym(order, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
-    											if (SciNameUtils.sameOrSynonym(order, aResult.getFamily(), "Family", sourceAuthority)) {
-    												if (SciNameUtils.sameOrSynonym(order, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
-    													if (SciNameUtils.sameOrSynonym(order, aResult.getTribe(), "Tribe", sourceAuthority)) {
-    														if (SciNameUtils.sameOrSynonym(order, aResult.getSubtribe(), "Subtribe", sourceAuthority)) {
+    										if (SciNameUtils.sameOrSynonym(superfamily, aResult.getSuperfamily(), "Superfamily", sourceAuthority)) {
+    											if (SciNameUtils.sameOrSynonym(family, aResult.getFamily(), "Family", sourceAuthority)) {
+    												if (SciNameUtils.sameOrSynonym(subfamily, aResult.getSubfamily(), "Subfamily", sourceAuthority)) {
+    													if (SciNameUtils.sameOrSynonym(tribe, aResult.getTribe(), "Tribe", sourceAuthority)) {
+    														if (SciNameUtils.sameOrSynonym(subtribe, aResult.getSubtribe(), "Subtribe", sourceAuthority)) {
     															hasMatch=true;
     														}
     													}
