@@ -115,6 +115,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
 	 * where bdq:sourceAuthority is the default GBIF Backbone Taxonomy.
 	 *
 	 * Provides: #57 AMENDMENT_TAXONID_FROM_TAXON
+     * Version: 2023-07-04
 	 *
 	 * @param taxonID the provided dwc:taxonID to evaluate
 	 * @param kingdom the provided dwc:kingdom to evaluate
@@ -138,10 +139,15 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
 	 * @param scientificNameID the provided dwc:scientificNameID to evaluate
 	 * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
 	 * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
+	 * @param superfamily the provided dwc:superfamily to evaluate
+	 * @param tribe the provided dwc:tribe to evaluate
+	 * @param subtribe the provided dwc:subtribe to evaluate
 	 * @return DQResponse the response of type AmendmentValue to return
 	 */
-	@Amendment(label="AMENDMENT_TAXONID_FROM_TAXON", description="Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms.")
-	@Provides("431467d6-9b4b-48fa-a197-cd5379f5e889")
+    @Amendment(label="AMENDMENT_TAXONID_FROM_TAXON", description="Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms.")
+    @Provides("431467d6-9b4b-48fa-a197-cd5379f5e889")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/431467d6-9b4b-48fa-a197-cd5379f5e889/2023-07-04")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available;  INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is not EMPTY or if all of dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, and dwc:cultivarEpithet are EMPTY, FILLED_IN the value of taxonID for an unambiguously resolved single taxon record in the bdq:sourceAuthority through (1) the value of dwc:scientificName or (2) if dwc:scientificName is EMPTY through values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship and dwc:cultivarEpithet, or (3) if ambiguity produced by multiple matches in (1) or (2) can be disambiguated to a single Taxon using the values of dwc:subtribe, dwc:tribe, dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID, dwc:taxonomicRank, and dwc:vernacularName; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
 	public static  DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
 			@ActedUpon("dwc:taxonID") String taxonID, 
 			@Consulted("dwc:kingdom") String kingdom, 
