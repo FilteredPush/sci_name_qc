@@ -58,22 +58,22 @@ import org.datakurator.ffdq.api.result.*;
 /**
  * Implementation of the TDWG TG2 NAME (scientific name) related data quality tests.
  * 
- * #82	VALIDATION_SCIENTIFICNAME_NOTEMPTY 7c4b9498-a8d9-4ebb-85f1-9f200c788595
  * #120	VALIDATION_TAXONID_NOTEMPTY 401bf207-9a55-4dff-88a5-abcd58ad97fa
  * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
- * #161	VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * #105	VALIDATION_TAXON_NOTEMPTY 06851339-843f-4a43-8422-4e61b9a00e75
- * #101	VALIDATION_POLYNOMIAL_CONSISTENT 17f03f1f-f74d-40c0-8071-2927cfc9487b
  * #123	VALIDATION_CLASSIFICATION_CONSISTENT 2750c040-1d4a-4149-99fe-0512785f2d5f
+ * #70	VALIDATION_TAXON_UNAMBIGUOUS 4c09f127-737b-4686-82a0-7c8e30841590
  * #81	VALIDATION_KINGDOM_FOUND 125b5493-052d-4a0d-a3e1-ed5bf792689e
  * #22	VALIDATION_PHYLUM_FOUND eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f
  * #77	VALIDATION_CLASS_FOUND 2cd6884e-3d14-4476-94f7-1191cfff309b
  * #83	VALIDATION_ORDER_FOUND 81cc974d-43cc-4c0f-a5e0-afa23b455aa3
  * #28	VALIDATION_FAMILY_FOUND 3667556d-d8f5-454c-922b-af8af38f613c
  * #122	VALIDATION_GENUS_FOUND f2ce7d55-5b1d-426a-b00e-6d4efe3058ec
+ * #82	VALIDATION_SCIENTIFICNAME_NOTEMPTY 7c4b9498-a8d9-4ebb-85f1-9f200c788595
  * #46	VALIDATION_SCIENTIFICNAME_FOUND 3f335517-f442-4b98-b149-1e87ff16de45
+ * #101	VALIDATION_POLYNOMIAL_CONSISTENT 17f03f1f-f74d-40c0-8071-2927cfc9487b
+ * #161	VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * #162	VALIDATION_TAXONRANK_STANDARD 7bdb13a4-8a51-4ee5-be7f-20693fdb183e
- * #70	VALIDATION_TAXON_UNAMBIGUOUS 4c09f127-737b-4686-82a0-7c8e30841590
  * 
  * #57	AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71	AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
@@ -725,10 +725,11 @@ public class DwCSciNameDQ {
 
 	
     /**
+     *
      * Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?
      *
      * Provides: #70 VALIDATION_TAXON_UNAMBIGUOUS
-     * Version: 2022-06-24
+     * Version: 2023-07-04
      *
      * @param class the provided dwc:class to evaluate
      * @param genus the provided dwc:genus to evaluate
@@ -758,9 +759,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_TAXON_UNAMBIGUOUS", description="Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?")
     @Provides("4c09f127-737b-4686-82a0-7c8e30841590")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2022-06-24")
-    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of dwc:taxonID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:taxonId references a single taxon record in the bdq:sourceAuthority, or (2) dwc:taxonID is empty and dwc:scientificName references a single taxon record in the bdq:sourceAuthority, or (3) if dwc:scientificName and dwc:taxonID are EMPTY and if a combination of the values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, or (4) if ambiguity produced by multiple matches in (2) or (3) can be disambiguated to a unique Taxon using the values of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
-// TODO: Implementation of VALIDATION_TAXON_UNAMBIGUOUS is not up to date with current version: https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2023-07-04 see line: 750
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2023-07-04")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of dwc:taxonID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:taxonId references a single taxon record in the bdq:sourceAuthority, or (2) dwc:taxonID is empty and dwc:scientificName references a single taxon record in the bdq:sourceAuthority, or (3) if dwc:scientificName and dwc:taxonID are EMPTY and if a combination of the values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, or (4) if ambiguity produced by multiple matches in (2) or (3) can be disambiguated to a unique Taxon using the values of dwc:tribe, dwc:subtribe, dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationTaxonUnambiguous(
     		@ActedUpon("dwc:class") String taxonomic_class, 
     		@ActedUpon("dwc:genus") String genus, 
@@ -830,10 +830,12 @@ public class DwCSciNameDQ {
         // resolved to a unique taxon in the bdq:sourceAuthority, or 
         // (4) if ambiguity produced by multiple matches in (2) or 
         // (3) can be disambiguated to a unique Taxon using the values 
-        // of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, 
-        // dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, 
-        // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
-        // dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT 
+        // of dwc:tribe, dwc:subtribe, dwc:subgenus, dwc:genus, dwc:subfamily, 
+        // dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, 
+        // dwc:kingdom, dwc:higherClassification, dwc:scientificNameID, 
+        // dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID 
+        // and dwc:vernacularName; otherwise NOT_COMPLIANT 
+        // bdq:sourceAuthority 
         // 
         
         // TODO: dwc:cultivarEpithet not handled yet
@@ -841,8 +843,8 @@ public class DwCSciNameDQ {
         // dwc:taxonConceptID and dwc:vernacularName
         
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
-        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // default = "GBIF Backbone Taxonomy" {[https://doi.org/10.15468/39omei]} 
+        // {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]} 
 
         if (SciNameUtils.isEmpty(taxon.getTaxonID()) &&
         		SciNameUtils.isEmpty(taxon.getScientificName()) &&
@@ -1107,15 +1109,6 @@ public class DwCSciNameDQ {
         							logger.debug(match.getTaxonomicStatus());
         							logger.debug(match.getAcceptedKey());
         							if ( taxon.sameHigherAs(match) ) { 
-//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getKingdom(), match.getKingdom())) &&
-//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getPhylum(), match.getPhylum())) &&
-//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getTaxonomic_class(), match.getClazz())) &&
-//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getOrder(), match.getOrder())) &&
-//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getFamily(), match.getFamily())) &&
-//        									(SciNameUtils.isEqualOrNonEmptyES(taxon.getGenus(), match.getGenus())) &&
-//        									(SciNameUtils.isEqualOrNonEmpty(lookMeUp, match.getCanonicalName())) 
-//        									) 
-//        							{ 
         								logger.debug(match.getCanonicalName());
         								logger.debug(match.getAuthorship());
         								logger.debug(match.getAuthorshipStringSimilarity());
@@ -2628,7 +2621,7 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
     @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-04")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-13")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
@@ -2650,15 +2643,16 @@ public class DwCSciNameDQ {
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
         // of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
         // dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, 
-        // dwc:genus are EMPTY; COMPLIANT if the combination 
-        // of values of higher classification taxonomic terms (dwc:kingdom, 
-        // dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, 
-        // dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent 
-        // with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority 
+        // dwc:genus are EMPTY; COMPLIANT if the combination of values 
+        // of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, 
+        // dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, 
+        // dwc:tribe, dwc:subtribe, dwc:genus) are consistent with 
+        // the bdq:sourceAuthority; otherwise NOT_COMPLIANT 
+        // 
 
     	// Parameters. This test is defined as parameterized.
-    	// bdq:sourceAuthority default = "GBIF Backbone Taxonomy" {[https://doi.org/10.15468/39omei]} 
-    	// {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}
+        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" {[https://doi.org/10.15468/39omei]} 
+        // {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]} 
 
     	if (sourceAuthority==null) { 
     		sourceAuthority = new SciNameSourceAuthority();
@@ -2896,4 +2890,6 @@ public class DwCSciNameDQ {
     }
     
 
+// TODO: Implementation of VALIDATION_TAXON_UNAMBIGUOUS is not up to date with current version: https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2023-07-04 see line: 760
+// TODO: Implementation of VALIDATION_CLASSIFICATION_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-13 see line: 2630
 }
