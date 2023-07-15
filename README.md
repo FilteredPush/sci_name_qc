@@ -90,7 +90,7 @@ Available in Maven Central.
     <dependency>
         <groupId>org.filteredpush</groupId>
         <artifactId>sci_name_qc</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </dependency>
 
 
@@ -128,11 +128,21 @@ To deploy a snapshot to the snapshotRepository:
 
     mvn clean deploy
 
-To deploy a new release to maven central, set the version in pom.xml to a non-snapshot version, then deploy with the release profile (which adds package signing and deployment to release staging:
+To deploy a new release to maven central, set the version in pom.xml and in metadata to a non-snapshot version, then deploy with the release profile (which adds package signing and deployment to release staging:
+
+1. set version in pom.xml
+
+2. set version in Mechanism annotation in the DwCSciNameDQ classes in the generation configuration files, and in this README.
+
+	src/main/java/org/filteredpush/qc/sciname/DwCSciNameDQ.java
+	src/main/java/org/filteredpush/qc/sciname/DwCSciNameDQDefaults.java
+	generation/sci_name_qc_DwCSciNameQC_kurator_ffdq.config
+	generation/sci_name_qc_DwCSciNameQC_stubs_kurator_ffdq.config
+	README.md
+
+3. deploy to maven central
 
     mvn clean deploy -P release
 
-After this, you will need to login to the sonatype oss repository hosting nexus instance, find the staged release in the staging repositories, and perform the release.  It should be possible (haven't verified this yet) to perform the release from the command line instead by running: 
-
-    mvn nexus-staging:release -P release
+After this, you may login to the sonatype oss repository hosting nexus instance find the staged release in the staging repositories and confirm the release.  
 
