@@ -2254,7 +2254,10 @@ public class DwCSciNameDQ {
        // Parameters. This test is defined as parameterized.
        // bdq:sourceAuthority
 
-       if (sourceAuthority==null) { 
+       if (SciNameUtils.isEmpty(sourceAuthority)) { 
+    	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
+       }
+       if (sourceAuthority.equals("GBIF Vocabulary: Taxonomic Rank")) { 
     	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
        }
        if (SciNameUtils.isEmpty(taxonRank)) { 
