@@ -401,7 +401,11 @@ public class DwCSciNameDQ {
 		DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 		SciNameSourceAuthority sourceAuthorityObject;
 		try {
-			sourceAuthorityObject = new SciNameSourceAuthority(sourceAuthority);
+			if (SciNameUtils.isEmpty(sourceAuthority)) { 
+				sourceAuthorityObject = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} else { 
+				sourceAuthorityObject = new SciNameSourceAuthority(sourceAuthority);
+			}
 			result = amendmentTaxonidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
 			genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
 			infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
@@ -2509,7 +2513,11 @@ public class DwCSciNameDQ {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         if (sourceAuthority==null) { 
-        	sourceAuthority = new SciNameSourceAuthority();
+        	try {
+				sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+			} catch (SourceAuthorityException e) {
+				logger.error(e.getMessage(),e);
+			}
         }
 
         if (SciNameUtils.isEmpty(taxon)) { 
@@ -2892,7 +2900,4 @@ public class DwCSciNameDQ {
     	return result;
     }
     
-
-// TODO: Implementation of VALIDATION_TAXON_UNAMBIGUOUS is not up to date with current version: https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2023-07-04 see line: 760
-// TODO: Implementation of VALIDATION_CLASSIFICATION_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-13 see line: 2630
 }
