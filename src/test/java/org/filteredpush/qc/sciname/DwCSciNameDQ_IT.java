@@ -172,18 +172,21 @@ public class DwCSciNameDQ_IT {
 		scientificName = "Murex brevispina Lamarck, 1822";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		scientificName = "Murex brevispina Lamarck, 1822";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,wormsAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		scientificName = "not a scientific name";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -191,6 +194,7 @@ public class DwCSciNameDQ_IT {
 		scientificName = "Babelomurex dalli (Emerson & D'Attilio, 1963)";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -198,6 +202,7 @@ public class DwCSciNameDQ_IT {
 		scientificName = "Pentagonaster Alexandri Perrier, 1881";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -205,6 +210,7 @@ public class DwCSciNameDQ_IT {
 		scientificName = "Ophiocoma Alexandri Lyman, 1860";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -212,6 +218,7 @@ public class DwCSciNameDQ_IT {
 		scientificName = "Eucalyptus camaldulensis";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -703,6 +710,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class(taxonomic_class);
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
 		
@@ -714,6 +722,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("Gastropoda");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -725,6 +734,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -736,6 +746,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -748,6 +759,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -760,6 +772,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Murex");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -771,6 +784,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("Gastropoda");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	
@@ -785,6 +799,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -799,6 +814,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -813,6 +829,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		
 		// ambiregnal homonyms 
@@ -823,6 +840,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -832,6 +850,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("Lecanoromycetes");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -842,6 +861,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setFamily("Graphidaceae");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -852,6 +872,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("Lecanoromycetes");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -862,6 +883,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -872,6 +894,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("Gastropoda");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -882,6 +905,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -897,6 +921,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship("Thomsen & Moestrup, 1983");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -910,6 +935,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship("Heyden, 1887");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -926,6 +952,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -941,6 +968,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -958,6 +986,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -969,6 +998,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,wormsAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -981,6 +1011,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	
@@ -994,6 +1025,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1007,6 +1039,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1020,6 +1053,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1033,6 +1067,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1046,6 +1081,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1059,6 +1095,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus("Chicoreus");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1073,6 +1110,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setSubtribe("Ignored value");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1087,6 +1125,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setSubtribe("Ignored value");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1102,6 +1141,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenericName(scientificName);  
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1117,6 +1157,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1132,6 +1173,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 	
@@ -1147,6 +1189,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1162,6 +1205,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1177,6 +1221,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	}
@@ -1494,6 +1539,7 @@ public class DwCSciNameDQ_IT {
 		String genus="";
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
 		kingdom="Plantae";
@@ -1505,6 +1551,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 
@@ -1517,6 +1564,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 
@@ -1529,6 +1577,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order,  superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 				
@@ -1541,6 +1590,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1553,6 +1603,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 
@@ -1565,6 +1616,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1578,6 +1630,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1592,6 +1645,7 @@ public class DwCSciNameDQ_IT {
 		genus="Canis";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1606,6 +1660,7 @@ public class DwCSciNameDQ_IT {
 		genus="Canis";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1620,6 +1675,7 @@ public class DwCSciNameDQ_IT {
 		genus="Chloeia";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 									
@@ -1635,6 +1691,7 @@ public class DwCSciNameDQ_IT {
 		genus="Poritia";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1650,6 +1707,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		//TODO: Currently failing, test implementation needs discussion, NOT_COMPLIANT may be the correct value.
 		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
@@ -1666,6 +1724,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1681,6 +1740,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1696,6 +1756,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		// assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1711,6 +1772,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1726,6 +1788,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1741,6 +1804,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -1756,6 +1820,7 @@ public class DwCSciNameDQ_IT {
 		genus="";
 		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
