@@ -60,6 +60,7 @@ public class NameComparison {
 	
 	public static final String MATCH_WEAKEXACTYEAR = "Slightly Similar Author, Year Exact";
 	public static final String MATCH_SIMILAREXACTYEAR = "Similar Author, Year Exact";
+	public static final String MATCH_DIFFERANDEXACTYEAR = "Author only differs in form of and, Year Exact";
 	public static final String MATCH_SIMILARMISSINGYEAR = "Similar Author, Year Removed";
 	public static final String MATCH_SIMILARADDSYEAR = "Similar Author, Year Added";
 	public static final String MATCH_EXACTDIFFERENTYEAR = "Exact Author, Years Different";
@@ -225,6 +226,7 @@ public class NameComparison {
 				match.equals(MATCH_L_EXACTYEAR) ||
 				match.equals(MATCH_SOWERBYEXACTYEAR) ||
 				match.equals(MATCH_ADDSINITIALEXACTYEAR) ||
+				match.equals(MATCH_DIFFERANDEXACTYEAR) ||
 				match.equals(MATCH_EXACTMISSINGYEAR)
 		) { 
 			result = true;

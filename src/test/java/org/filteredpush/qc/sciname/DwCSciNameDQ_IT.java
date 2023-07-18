@@ -1180,7 +1180,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setTaxonID("urn:lsid:irmng.org:taxname:10360908");
 		scientificName = "Crotalus atrox Baird and Girard, 1853";
-		kingdom = "Animailia";
+		kingdom = "Animalia";
 		taxonomic_class = ""; 
 		scientificNameAuthorship = "Baird and Girard, 1853"; 
 		taxon.setKingdom(kingdom);
@@ -1196,7 +1196,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setTaxonID("");
 		scientificName = "Crotalus atrox Baird & Girard, 1853";
-		kingdom = "Animailia";
+		kingdom = "Animalia";
 		taxonomic_class = ""; 
 		scientificNameAuthorship = "Baird & Girard, 1853"; 
 		taxon.setKingdom(kingdom);
@@ -1212,7 +1212,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setTaxonID("");
 		scientificName = "Crotalus atrox Baird and Girard, 1853";
-		kingdom = "Animailia";
+		kingdom = "Animalia";
 		taxonomic_class = ""; 
 		scientificNameAuthorship = "Baird and Girard, 1853"; 
 		taxon.setKingdom(kingdom);

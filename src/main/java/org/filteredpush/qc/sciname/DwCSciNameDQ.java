@@ -21,6 +21,7 @@ package org.filteredpush.qc.sciname;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1138,6 +1139,9 @@ public class DwCSciNameDQ {
         										authorshipOK = true;
         									} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACT_BRACKETS)) {
         										result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with exact match (except for square brackets) on authorship.");
+        										authorshipOK = true;
+        									} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_DIFFERANDEXACTYEAR)) {
+        										result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with exact match (except for use of and/amperstand) on authorship.");
         										authorshipOK = true;
         									} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXACTADDSYEAR)) {
         										result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
@@ -2395,7 +2399,9 @@ public class DwCSciNameDQ {
     			   RankAuthorityLoader loader = new RankAuthorityLoader();
     			   try {
     				   loader.load();
-    			   } catch (IOException | ParserConfigurationException | SAXException e) {
+    			   } catch (IOException  e) { 
+    				   result.addComment("Error looking up " + sourceAuthority + " "  +e.getMessage());
+    		   		} catch (ParserConfigurationException | SAXException e) {
     				   logger.debug(e.getMessage(), e);
     			   }
 

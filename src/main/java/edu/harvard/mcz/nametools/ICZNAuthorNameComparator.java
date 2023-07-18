@@ -87,6 +87,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 						result.setMatchType(NameComparison.MATCH_DISSIMILAR);
 					}
 					double similarityAlpha = ICZNAuthorNameComparator.calulateSimilarityOfAuthorAlpha(anAuthor, toOtherAuthor);
+					double similarityAlphaAnd = ICZNAuthorNameComparator.calulateSimilarityOfAuthorAlpha(anAuthor.replace("&", "and"), toOtherAuthor.replace("&", "and"));
 					double similarityYear = ICZNAuthorNameComparator.calulateSimilarityOfAuthorYear(anAuthor, toOtherAuthor);
 					boolean parenSame = ICZNAuthorNameComparator.calculateHasParen(anAuthor)==ICZNAuthorNameComparator.calculateHasParen(toOtherAuthor);
 					
@@ -102,11 +103,19 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 					    	result.setMatchType(NameComparison.MATCH_EXACTDIFFERENTYEAR);
 					   }
 					}
-					if (parenSame && (similarityYear==1d) && similarityAlpha > weakThreshold ) { 
-						result.setMatchType(NameComparison.MATCH_WEAKEXACTYEAR);
+					if (parenSame && (similarityYear==1d) && similarityAlpha > weakThreshold ) {
+						if (similarityAlphaAnd==1d) { 
+							result.setMatchType(NameComparison.MATCH_DIFFERANDEXACTYEAR);
+						} else { 
+							result.setMatchType(NameComparison.MATCH_WEAKEXACTYEAR);
+						}
 					}
 					if (parenSame && (similarityYear==1d) && similarityAlpha > similarityThreshold ) { 
-						result.setMatchType(NameComparison.MATCH_SIMILAREXACTYEAR);
+						if (similarityAlphaAnd==1d) { 
+							result.setMatchType(NameComparison.MATCH_DIFFERANDEXACTYEAR);
+						} else { 
+							result.setMatchType(NameComparison.MATCH_SIMILAREXACTYEAR);
+						}
 					}
 					if (parenSame && (similarityYear==1d)) { 
 						String testOne = anAuthor.replaceFirst("^\\(", "");
