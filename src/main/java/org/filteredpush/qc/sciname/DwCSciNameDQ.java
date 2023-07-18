@@ -1034,6 +1034,7 @@ public class DwCSciNameDQ {
         						logger.debug(id);
         						try {
         							taxonAtID = WoRMSService.lookupTaxonByID(id);
+        							// TODO: Confirm implementation to specification.
         							if (taxonAtID.getScientificName().equals(taxon.getScientificName())) { 
         								result.addComment("Exact match to provided taxonID found in " + sourceAuthority.getName() + ", matching the provided value of dwc:scientificName");
         								result.setValue(ComplianceValue.COMPLIANT);
@@ -1061,17 +1062,24 @@ public class DwCSciNameDQ {
         						logger.debug(id);
         						try {
         							taxonAtID = IRMNGService.lookupTaxonByID(id);
-        							if (taxonAtID.getScientificName().equals(taxon.getScientificName())) { 
-        								// matched
+        							logger.debug(taxonAtID);
+        							if (taxonAtID.getGuid().equals(taxon.getTaxonID())) { 
        									result.addComment("Match to provided taxonID found in " + sourceAuthority.getName() + ".");
        									result.setValue(ComplianceValue.COMPLIANT);
        									result.setResultState(ResultState.RUN_HAS_RESULT);
-        							} else { 
-        								// not matched
-       									result.addComment("Match to provided taxonID ["+taxon.getTaxonID()+"] not found in " + sourceAuthority.getName() + ".");
-       									result.setValue(ComplianceValue.NOT_COMPLIANT);
-       									result.setResultState(ResultState.RUN_HAS_RESULT);
-        							}
+        							} 
+        							// TODO: Conform implementation to specification.
+//        							if (taxon.plausiblySameNameAs(taxonAtID)) { 
+//        								// matched
+//       									result.addComment("Match to provided taxonID found in " + sourceAuthority.getName() + ".");
+//       									result.setValue(ComplianceValue.COMPLIANT);
+//       									result.setResultState(ResultState.RUN_HAS_RESULT);
+//        							} else { 
+//        								// not matched
+//       									result.addComment("Match to provided taxonID ["+taxon.getTaxonID()+"] not found in " + sourceAuthority.getName() + ".");
+//       									result.setValue(ComplianceValue.NOT_COMPLIANT);
+//       									result.setResultState(ResultState.RUN_HAS_RESULT);
+//        							}
         						} catch (IDFormatException e) {
    									result.addComment("Provided taxonID ["+taxon.getTaxonID()+"] does not conform to the expecations for " + sourceAuthority.getName() + ".");
   									result.setValue(ComplianceValue.NOT_COMPLIANT);
@@ -1097,6 +1105,8 @@ public class DwCSciNameDQ {
         						matchList = GBIFService.parseAllNameUsagesFromJSON(matches);					
         					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
         						matchList = WoRMSService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
+        					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
+        						matchList = IRMNGService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());        						
         					} else { 
         						throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
         					} 
@@ -1224,10 +1234,15 @@ public class DwCSciNameDQ {
         			result.addComment("Unable to process:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
         		} catch (ApiException e) {
-        			e.printStackTrace();
+        			logger.debug(e.getMessage(),e);
         			result.addComment(sourceAuthority.getName() + " API invocation error:" + e.getMessage());
         			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
-        		}
+        		} catch (org.irmng.aphia.v1_0.handler.ApiException e) {
+        			logger.debug(e.getMessage(),e);
+					e.printStackTrace();
+        			result.addComment(sourceAuthority.getName() + " API invocation error:" + e.getMessage());
+        			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+				}
         	}
         }
         
