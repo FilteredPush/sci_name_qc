@@ -51,116 +51,117 @@ public class TestDwCSciNameDQ {
 		String taxonID = "";
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
 		taxonID = " ";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
 		taxonID = "3256236";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "urn:lsid:marinespecies.org:taxname:148";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "urn:lsid:marinespecies.org:taxname:";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "https://www.gbif.org/species/2529789";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "gbif:2529789";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "https://www.gbif.org/";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "https://www.gbif.org/species/";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "urn:uuid:c65c3ede-484f-45af-813e-65f606dff750";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "c65c3ede-484f-45af-813e-65f606dff750";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "pseudonamespace:c65c3ede-484f-45af-813e-65f606dff750";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "gbif:2529789";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "pseudonamespace:2529789";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "gbif:";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "https://invalid/99999999";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "https://example.com/99999999";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -179,12 +180,14 @@ public class TestDwCSciNameDQ {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		scientificName = "";
 		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 
 	}
 
@@ -208,6 +211,7 @@ public class TestDwCSciNameDQ {
 		String infraspecificEpithet = "cus";
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -217,9 +221,10 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
-		assertNotNull(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		scientificName = "Hakea";
 		genericName = "Hakea";
@@ -227,6 +232,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
 	
@@ -236,6 +242,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet="physocarpa";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
@@ -245,6 +252,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet="";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
@@ -254,6 +262,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet="";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
@@ -264,6 +273,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet="physocarpa";  
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
 		
@@ -273,6 +283,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -282,6 +293,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -291,6 +303,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -300,6 +313,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -309,6 +323,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -318,6 +333,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -327,6 +343,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -336,6 +353,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -345,6 +363,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "scaberrima";   // per definition, dwc:infraspecificEpithet is the terminal epithet
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -354,6 +373,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "sessilis";  // not correct per definition
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -363,6 +383,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "var. scaberrima";  // not correct per definition, rank is not included in term
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -372,6 +393,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -381,6 +403,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
 		
@@ -390,6 +413,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertNull(result.getValue());
 		
@@ -400,6 +424,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -409,6 +434,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "cus";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -418,6 +444,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -428,6 +455,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = null;
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -438,6 +466,7 @@ public class TestDwCSciNameDQ {
 		logger.debug(infraspecificEpithet);
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -447,6 +476,7 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "foo";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		// wrong path in test
@@ -458,6 +488,8 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		// wrong path in test
@@ -469,6 +501,8 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
@@ -478,6 +512,8 @@ public class TestDwCSciNameDQ {
 		infraspecificEpithet = "";
 		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	}
@@ -490,9 +526,11 @@ public class TestDwCSciNameDQ {
 		DQResponse<ComplianceValue> result =DwCSciNameDQ.validationTaxonNotempty(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		result =DwCSciNameDQ.validationTaxonNotempty("class", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		result =DwCSciNameDQ.validationTaxonNotempty(null, "A", null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
@@ -568,6 +606,7 @@ public class TestDwCSciNameDQ {
 		result =DwCSciNameDQ.validationTaxonNotempty("A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A");
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 	}
 
@@ -583,12 +622,14 @@ public class TestDwCSciNameDQ {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		taxonId = "";
 		result = DwCSciNameDQ.validationTaxonidNotempty(taxonId);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());		
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 	}
 
@@ -603,12 +644,18 @@ public class TestDwCSciNameDQ {
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonrankNotempty(null);
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
 		result = DwCSciNameDQ.validationTaxonrankNotempty("string");
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
 		result = DwCSciNameDQ.validationTaxonrankNotempty("species");
 		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
 	}
 
 	/**
@@ -621,26 +668,31 @@ public class TestDwCSciNameDQ {
 		
 		DQResponse<ComplianceValue> result= DwCSciNameDQ.validationTaxonrankStandard("kingdom", null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		result = DwCSciNameDQ.validationTaxonrankStandard("subspecies", null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		result = DwCSciNameDQ.validationTaxonrankStandard("", null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertEquals(null, result.getValue());
 		
 		result = DwCSciNameDQ.validationTaxonrankStandard("invalidvalue", null);
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		result = DwCSciNameDQ.validationTaxonrankStandard("kingdom", "https://example.com/example");
 		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.EXTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		assertEquals(null, result.getValue());
 	}
@@ -653,40 +705,47 @@ public class TestDwCSciNameDQ {
 		String taxonRank = "species"; 
 		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		taxonRank = "Species"; 
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("species",response.getValue().getObject().get("dwc:taxonRank"));
 		
 		taxonRank = "";
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, "https://www.example.com/example");
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		
 		taxonRank = "kingdom";
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, "https://www.example.com/example");
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.EXTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		
 		taxonRank = "familia"; 
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("family",response.getValue().getObject().get("dwc:taxonRank"));
 		
 		taxonRank = "Familia "; 
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());
 		assertEquals("family",response.getValue().getObject().get("dwc:taxonRank"));
 		
 		taxonRank = "not a rank string"; 
 		response = DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
 		logger.debug(response.getComment());
+		assertFalse(SciNameUtils.isEmpty(response.getComment()));
 		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		
 	}

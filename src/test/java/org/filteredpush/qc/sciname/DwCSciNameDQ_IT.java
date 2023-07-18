@@ -1134,7 +1134,51 @@ public class DwCSciNameDQ_IT {
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+	
+		taxon = new Taxon();
+		taxon.setTaxonID("urn:lsid:irmng.org:taxname:10360908");
+		scientificName = "Crotalus atrox Baird and Girard, 1853";
+		kingdom = "Animailia";
+		taxonomic_class = ""; 
+		scientificNameAuthorship = "Baird and Girard, 1853"; 
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		scientificName = "Crotalus atrox Baird & Girard, 1853";
+		kingdom = "Animailia";
+		taxonomic_class = ""; 
+		scientificNameAuthorship = "Baird & Girard, 1853"; 
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setTaxonID("");
+		scientificName = "Crotalus atrox Baird and Girard, 1853";
+		kingdom = "Animailia";
+		taxonomic_class = ""; 
+		scientificNameAuthorship = "Baird and Girard, 1853"; 
+		taxon.setKingdom(kingdom);
+		taxon.setTaxonomic_class(taxonomic_class);
+		taxon.setScientificName(scientificName);
+		taxon.setScientificNameAuthorship(scientificNameAuthorship);
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,irmngAuthority);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	}
 
 	/**
