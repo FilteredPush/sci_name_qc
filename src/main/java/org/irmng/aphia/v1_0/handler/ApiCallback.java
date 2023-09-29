@@ -21,6 +21,8 @@ import java.util.List;
  * Callback for asynchronous API call.
  *
  * @param <T> The return type
+ * @author mole
+ * @version $Id: $Id
  */
 public interface ApiCallback<T> {
     /**

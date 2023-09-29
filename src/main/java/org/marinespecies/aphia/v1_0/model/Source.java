@@ -23,6 +23,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 /**
  * Source
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
@@ -51,151 +54,248 @@ public class Source {
   @SerializedName("doi")
   private String doi = null;
 
+  /**
+   * <p>sourceId.</p>
+   *
+   * @param sourceId a {@link java.lang.Integer} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source sourceId(Integer sourceId) {
     this.sourceId = sourceId;
     return this;
   }
 
-   /**
-   * Unique identifier for the source within WoRMS -- 
+  /**
+   * Unique identifier for the source within WoRMS --
+   *
    * @return sourceId
-  **/
+   */
   @Schema(description = "Unique identifier for the source within WoRMS -- ")
   public Integer getSourceId() {
     return sourceId;
   }
 
+  /**
+   * <p>Setter for the field <code>sourceId</code>.</p>
+   *
+   * @param sourceId a {@link java.lang.Integer} object.
+   */
   public void setSourceId(Integer sourceId) {
     this.sourceId = sourceId;
   }
 
+  /**
+   * <p>use.</p>
+   *
+   * @param use a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source use(String use) {
     this.use = use;
     return this;
   }
 
-   /**
+  /**
    * Usage of the source for this taxon. See &lt;a href&#x3D;&#x27;https://www.marinespecies.org/aphia.php?p&#x3D;manual#topic6&#x27; target&#x3D;&#x27;_blank&#x27;&gt;here&lt;/a&gt; for all values
+   *
    * @return use
-  **/
+   */
   @Schema(description = "Usage of the source for this taxon. See <a href='https://www.marinespecies.org/aphia.php?p=manual#topic6' target='_blank'>here</a> for all values")
   public String getUse() {
     return use;
   }
 
+  /**
+   * <p>Setter for the field <code>use</code>.</p>
+   *
+   * @param use a {@link java.lang.String} object.
+   */
   public void setUse(String use) {
     this.use = use;
   }
 
+  /**
+   * <p>reference.</p>
+   *
+   * @param reference a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source reference(String reference) {
     this.reference = reference;
     return this;
   }
 
-   /**
+  /**
    * Full citation string
+   *
    * @return reference
-  **/
+   */
   @Schema(description = "Full citation string")
   public String getReference() {
     return reference;
   }
 
+  /**
+   * <p>Setter for the field <code>reference</code>.</p>
+   *
+   * @param reference a {@link java.lang.String} object.
+   */
   public void setReference(String reference) {
     this.reference = reference;
   }
 
+  /**
+   * <p>page.</p>
+   *
+   * @param page a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source page(String page) {
     this.page = page;
     return this;
   }
 
-   /**
+  /**
    * Page(s) where the taxon is mentioned
+   *
    * @return page
-  **/
+   */
   @Schema(description = "Page(s) where the taxon is mentioned")
   public String getPage() {
     return page;
   }
 
+  /**
+   * <p>Setter for the field <code>page</code>.</p>
+   *
+   * @param page a {@link java.lang.String} object.
+   */
   public void setPage(String page) {
     this.page = page;
   }
 
+  /**
+   * <p>url.</p>
+   *
+   * @param url a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source url(String url) {
     this.url = url;
     return this;
   }
 
-   /**
+  /**
    * Direct link to the source record
+   *
    * @return url
-  **/
+   */
   @Schema(description = "Direct link to the source record")
   public String getUrl() {
     return url;
   }
 
+  /**
+   * <p>Setter for the field <code>url</code>.</p>
+   *
+   * @param url a {@link java.lang.String} object.
+   */
   public void setUrl(String url) {
     this.url = url;
   }
 
+  /**
+   * <p>link.</p>
+   *
+   * @param link a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source link(String link) {
     this.link = link;
     return this;
   }
 
-   /**
+  /**
    * External link (i.e. journal, data system, etc..)
+   *
    * @return link
-  **/
+   */
   @Schema(description = "External link (i.e. journal, data system, etc..)")
   public String getLink() {
     return link;
   }
 
+  /**
+   * <p>Setter for the field <code>link</code>.</p>
+   *
+   * @param link a {@link java.lang.String} object.
+   */
   public void setLink(String link) {
     this.link = link;
   }
 
+  /**
+   * <p>fulltext.</p>
+   *
+   * @param fulltext a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source fulltext(String fulltext) {
     this.fulltext = fulltext;
     return this;
   }
 
-   /**
+  /**
    * Full text link (PDF)
+   *
    * @return fulltext
-  **/
+   */
   @Schema(description = "Full text link (PDF)")
   public String getFulltext() {
     return fulltext;
   }
 
+  /**
+   * <p>Setter for the field <code>fulltext</code>.</p>
+   *
+   * @param fulltext a {@link java.lang.String} object.
+   */
   public void setFulltext(String fulltext) {
     this.fulltext = fulltext;
   }
 
+  /**
+   * <p>doi.</p>
+   *
+   * @param doi a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Source} object.
+   */
   public Source doi(String doi) {
     this.doi = doi;
     return this;
   }
 
-   /**
+  /**
    * Digital Object Identifier
+   *
    * @return doi
-  **/
+   */
   @Schema(description = "Digital Object Identifier")
   public String getDoi() {
     return doi;
   }
 
+  /**
+   * <p>Setter for the field <code>doi</code>.</p>
+   *
+   * @param doi a {@link java.lang.String} object.
+   */
   public void setDoi(String doi) {
     this.doi = doi;
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -215,12 +315,14 @@ public class Source {
         Objects.equals(this.doi, source.doi);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(sourceId, use, reference, page, url, link, fulltext, doi);
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

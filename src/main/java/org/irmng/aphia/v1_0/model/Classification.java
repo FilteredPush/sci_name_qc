@@ -24,6 +24,9 @@ import java.io.IOException;
 import org.irmng.aphia.v1_0.model.Classification;
 /**
  * Classification
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")
@@ -40,79 +43,128 @@ public class Classification {
   @SerializedName("child")
   private Classification child = null;
 
+  /**
+   * <p>IRMNG_ID.</p>
+   *
+   * @param IRMNG_ID a {@link java.lang.Integer} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.Classification} object.
+   */
   public Classification IRMNG_ID(Integer IRMNG_ID) {
     this.IRMNG_ID = IRMNG_ID;
     return this;
   }
 
-   /**
+  /**
    * Get IRMNG_ID
+   *
    * @return IRMNG_ID
-  **/
+   */
   @Schema(description = "")
   public Integer getIRMNGID() {
     return IRMNG_ID;
   }
 
+  /**
+   * <p>setIRMNGID.</p>
+   *
+   * @param IRMNG_ID a {@link java.lang.Integer} object.
+   */
   public void setIRMNGID(Integer IRMNG_ID) {
     this.IRMNG_ID = IRMNG_ID;
   }
 
+  /**
+   * <p>rank.</p>
+   *
+   * @param rank a {@link java.lang.String} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.Classification} object.
+   */
   public Classification rank(String rank) {
     this.rank = rank;
     return this;
   }
 
-   /**
+  /**
    * Get rank
+   *
    * @return rank
-  **/
+   */
   @Schema(description = "")
   public String getRank() {
     return rank;
   }
 
+  /**
+   * <p>Setter for the field <code>rank</code>.</p>
+   *
+   * @param rank a {@link java.lang.String} object.
+   */
   public void setRank(String rank) {
     this.rank = rank;
   }
 
+  /**
+   * <p>scientificname.</p>
+   *
+   * @param scientificname a {@link java.lang.String} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.Classification} object.
+   */
   public Classification scientificname(String scientificname) {
     this.scientificname = scientificname;
     return this;
   }
 
-   /**
+  /**
    * Get scientificname
+   *
    * @return scientificname
-  **/
+   */
   @Schema(description = "")
   public String getScientificname() {
     return scientificname;
   }
 
+  /**
+   * <p>Setter for the field <code>scientificname</code>.</p>
+   *
+   * @param scientificname a {@link java.lang.String} object.
+   */
   public void setScientificname(String scientificname) {
     this.scientificname = scientificname;
   }
 
+  /**
+   * <p>child.</p>
+   *
+   * @param child a {@link org.irmng.aphia.v1_0.model.Classification} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.Classification} object.
+   */
   public Classification child(Classification child) {
     this.child = child;
     return this;
   }
 
-   /**
+  /**
    * Get child
+   *
    * @return child
-  **/
+   */
   @Schema(description = "")
   public Classification getChild() {
     return child;
   }
 
+  /**
+   * <p>Setter for the field <code>child</code>.</p>
+   *
+   * @param child a {@link org.irmng.aphia.v1_0.model.Classification} object.
+   */
   public void setChild(Classification child) {
     this.child = child;
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -128,12 +180,14 @@ public class Classification {
         Objects.equals(this.child, classification.child);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(IRMNG_ID, rank, scientificname, child);
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

@@ -40,6 +40,12 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * <p>JSON class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class JSON {
     private Gson gson;
     private boolean isLenientOnJson = false;
@@ -49,6 +55,11 @@ public class JSON {
     private LocalDateTypeAdapter localDateTypeAdapter = new LocalDateTypeAdapter();
 	private BooleanTypeAdapter booleanTypeAdapter = new BooleanTypeAdapter();
 
+    /**
+     * <p>createGson.</p>
+     *
+     * @return a {@link com.google.gson.GsonBuilder} object.
+     */
     public static GsonBuilder createGson() {
         GsonFireBuilder fireBuilder = new GsonFireBuilder()
         ;
@@ -71,6 +82,9 @@ public class JSON {
         return clazz;
     }
 
+    /**
+     * <p>Constructor for JSON.</p>
+     */
     public JSON() {
         gson = createGson()
             .registerTypeAdapter(Date.class, dateTypeAdapter)
@@ -101,6 +115,12 @@ public class JSON {
         return this;
     }
 
+    /**
+     * <p>setLenientOnJson.</p>
+     *
+     * @param lenientOnJson a boolean.
+     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
+     */
     public JSON setLenientOnJson(boolean lenientOnJson) {
         isLenientOnJson = lenientOnJson;
         return this;
@@ -229,11 +249,23 @@ public class JSON {
         }
     }
 
+    /**
+     * <p>setOffsetDateTimeFormat.</p>
+     *
+     * @param dateFormat a {@link org.threeten.bp.format.DateTimeFormatter} object.
+     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
+     */
     public JSON setOffsetDateTimeFormat(DateTimeFormatter dateFormat) {
         offsetDateTimeTypeAdapter.setFormat(dateFormat);
         return this;
     }
 
+    /**
+     * <p>setLocalDateFormat.</p>
+     *
+     * @param dateFormat a {@link org.threeten.bp.format.DateTimeFormatter} object.
+     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
+     */
     public JSON setLocalDateFormat(DateTimeFormatter dateFormat) {
         localDateTypeAdapter.setFormat(dateFormat);
         return this;
@@ -352,11 +384,23 @@ public class JSON {
         }
     }
 
+    /**
+     * <p>setDateFormat.</p>
+     *
+     * @param dateFormat a {@link java.text.DateFormat} object.
+     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
+     */
     public JSON setDateFormat(DateFormat dateFormat) {
         dateTypeAdapter.setFormat(dateFormat);
         return this;
     }
 
+    /**
+     * <p>setSqlDateFormat.</p>
+     *
+     * @param dateFormat a {@link java.text.DateFormat} object.
+     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
+     */
     public JSON setSqlDateFormat(DateFormat dateFormat) {
         sqlDateTypeAdapter.setFormat(dateFormat);
         return this;

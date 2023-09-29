@@ -38,34 +38,59 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>TaxonomicDataApi class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class TaxonomicDataApi {
     private ApiClient apiClient;
 
+    /**
+     * <p>Constructor for TaxonomicDataApi.</p>
+     */
     public TaxonomicDataApi() {
         this(Configuration.getDefaultApiClient());
     }
 
+    /**
+     * <p>Constructor for TaxonomicDataApi.</p>
+     *
+     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public TaxonomicDataApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
+    /**
+     * <p>Getter for the field <code>apiClient</code>.</p>
+     *
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
+    /**
+     * <p>Setter for the field <code>apiClient</code>.</p>
+     *
+     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaChildrenByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaChildrenByAphiaIDCall(Integer ID, Boolean marineOnly, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -132,11 +157,12 @@ public class TaxonomicDataApi {
     /**
      * Get the direct children (max. 50) for a given AphiaID
      * Get the direct children (max. 50) for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaChildrenByAphiaID(Integer ID, Boolean marineOnly, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaChildrenByAphiaIDWithHttpInfo(ID, marineOnly, offset);
@@ -146,11 +172,12 @@ public class TaxonomicDataApi {
     /**
      * Get the direct children (max. 50) for a given AphiaID
      * Get the direct children (max. 50) for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaChildrenByAphiaIDWithHttpInfo(Integer ID, Boolean marineOnly, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaChildrenByAphiaIDValidateBeforeCall(ID, marineOnly, offset, null, null);
@@ -161,12 +188,13 @@ public class TaxonomicDataApi {
     /**
      * Get the direct children (max. 50) for a given AphiaID (asynchronously)
      * Get the direct children (max. 50) for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaChildrenByAphiaIDAsync(Integer ID, Boolean marineOnly, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -196,11 +224,12 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaClassificationByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaClassificationByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -263,9 +292,10 @@ public class TaxonomicDataApi {
     /**
      * Get the complete classification for one taxon. This also includes any sub or super ranks.
      * Get the complete classification for one taxon. This also includes any sub or super ranks.
+     *
      * @param ID The AphiaID to search for (required)
      * @return Classification
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public Classification aphiaClassificationByAphiaID(Integer ID) throws ApiException {
         ApiResponse<Classification> resp = aphiaClassificationByAphiaIDWithHttpInfo(ID);
@@ -275,9 +305,10 @@ public class TaxonomicDataApi {
     /**
      * Get the complete classification for one taxon. This also includes any sub or super ranks.
      * Get the complete classification for one taxon. This also includes any sub or super ranks.
+     *
      * @param ID The AphiaID to search for (required)
      * @return ApiResponse&lt;Classification&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<Classification> aphiaClassificationByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaClassificationByAphiaIDValidateBeforeCall(ID, null, null);
@@ -288,10 +319,11 @@ public class TaxonomicDataApi {
     /**
      * Get the complete classification for one taxon. This also includes any sub or super ranks. (asynchronously)
      * Get the complete classification for one taxon. This also includes any sub or super ranks.
+     *
      * @param ID The AphiaID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaClassificationByAphiaIDAsync(Integer ID, final ApiCallback<Classification> callback) throws ApiException {
 
@@ -321,12 +353,13 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaIDByName
+     *
      * @param scientificName Name to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaIDByNameCall(String scientificName, Boolean marineOnly, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -391,10 +424,11 @@ public class TaxonomicDataApi {
     /**
      * Get the AphiaID for a given name.
      * Get the AphiaID for a given name.  Output: NULL when no match is found; -999 when multiple matches are found; an integer (AphiaID) when one exact match was found
+     *
      * @param scientificName Name to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @return Integer
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public Integer aphiaIDByName(String scientificName, Boolean marineOnly) throws ApiException {
         ApiResponse<Integer> resp = aphiaIDByNameWithHttpInfo(scientificName, marineOnly);
@@ -404,10 +438,11 @@ public class TaxonomicDataApi {
     /**
      * Get the AphiaID for a given name.
      * Get the AphiaID for a given name.  Output: NULL when no match is found; -999 when multiple matches are found; an integer (AphiaID) when one exact match was found
+     *
      * @param scientificName Name to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @return ApiResponse&lt;Integer&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<Integer> aphiaIDByNameWithHttpInfo(String scientificName, Boolean marineOnly) throws ApiException {
         com.squareup.okhttp.Call call = aphiaIDByNameValidateBeforeCall(scientificName, marineOnly, null, null);
@@ -418,11 +453,12 @@ public class TaxonomicDataApi {
     /**
      * Get the AphiaID for a given name. (asynchronously)
      * Get the AphiaID for a given name.  Output: NULL when no match is found; -999 when multiple matches are found; an integer (AphiaID) when one exact match was found
+     *
      * @param scientificName Name to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaIDByNameAsync(String scientificName, Boolean marineOnly, final ApiCallback<Integer> callback) throws ApiException {
 
@@ -452,11 +488,12 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaNameByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaNameByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -519,9 +556,10 @@ public class TaxonomicDataApi {
     /**
      * Get the name for a given AphiaID
      * Get the name for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @return Integer
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public Integer aphiaNameByAphiaID(Integer ID) throws ApiException {
         ApiResponse<Integer> resp = aphiaNameByAphiaIDWithHttpInfo(ID);
@@ -531,9 +569,10 @@ public class TaxonomicDataApi {
     /**
      * Get the name for a given AphiaID
      * Get the name for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @return ApiResponse&lt;Integer&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<Integer> aphiaNameByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaNameByAphiaIDValidateBeforeCall(ID, null, null);
@@ -544,10 +583,11 @@ public class TaxonomicDataApi {
     /**
      * Get the name for a given AphiaID (asynchronously)
      * Get the name for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaNameByAphiaIDAsync(Integer ID, final ApiCallback<Integer> callback) throws ApiException {
 
@@ -577,11 +617,12 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -644,9 +685,10 @@ public class TaxonomicDataApi {
     /**
      * Get the complete AphiaRecord for a given AphiaID
      * Get the complete AphiaRecord for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @return AphiaRecord
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public AphiaRecord aphiaRecordByAphiaID(Integer ID) throws ApiException {
         ApiResponse<AphiaRecord> resp = aphiaRecordByAphiaIDWithHttpInfo(ID);
@@ -656,9 +698,10 @@ public class TaxonomicDataApi {
     /**
      * Get the complete AphiaRecord for a given AphiaID
      * Get the complete AphiaRecord for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @return ApiResponse&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<AphiaRecord> aphiaRecordByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordByAphiaIDValidateBeforeCall(ID, null, null);
@@ -669,10 +712,11 @@ public class TaxonomicDataApi {
     /**
      * Get the complete AphiaRecord for a given AphiaID (asynchronously)
      * Get the complete AphiaRecord for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordByAphiaIDAsync(Integer ID, final ApiCallback<AphiaRecord> callback) throws ApiException {
 
@@ -702,11 +746,12 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordsByAphiaIDs
+     *
      * @param aphiaids The AphiaIDs to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByAphiaIDsCall(List<Integer> aphiaids, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -770,9 +815,10 @@ public class TaxonomicDataApi {
     /**
      * Get an AphiaRecord for multiple AphiaIDs in one go (max: 50)
      * Get an AphiaRecord for multiple AphiaIDs in one go (max: 50)
+     *
      * @param aphiaids The AphiaIDs to search for (required)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByAphiaIDs(List<Integer> aphiaids) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByAphiaIDsWithHttpInfo(aphiaids);
@@ -782,9 +828,10 @@ public class TaxonomicDataApi {
     /**
      * Get an AphiaRecord for multiple AphiaIDs in one go (max: 50)
      * Get an AphiaRecord for multiple AphiaIDs in one go (max: 50)
+     *
      * @param aphiaids The AphiaIDs to search for (required)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByAphiaIDsWithHttpInfo(List<Integer> aphiaids) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByAphiaIDsValidateBeforeCall(aphiaids, null, null);
@@ -795,10 +842,11 @@ public class TaxonomicDataApi {
     /**
      * Get an AphiaRecord for multiple AphiaIDs in one go (max: 50) (asynchronously)
      * Get an AphiaRecord for multiple AphiaIDs in one go (max: 50)
+     *
      * @param aphiaids The AphiaIDs to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByAphiaIDsAsync(List<Integer> aphiaids, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -828,6 +876,7 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordsByDate
+     *
      * @param startdate ISO 8601 formatted start date(time). Default&#x3D;today(). i.e. 2022-02-02T01:21:53+00:00 (required)
      * @param enddate ISO 8601 formatted end date(time). Default&#x3D;today().i.e. 2022-02-02T01:21:53+00:00 (optional)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
@@ -835,7 +884,7 @@ public class TaxonomicDataApi {
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByDateCall(OffsetDateTime startdate, OffsetDateTime enddate, Boolean marineOnly, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -905,12 +954,13 @@ public class TaxonomicDataApi {
     /**
      * Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period
      * Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period
+     *
      * @param startdate ISO 8601 formatted start date(time). Default&#x3D;today(). i.e. 2022-02-02T01:21:53+00:00 (required)
      * @param enddate ISO 8601 formatted end date(time). Default&#x3D;today().i.e. 2022-02-02T01:21:53+00:00 (optional)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByDate(OffsetDateTime startdate, OffsetDateTime enddate, Boolean marineOnly, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByDateWithHttpInfo(startdate, enddate, marineOnly, offset);
@@ -920,12 +970,13 @@ public class TaxonomicDataApi {
     /**
      * Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period
      * Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period
+     *
      * @param startdate ISO 8601 formatted start date(time). Default&#x3D;today(). i.e. 2022-02-02T01:21:53+00:00 (required)
      * @param enddate ISO 8601 formatted end date(time). Default&#x3D;today().i.e. 2022-02-02T01:21:53+00:00 (optional)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByDateWithHttpInfo(OffsetDateTime startdate, OffsetDateTime enddate, Boolean marineOnly, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByDateValidateBeforeCall(startdate, enddate, marineOnly, offset, null, null);
@@ -936,13 +987,14 @@ public class TaxonomicDataApi {
     /**
      * Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period (asynchronously)
      * Lists all AphiaRecords (taxa) that have their last edit action (modified or added) during the specified period
+     *
      * @param startdate ISO 8601 formatted start date(time). Default&#x3D;today(). i.e. 2022-02-02T01:21:53+00:00 (required)
      * @param enddate ISO 8601 formatted end date(time). Default&#x3D;today().i.e. 2022-02-02T01:21:53+00:00 (optional)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByDateAsync(OffsetDateTime startdate, OffsetDateTime enddate, Boolean marineOnly, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -972,12 +1024,13 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordsByMatchNames
+     *
      * @param scientificnames Names to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByMatchNamesCall(List<String> scientificnames, Boolean marineOnly, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1043,10 +1096,11 @@ public class TaxonomicDataApi {
     /**
      * Try to find AphiaRecords using the TAXAMATCH fuzzy matching algorithm by Tony Rees
      * For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.&lt;br/&gt;This allows you to (fuzzy) match multiple names in one call. Limited to 50 names at once for performance reasons
+     *
      * @param scientificnames Names to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @return List&lt;AphiaRecordsArray&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecordsArray> aphiaRecordsByMatchNames(List<String> scientificnames, Boolean marineOnly) throws ApiException {
         ApiResponse<List<AphiaRecordsArray>> resp = aphiaRecordsByMatchNamesWithHttpInfo(scientificnames, marineOnly);
@@ -1056,10 +1110,11 @@ public class TaxonomicDataApi {
     /**
      * Try to find AphiaRecords using the TAXAMATCH fuzzy matching algorithm by Tony Rees
      * For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.&lt;br/&gt;This allows you to (fuzzy) match multiple names in one call. Limited to 50 names at once for performance reasons
+     *
      * @param scientificnames Names to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @return ApiResponse&lt;List&lt;AphiaRecordsArray&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecordsArray>> aphiaRecordsByMatchNamesWithHttpInfo(List<String> scientificnames, Boolean marineOnly) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByMatchNamesValidateBeforeCall(scientificnames, marineOnly, null, null);
@@ -1070,11 +1125,12 @@ public class TaxonomicDataApi {
     /**
      * Try to find AphiaRecords using the TAXAMATCH fuzzy matching algorithm by Tony Rees (asynchronously)
      * For each given scientific name (may include authority), try to find one or more AphiaRecords, using the TAXAMATCH fuzzy matching algorithm by Tony Rees.&lt;br/&gt;This allows you to (fuzzy) match multiple names in one call. Limited to 50 names at once for performance reasons
+     *
      * @param scientificnames Names to search for (required)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByMatchNamesAsync(List<String> scientificnames, Boolean marineOnly, final ApiCallback<List<AphiaRecordsArray>> callback) throws ApiException {
 
@@ -1104,6 +1160,7 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordsByName
+     *
      * @param scientificName Name to search for (required)
      * @param like Add a &#x27;%&#x27;-sign added after the ScientificName (SQL LIKE function). Default&#x3D;true (optional, default to true)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
@@ -1111,7 +1168,7 @@ public class TaxonomicDataApi {
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByNameCall(String scientificName, Boolean like, Boolean marineOnly, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1180,12 +1237,13 @@ public class TaxonomicDataApi {
     /**
      * Get one or more matching (max. 50) AphiaRecords for a given name
      * Get one or more matching (max. 50) AphiaRecords for a given name
+     *
      * @param scientificName Name to search for (required)
      * @param like Add a &#x27;%&#x27;-sign added after the ScientificName (SQL LIKE function). Default&#x3D;true (optional, default to true)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByName(String scientificName, Boolean like, Boolean marineOnly, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByNameWithHttpInfo(scientificName, like, marineOnly, offset);
@@ -1195,12 +1253,13 @@ public class TaxonomicDataApi {
     /**
      * Get one or more matching (max. 50) AphiaRecords for a given name
      * Get one or more matching (max. 50) AphiaRecords for a given name
+     *
      * @param scientificName Name to search for (required)
      * @param like Add a &#x27;%&#x27;-sign added after the ScientificName (SQL LIKE function). Default&#x3D;true (optional, default to true)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByNameWithHttpInfo(String scientificName, Boolean like, Boolean marineOnly, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByNameValidateBeforeCall(scientificName, like, marineOnly, offset, null, null);
@@ -1211,13 +1270,14 @@ public class TaxonomicDataApi {
     /**
      * Get one or more matching (max. 50) AphiaRecords for a given name (asynchronously)
      * Get one or more matching (max. 50) AphiaRecords for a given name
+     *
      * @param scientificName Name to search for (required)
      * @param like Add a &#x27;%&#x27;-sign added after the ScientificName (SQL LIKE function). Default&#x3D;true (optional, default to true)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByNameAsync(String scientificName, Boolean like, Boolean marineOnly, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -1247,13 +1307,14 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordsByNames
+     *
      * @param scientificnames Names to search for (required)
      * @param like Add a &#x27;%&#x27;-sign after the ScientificName (SQL LIKE function). Default&#x3D;false (optional, default to false)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByNamesCall(List<String> scientificnames, Boolean like, Boolean marineOnly, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1321,11 +1382,12 @@ public class TaxonomicDataApi {
     /**
      * For each given scientific name, try to find one or more AphiaRecords
      * For each given scientific name, try to find one or more AphiaRecords. This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons.
+     *
      * @param scientificnames Names to search for (required)
      * @param like Add a &#x27;%&#x27;-sign after the ScientificName (SQL LIKE function). Default&#x3D;false (optional, default to false)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByNames(List<String> scientificnames, Boolean like, Boolean marineOnly) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByNamesWithHttpInfo(scientificnames, like, marineOnly);
@@ -1335,11 +1397,12 @@ public class TaxonomicDataApi {
     /**
      * For each given scientific name, try to find one or more AphiaRecords
      * For each given scientific name, try to find one or more AphiaRecords. This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons.
+     *
      * @param scientificnames Names to search for (required)
      * @param like Add a &#x27;%&#x27;-sign after the ScientificName (SQL LIKE function). Default&#x3D;false (optional, default to false)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByNamesWithHttpInfo(List<String> scientificnames, Boolean like, Boolean marineOnly) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByNamesValidateBeforeCall(scientificnames, like, marineOnly, null, null);
@@ -1350,12 +1413,13 @@ public class TaxonomicDataApi {
     /**
      * For each given scientific name, try to find one or more AphiaRecords (asynchronously)
      * For each given scientific name, try to find one or more AphiaRecords. This allows you to match multiple names in one call. Limited to 500 names at once for performance reasons.
+     *
      * @param scientificnames Names to search for (required)
      * @param like Add a &#x27;%&#x27;-sign after the ScientificName (SQL LIKE function). Default&#x3D;false (optional, default to false)
      * @param marineOnly Limit to marine taxa. Default&#x3D;true (optional, default to true)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByNamesAsync(List<String> scientificnames, Boolean like, Boolean marineOnly, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -1385,13 +1449,14 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaRecordsByTaxonRankID
+     *
      * @param ID A taxonomic rank identifier (required)
      * @param belongsTo Limit the results to descendants of the given AphiaID (optional)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByTaxonRankIDCall(Integer ID, Integer belongsTo, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1458,11 +1523,12 @@ public class TaxonomicDataApi {
     /**
      * Get the AphiaRecords for a given taxonRankID (max 50)
      * Get the AphiaRecords for a given taxonRankID (max 50)
+     *
      * @param ID A taxonomic rank identifier (required)
      * @param belongsTo Limit the results to descendants of the given AphiaID (optional)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByTaxonRankID(Integer ID, Integer belongsTo, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByTaxonRankIDWithHttpInfo(ID, belongsTo, offset);
@@ -1472,11 +1538,12 @@ public class TaxonomicDataApi {
     /**
      * Get the AphiaRecords for a given taxonRankID (max 50)
      * Get the AphiaRecords for a given taxonRankID (max 50)
+     *
      * @param ID A taxonomic rank identifier (required)
      * @param belongsTo Limit the results to descendants of the given AphiaID (optional)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByTaxonRankIDWithHttpInfo(Integer ID, Integer belongsTo, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByTaxonRankIDValidateBeforeCall(ID, belongsTo, offset, null, null);
@@ -1487,12 +1554,13 @@ public class TaxonomicDataApi {
     /**
      * Get the AphiaRecords for a given taxonRankID (max 50) (asynchronously)
      * Get the AphiaRecords for a given taxonRankID (max 50)
+     *
      * @param ID A taxonomic rank identifier (required)
      * @param belongsTo Limit the results to descendants of the given AphiaID (optional)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByTaxonRankIDAsync(Integer ID, Integer belongsTo, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -1522,12 +1590,13 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaSynonymsByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaSynonymsByAphiaIDCall(Integer ID, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1592,10 +1661,11 @@ public class TaxonomicDataApi {
     /**
      * Get all synonyms for a given AphiaID
      * Get all synonyms for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaSynonymsByAphiaID(Integer ID, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaSynonymsByAphiaIDWithHttpInfo(ID, offset);
@@ -1605,10 +1675,11 @@ public class TaxonomicDataApi {
     /**
      * Get all synonyms for a given AphiaID
      * Get all synonyms for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaSynonymsByAphiaIDWithHttpInfo(Integer ID, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaSynonymsByAphiaIDValidateBeforeCall(ID, offset, null, null);
@@ -1619,11 +1690,12 @@ public class TaxonomicDataApi {
     /**
      * Get all synonyms for a given AphiaID (asynchronously)
      * Get all synonyms for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional, default to 1)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaSynonymsByAphiaIDAsync(Integer ID, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -1653,12 +1725,13 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaTaxonRanksByID
+     *
      * @param ID A taxonomic rank identifier. Default&#x3D;-1 (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaTaxonRanksByIDCall(Integer ID, Integer aphiaID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1723,10 +1796,11 @@ public class TaxonomicDataApi {
     /**
      * Get taxonomic ranks by their identifier
      * Get taxonomic ranks by their identifier
+     *
      * @param ID A taxonomic rank identifier. Default&#x3D;-1 (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @return List&lt;AphiaRank&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRank> aphiaTaxonRanksByID(Integer ID, Integer aphiaID) throws ApiException {
         ApiResponse<List<AphiaRank>> resp = aphiaTaxonRanksByIDWithHttpInfo(ID, aphiaID);
@@ -1736,10 +1810,11 @@ public class TaxonomicDataApi {
     /**
      * Get taxonomic ranks by their identifier
      * Get taxonomic ranks by their identifier
+     *
      * @param ID A taxonomic rank identifier. Default&#x3D;-1 (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @return ApiResponse&lt;List&lt;AphiaRank&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRank>> aphiaTaxonRanksByIDWithHttpInfo(Integer ID, Integer aphiaID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaTaxonRanksByIDValidateBeforeCall(ID, aphiaID, null, null);
@@ -1750,11 +1825,12 @@ public class TaxonomicDataApi {
     /**
      * Get taxonomic ranks by their identifier (asynchronously)
      * Get taxonomic ranks by their identifier
+     *
      * @param ID A taxonomic rank identifier. Default&#x3D;-1 (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaTaxonRanksByIDAsync(Integer ID, Integer aphiaID, final ApiCallback<List<AphiaRank>> callback) throws ApiException {
 
@@ -1784,12 +1860,13 @@ public class TaxonomicDataApi {
     }
     /**
      * Build call for aphiaTaxonRanksByName
+     *
      * @param taxonRank A taxonomic rank. Default&#x3D;empty (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaTaxonRanksByNameCall(String taxonRank, Integer aphiaID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -1854,10 +1931,11 @@ public class TaxonomicDataApi {
     /**
      * Get taxonomic ranks by their name
      * Get taxonomic ranks by their name
+     *
      * @param taxonRank A taxonomic rank. Default&#x3D;empty (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @return List&lt;AphiaRank&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRank> aphiaTaxonRanksByName(String taxonRank, Integer aphiaID) throws ApiException {
         ApiResponse<List<AphiaRank>> resp = aphiaTaxonRanksByNameWithHttpInfo(taxonRank, aphiaID);
@@ -1867,10 +1945,11 @@ public class TaxonomicDataApi {
     /**
      * Get taxonomic ranks by their name
      * Get taxonomic ranks by their name
+     *
      * @param taxonRank A taxonomic rank. Default&#x3D;empty (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @return ApiResponse&lt;List&lt;AphiaRank&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRank>> aphiaTaxonRanksByNameWithHttpInfo(String taxonRank, Integer aphiaID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaTaxonRanksByNameValidateBeforeCall(taxonRank, aphiaID, null, null);
@@ -1881,11 +1960,12 @@ public class TaxonomicDataApi {
     /**
      * Get taxonomic ranks by their name (asynchronously)
      * Get taxonomic ranks by their name
+     *
      * @param taxonRank A taxonomic rank. Default&#x3D;empty (required)
      * @param aphiaID The AphiaID of the kingdom (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaTaxonRanksByNameAsync(String taxonRank, Integer aphiaID, final ApiCallback<List<AphiaRank>> callback) throws ApiException {
 

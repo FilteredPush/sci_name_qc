@@ -23,6 +23,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 /**
  * Vernacular
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
@@ -36,61 +39,98 @@ public class Vernacular {
   @SerializedName("language")
   private String language = null;
 
+  /**
+   * <p>vernacular.</p>
+   *
+   * @param vernacular a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Vernacular} object.
+   */
   public Vernacular vernacular(String vernacular) {
     this.vernacular = vernacular;
     return this;
   }
 
-   /**
+  /**
    * Get vernacular
+   *
    * @return vernacular
-  **/
+   */
   @Schema(description = "")
   public String getVernacular() {
     return vernacular;
   }
 
+  /**
+   * <p>Setter for the field <code>vernacular</code>.</p>
+   *
+   * @param vernacular a {@link java.lang.String} object.
+   */
   public void setVernacular(String vernacular) {
     this.vernacular = vernacular;
   }
 
+  /**
+   * <p>languageCode.</p>
+   *
+   * @param languageCode a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Vernacular} object.
+   */
   public Vernacular languageCode(String languageCode) {
     this.languageCode = languageCode;
     return this;
   }
 
-   /**
+  /**
    * Get languageCode
+   *
    * @return languageCode
-  **/
+   */
   @Schema(description = "")
   public String getLanguageCode() {
     return languageCode;
   }
 
+  /**
+   * <p>Setter for the field <code>languageCode</code>.</p>
+   *
+   * @param languageCode a {@link java.lang.String} object.
+   */
   public void setLanguageCode(String languageCode) {
     this.languageCode = languageCode;
   }
 
+  /**
+   * <p>language.</p>
+   *
+   * @param language a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.Vernacular} object.
+   */
   public Vernacular language(String language) {
     this.language = language;
     return this;
   }
 
-   /**
+  /**
    * Get language
+   *
    * @return language
-  **/
+   */
   @Schema(description = "")
   public String getLanguage() {
     return language;
   }
 
+  /**
+   * <p>Setter for the field <code>language</code>.</p>
+   *
+   * @param language a {@link java.lang.String} object.
+   */
   public void setLanguage(String language) {
     this.language = language;
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -105,12 +145,14 @@ public class Vernacular {
         Objects.equals(this.language, vernacular.language);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(vernacular, languageCode, language);
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

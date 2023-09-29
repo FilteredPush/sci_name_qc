@@ -214,7 +214,7 @@
 	<repositories>
 		<repository>
 			<id>GBIF</id>
-			<url>http://repository.gbif.org/content/repositories/releases</url>
+			<url>https://repository.gbif.org/content/repositories/releases</url>
 		</repository>
 	</repositories>
 	<build>

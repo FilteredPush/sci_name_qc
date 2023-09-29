@@ -12,6 +12,12 @@
 
 package org.marinespecies.aphia.v1_0.handler;
 
+/**
+ * <p>Configuration class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")public class Configuration {
     private static ApiClient defaultApiClient = new ApiClient();
 

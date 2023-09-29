@@ -34,32 +34,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>SourcesApi class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class SourcesApi {
     private ApiClient apiClient;
 
+    /**
+     * <p>Constructor for SourcesApi.</p>
+     */
     public SourcesApi() {
         this(Configuration.getDefaultApiClient());
     }
 
+    /**
+     * <p>Constructor for SourcesApi.</p>
+     *
+     * @param apiClient a {@link org.irmng.aphia.v1_0.handler.ApiClient} object.
+     */
     public SourcesApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
+    /**
+     * <p>Getter for the field <code>apiClient</code>.</p>
+     *
+     * @return a {@link org.irmng.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
+    /**
+     * <p>Setter for the field <code>apiClient</code>.</p>
+     *
+     * @param apiClient a {@link org.irmng.aphia.v1_0.handler.ApiClient} object.
+     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaSourcesByIRMNGID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaSourcesByIRMNGIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -122,9 +147,10 @@ public class SourcesApi {
     /**
      * Get one or more sources/references including links, for one IRMNG_ID
      * Get one or more sources/references including links, for one IRMNG_ID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @return List&lt;Source&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<Source> aphiaSourcesByIRMNGID(Integer ID) throws ApiException {
         ApiResponse<List<Source>> resp = aphiaSourcesByIRMNGIDWithHttpInfo(ID);
@@ -134,9 +160,10 @@ public class SourcesApi {
     /**
      * Get one or more sources/references including links, for one IRMNG_ID
      * Get one or more sources/references including links, for one IRMNG_ID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @return ApiResponse&lt;List&lt;Source&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<Source>> aphiaSourcesByIRMNGIDWithHttpInfo(Integer ID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaSourcesByIRMNGIDValidateBeforeCall(ID, null, null);
@@ -147,10 +174,11 @@ public class SourcesApi {
     /**
      * Get one or more sources/references including links, for one IRMNG_ID (asynchronously)
      * Get one or more sources/references including links, for one IRMNG_ID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaSourcesByIRMNGIDAsync(Integer ID, final ApiCallback<List<Source>> callback) throws ApiException {
 
