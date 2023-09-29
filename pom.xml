@@ -349,6 +349,7 @@
 							<artifactSet>
 								<excludes>
 									<exclude>axis:axis</exclude>
+									<exclude>commons:commons-logging</exclude>
 <!--
 									<exclude>org.apache.axis:axis-jaxrpc</exclude>
 									<exclude>org.apache.axis:axis-saaj</exclude>
