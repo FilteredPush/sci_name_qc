@@ -27,6 +27,9 @@ import org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues;
 import org.marinespecies.aphia.v1_0.model.AttributeValue;
 /**
  * AttributeKeyWithValues
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
@@ -43,47 +46,83 @@ public class AttributeKeyWithValues {
   @SerializedName("children")
   private List<AttributeKeyWithValues> children = null;
 
+  /**
+   * <p>measurementTypeID.</p>
+   *
+   * @param measurementTypeID a {@link java.lang.Integer} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   */
   public AttributeKeyWithValues measurementTypeID(Integer measurementTypeID) {
     this.measurementTypeID = measurementTypeID;
     return this;
   }
 
-   /**
+  /**
    * An internal identifier for the measurementType
+   *
    * @return measurementTypeID
-  **/
+   */
   @Schema(example = "4", description = "An internal identifier for the measurementType")
   public Integer getMeasurementTypeID() {
     return measurementTypeID;
   }
 
+  /**
+   * <p>Setter for the field <code>measurementTypeID</code>.</p>
+   *
+   * @param measurementTypeID a {@link java.lang.Integer} object.
+   */
   public void setMeasurementTypeID(Integer measurementTypeID) {
     this.measurementTypeID = measurementTypeID;
   }
 
+  /**
+   * <p>measurementType.</p>
+   *
+   * @param measurementType a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   */
   public AttributeKeyWithValues measurementType(String measurementType) {
     this.measurementType = measurementType;
     return this;
   }
 
-   /**
+  /**
    * The nature of the measurement, fact, characteristic, or assertion &lt;a href&#x3D;&#x27;https://www.marinespecies.org/traits/wiki&#x27; target&#x3D;&#x27;_blank&#x27;&gt;https://www.marinespecies.org/traits/wiki&lt;/a&gt;
+   *
    * @return measurementType
-  **/
+   */
   @Schema(example = "Functional group", description = "The nature of the measurement, fact, characteristic, or assertion <a href='https://www.marinespecies.org/traits/wiki' target='_blank'>https://www.marinespecies.org/traits/wiki</a>")
   public String getMeasurementType() {
     return measurementType;
   }
 
+  /**
+   * <p>Setter for the field <code>measurementType</code>.</p>
+   *
+   * @param measurementType a {@link java.lang.String} object.
+   */
   public void setMeasurementType(String measurementType) {
     this.measurementType = measurementType;
   }
 
+  /**
+   * <p>possibleAttributeValues.</p>
+   *
+   * @param possibleAttributeValues a {@link java.util.List} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   */
   public AttributeKeyWithValues possibleAttributeValues(List<AttributeValue> possibleAttributeValues) {
     this.possibleAttributeValues = possibleAttributeValues;
     return this;
   }
 
+  /**
+   * <p>addPossibleAttributeValuesItem.</p>
+   *
+   * @param possibleAttributeValuesItem a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   */
   public AttributeKeyWithValues addPossibleAttributeValuesItem(AttributeValue possibleAttributeValuesItem) {
     if (this.possibleAttributeValues == null) {
       this.possibleAttributeValues = new ArrayList<AttributeValue>();
@@ -92,24 +131,42 @@ public class AttributeKeyWithValues {
     return this;
   }
 
-   /**
+  /**
    * The category definition that list possible attribute values for this attribute definition
+   *
    * @return possibleAttributeValues
-  **/
+   */
   @Schema(description = "The category definition that list possible attribute values for this attribute definition")
   public List<AttributeValue> getPossibleAttributeValues() {
     return possibleAttributeValues;
   }
 
+  /**
+   * <p>Setter for the field <code>possibleAttributeValues</code>.</p>
+   *
+   * @param possibleAttributeValues a {@link java.util.List} object.
+   */
   public void setPossibleAttributeValues(List<AttributeValue> possibleAttributeValues) {
     this.possibleAttributeValues = possibleAttributeValues;
   }
 
+  /**
+   * <p>children.</p>
+   *
+   * @param children a {@link java.util.List} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   */
   public AttributeKeyWithValues children(List<AttributeKeyWithValues> children) {
     this.children = children;
     return this;
   }
 
+  /**
+   * <p>addChildrenItem.</p>
+   *
+   * @param childrenItem a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeKeyWithValues} object.
+   */
   public AttributeKeyWithValues addChildrenItem(AttributeKeyWithValues childrenItem) {
     if (this.children == null) {
       this.children = new ArrayList<AttributeKeyWithValues>();
@@ -118,20 +175,27 @@ public class AttributeKeyWithValues {
     return this;
   }
 
-   /**
+  /**
    * The possible child attribute keys that help to describe to current attribute
+   *
    * @return children
-  **/
+   */
   @Schema(description = "The possible child attribute keys that help to describe to current attribute")
   public List<AttributeKeyWithValues> getChildren() {
     return children;
   }
 
+  /**
+   * <p>Setter for the field <code>children</code>.</p>
+   *
+   * @param children a {@link java.util.List} object.
+   */
   public void setChildren(List<AttributeKeyWithValues> children) {
     this.children = children;
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -147,12 +211,14 @@ public class AttributeKeyWithValues {
         Objects.equals(this.children, attributeKeyWithValues.children);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(measurementTypeID, measurementType, possibleAttributeValues, children);
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

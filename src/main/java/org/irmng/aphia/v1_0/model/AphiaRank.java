@@ -23,6 +23,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 /**
  * AphiaRank
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")
@@ -39,79 +42,128 @@ public class AphiaRank {
   @SerializedName("kingdom")
   private String kingdom = null;
 
+  /**
+   * <p>taxonRankID.</p>
+   *
+   * @param taxonRankID a {@link java.lang.Integer} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.AphiaRank} object.
+   */
   public AphiaRank taxonRankID(Integer taxonRankID) {
     this.taxonRankID = taxonRankID;
     return this;
   }
 
-   /**
+  /**
    * A taxonomic rank identifier
+   *
    * @return taxonRankID
-  **/
+   */
   @Schema(example = "220", description = "A taxonomic rank identifier")
   public Integer getTaxonRankID() {
     return taxonRankID;
   }
 
+  /**
+   * <p>Setter for the field <code>taxonRankID</code>.</p>
+   *
+   * @param taxonRankID a {@link java.lang.Integer} object.
+   */
   public void setTaxonRankID(Integer taxonRankID) {
     this.taxonRankID = taxonRankID;
   }
 
+  /**
+   * <p>taxonRank.</p>
+   *
+   * @param taxonRank a {@link java.lang.String} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.AphiaRank} object.
+   */
   public AphiaRank taxonRank(String taxonRank) {
     this.taxonRank = taxonRank;
     return this;
   }
 
-   /**
+  /**
    * A taxonomic rank name
+   *
    * @return taxonRank
-  **/
+   */
   @Schema(example = "species", description = "A taxonomic rank name")
   public String getTaxonRank() {
     return taxonRank;
   }
 
+  /**
+   * <p>Setter for the field <code>taxonRank</code>.</p>
+   *
+   * @param taxonRank a {@link java.lang.String} object.
+   */
   public void setTaxonRank(String taxonRank) {
     this.taxonRank = taxonRank;
   }
 
+  /**
+   * <p>IRMNG_ID.</p>
+   *
+   * @param IRMNG_ID a {@link java.lang.Integer} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.AphiaRank} object.
+   */
   public AphiaRank IRMNG_ID(Integer IRMNG_ID) {
     this.IRMNG_ID = IRMNG_ID;
     return this;
   }
 
-   /**
+  /**
    * IRMNG_ID of the kingdom
+   *
    * @return IRMNG_ID
-  **/
+   */
   @Schema(example = "2", description = "IRMNG_ID of the kingdom")
   public Integer getIRMNGID() {
     return IRMNG_ID;
   }
 
+  /**
+   * <p>setIRMNGID.</p>
+   *
+   * @param IRMNG_ID a {@link java.lang.Integer} object.
+   */
   public void setIRMNGID(Integer IRMNG_ID) {
     this.IRMNG_ID = IRMNG_ID;
   }
 
+  /**
+   * <p>kingdom.</p>
+   *
+   * @param kingdom a {@link java.lang.String} object.
+   * @return a {@link org.irmng.aphia.v1_0.model.AphiaRank} object.
+   */
   public AphiaRank kingdom(String kingdom) {
     this.kingdom = kingdom;
     return this;
   }
 
-   /**
+  /**
    * The name of a taxonomic kingdom the rank is used in
+   *
    * @return kingdom
-  **/
+   */
   @Schema(example = "Animalia", description = "The name of a taxonomic kingdom the rank is used in")
   public String getKingdom() {
     return kingdom;
   }
 
+  /**
+   * <p>Setter for the field <code>kingdom</code>.</p>
+   *
+   * @param kingdom a {@link java.lang.String} object.
+   */
   public void setKingdom(String kingdom) {
     this.kingdom = kingdom;
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -127,12 +179,14 @@ public class AphiaRank {
         Objects.equals(this.kingdom, aphiaRank.kingdom);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(taxonRankID, taxonRank, IRMNG_ID, kingdom);
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

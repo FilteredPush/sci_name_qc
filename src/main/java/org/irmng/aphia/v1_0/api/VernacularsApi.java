@@ -35,34 +35,59 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>VernacularsApi class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class VernacularsApi {
     private ApiClient apiClient;
 
+    /**
+     * <p>Constructor for VernacularsApi.</p>
+     */
     public VernacularsApi() {
         this(Configuration.getDefaultApiClient());
     }
 
+    /**
+     * <p>Constructor for VernacularsApi.</p>
+     *
+     * @param apiClient a {@link org.irmng.aphia.v1_0.handler.ApiClient} object.
+     */
     public VernacularsApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
+    /**
+     * <p>Getter for the field <code>apiClient</code>.</p>
+     *
+     * @return a {@link org.irmng.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
+    /**
+     * <p>Setter for the field <code>apiClient</code>.</p>
+     *
+     * @param apiClient a {@link org.irmng.aphia.v1_0.handler.ApiClient} object.
+     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaRecordsByVernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByVernacularCall(String vernacular, Boolean like, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -129,11 +154,12 @@ public class VernacularsApi {
     /**
      * Get one or more Aphia Records (max. 50) for a given vernacular
      * Get one or more Aphia Records (max. 50) for a given vernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByVernacular(String vernacular, Boolean like, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByVernacularWithHttpInfo(vernacular, like, offset);
@@ -143,11 +169,12 @@ public class VernacularsApi {
     /**
      * Get one or more Aphia Records (max. 50) for a given vernacular
      * Get one or more Aphia Records (max. 50) for a given vernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByVernacularWithHttpInfo(String vernacular, Boolean like, Integer offset) throws ApiException {
         com.squareup.okhttp.Call call = aphiaRecordsByVernacularValidateBeforeCall(vernacular, like, offset, null, null);
@@ -158,12 +185,13 @@ public class VernacularsApi {
     /**
      * Get one or more Aphia Records (max. 50) for a given vernacular (asynchronously)
      * Get one or more Aphia Records (max. 50) for a given vernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaRecordsByVernacularAsync(String vernacular, Boolean like, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
@@ -193,11 +221,12 @@ public class VernacularsApi {
     }
     /**
      * Build call for aphiaVernacularsByIRMNGID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public com.squareup.okhttp.Call aphiaVernacularsByIRMNGIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
@@ -260,9 +289,10 @@ public class VernacularsApi {
     /**
      * Get all vernaculars for a given IRMNG_ID
      * Get all vernaculars for a given IRMNG_ID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @return List&lt;Vernacular&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<Vernacular> aphiaVernacularsByIRMNGID(Integer ID) throws ApiException {
         ApiResponse<List<Vernacular>> resp = aphiaVernacularsByIRMNGIDWithHttpInfo(ID);
@@ -272,9 +302,10 @@ public class VernacularsApi {
     /**
      * Get all vernaculars for a given IRMNG_ID
      * Get all vernaculars for a given IRMNG_ID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @return ApiResponse&lt;List&lt;Vernacular&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<Vernacular>> aphiaVernacularsByIRMNGIDWithHttpInfo(Integer ID) throws ApiException {
         com.squareup.okhttp.Call call = aphiaVernacularsByIRMNGIDValidateBeforeCall(ID, null, null);
@@ -285,10 +316,11 @@ public class VernacularsApi {
     /**
      * Get all vernaculars for a given IRMNG_ID (asynchronously)
      * Get all vernaculars for a given IRMNG_ID
+     *
      * @param ID The IRMNG_ID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.irmng.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
     public com.squareup.okhttp.Call aphiaVernacularsByIRMNGIDAsync(Integer ID, final ApiCallback<List<Vernacular>> callback) throws ApiException {
 

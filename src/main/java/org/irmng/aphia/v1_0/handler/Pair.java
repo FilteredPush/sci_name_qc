@@ -12,10 +12,22 @@
 
 package org.irmng.aphia.v1_0.handler;
 
+/**
+ * <p>Pair class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")public class Pair {
     private String name = "";
     private String value = "";
 
+    /**
+     * <p>Constructor for Pair.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param value a {@link java.lang.String} object.
+     */
     public Pair (String name, String value) {
         setName(name);
         setValue(value);
@@ -33,10 +45,20 @@ package org.irmng.aphia.v1_0.handler;
         this.value = value;
     }
 
+    /**
+     * <p>Getter for the field <code>name</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * <p>Getter for the field <code>value</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getValue() {
         return this.value;
     }

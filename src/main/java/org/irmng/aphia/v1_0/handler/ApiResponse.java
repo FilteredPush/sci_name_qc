@@ -19,6 +19,8 @@ import java.util.Map;
  * API response returned by API call.
  *
  * @param <T> The type of data that is deserialized from response body
+ * @author mole
+ * @version $Id: $Id
  */
 public class ApiResponse<T> {
     final private int statusCode;
@@ -26,6 +28,8 @@ public class ApiResponse<T> {
     final private T data;
 
     /**
+     * <p>Constructor for ApiResponse.</p>
+     *
      * @param statusCode The status code of HTTP response
      * @param headers The headers of HTTP response
      */
@@ -34,6 +38,8 @@ public class ApiResponse<T> {
     }
 
     /**
+     * <p>Constructor for ApiResponse.</p>
+     *
      * @param statusCode The status code of HTTP response
      * @param headers The headers of HTTP response
      * @param data The object deserialized from response bod
@@ -44,14 +50,29 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    /**
+     * <p>Getter for the field <code>statusCode</code>.</p>
+     *
+     * @return a int.
+     */
     public int getStatusCode() {
         return statusCode;
     }
 
+    /**
+     * <p>Getter for the field <code>headers</code>.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, List<String>> getHeaders() {
         return headers;
     }
 
+    /**
+     * <p>Getter for the field <code>data</code>.</p>
+     *
+     * @return a T object.
+     */
     public T getData() {
         return data;
     }

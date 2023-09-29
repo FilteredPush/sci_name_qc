@@ -15,21 +15,49 @@ package org.marinespecies.aphia.v1_0.handler;
 import java.util.Map;
 import java.util.List;
 
+/**
+ * <p>ApiException class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")public class ApiException extends Exception {
     private int code = 0;
     private Map<String, List<String>> responseHeaders = null;
     private String responseBody = null;
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     */
     public ApiException() {}
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param throwable a {@link java.lang.Throwable} object.
+     */
     public ApiException(Throwable throwable) {
         super(throwable);
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     */
     public ApiException(String message) {
         super(message);
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     * @param throwable a {@link java.lang.Throwable} object.
+     * @param code a int.
+     * @param responseHeaders a {@link java.util.Map} object.
+     * @param responseBody a {@link java.lang.String} object.
+     */
     public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders, String responseBody) {
         super(message, throwable);
         this.code = code;
@@ -37,23 +65,60 @@ import java.util.List;
         this.responseBody = responseBody;
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     * @param code a int.
+     * @param responseHeaders a {@link java.util.Map} object.
+     * @param responseBody a {@link java.lang.String} object.
+     */
     public ApiException(String message, int code, Map<String, List<String>> responseHeaders, String responseBody) {
         this(message, (Throwable) null, code, responseHeaders, responseBody);
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     * @param throwable a {@link java.lang.Throwable} object.
+     * @param code a int.
+     * @param responseHeaders a {@link java.util.Map} object.
+     */
     public ApiException(String message, Throwable throwable, int code, Map<String, List<String>> responseHeaders) {
         this(message, throwable, code, responseHeaders, null);
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param code a int.
+     * @param responseHeaders a {@link java.util.Map} object.
+     * @param responseBody a {@link java.lang.String} object.
+     */
     public ApiException(int code, Map<String, List<String>> responseHeaders, String responseBody) {
         this((String) null, (Throwable) null, code, responseHeaders, responseBody);
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param code a int.
+     * @param message a {@link java.lang.String} object.
+     */
     public ApiException(int code, String message) {
         super(message);
         this.code = code;
     }
 
+    /**
+     * <p>Constructor for ApiException.</p>
+     *
+     * @param code a int.
+     * @param message a {@link java.lang.String} object.
+     * @param responseHeaders a {@link java.util.Map} object.
+     * @param responseBody a {@link java.lang.String} object.
+     */
     public ApiException(int code, String message, Map<String, List<String>> responseHeaders, String responseBody) {
         this(code, message);
         this.responseHeaders = responseHeaders;
