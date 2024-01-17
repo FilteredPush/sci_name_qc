@@ -34,6 +34,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class AuthorNameComparator {
 	
+	/** Obtain the similarity threshold for comparison.
+	 * 
+	 * @return double representing the threshold value for considering strings similar.
+	 */
 	public abstract double getSimilarityThreshold();
 
 	/**
@@ -97,6 +101,15 @@ public abstract class AuthorNameComparator {
 		return result;
 	}
 	
+	/**
+	 * Attempt to detect relevant code for authorship string from the authorship
+	 * 
+	 * @param authorship to test for code
+	 * @param withCertainty if true Will only return one applicable code, and 
+	 *   will return false/false for simple strings that could fit in either code, 
+	 *   otherwise could return true/true.
+	 * @return map of the codes with boolean true/false for detection of the code
+	 */
 	public static Map<String,Boolean> detectApplicableCode(String authorship,boolean withCertainty) {
 		if (withCertainty) { 
 			return detectApplicableCodeWithCertainty(authorship, null, null);
@@ -105,6 +118,16 @@ public abstract class AuthorNameComparator {
 		}
 	}
 	
+	/**Detect, if possible, which code is applicable for some combination of kingdom and authorship.  
+	 * 
+	 * @param authorship to test
+	 * @param kingdom to consider
+	 * @param withCertainty of true, will only return one applicable code as true, will return false 
+	 *   for each code if strings could fit multiple codes, if false, will return true for any code
+	 *   with which the authorship and kingdom are consistent.
+	 * @return map of the nomenclatural codes with boolean true/false marking detected applicability 
+	 *   of each code.
+	 */
 	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom, boolean withCertainty) { 
 		if (withCertainty) { 
 			return detectApplicableCodeWithCertainty(authorship, kingdom, null);

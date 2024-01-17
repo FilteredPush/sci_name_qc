@@ -284,6 +284,11 @@ public class SciNameUtils {
 	}	
 	
 
+	/**
+	 * Entry point for command line usage of SciNameUtils.
+	 * 
+	 * @param args command line arguments, run with -h to list options.
+	 */
 	public static void main(String[] args) { 
 		
 		CommandLineParser parser = new DefaultParser();

@@ -36,8 +36,8 @@ public class BooleanWithComment {
 	/**
 	 * Construct an instance of BooleanWithComment with a specified value and comment
 	 * 
-	 * @param booleanValue 
-	 * @param comment
+	 * @param booleanValue true or false 
+	 * @param comment associated with booleanValue
 	 */
 	public BooleanWithComment(Boolean booleanValue, String comment) {
 		super();
@@ -70,7 +70,7 @@ public class BooleanWithComment {
 	/**
 	 * Append a string to the comment
 	 * 
-	 * @param the string to append to the comment
+	 * @param comment the string to append to the comment
 	 */
 	public void addComment(String comment) {
 		if (this.comment==null) { 

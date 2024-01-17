@@ -53,9 +53,16 @@ public class BatchRunner {
 	private File outputFile;
 	private Validator validator;
 	
-	/**
-	 * @throws FileException 
+	/** 
+	 * Constructor for a BatchRunner to read scientific names from an input file, run them against 
+	 * specfied validator class, and write the output to an output file.
 	 * 
+	 * @param inputFileName containing a list of taxon names to evaluate
+	 * @param outputFileName into which to write results.
+	 * @param validator to apply to the names
+	 * 
+	 * @throws FileException if there is a problem reading the input file 
+	 *  or writing the output file. 
 	 */
 	public BatchRunner(String inputFileName, String outputFileName, Validator validator) throws FileException {
 	   File targetInputFile = new File(inputFileName);
@@ -75,6 +82,11 @@ public class BatchRunner {
 	   this.validator = validator;
 	}
 
+	/**
+	 * Execute the batch operation.
+	 * 
+	 * @return success of the batch operation
+	 */
 	public boolean runBatch() { 
 		boolean result = false;
 		

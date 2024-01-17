@@ -611,21 +611,21 @@ public class TestDwCSciNameDQ {
 	}
 
 	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonidNotempty(java.lang.String)}.
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificNameidNotempty(java.lang.String)}.
 	 */
 	@Test
-	public void testValidationTaxonidEmpty() {
+	public void testValidationScientificNameidEmpty() {
 		// COMPLIANT if dwc:taxonID is not EMPTY; otherwise NOT_COMPLIANT
 		
 		String taxonId = "foo";
-		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonidNotempty(taxonId);
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationscientificNameIDNotempty(taxonId);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		taxonId = "";
-		result = DwCSciNameDQ.validationTaxonidNotempty(taxonId);
+		result = DwCSciNameDQ.validationscientificNameIDNotempty(taxonId);
 		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());		

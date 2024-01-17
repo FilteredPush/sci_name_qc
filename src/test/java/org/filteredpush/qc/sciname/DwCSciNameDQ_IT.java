@@ -268,7 +268,7 @@ public class DwCSciNameDQ_IT {
 		Taxon taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
-		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5726736", response.getValue().getObject().get("dwc:taxonID"));
 
@@ -278,7 +278,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship = null;
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
@@ -290,7 +290,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -302,7 +302,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -314,7 +314,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
@@ -326,7 +326,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, null);   /// null authority should be GBIF
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, null);   /// null authority should be GBIF
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
@@ -338,7 +338,7 @@ public class DwCSciNameDQ_IT {
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));			
@@ -351,7 +351,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		// NOTE: If GBIF improves its data quality, this test will fail
 		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
@@ -365,7 +365,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		
@@ -377,7 +377,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
@@ -411,7 +411,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus(subgenus);
 		taxon.setGenericName(genericName);
 		taxon.setSpecificEpithet(specificEpithet);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("gbif:4365662",response.getValue().getObject().get("dwc:taxonID"));	
@@ -430,7 +430,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:148", response.getValue().getObject().get("dwc:taxonID"));
@@ -443,7 +443,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
@@ -456,7 +456,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
@@ -470,7 +470,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
@@ -484,7 +484,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());		
@@ -498,7 +498,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -512,7 +512,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -527,7 +527,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		
@@ -541,7 +541,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		
@@ -555,7 +555,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority, true);  // requesting overwrite, not standard behavior
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority, true);  // requesting overwrite, not standard behavior
 		logger.debug(response.getComment());
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());  // overwrite
 		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
@@ -569,7 +569,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
@@ -583,7 +583,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
@@ -597,7 +597,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
@@ -632,7 +632,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setGenus(subgenus);
 		taxon.setGenericName(genericName);
 		taxon.setSpecificEpithet(specificEpithet);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:208134",response.getValue().getObject().get("dwc:taxonID"));		
@@ -649,7 +649,7 @@ public class DwCSciNameDQ_IT {
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
-		response = DwCSciNameDQ.amendmentTaxonidFromTaxon(taxon, authority);
+		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("urn:lsid:marinespecies.org:taxname:234156",response.getValue().getObject().get("dwc:taxonID"));		

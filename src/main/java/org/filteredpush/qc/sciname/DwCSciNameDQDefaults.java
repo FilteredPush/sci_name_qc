@@ -175,7 +175,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
 			@Consulted("dwc:tribe") String tribe,
 			@Consulted("dwc:subtribe") String subtribe
 	){
-		return amendmentTaxonidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
+		return amendmentScientificnameidFromTaxon(new Taxon(taxonID, kingdom, phylum, taxonomic_class, order, family, subfamily,
 				genus, subgenus, scientificName, scientificNameAuthorship, genericName, specificEpithet,
 				infraspecificEpithet, taxonRank, cultivarEpithet, higherClassification, vernacularName, taxonConceptID,
 				scientificNameID, originalNameUsageID, acceptedNameUsageID, superfamily, tribe, subtribe), null);
