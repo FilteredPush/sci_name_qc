@@ -42,8 +42,10 @@ import org.filteredpush.qc.sciname.services.Validator;
 import edu.harvard.mcz.nametools.NameUsage;
 
 /**
- * @author mole
+ * <p>BatchRunner class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class BatchRunner {
 
@@ -53,16 +55,15 @@ public class BatchRunner {
 	private File outputFile;
 	private Validator validator;
 	
-	/** 
-	 * Constructor for a BatchRunner to read scientific names from an input file, run them against 
+	/**
+	 * Constructor for a BatchRunner to read scientific names from an input file, run them against
 	 * specfied validator class, and write the output to an output file.
-	 * 
+	 *
 	 * @param inputFileName containing a list of taxon names to evaluate
 	 * @param outputFileName into which to write results.
 	 * @param validator to apply to the names
-	 * 
-	 * @throws FileException if there is a problem reading the input file 
-	 *  or writing the output file. 
+	 * @throws org.filteredpush.qc.sciname.FileException if there is a problem reading the input file
+	 *  or writing the output file.
 	 */
 	public BatchRunner(String inputFileName, String outputFileName, Validator validator) throws FileException {
 	   File targetInputFile = new File(inputFileName);
@@ -84,7 +85,7 @@ public class BatchRunner {
 
 	/**
 	 * Execute the batch operation.
-	 * 
+	 *
 	 * @return success of the batch operation
 	 */
 	public boolean runBatch() { 

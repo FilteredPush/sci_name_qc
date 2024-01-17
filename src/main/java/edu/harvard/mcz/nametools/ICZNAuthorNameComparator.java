@@ -21,9 +21,9 @@ package edu.harvard.mcz.nametools;
 /**
  * Make comparisons between pairs of scientificNameAuthor strings, under the assumption
  * that both strings are from names covered by the zoological code.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ICZNAuthorNameComparator extends AuthorNameComparator {
 	
@@ -39,7 +39,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
     /**
      * Constructor for an ICZN author name comparator that specifies values for similarity
      * assertions.
-     * 
+     *
      * @param similarityThreshold in range 0 to 1 for marking comparisons as similar
      * @param weakThreshold in range 0 to 1 for marking comparisons as weakly similar
      */
@@ -48,6 +48,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
     	this.weakThreshold = weakThreshold;
     }
     
+    /** {@inheritDoc} */
     @Override
 	public double getSimilarityThreshold() {
 		return similarityThreshold;
@@ -56,6 +57,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 	/* (non-Javadoc)
 	 * @see edu.harvard.mcz.nametools.AuthorNameComparator#compare(java.lang.String, java.lang.String)
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public NameComparison compare(String anAuthor, String toOtherAuthor) {
 		
@@ -167,7 +169,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Compare the non-numeric (i.e. removing the year if present) parts of two authorship strings.
-	 * 
+	 *
 	 * @param anAuthor for comparison
 	 * @param toOtherAuthor to compare with anAuthor
 	 * @return similarity (in the range 0 to 1) between the two strings.
@@ -180,7 +182,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Return true if anAuthor contains a 4 digit integer that might be a year.
-	 * 
+	 *
 	 * @param anAuthor to check.
 	 * @return true if author contains 4 numeric digits.
 	 */
@@ -191,7 +193,7 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Return true if an author contains ( and )
-	 * 
+	 *
 	 * @param anAuthor to check
 	 * @return true if author contains parenthesizes.
 	 */
@@ -199,6 +201,13 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 		return ( anAuthor.contains("(") && anAuthor.contains(")") );
 	}	
 	
+	/**
+	 * <p>knownAbbreviation.</p>
+	 *
+	 * @param anAuthor a {@link java.lang.String} object.
+	 * @param toOtherAuthor a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public static boolean knownAbbreviation(String anAuthor, String toOtherAuthor) { 
 		boolean result = false;
 	    String a = anAuthor.replaceAll("[^A-Za-z'é]", "");

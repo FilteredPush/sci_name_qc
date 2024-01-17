@@ -11,10 +11,11 @@ import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
 import edu.harvard.mcz.nametools.ScientificNameComparator;
 
-/** A utility class containing the dwc:Taxon terms.   
- * 
- * @author mole
+/**
+ * A utility class containing the dwc:Taxon terms.
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class Taxon {
 	
@@ -46,6 +47,9 @@ public class Taxon {
 	private String originalNameUsageID;
 	private String acceptedNameUsageID;
 
+	/**
+	 * <p>Constructor for Taxon.</p>
+	 */
 	public Taxon() { 
 		setNullValuesToEmptyString();
 	}
@@ -136,31 +140,34 @@ public class Taxon {
 	
 	/**
 	 * Construct a taxon instance.  Any null values of parameters will be set to an empty string.
-	 * @param taxonID
-	 * @param kingdom
-	 * @param phylum
-	 * @param taxonomic_class
-	 * @param order
-	 * @param family
-	 * @param subfamily
-	 * @param genus
-	 * @param subgenus
+	 *
+	 * @param taxonID a {@link java.lang.String} object.
+	 * @param kingdom a {@link java.lang.String} object.
+	 * @param phylum a {@link java.lang.String} object.
+	 * @param taxonomic_class a {@link java.lang.String} object.
+	 * @param order a {@link java.lang.String} object.
+	 * @param family a {@link java.lang.String} object.
+	 * @param subfamily a {@link java.lang.String} object.
+	 * @param genus a {@link java.lang.String} object.
+	 * @param subgenus a {@link java.lang.String} object.
 	 * @param scientificName
 	 * @param scientificNameAuthorship
-	 * @param genericName
-	 * @param specificEpithet
-	 * @param infraspecificEpithet
-	 * @param taxonRank
-	 * @param cultivarEpithet
-	 * @param higherClassification
-	 * @param vernacularName
-	 * @param taxonConceptID
 	 * @param scientificNameID
-	 * @param originalNameUsageID
-	 * @param acceptedNameUsageID
-	 * @param superfamily
-	 * @param tribe
-	 * @param subtribe
+	 * @param scientificNameAuthorship a {@link java.lang.String} object.
+	 * @param genericName a {@link java.lang.String} object.
+	 * @param specificEpithet a {@link java.lang.String} object.
+	 * @param infraspecificEpithet a {@link java.lang.String} object.
+	 * @param taxonRank a {@link java.lang.String} object.
+	 * @param cultivarEpithet a {@link java.lang.String} object.
+	 * @param higherClassification a {@link java.lang.String} object.
+	 * @param vernacularName a {@link java.lang.String} object.
+	 * @param taxonConceptID a {@link java.lang.String} object.
+	 * @param scientificNameID a {@link java.lang.String} object.
+	 * @param originalNameUsageID a {@link java.lang.String} object.
+	 * @param acceptedNameUsageID a {@link java.lang.String} object.
+	 * @param superfamily a {@link java.lang.String} object.
+	 * @param tribe a {@link java.lang.String} object.
+	 * @param subtribe a {@link java.lang.String} object.
 	 */
 	public Taxon(String taxonID, String kingdom, String phylum, String taxonomic_class, String order, String family,
 			String subfamily, String genus, String subgenus, String scientificName, String scientificNameAuthorship,
@@ -197,78 +204,173 @@ public class Taxon {
 		setNullValuesToEmptyString();
 	}
 
+	/**
+	 * <p>Getter for the field <code>taxonID</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTaxonID() {
 		return taxonID;
 	}
 
+	/**
+	 * <p>Setter for the field <code>taxonID</code>.</p>
+	 *
+	 * @param taxonID a {@link java.lang.String} object.
+	 */
 	public void setTaxonID(String taxonID) {
 		this.taxonID = taxonID;
 	}
 
+	/**
+	 * <p>Getter for the field <code>kingdom</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getKingdom() {
 		return kingdom;
 	}
 
+	/**
+	 * <p>Setter for the field <code>kingdom</code>.</p>
+	 *
+	 * @param kingdom a {@link java.lang.String} object.
+	 */
 	public void setKingdom(String kingdom) {
 		this.kingdom = kingdom;
 	}
 
+	/**
+	 * <p>Getter for the field <code>phylum</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getPhylum() {
 		return phylum;
 	}
 
+	/**
+	 * <p>Setter for the field <code>phylum</code>.</p>
+	 *
+	 * @param phylum a {@link java.lang.String} object.
+	 */
 	public void setPhylum(String phylum) {
 		this.phylum = phylum;
 	}
 
+	/**
+	 * <p>Getter for the field <code>taxonomic_class</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTaxonomic_class() {
 		return taxonomic_class;
 	}
 
+	/**
+	 * <p>Setter for the field <code>taxonomic_class</code>.</p>
+	 *
+	 * @param taxonomic_class a {@link java.lang.String} object.
+	 */
 	public void setTaxonomic_class(String taxonomic_class) {
 		this.taxonomic_class = taxonomic_class;
 	}
 
+	/**
+	 * <p>Getter for the field <code>order</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getOrder() {
 		return order;
 	}
 
+	/**
+	 * <p>Setter for the field <code>order</code>.</p>
+	 *
+	 * @param order a {@link java.lang.String} object.
+	 */
 	public void setOrder(String order) {
 		this.order = order;
 	}
 
+	/**
+	 * <p>Getter for the field <code>family</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFamily() {
 		return family;
 	}
 
+	/**
+	 * <p>Setter for the field <code>family</code>.</p>
+	 *
+	 * @param family a {@link java.lang.String} object.
+	 */
 	public void setFamily(String family) {
 		this.family = family;
 	}
 
+	/**
+	 * <p>Getter for the field <code>subfamily</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSubfamily() {
 		return subfamily;
 	}
 
+	/**
+	 * <p>Setter for the field <code>subfamily</code>.</p>
+	 *
+	 * @param subfamily a {@link java.lang.String} object.
+	 */
 	public void setSubfamily(String subfamily) {
 		this.subfamily = subfamily;
 	}
 
+	/**
+	 * <p>Getter for the field <code>genus</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getGenus() {
 		return genus;
 	}
 
+	/**
+	 * <p>Setter for the field <code>genus</code>.</p>
+	 *
+	 * @param genus a {@link java.lang.String} object.
+	 */
 	public void setGenus(String genus) {
 		this.genus = genus;
 	}
 
+	/**
+	 * <p>Getter for the field <code>subgenus</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSubgenus() {
 		return subgenus;
 	}
 
+	/**
+	 * <p>Setter for the field <code>subgenus</code>.</p>
+	 *
+	 * @param subgenus a {@link java.lang.String} object.
+	 */
 	public void setSubgenus(String subgenus) {
 		this.subgenus = subgenus;
 	}
 
+	/**
+	 * <p>Getter for the field <code>scientificName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getScientificName() {
 		if (scientificName==null) { 
 			return "";
@@ -276,10 +378,20 @@ public class Taxon {
 		return scientificName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>scientificName</code>.</p>
+	 *
+	 * @param scientificName a {@link java.lang.String} object.
+	 */
 	public void setScientificName(String scientificName) {
 		this.scientificName = scientificName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>scientificNameAuthorship</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getScientificNameAuthorship() {
 		if (scientificNameAuthorship==null) { 
 			return "";
@@ -287,98 +399,218 @@ public class Taxon {
 		return scientificNameAuthorship;
 	}
 
+	/**
+	 * <p>Setter for the field <code>scientificNameAuthorship</code>.</p>
+	 *
+	 * @param scientificNameAuthorship a {@link java.lang.String} object.
+	 */
 	public void setScientificNameAuthorship(String scientificNameAuthorship) {
 		this.scientificNameAuthorship = scientificNameAuthorship;
 	}
 
+	/**
+	 * <p>Getter for the field <code>genericName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getGenericName() {
 		return genericName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>genericName</code>.</p>
+	 *
+	 * @param genericName a {@link java.lang.String} object.
+	 */
 	public void setGenericName(String genericName) {
 		this.genericName = genericName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>specificEpithet</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSpecificEpithet() {
 		return specificEpithet;
 	}
 
+	/**
+	 * <p>Setter for the field <code>specificEpithet</code>.</p>
+	 *
+	 * @param specificEpithet a {@link java.lang.String} object.
+	 */
 	public void setSpecificEpithet(String specificEpithet) {
 		this.specificEpithet = specificEpithet;
 	}
 
+	/**
+	 * <p>Getter for the field <code>infraspecificEpithet</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getInfraspecificEpithet() {
 		return infraspecificEpithet;
 	}
 
+	/**
+	 * <p>Setter for the field <code>infraspecificEpithet</code>.</p>
+	 *
+	 * @param infraspecificEpithet a {@link java.lang.String} object.
+	 */
 	public void setInfraspecificEpithet(String infraspecificEpithet) {
 		this.infraspecificEpithet = infraspecificEpithet;
 	}
 
+	/**
+	 * <p>Getter for the field <code>taxonRank</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTaxonRank() {
 		return taxonRank;
 	}
 
+	/**
+	 * <p>Setter for the field <code>taxonRank</code>.</p>
+	 *
+	 * @param taxonRank a {@link java.lang.String} object.
+	 */
 	public void setTaxonRank(String taxonRank) {
 		this.taxonRank = taxonRank;
 	}
 
+	/**
+	 * <p>Getter for the field <code>cultivarEpithet</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getCultivarEpithet() {
 		return cultivarEpithet;
 	}
 
+	/**
+	 * <p>Setter for the field <code>cultivarEpithet</code>.</p>
+	 *
+	 * @param cultivarEpithet a {@link java.lang.String} object.
+	 */
 	public void setCultivarEpithet(String cultivarEpithet) {
 		this.cultivarEpithet = cultivarEpithet;
 	}
 
+	/**
+	 * <p>Getter for the field <code>higherClassification</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getHigherClassification() {
 		return higherClassification;
 	}
 
+	/**
+	 * <p>Setter for the field <code>higherClassification</code>.</p>
+	 *
+	 * @param higherClassification a {@link java.lang.String} object.
+	 */
 	public void setHigherClassification(String higherClassification) {
 		this.higherClassification = higherClassification;
 	}
 
+	/**
+	 * <p>Getter for the field <code>vernacularName</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getVernacularName() {
 		return vernacularName;
 	}
 
+	/**
+	 * <p>Setter for the field <code>vernacularName</code>.</p>
+	 *
+	 * @param vernacularName a {@link java.lang.String} object.
+	 */
 	public void setVernacularName(String vernacularName) {
 		this.vernacularName = vernacularName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>taxonConceptID</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTaxonConceptID() {
 		return taxonConceptID;
 	}
 
+	/**
+	 * <p>Setter for the field <code>taxonConceptID</code>.</p>
+	 *
+	 * @param taxonConceptID a {@link java.lang.String} object.
+	 */
 	public void setTaxonConceptID(String taxonConceptID) {
 		this.taxonConceptID = taxonConceptID;
 	}
 
+	/**
+	 * <p>Getter for the field <code>scientificNameID</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getScientificNameID() {
 		return scientificNameID;
 	}
 
+	/**
+	 * <p>Setter for the field <code>scientificNameID</code>.</p>
+	 *
+	 * @param scientificNameID a {@link java.lang.String} object.
+	 */
 	public void setScientificNameID(String scientificNameID) {
 		this.scientificNameID = scientificNameID;
 	}
 
+	/**
+	 * <p>Getter for the field <code>originalNameUsageID</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getOriginalNameUsageID() {
 		return originalNameUsageID;
 	}
 
+	/**
+	 * <p>Setter for the field <code>originalNameUsageID</code>.</p>
+	 *
+	 * @param originalNameUsageID a {@link java.lang.String} object.
+	 */
 	public void setOriginalNameUsageID(String originalNameUsageID) {
 		this.originalNameUsageID = originalNameUsageID;
 	}
 
+	/**
+	 * <p>Getter for the field <code>acceptedNameUsageID</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getAcceptedNameUsageID() {
 		return acceptedNameUsageID;
 	}
 
+	/**
+	 * <p>Setter for the field <code>acceptedNameUsageID</code>.</p>
+	 *
+	 * @param acceptedNameUsageID a {@link java.lang.String} object.
+	 */
 	public void setAcceptedNameUsageID(String acceptedNameUsageID) {
 		this.acceptedNameUsageID = acceptedNameUsageID;
 	}
 	
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String toString() { 
 		StringBuilder result = new StringBuilder();
 		result.append(taxonID).append(":");
@@ -412,11 +644,10 @@ public class Taxon {
 	/**
 	 * Test if the major ranks (kingdom, phylum, class, order, family) are the same between this Taxon and
 	 * a NameUsage instance.  Does not assess tribe, does not assess super/sub ranks.  Only compares properties
-	 * that have non-empty values.  
-	 * 
+	 * that have non-empty values.
+	 *
 	 * @param match NameUsage to compare with.
-	 * 
-	 * @return false if any of the non-empty values of kingdom, phylum, class, order, family are different between the two 
+	 * @return false if any of the non-empty values of kingdom, phylum, class, order, family are different between the two
 	 * NameUsages, otherwise returns true.
 	 */
 	public boolean sameHigherAs(NameUsage match) {
@@ -448,13 +679,14 @@ public class Taxon {
 
 	/**
 	 * Compare the scientific name and authorship of this taxon to a nameUsage, handles comparisons
-	 * where the authorship is in authorship and in scientific name, or in just one of the two, or is 
-	 * absent from either this or the nameUsage.  For the meanings of plausible, see the 
+	 * where the authorship is in authorship and in scientific name, or in just one of the two, or is
+	 * absent from either this or the nameUsage.  For the meanings of plausible, see the
 	 * NameComparison.isPlausible... methods.
-	 * 
+	 *
 	 * @see NameComparison#isPlausibleAuthorMatch(String) list of plausibly similar authorships
 	 * @see NameComparison#isPlausible(String) list of plausibly similar scientific names without authorship
-	 * 
+	 * @see NameComparison#isPlausibleAuthorMatch(String) list of plausibly similar authorships
+	 * @see NameComparison#isPlausible(String) list of plausibly similar scientific names without authorship
 	 * @param nameUsage to compare this with
 	 * @return true if plausible that this and the supplied nameUsage represent the same name, false if not.
 	 */
@@ -554,6 +786,8 @@ public class Taxon {
 	}
 	
 	/**
+	 * <p>Getter for the field <code>superfamily</code>.</p>
+	 *
 	 * @return the superfamily
 	 */
 	public String getSuperfamily() {
@@ -561,6 +795,8 @@ public class Taxon {
 	}
 
 	/**
+	 * <p>Setter for the field <code>superfamily</code>.</p>
+	 *
 	 * @param superfamily the superfamily to set
 	 */
 	public void setSuperfamily(String superfamily) {
@@ -568,6 +804,8 @@ public class Taxon {
 	}
 
 	/**
+	 * <p>Getter for the field <code>tribe</code>.</p>
+	 *
 	 * @return the tribe
 	 */
 	public String getTribe() {
@@ -575,6 +813,8 @@ public class Taxon {
 	}
 
 	/**
+	 * <p>Setter for the field <code>tribe</code>.</p>
+	 *
 	 * @param tribe the tribe to set
 	 */
 	public void setTribe(String tribe) {
@@ -582,6 +822,8 @@ public class Taxon {
 	}
 
 	/**
+	 * <p>Getter for the field <code>subtribe</code>.</p>
+	 *
 	 * @return the subtribe
 	 */
 	public String getSubtribe() {
@@ -589,6 +831,8 @@ public class Taxon {
 	}
 
 	/**
+	 * <p>Setter for the field <code>subtribe</code>.</p>
+	 *
 	 * @param subtribe the subtribe to set
 	 */
 	public void setSubtribe(String subtribe) {

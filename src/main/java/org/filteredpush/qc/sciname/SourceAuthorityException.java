@@ -18,13 +18,20 @@
 package org.filteredpush.qc.sciname;
 
 /**
- * @author mole
+ * <p>SourceAuthorityException class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class SourceAuthorityException extends Exception {
 
 	private static final long serialVersionUID = 2150334636977513462L;
 
+	/**
+	 * <p>Constructor for SourceAuthorityException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 */
 	public SourceAuthorityException(String message) {
 		super(message);
 	}

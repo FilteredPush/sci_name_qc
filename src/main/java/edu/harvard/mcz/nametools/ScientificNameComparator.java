@@ -33,9 +33,9 @@ import org.gbif.nameparser.api.UnparsableNameException;
 
 /**
  * Class for evaluating the similarity between two scientific names.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ScientificNameComparator {
 	
@@ -43,10 +43,10 @@ public class ScientificNameComparator {
 	
 	/**
 	 * Perform a comparison on two strings that are expected to be the scientific name without authorship.
-	 * 
+	 *
 	 * @param aName one name
 	 * @param toOtherName the name to compare with aName
-	 * @return a name comparison object where the match type will be one of MATCH_EXACT, MATCH_ERROR, or 
+	 * @return a name comparison object where the match type will be one of MATCH_EXACT, MATCH_ERROR, or
 	 *   one of the SNMATCH_ values
 	 */
 	public NameComparison compareWithoutAuthor(String aName, String toOtherName) {
@@ -225,9 +225,9 @@ public class ScientificNameComparator {
 	 * Return a measure of the similarity between two strings in the range of
 	 * 0 (no similarity) to 1 (exact same strings), using a measure of the
 	 * string edit distance scaled to the length differences of the two strings.
-	 * 
-	 * @param string1
-	 * @param string2
+	 *
+	 * @param string1 a {@link java.lang.String} object.
+	 * @param string2 a {@link java.lang.String} object.
 	 * @return a double in the range 0 to 1.
 	 */
 	public static double stringSimilarity(String string1, String string2) {

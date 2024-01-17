@@ -21,14 +21,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * @author mole
+ * <p>ServiceException class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ServiceException extends Exception {
 
 	private static final long serialVersionUID = -2466745701520747852L;
 	private static final Log logger = LogFactory.getLog(ServiceException.class);
 	
+	/**
+	 * <p>Constructor for ServiceException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 */
 	public ServiceException(String message) { 
 		super(message);
 	}

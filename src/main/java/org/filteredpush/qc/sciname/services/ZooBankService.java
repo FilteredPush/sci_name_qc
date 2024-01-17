@@ -44,17 +44,29 @@ import edu.harvard.mcz.nametools.NameUsage;
 import edu.harvard.mcz.nametools.ScientificNameComparator;
 
 /**
- * @author mole
+ * <p>ZooBankService class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ZooBankService implements Validator {
 
 	private static final Log log = LogFactory.getLog(ZooBankService.class);
 	
+	/**
+	 * <p>Constructor for ZooBankService.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	public ZooBankService() throws IOException { 
 		init();
     }
 
+    /**
+     * <p>init.</p>
+     *
+     * @throws java.io.IOException if any.
+     */
     protected void init()  throws IOException { 
 		URL url = new URL("http://zoobank.org/NomenclaturalActs.json/Pseudanthias_carlsoni");
 		InputStream is = url.openStream();
@@ -65,6 +77,7 @@ public class ZooBankService implements Validator {
 	/* (non-Javadoc)
 	 * @see edu.harvard.mcz.nametools.Validator#validate(edu.harvard.mcz.nametools.NameUsage)
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public NameUsage validate(NameUsage taxonToValidate) {
 		NameUsage returnValue = null;
@@ -152,6 +165,7 @@ public class ZooBankService implements Validator {
 		return returnValue;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<String> supportedExtensionTerms() {
 		return new ArrayList<String>();

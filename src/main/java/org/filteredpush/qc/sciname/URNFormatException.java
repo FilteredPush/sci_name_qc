@@ -21,14 +21,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * @author mole
+ * <p>URNFormatException class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class URNFormatException extends Exception {
 
 	private static final long serialVersionUID = -9093102475674980588L;
 	private static final Log logger = LogFactory.getLog(URNFormatException.class);
 	
+	/**
+	 * <p>Constructor for URNFormatException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 */
 	public URNFormatException(String message) { 
 		super(message);
 	}

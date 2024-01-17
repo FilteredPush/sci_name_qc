@@ -57,7 +57,7 @@ import org.datakurator.ffdq.api.result.*;
 
 /**
  * Implementation of the TDWG TG2 NAME (scientific name) related data quality tests.
- * 
+ *
  * #212 VALIDATION_SCIENTIFICNAMEID_COMPLETE 6eeac3ed-f691-457f-a42e-eaa9c8a71ce8
  * #120	VALIDATION_SCIENTIFICNAMEID_NOTEMPTY 401bf207-9a55-4dff-88a5-abcd58ad97fa
  * #105	VALIDATION_TAXON_NOTEMPTY 06851339-843f-4a43-8422-4e61b9a00e75
@@ -74,7 +74,7 @@ import org.datakurator.ffdq.api.result.*;
  * #101	VALIDATION_POLYNOMIAL_CONSISTENT 17f03f1f-f74d-40c0-8071-2927cfc9487b
  * #161	VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * #162	VALIDATION_TAXONRANK_STANDARD 7bdb13a4-8a51-4ee5-be7f-20693fdb183e
- * 
+ *
  * #57	AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71	AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
  * #163	AMENDMENT_TAXONRANK_STANDARDIZED e39098df-ef46-464c-9aef-bcdeee2a88cb
@@ -82,12 +82,12 @@ import org.datakurator.ffdq.api.result.*;
  * Also, with amendmentScientificnameidFromTaxon(taxon, sourceAuthority, replaceExisting) provides
  * a variant of #57 that allows existing scientificNameID values to be conformed to a specified sourceAuthority
  * based on a lookup of the taxon terms on that authority.
- * 
- * Supplementary tests: 
- * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
- * 
- * @author mole
  *
+ * Supplementary tests:
+ * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 @Mechanism(value="90516df7-838c-4d53-81d9-8131be6ac713",
 	label="Kurator: Scientific Name Validator - DwCSciNameDQ:v1.0.2-SNAPSHOT")
@@ -96,14 +96,14 @@ public class DwCSciNameDQ {
 	private static final Log logger = LogFactory.getLog(DwCSciNameDQ.class);
 	
 	
-	/**
+    /**
      * Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?
      *
      * Provides: #22 VALIDATION_PHYLUM_FOUND
      * Version: 2022-03-25
      *
      * @param phylum the provided dwc:phylum to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_PHYLUM_FOUND", description="Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?")
@@ -137,12 +137,12 @@ public class DwCSciNameDQ {
 
     /**
      * Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?
-     * 
+     *
      * Provides: #28 VALIDATION_FAMILY_FOUND
      * Version: 2023-09-17
      *
      * @param family the provided dwc:family to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_FAMILY_FOUND", description="Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?")
@@ -183,7 +183,7 @@ public class DwCSciNameDQ {
      * Version: 2023-09-17
      *
      * @param scientificName the provided dwc:scientificName to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_SCIENTIFICNAME_FOUND", description="Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?")
@@ -333,40 +333,42 @@ public class DwCSciNameDQ {
 
     
     /**
-     * Propose amendment to the value of dwc:scientificNameID if it can be unambiguously resolved from bdq:sourceAuthority 
+     * Propose amendment to the value of dwc:scientificNameID if it can be unambiguously resolved from bdq:sourceAuthority
      * using the available taxon terms.
-	 *
-	 * Provides: #57 AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON
+     *
+     * Provides: #57 AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON
      * Version: 2023-09-17
-	 *
+     *
      * @param scientificNameID the provided dwc:scientificNameID to evaluate as ActedUpon.
-	 * @param kingdom the provided dwc:kingdom to evaluate
-	 * @param phylum the provided dwc:phylum to evaluate
-	 * @param order the provided dwc:order to evaluate
-	 * @param taxonomic_class the provided dwc:class to evaluate
-	 * @param family the provided dwc:family to evaluate
-	 * @param subfamily the provided dwc:subfamily to evaluate
-	 * @param genus the provided dwc:genus to evaluate
-	 * @param subgenus the provided dwc:subgenus to evaluate
-	 * @param scientificName the provided dwc:scientificName to evaluate
-	 * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
-	 * @param genericName the provided dwc:genericName to evaluate
-	 * @param specificEpithet the provided dwc:specificEpithet to evaluate
-	 * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
-	 * @param taxonRank the provided dwc:taxonRank to evaluate
-	 * @param cultivarEpithet the provided dwc:cultivarEpithet to evaluate
-	 * @param higherClassification the provided dwc:higherClassification to evaluate
-	 * @param vernacularName the provided dwc:vernacularName to evaluate
-	 * @param taxonID the provided dwc:taxonID to evaluate
-	 * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
-	 * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
-	 * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
-	 * @param superfamily the provided dwc:superfamily to evaluate
-	 * @param tribe the provided dwc:tribe to evaluate
-	 * @param subtribe the provided dwc:subtribe to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to evaluate against, defaults to GBIF Backbone Taxonomy if null
-	 * @return DQResponse the response of type AmendmentValue to return
-	 */
+     * @param kingdom the provided dwc:kingdom to evaluate
+     * @param phylum the provided dwc:phylum to evaluate
+     * @param order the provided dwc:order to evaluate
+     * @param taxonomic_class the provided dwc:class to evaluate
+     * @param family the provided dwc:family to evaluate
+     * @param subfamily the provided dwc:subfamily to evaluate
+     * @param genus the provided dwc:genus to evaluate
+     * @param subgenus the provided dwc:subgenus to evaluate
+     * @param scientificNameID the provided dwc:scientificNameID to evaluate as ActedUpon.
+     * @param scientificName the provided dwc:scientificName to evaluate
+     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
+     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
+     * @param genericName the provided dwc:genericName to evaluate
+     * @param specificEpithet the provided dwc:specificEpithet to evaluate
+     * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
+     * @param taxonRank the provided dwc:taxonRank to evaluate
+     * @param cultivarEpithet the provided dwc:cultivarEpithet to evaluate
+     * @param higherClassification the provided dwc:higherClassification to evaluate
+     * @param vernacularName the provided dwc:vernacularName to evaluate
+     * @param taxonID the provided dwc:taxonID to evaluate
+     * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
+     * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
+     * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
+     * @param superfamily the provided dwc:superfamily to evaluate
+     * @param tribe the provided dwc:tribe to evaluate
+     * @param subtribe the provided dwc:subtribe to evaluate
+     * @param sourceAuthority the bdq:sourceAuthority to evaluate against, defaults to GBIF Backbone Taxonomy if null
+     * @return DQResponse the response of type AmendmentValue to return
+     */
     @Amendment(label="AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON", description="Propose amendment to the value of dwc:scientificNameID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms.")
     @Provides("431467d6-9b4b-48fa-a197-cd5379f5e889")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/431467d6-9b4b-48fa-a197-cd5379f5e889/2023-09-17")
@@ -420,17 +422,16 @@ public class DwCSciNameDQ {
 	}
 
 	/**
-     * Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority 
-     * using the available taxon terms.  Utility method using a Taxon object as input instead of a separate annotated
-     * parameters for each taxon term.
-     *
-     * Provides: #57 AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON
-     * 
-     * @param taxon a dwc:Taxon object to evaluate.
+	 * Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority
+	 * using the available taxon terms.  Utility method using a Taxon object as input instead of a separate annotated
+	 * parameters for each taxon term.
+	 *
+	 * Provides: #57 AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON
+	 *
+	 * @param taxon a dwc:Taxon object to evaluate.
 	 * @param sourceAuthority the bdq:sourceAuthority to evaluate against, defaults to GBIF Backbone Taxonomy if null
-     *
-     * @return DQResponse the response of type AmendmentValue to return
-     */
+	 * @return DQResponse the response of type AmendmentValue to return
+	 */
 	public static  DQResponse<AmendmentValue> amendmentScientificnameidFromTaxon(
 			Taxon taxon, 
 			SciNameSourceAuthority sourceAuthority
@@ -444,14 +445,12 @@ public class DwCSciNameDQ {
 	 * Includes a non-standard option to conform existing dwc:taxonID values to the sourceAuthority vocabulary.
 	 *
 	 * Provides: #57 AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON, but with option of overwriting existing values
-     * Version: 2023-09-17
-	 * 
+	 * Version: 2023-09-17
+	 *
 	 * @param taxon a dwc:Taxon object to evaluate.
 	 * @param sourceAuthority the bdq:sourceAuthority to evaluate against, defaults to GBIF Backbone Taxonomy if null
-	 * @param replaceExisting, if true, behavior is changed to allow AMENDED to replace existing values instead of INTERNAL_PREREQUISITES_NOT_MET,
-	 *    use false to provide the standard behaviour of AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON
-	 *
 	 * @return DQResponse the response of type AmendmentValue to return
+	 * @param replaceExisting a boolean.
 	 */
 	public static  DQResponse<AmendmentValue> amendmentScientificnameidFromTaxon(
 			Taxon taxon, 
@@ -759,13 +758,15 @@ public class DwCSciNameDQ {
      * @param taxonRank the provided dwc:taxonRank to evaluate
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param family the provided dwc:family to evaluate
+     * @param scientificNameID the provided dwc:scientificNameID to evaluate
+     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
      * @param order the provided dwc:order to evaluate
      * @param superfamily the provided dwc:superfamily to evaluate
      * @param tribe the provided dwc:tribe to evaluate
      * @param subtribe the provided dwc:subtribe to evaluate
-	 * @param sourceAuthorityString the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthorityString the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_TAXON_UNAMBIGUOUS", description="Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?")
@@ -814,10 +815,10 @@ public class DwCSciNameDQ {
      * parameters for each taxon term.
      *
      * Provides: #70 VALIDATION_TAXON_UNAMBIGUOUS
-     * 
+     *
      * @param taxon a dwc:Taxon object to evaluate.
-	 * @param sourceAuthority the bdq:sourceAuthority to evaluate against, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
+     * @param sourceAuthorityString a {@link java.lang.String} object.
      */
     public static DQResponse<ComplianceValue> validationTaxonUnambiguous(
     		Taxon taxon, 
@@ -1267,7 +1268,7 @@ public class DwCSciNameDQ {
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type AmendmentValue to return
      */
     @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_TAXONID", description="Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.")
@@ -1460,7 +1461,7 @@ public class DwCSciNameDQ {
      * Version: 2023-09-18
      *
      * @param taxonomic_class the provided dwc:class to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_CLASS_FOUND", description="Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?")
@@ -1501,7 +1502,7 @@ public class DwCSciNameDQ {
      * Version: 2022-03-22
      *
      * @param kingdom the provided dwc:kingdom to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_KINGDOM_FOUND", description="Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?")
@@ -1574,7 +1575,7 @@ public class DwCSciNameDQ {
      * Version: 2022-03-25
      *
      * @param order the provided dwc:order to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse tyyhe response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_ORDER_FOUND", description="Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?")
@@ -1853,6 +1854,7 @@ public class DwCSciNameDQ {
      * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param family the provided dwc:family to evaluate
+     * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param genericName the provided dwc:genericName to evaluate
      * @param infragenericEpithet the provided dwc:infragenericEpithet to evaluate
@@ -2097,7 +2099,7 @@ public class DwCSciNameDQ {
      * Version: 2022-03-22
      *
      * @param genus the provided dwc:genus to evaluate
-	 * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
+     * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_GENUS_FOUND", description="Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?")
@@ -2254,15 +2256,15 @@ public class DwCSciNameDQ {
  
 
     /**
-    * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
-    *
-    * Provides: #162 VALIDATION_TAXONRANK_STANDARD
-    * Version: 2022-03-22
-    *
-    * @param taxonRank the provided dwc:taxonRank to evaluate
-    * @param sourceAuthority the authority for taxonRank values
-    * @return DQResponse the response of type ComplianceValue  to return
-    */
+     * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
+     *
+     * Provides: #162 VALIDATION_TAXONRANK_STANDARD
+     * Version: 2022-03-22
+     *
+     * @param taxonRank the provided dwc:taxonRank to evaluate
+     * @param sourceAuthority the authority for taxonRank values
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
     @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
     @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/7bdb13a4-8a51-4ee5-be7f-20693fdb183e/2022-03-22")
@@ -2371,6 +2373,7 @@ public class DwCSciNameDQ {
     *
     * @param taxonRank the provided dwc:taxonRank to evaluate
     * @return DQResponse the response of type AmendmentValue to return
+    * @param sourceAuthority a {@link java.lang.String} object.
     */
    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
@@ -2531,7 +2534,7 @@ public class DwCSciNameDQ {
    }
     /**
      * Provides internals for validationKingdomNotFound etc.
-     * 
+     *
      * @param taxon name of the taxon to look up
      * @param rank at which potential matches of the taxon must be to match (expected to be single word, first letter capitalized.
      * @param sourceAuthority in which to look up the taxon
@@ -2647,7 +2650,6 @@ public class DwCSciNameDQ {
      *
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param phylum the provided dwc:phylum to evaluate
-     * @param class the provided dwc:class to evaluate
      * @param order the provided dwc:order to evaluate
      * @param superfamily the provided dwc:superfamily to evaluate
      * @param family the provided dwc:family to evaluate
@@ -2657,6 +2659,7 @@ public class DwCSciNameDQ {
      * @param genus the provided dwc:genus to evaluate
      * @param sourceAuthority in which to look up the taxon
      * @return DQResponse the response of type ComplianceValue  to return
+     * @param taxonomic_class a {@link java.lang.String} object.
      */
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
     @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
@@ -2942,14 +2945,14 @@ public class DwCSciNameDQ {
 // TODO: Implementation of VALIDATION_TAXONRANK_STANDARD is not up to date with current version: https://rs.tdwg.org/bdq/terms/7bdb13a4-8a51-4ee5-be7f-20693fdb183e/2023-09-18 see line: 2260
 // TODO: Implementation of AMENDMENT_TAXONRANK_STANDARDIZED is not up to date with current version: https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-09-18 see line: 2369
     /**
-    * Does the value of dwc:scientificNameID contain a complete identifier?
-    *
-    * Provides: #212 VALIDATION_SCIENTIFICNAMEID_COMPLETE
-    * Version: 2023-09-18
-    *
-    * @param scientificNameID the provided dwc:scientificNameID to evaluate as ActedUpon.
-    * @return DQResponse the response of type ComplianceValue  to return
-    */
+     * Does the value of dwc:scientificNameID contain a complete identifier?
+     *
+     * Provides: #212 VALIDATION_SCIENTIFICNAMEID_COMPLETE
+     * Version: 2023-09-18
+     *
+     * @param scientificNameID the provided dwc:scientificNameID to evaluate as ActedUpon.
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
     @Validation(label="VALIDATION_SCIENTIFICNAMEID_COMPLETE", description="Does the value of dwc:scientificNameID contain a complete identifier?")
     @Provides("6eeac3ed-f691-457f-a42e-eaa9c8a71ce8")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/6eeac3ed-f691-457f-a42e-eaa9c8a71ce8/2023-09-18")

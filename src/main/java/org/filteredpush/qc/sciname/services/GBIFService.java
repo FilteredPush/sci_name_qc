@@ -54,27 +54,36 @@ import edu.harvard.mcz.nametools.NameUsage;
 import edu.harvard.mcz.nametools.ScientificNameComparator;
 
 /**
- * Wrapper for accessing the GBIF API to search for scientific names. 
- * 
+ * Wrapper for accessing the GBIF API to search for scientific names.
+ *
  * See service documentation at: https://www.gbif.org/developer/species
  * Formerly at: http://dev.gbif.org/wiki/display/POR/Webservice+API#WebserviceAPI-ChecklistBankServices:Nameusage
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class GBIFService implements Validator {
 	
 	private static final Log logger = LogFactory.getLog(GBIFService.class);
 	
+	/** Constant <code>GBIF_SERVICE="http://api.gbif.org/v1"</code> */
 	public static final String GBIF_SERVICE = "http://api.gbif.org/v1";
 	
+	/** Constant <code>KEY_GBIFBACKBONE="d7dddbf4-2cf0-4f39-9b2a-bb099caae36c"</code> */
 	public static final String KEY_GBIFBACKBONE = "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c";
+	/** Constant <code>KEY_IPNI="046bbc50-cae2-47ff-aa43-729fbf53f7c5"</code> */
 	public static final String KEY_IPNI = "046bbc50-cae2-47ff-aa43-729fbf53f7c5";
+	/** Constant <code>KEY_INDEXFUNGORUM="bf3db7c9-5e5d-4fd0-bd5b-94539eaf9598"</code> */
 	public static final String KEY_INDEXFUNGORUM = "bf3db7c9-5e5d-4fd0-bd5b-94539eaf9598";
+	/** Constant <code>KEY_COL="7ddf754f-d193-4cc9-b351-99906754a03b"</code> */
 	public static final String KEY_COL = "7ddf754f-d193-4cc9-b351-99906754a03b";
+	/** Constant <code>KEY_PALEIOBIOLOGY_DATABASE="c33ce2f2-c3cc-43a5-a380-fe4526d63650"</code> */
 	public static final String KEY_PALEIOBIOLOGY_DATABASE = "c33ce2f2-c3cc-43a5-a380-fe4526d63650";
+	/** Constant <code>KEY_ITIS="9ca92552-f23a-41a8-a140-01abaa31c931"</code> */
 	public static final String KEY_ITIS ="9ca92552-f23a-41a8-a140-01abaa31c931";
+	/** Constant <code>KEY_FAUNA_EUROPAEA="90d9e8a6-0ce1-472d-b682-3451095dbc5a"</code> */
 	public static final String KEY_FAUNA_EUROPAEA = "90d9e8a6-0ce1-472d-b682-3451095dbc5a";
+	/** Constant <code>KEY_UKSI="dbaa27eb-29e7-4cbb-8eab-3f689cfce116"</code> */
 	public static final String KEY_UKSI = "dbaa27eb-29e7-4cbb-8eab-3f689cfce116";
 	
 	private NameUsage validatedNameUsage = null;
@@ -84,6 +93,11 @@ public class GBIFService implements Validator {
 	protected String targetDataSetName; 
 	protected boolean fetchSynonymsAboveSpecies;
 
+	/**
+	 * <p>Constructor for GBIFService.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	public GBIFService()  throws IOException  { 
 		super();
 		targetKey = GBIFService.KEY_GBIFBACKBONE;
@@ -93,6 +107,12 @@ public class GBIFService implements Validator {
 		test();
 	}
 	
+	/**
+	 * <p>Constructor for GBIFService.</p>
+	 *
+	 * @param test a boolean.
+	 * @throws java.io.IOException if any.
+	 */
 	public GBIFService(boolean test)  throws IOException  { 
 		super();
 		targetKey = GBIFService.KEY_GBIFBACKBONE;
@@ -104,6 +124,12 @@ public class GBIFService implements Validator {
 		}
 	}
 	
+	/**
+	 * <p>Constructor for GBIFService.</p>
+	 *
+	 * @param targetKey a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public GBIFService(String targetKey)  throws IOException  { 
 		this.targetKey = targetKey;
 		fetchSynonymsAboveSpecies = true;
@@ -122,6 +148,13 @@ public class GBIFService implements Validator {
 		test();
 	}
 	
+	/**
+	 * <p>Constructor for GBIFService.</p>
+	 *
+	 * @param targetKey a {@link java.lang.String} object.
+	 * @param test a boolean.
+	 * @throws java.io.IOException if any.
+	 */
 	public GBIFService(String targetKey, boolean test)  throws IOException  { 
 		this.targetKey = targetKey;
 		fetchSynonymsAboveSpecies = true;
@@ -143,21 +176,35 @@ public class GBIFService implements Validator {
 	}
 	
 	
+	/**
+	 * <p>initSciName.</p>
+	 */
 	protected void initSciName() { 
 		validatedNameUsage = new NameUsage("GBIF",new ICZNAuthorNameComparator(.75d, .5d));
 	}
 	
+	/**
+	 * <p>test.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	protected void test() throws IOException  { 
 		// check that the service is up.
 		GBIFService.searchForGenus("Murex", GBIFService.KEY_GBIFBACKBONE,1);
 	}	
 
+	/**
+	 * <p>getServiceImplementationName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getServiceImplementationName() {
 		return targetDataSetName;
 	}
 	
 	/**
-	 * Invoke the GBIF Name Parser service 
+	 * Invoke the GBIF Name Parser service
+	 *
 	 * @param nameString to parse
 	 * @return the parsed name list as a json string
 	 */
@@ -193,9 +240,10 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}
 	
-	/** use the GBIF parser service to separate out the authorship part of a 
-	 * scientific name string from the 
-	 * 	  
+	/**
+	 * use the GBIF parser service to separate out the authorship part of a
+	 * scientific name string from the
+	 *
 	 * @param nameString to parse
 	 * @return a NameAuthorshipObject containing the separated authorship and name.
 	 */
@@ -238,6 +286,13 @@ public class GBIFService implements Validator {
 		return response;
 	}
 	
+	/**
+	 * <p>fetchTaxon.</p>
+	 *
+	 * @param taxon a {@link java.lang.String} object.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String fetchTaxon(String taxon, String targetChecklist) { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
@@ -262,6 +317,14 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}
 	
+	/**
+	 * <p>fetchTaxonByID.</p>
+	 *
+	 * @param taxonID a {@link java.lang.String} object.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws org.filteredpush.qc.sciname.IDFormatException if any.
+	 */
 	public static String fetchTaxonByID(String taxonID, String targetChecklist) throws IDFormatException { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
@@ -290,6 +353,14 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}
 	
+	/**
+	 * <p>searchForTaxon.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static String searchForTaxon(String name, String targetChecklist) throws IOException { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
@@ -312,6 +383,14 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}
 	
+	/**
+	 * <p>searchForSpecies.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static String searchForSpecies(String name, String targetChecklist) throws IOException { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
@@ -332,6 +411,15 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}	
 	
+	/**
+	 * <p>searchForGenus.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @param limit a int.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static String searchForGenus(String name, String targetChecklist, int limit) throws IOException { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
@@ -351,6 +439,13 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}	
 	
+	/**
+	 * <p>lookupNameByID.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link edu.harvard.mcz.nametools.NameUsage} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static NameUsage lookupNameByID(String id) throws IOException { 
 		NameUsage result = new NameUsage();
 		StringBuilder gbifLookup = new StringBuilder();
@@ -372,6 +467,13 @@ public class GBIFService implements Validator {
 		return result;
 	}
 	
+	/**
+	 * <p>lookupScientificNameByID.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static String lookupScientificNameByID(String id) throws IOException { 
 		StringBuilder result = new StringBuilder();
 		NameUsage lookupName = lookupNameByID(id);
@@ -380,6 +482,15 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}
 	
+	/**
+	 * <p>lookupGenus.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @param limit a int.
+	 * @return a {@link java.util.List} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static List<NameUsage> lookupGenus(String name, String targetChecklist, int limit) throws IOException { 
 		List<NameUsage> returnvalue = new ArrayList<NameUsage>();
 		if (!SciNameUtils.isEmpty(name)) { 
@@ -412,13 +523,13 @@ public class GBIFService implements Validator {
 	
 	/**
 	 * Lookup records of a name at a particular rank in a particular GBIF name list.
-	 * 
+	 *
 	 * @param name the name to search for
 	 * @param targetChecklist the checklist in which to look for the name
 	 * @param rank that matching records must possess
 	 * @param limit limit of the number of records to check
 	 * @return a list of matching NameUsages
-	 * @throws IOException in case of problems forming or making the request to GBIF
+	 * @throws java.io.IOException in case of problems forming or making the request to GBIF
 	 */
 	public static List<NameUsage> lookupTaxonAtRank(String name, String targetChecklist, String rank, int limit) throws IOException { 
 		List<NameUsage> returnvalue = new ArrayList<NameUsage>();
@@ -450,6 +561,13 @@ public class GBIFService implements Validator {
 		return returnvalue;
 	}	
 	
+	/**
+	 * <p>fetchSynonyms.</p>
+	 *
+	 * @param taxonId a int.
+	 * @param targetChecklist a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String fetchSynonyms(int taxonId, String targetChecklist) { 
 		StringBuilder result = new StringBuilder();
 		String datasetKey = "";
@@ -474,6 +592,12 @@ public class GBIFService implements Validator {
 		return result.toString();
 	}		
 	
+	/**
+	 * <p>parseAllNameUsagesFromJSON.</p>
+	 *
+	 * @param json a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<NameUsage> parseAllNameUsagesFromJSON(String json) {
 		boolean gotAll = true;
 		ArrayList<NameUsage> result = new ArrayList<NameUsage>(); 
@@ -521,6 +645,13 @@ public class GBIFService implements Validator {
 		return result;
 	}	
 	
+	/**
+	 * <p>parseNameUsageFromJSON.</p>
+	 *
+	 * @param targetName a {@link java.lang.String} object.
+	 * @param json a {@link java.lang.String} object.
+	 * @return a {@link edu.harvard.mcz.nametools.NameUsage} object.
+	 */
 	public static NameUsage parseNameUsageFromJSON(String targetName, String json) { 
         JSONParser parser=new JSONParser();
 
@@ -555,6 +686,12 @@ public class GBIFService implements Validator {
 	}
 
 
+	/**
+	 * <p>nameSearchAgainstServices.</p>
+	 *
+	 * @param toCheck a {@link edu.harvard.mcz.nametools.NameUsage} object.
+	 * @return a boolean.
+	 */
 	@SuppressWarnings("static-access")
 	public boolean nameSearchAgainstServices(NameUsage toCheck) {
 		boolean result = false;
@@ -705,6 +842,11 @@ public class GBIFService implements Validator {
 	
 	private StringBuffer comments;
 
+	/**
+	 * <p>addToComment.</p>
+	 *
+	 * @param comment a {@link java.lang.String} object.
+	 */
 	public void addToComment(String comment) {
 		logger.debug(comment);
 		if (comments==null) { 
@@ -715,10 +857,16 @@ public class GBIFService implements Validator {
 		}
 	}
 	
+	/**
+	 * <p>Getter for the field <code>validatedNameUsage</code>.</p>
+	 *
+	 * @return a {@link edu.harvard.mcz.nametools.NameUsage} object.
+	 */
 	public NameUsage getValidatedNameUsage() { 
 		return validatedNameUsage;
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings("static-access")
 	@Override
 	public NameUsage validate(NameUsage taxonNameToValidate) throws ServiceException {
@@ -859,6 +1007,7 @@ public class GBIFService implements Validator {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<String> supportedExtensionTerms() {
 		return new ArrayList<String>();

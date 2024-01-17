@@ -18,13 +18,20 @@
 package org.filteredpush.qc.sciname;
 
 /**
- * @author mole
+ * <p>IDFormatException class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class IDFormatException extends Exception {
 
 	private static final long serialVersionUID = 5647129845729161541L;
 
+	/**
+	 * <p>Constructor for IDFormatException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 */
 	public IDFormatException(String message) { 
 		super(message);
 	}

@@ -31,9 +31,9 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Make comparisons between pairs of scientificNameAuthor strings, under the assumption
  * that both strings are from names covered by the botanical code.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	
@@ -48,15 +48,16 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	 */
     protected double weakThreshold = .5d;
 	
+    /** {@inheritDoc} */
     @Override
 	public double getSimilarityThreshold() {
 		return similarityThreshold;
 	}
 
-	/**
+    /**
      * Constructor for an ICNapf author name comparator that specifies values for similarity
      * assertions.
-     * 
+     *
      * @param similarityThreshold in range 0 to 1 for marking comparisons as similar
      * @param weakThreshold in range 0 to 1 for marking comparisons as weakly similar
      */
@@ -68,6 +69,7 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	/* (non-Javadoc)
 	 * @see edu.harvard.mcz.nametools.AuthorNameComparator#compare(java.lang.String, java.lang.String)
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public NameComparison compare(String anAuthor, String toOtherAuthor) {
 		
@@ -130,15 +132,14 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Compare the two author strings to see if they look like differing abbreviations
-	 * of the same set of authors in the same semantic positions (comparing each 
+	 * of the same set of authors in the same semantic positions (comparing each
 	 * parenthetical author, ex author, sanctioning author, etc separately.
-	 * 
+	 *
 	 * @param anAuthor for the comparison
 	 * @param toOtherAuthor to compare with anAuthor
-	 * 
-	 * @return true if each semantic piece of the two author strings is the same, or if 
+	 * @return true if each semantic piece of the two author strings is the same, or if
 	 * each semantic piece appears to be an abbreviation of the corresponding semantic piece
-	 * otherwise return false. 
+	 * otherwise return false.
 	 */
 	public static boolean matchedOnWordsInTokens(String anAuthor, String toOtherAuthor) {
 		logger.debug("in matchedOnWordsInTokens(" + anAuthor + "," + toOtherAuthor + ")");
@@ -227,7 +228,7 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Given a string, return any initials from that string.
-	 * 
+	 *
 	 * @param name to examine for initials
 	 * @return portion of name that fits the pattern of initials.
 	 */
@@ -244,8 +245,8 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	
 	/**
 	 * Compare to strings to see if they are the same or if the longer starts with
-	 * the shorter.  Special case, "L." is not same or starts with "Lamarck".  
-	 * 
+	 * the shorter.  Special case, "L." is not same or starts with "Lamarck".
+	 *
 	 * @param aString for comparison
 	 * @param anotherString to compare with aString
 	 * @return true if the two strings are the same, or if the longer of the two strings
@@ -276,14 +277,14 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 		return result;
 	}
 	
-	/**
-	 * Given a botanical authorship string, split it into a list of component 
-	 * authors on parenthetical authors, ex authors, and sanctioning authors.
-	 * 
-	 * @param authorship to tokenize
-	 * @return a list of authorship strings representing the components of the 
-	 * authorship string.
-	 */
+     /**
+      * Given a botanical authorship string, split it into a list of component
+      * authors on parenthetical authors, ex authors, and sanctioning authors.
+      *
+      * @param authorship to tokenize
+      * @return a list of authorship strings representing the components of the
+      * authorship string.
+      */
      public static List<String> tokenizeAuthorship(String authorship) { 
 		ArrayList<String> bits = new ArrayList<String>();
 		ArrayList<String> subbits = new ArrayList<String>();
@@ -344,16 +345,16 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 		return result;
 	}
      
-    /**
-     * Are anAuthor and anotherAuthor a known match for a small set of 
-     * unusual standard abbreviations linked to name and initials 
-     * (e.g. DC. for de Candolle). 
-     * 
-     * @param anAuthor for comparison
-     * @param anotherAuthor to compare with anAuthor
-     * @return true if anAuthor and anotherAuthor form a known pair of
-     * name and abbreviation.
-     */
+ 	/**
+ 	 * Are anAuthor and anotherAuthor a known match for a small set of
+ 	 * unusual standard abbreviations linked to name and initials
+ 	 * (e.g. DC. for de Candolle).
+ 	 *
+ 	 * @param anAuthor for comparison
+ 	 * @param anotherAuthor to compare with anAuthor
+ 	 * @return true if anAuthor and anotherAuthor form a known pair of
+ 	 * name and abbreviation.
+ 	 */
  	public static boolean knownMatch(String anAuthor, String anotherAuthor) {
 		boolean result = false;
 		
@@ -392,10 +393,10 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 		return result;
 	}    
  	
- 	/**
+	/**
 	 * If initials are present in both strings, true false if they are different, otherwise
 	 * return true.
-	 * 
+	 *
 	 * @param anAuthorBit for comparison
 	 * @param toOtherAuthorBit to compare with anAuthorBit
 	 * @return false if initials are present in both author bits, otherwise return true
@@ -415,12 +416,11 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 
 	/**
 	 * Given two strings, does the shorter appear to not be an abbreviation.
-	 * 
+	 *
 	 * @param shorter a string (doesn't have to be the shorter of the two).
 	 * @param longer string to compare with (doesn't have to be the longer of the two).
-	 * 
-	 * @return true if one string is shorter than the other and doesn't end with a period, 
-	 *  and the longer of the two doesn't contain a period, thus the shorter doesn't 
+	 * @return true if one string is shorter than the other and doesn't end with a period,
+	 *  and the longer of the two doesn't contain a period, thus the shorter doesn't
 	 *  appear to be an abbreviation of the longer.  Otherwise returns false (including
 	 *  if both strings are the same length).
 	 */

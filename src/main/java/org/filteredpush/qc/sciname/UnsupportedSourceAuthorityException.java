@@ -19,14 +19,19 @@ package org.filteredpush.qc.sciname;
 
 /**
  * Exception to be thrown when a source authority provided is not supported by the implementation.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class UnsupportedSourceAuthorityException extends Exception {
 
 	private static final long serialVersionUID = 8430152861520306266L;
 	
+	/**
+	 * <p>Constructor for UnsupportedSourceAuthorityException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 */
 	public UnsupportedSourceAuthorityException(String message) {
 		super(message);
 	}

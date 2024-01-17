@@ -27,11 +27,11 @@ import com.squareup.okhttp.logging.HttpLoggingInterceptor.Logger;
 
 /**
  * Identify source authorities for scientific names, handling both specific services
- * and services which can take some form of dataset identifier (such as GBIF's API) 
+ * and services which can take some form of dataset identifier (such as GBIF's API)
  * to add to queries.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class SciNameSourceAuthority {
 	
@@ -49,11 +49,11 @@ public class SciNameSourceAuthority {
 	}
 	
 	/**
-	 * Construct a scientific name source authority descriptor where additional information on a sub data set 
+	 * Construct a scientific name source authority descriptor where additional information on a sub data set
 	 * is not needed.
-	 * 
+	 *
 	 * @param authority the authority
-	 * @throws SourceAuthorityException if the authority specified requires a sub data set specification
+	 * @throws org.filteredpush.qc.sciname.SourceAuthorityException if the authority specified requires a sub data set specification
 	 */
 	public SciNameSourceAuthority(EnumSciNameSourceAuthority authority) throws SourceAuthorityException { 
 	    if (authority.equals(EnumSciNameSourceAuthority.GBIF_ARBITRARY)) {
@@ -66,9 +66,9 @@ public class SciNameSourceAuthority {
 	
 	/**
 	 * Utility constructor to construct a scientific name source authority from a string instead of the enum.
-	 * 
+	 *
 	 * @param authorityString a value matching the name of an item in EnumSciNameSourceAuthority
-	 * @throws SourceAuthorityException if the string is not matched to the enumeration, or if the specified
+	 * @throws org.filteredpush.qc.sciname.SourceAuthorityException if the string is not matched to the enumeration, or if the specified
 	 *   source authority requires the specification of an authoritySubDataset.
 	 */
 	public SciNameSourceAuthority(String authorityString) throws SourceAuthorityException {
@@ -115,8 +115,9 @@ public class SciNameSourceAuthority {
 	
 	/**
 	 * Construct a scientific name source authority descriptor.
-	 * 
+	 *
 	 * @param authority the authority to use
+	 * @param authoritySubDataset the specific authority (e.g. GBIF checklist) to use.
 	 * @param authoritySubDataset the specific authority (e.g. GBIF checklist) to use.
 	 */
 	public SciNameSourceAuthority(EnumSciNameSourceAuthority authority, String authoritySubDataset) {
@@ -125,10 +126,20 @@ public class SciNameSourceAuthority {
 		updateDefaultSubAuthorities();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>authority</code>.</p>
+	 *
+	 * @return a {@link org.filteredpush.qc.sciname.EnumSciNameSourceAuthority} object.
+	 */
 	public EnumSciNameSourceAuthority getAuthority() {
 		return authority;
 	}
 
+	/**
+	 * <p>Getter for the field <code>authoritySubDataset</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getAuthoritySubDataset() {
 		return authoritySubDataset;
 	}	
@@ -171,6 +182,11 @@ public class SciNameSourceAuthority {
 		}
 	}
 	
+	/**
+	 * <p>isGBIFChecklist.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isGBIFChecklist() { 
 		boolean result = false;
 		switch (this.authority) {
@@ -216,6 +232,11 @@ public class SciNameSourceAuthority {
 		return result;
 	}
 
+	/**
+	 * <p>getName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName() {
 		
 		return authority.getName();

@@ -901,6 +901,7 @@ public class ApiClient {
      * @param <T> Type
      * @param call An instance of the Call object
      * @param callback ApiCallback&lt;T&gt;
+     * @param callback ApiCallback&lt;T&gt;
      */
     public <T> void executeAsync(Call call, ApiCallback<T> callback) {
         executeAsync(call, null, callback);
@@ -912,6 +913,7 @@ public class ApiClient {
      * @see #execute(Call, Type)
      * @param <T> Type
      * @param call The callback to be executed when the API call finishes
+     * @param callback ApiCallback
      * @param callback ApiCallback
      * @param returnType Return type
      */

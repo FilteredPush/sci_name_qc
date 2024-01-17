@@ -45,8 +45,10 @@ import edu.harvard.mcz.nametools.NameUsage;
 import edu.harvard.mcz.nametools.ScientificNameComparator;
 
 /**
- * @author mole
+ * <p>IRMNGService class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class IRMNGService implements Validator {
 
@@ -60,6 +62,12 @@ public class IRMNGService implements Validator {
 	private final static String IRMNGGUIDPREFIX = "urn:lsid:irmng.org:taxname:";
 	private final static String IRMNGBASEPATH = "https://www.irmng.org/rest";
 
+	/**
+	 * <p>Constructor for IRMNGService.</p>
+	 *
+	 * @param test a boolean.
+	 * @throws java.io.IOException if any.
+	 */
 	public IRMNGService(boolean test) throws IOException {
 		super();
 		irmngService = new TaxonomicDataApi();
@@ -71,6 +79,11 @@ public class IRMNGService implements Validator {
 		depth = 0;
 	}
 	
+	/**
+	 * <p>test.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	protected void test()  throws IOException { 
 		logger.debug(irmngService.getApiClient().getBasePath());
 		URL test = new URL(irmngService.getApiClient().getBasePath());
@@ -80,11 +93,11 @@ public class IRMNGService implements Validator {
 	
 	/**
 	 * Given an AphiaID, look up the Aphia record.
-	 * 
+	 *
 	 * @param aphiaID the AphiaID to look up, should be parsable as an integer.
 	 * @return a NameUsage containing the returned information
-	 * @throws IDFormatException if the provided aphiaID is not an integer.
-	 * @throws ApiException if there is a problem invoking the service.
+	 * @throws org.filteredpush.qc.sciname.IDFormatException if the provided aphiaID is not an integer.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if there is a problem invoking the service.
 	 */
 	public static NameUsage lookupTaxonByID(String aphiaID) throws IDFormatException, ApiException { 
 		NameUsage result = new NameUsage();
@@ -113,6 +126,14 @@ public class IRMNGService implements Validator {
 		return result;
 	}
 	
+	/**
+	 * <p>lookupTaxon.</p>
+	 *
+	 * @param taxon a {@link java.lang.String} object.
+	 * @param authorship a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 */
 	public static  List<NameUsage> lookupTaxon(String taxon,  String authorship) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
 		
@@ -154,13 +175,12 @@ public class IRMNGService implements Validator {
 	
 	/**
 	 * Find a taxon name record in WoRMS.
-	 * 
+	 *
 	 * @param taxon name to look for
 	 * @param author authority to look for
-	 * 
 	 * @return aphia id for the taxon
-	 * 
-	 * @throws Exception
+	 * @throws java.lang.Exception if any.
+	 * @param marineOnly a boolean.
 	 */
 	public static String simpleNameSearch(String taxon, String author, boolean marineOnly) throws Exception {
 		String id  = null;
@@ -214,6 +234,13 @@ public class IRMNGService implements Validator {
 		return id;
 	}
 	
+	/**
+	 * <p>lookupGenus.</p>
+	 *
+	 * @param genus a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 */
 	public static  List<NameUsage> lookupGenus(String genus) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
 		
@@ -249,6 +276,14 @@ public class IRMNGService implements Validator {
 		return result;
 	}
 
+	/**
+	 * <p>lookupTaxonAtRank.</p>
+	 *
+	 * @param taxon a {@link java.lang.String} object.
+	 * @param rank a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 */
 	public static  List<NameUsage> lookupTaxonAtRank(String taxon, String rank) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
 		
@@ -286,12 +321,12 @@ public class IRMNGService implements Validator {
 	}	
 
 	/**
-	 * Return a rank as a string for a given aphia rankID. 
-	 * 
+	 * Return a rank as a string for a given aphia rankID.
+	 *
 	 * Note: values as of 2022 Jan 31 from https://www.marinespecies.org/rest/AphiaTaxonRanksByID/-1
 	 * without awareness of kingdom applicability, and using the values Phylum/Subphylum instead of
 	 * Phylum (Division)/Subphylum (Subdivision).
-	 * 
+	 *
 	 * @param rankID  the aphia rank id for which to look up a rank string
 	 * @return a rank represented as a string, or an empty string if no match is found
 	 */
@@ -390,7 +425,7 @@ public class IRMNGService implements Validator {
 	
 	/**
 	 * For a string representing a taxon rank, return the corresponding aphia rankID
-	 * 
+	 *
 	 * @param rank a case insensitive string for which to look up a taxon rank
 	 * @return the aphia rankID for the given rank
 	 */
@@ -513,6 +548,15 @@ public class IRMNGService implements Validator {
 	
 	
 	
+	/**
+	 * <p>nameComparisonSearch.</p>
+	 *
+	 * @param taxon a {@link java.lang.String} object.
+	 * @param author a {@link java.lang.String} object.
+	 * @param marineOnly a boolean.
+	 * @return a {@link edu.harvard.mcz.nametools.LookupResult} object.
+	 * @throws java.lang.Exception if any.
+	 */
 	public static LookupResult nameComparisonSearch(String taxon, String author, boolean marineOnly) throws Exception {
 		LookupResult result  = null;
 
@@ -553,6 +597,7 @@ public class IRMNGService implements Validator {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public NameUsage validate(NameUsage taxonNameToValidate) throws ServiceException {
 		logger.debug("Checking: " + taxonNameToValidate.getScientificName() + " " + taxonNameToValidate.getAuthorship());
@@ -740,6 +785,7 @@ public class IRMNGService implements Validator {
 		return result;		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<String> supportedExtensionTerms() {
 	    List<String> terms = new ArrayList<String>();
@@ -751,6 +797,13 @@ public class IRMNGService implements Validator {
 		return terms;
 	}
 	
+	/**
+	 * <p>lookupHabitat.</p>
+	 *
+	 * @param ar a {@link org.irmng.aphia.v1_0.model.AphiaRecord} object.
+	 * @return a {@link java.util.Map} object.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 */
 	protected Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
 		Map<String,String> attributes = new HashMap<String,String>();
 		if (ar!=null)  {

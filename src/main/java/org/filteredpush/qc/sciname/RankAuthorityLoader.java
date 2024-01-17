@@ -37,8 +37,10 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
- * @author mole
+ * <p>RankAuthorityLoader class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class RankAuthorityLoader {
 
@@ -48,11 +50,19 @@ public class RankAuthorityLoader {
 	
 	private String targetURI;
 	
+	/**
+	 * <p>Constructor for RankAuthorityLoader.</p>
+	 */
 	public RankAuthorityLoader() { 
 		targetURI ="https://rs.gbif.org/vocabulary/gbif/rank.xml";
 		values = new HashMap<String,String>();
 	}
 	
+	/**
+	 * <p>Constructor for RankAuthorityLoader.</p>
+	 *
+	 * @param uriForVocabularyXML a {@link java.lang.String} object.
+	 */
 	@Deprecated
 	public RankAuthorityLoader(String uriForVocabularyXML) { 
 		targetURI = uriForVocabularyXML;
@@ -60,7 +70,9 @@ public class RankAuthorityLoader {
 	}
 	
 	/**
-	 * @param args
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
 	 */
 	public static void main(String[] args) {
 		RankAuthorityLoader loader = new RankAuthorityLoader();
@@ -78,14 +90,31 @@ public class RankAuthorityLoader {
 		
 	}
 	
+	/**
+	 * <p>Getter for the field <code>values</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<String,String> getValues() { 
 		return values;
 	}
 	
+	/**
+	 * <p>getValuesCopy.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<String,String> getValuesCopy() { 
 		return new HashMap<String,String>(values);
 	}
 	
+	/**
+	 * <p>load.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 * @throws javax.xml.parsers.ParserConfigurationException if any.
+	 * @throws org.xml.sax.SAXException if any.
+	 */
 	public void load() throws IOException, ParserConfigurationException, SAXException { 
 		
 		//TODO: Implement local file cache.

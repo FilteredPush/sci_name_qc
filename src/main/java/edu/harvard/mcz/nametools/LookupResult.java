@@ -22,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Structure to hold the result of a lookup of a name
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class LookupResult {
 	
@@ -36,6 +36,9 @@ public class LookupResult {
 	private String guid;
 	private Class<?> service;
 	
+	/**
+	 * <p>Constructor for LookupResult.</p>
+	 */
 	public LookupResult() { 
 		nameComparison = null;
 		matchedName = null;
@@ -45,16 +48,16 @@ public class LookupResult {
 	}
 
 	/**
-	 * Create an instance of a LookupResult carrying metadata about a lookup of 
+	 * Create an instance of a LookupResult carrying metadata about a lookup of
 	 * a name on a service.
-	 * 
+	 *
 	 * @param nameComparison a structured comparison of the authorship of the name presented (as name one)
 	 *  and the authorship of the name returned by the service (as name two)
 	 * @param matchedName the scientific name string for the match as returned by the service
 	 * @param matchedAuthorship the authorship string for the match as returned by the service
 	 * @param guid a guid for the match as returned by the service.
 	 * @param service the service on which the lookup was performed.
-	 * @throws ExpectationsNotMetException when the matchedAuthorship doesn't match nameTwo in the nameComparison
+	 * @throws edu.harvard.mcz.nametools.ExpectationsNotMetException when the matchedAuthorship doesn't match nameTwo in the nameComparison
 	 */
 	public LookupResult(NameComparison nameComparison, String matchedName, String matchedAuthorship, String guid, Class<?> service) throws ExpectationsNotMetException {
 		if (nameComparison!=null) { 
@@ -70,6 +73,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Getter for the field <code>nameComparison</code>.</p>
+	 *
 	 * @return the nameComparison
 	 */
 	public NameComparison getNameComparison() {
@@ -77,6 +82,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Setter for the field <code>nameComparison</code>.</p>
+	 *
 	 * @param nameComparison the nameComparison to set
 	 */
 	public void setNameComparison(NameComparison nameComparison) {
@@ -84,6 +91,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Getter for the field <code>matchedName</code>.</p>
+	 *
 	 * @return the matchedName
 	 */
 	public String getMatchedName() {
@@ -91,6 +100,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Setter for the field <code>matchedName</code>.</p>
+	 *
 	 * @param matchedName the matchedName to set
 	 */
 	public void setMatchedName(String matchedName) {
@@ -98,6 +109,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Getter for the field <code>guid</code>.</p>
+	 *
 	 * @return the guid
 	 */
 	public String getGuid() {
@@ -105,6 +118,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Setter for the field <code>guid</code>.</p>
+	 *
 	 * @param guid the guid to set
 	 */
 	public void setGuid(String guid) {
@@ -112,6 +127,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Getter for the field <code>matchedAuthorship</code>.</p>
+	 *
 	 * @return the matchedAuthorship
 	 */
 	public String getMatchedAuthorship() {
@@ -119,6 +136,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Setter for the field <code>matchedAuthorship</code>.</p>
+	 *
 	 * @param matchedAuthorship the matchedAuthorship to set
 	 */
 	public void setMatchedAuthorship(String matchedAuthorship) {
@@ -126,6 +145,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Getter for the field <code>service</code>.</p>
+	 *
 	 * @return the service
 	 */
 	public Class<?> getService() {
@@ -133,6 +154,8 @@ public class LookupResult {
 	}
 
 	/**
+	 * <p>Setter for the field <code>service</code>.</p>
+	 *
 	 * @param service the service to set
 	 */
 	public void setService(Class<?> service) {

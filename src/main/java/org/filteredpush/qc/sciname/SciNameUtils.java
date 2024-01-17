@@ -52,18 +52,32 @@ import edu.harvard.mcz.nametools.NameUsage;
 
 /**
  * Utility functions for working with DarwinCore scientific name terms.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class SciNameUtils {
 
 	private static final Log logger = LogFactory.getLog(SciNameUtils.class);
 	
+	/**
+	 * <p>Constructor for SciNameUtils.</p>
+	 */
 	public SciNameUtils() { 
 		
 	} 
 	
+	/**
+	 * <p>validateTaxonID.</p>
+	 *
+	 * @param taxonID a {@link java.lang.String} object.
+	 * @param sourceAuthority a {@link org.filteredpush.qc.sciname.SciNameSourceAuthority} object.
+	 * @return a boolean.
+	 * @throws org.filteredpush.qc.sciname.IDFormatException if any.
+	 * @throws org.filteredpush.qc.sciname.UnsupportedSourceAuthorityException if any.
+	 * @throws org.marinespecies.aphia.v1_0.handler.ApiException if any.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 */
 	public static boolean validateTaxonID(String taxonID, SciNameSourceAuthority sourceAuthority) throws IDFormatException, UnsupportedSourceAuthorityException, ApiException, org.irmng.aphia.v1_0.handler.ApiException { 
 		boolean result = false;
 		if (sourceAuthority.isGBIFChecklist()) { 
@@ -98,15 +112,15 @@ public class SciNameUtils {
 	
 	/**
 	 * Check to see if a name is the same as another name or the other name's synonyms.
-	 * 
+	 *
 	 * @param name the name being checked
 	 * @param compareToName the name returned from the authority to compare with name, including synonyms
 	 * @param atRank the rank of the two names being compared
 	 * @param sourceAuthority in which to lookup compareToName for synonyms.
 	 * @return true if either name is empty, the two are the same, or if a synonym of compareToName found in sourceAuthority is the same as name. Otherwise false.
-	 * @throws IOException on lookup error
-	 * @throws ApiException on lookup error
-	 * @throws org.irmng.aphia.v1_0.handler.ApiException 
+	 * @throws java.io.IOException on lookup error
+	 * @throws org.marinespecies.aphia.v1_0.handler.ApiException on lookup error
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
 	 */
 	public static boolean sameOrSynonym(String name, String compareToName, String atRank, SciNameSourceAuthority sourceAuthority) throws IOException, ApiException, org.irmng.aphia.v1_0.handler.ApiException {
 			return sameOrSynonym(compareToName, name, atRank, sourceAuthority, true);
@@ -168,9 +182,9 @@ public class SciNameUtils {
 	
     /**
      * Does a string contain a non-blank value.
-     * 
+     *
      * @param aString to check
-     * @return true if the string is null, is an empty string, 
+     * @return true if the string is null, is an empty string,
      *     or contains only whitespace.
      */
     public static boolean isEmpty(String aString)  {
@@ -185,11 +199,12 @@ public class SciNameUtils {
     }
     
     /**
-     * Test to see if two strings are the same or are not comparable, 
+     * Test to see if two strings are the same or are not comparable,
      * returns true if either or both strings are null, returns true if both
      * strings have a value and are equal, returns false only if both strings
      * are non-null and have different values, note that an empty string
      * is not treated as a null.
+     *
      * @param aString a string to compare
      * @param anotherString a string to compare
      * @return false if both strings are non-null and have different values, otherwise true.
@@ -207,11 +222,12 @@ public class SciNameUtils {
     }
     
     /**
-     * Test to see if two strings are the same or are not comparable, 
+     * Test to see if two strings are the same or are not comparable,
      * returns true if either or both strings are null or empty, returns true if both
      * strings have a value and are equal, returns false only if both strings
      * are non-null or empty and have different values, an empty string
      * is treated as a null.
+     *
      * @param aString a string to compare
      * @param anotherString a string to compare
      * @return false if both strings are non-null and have different values, otherwise true.
@@ -232,6 +248,13 @@ public class SciNameUtils {
     	return result;
     }
 	
+	/**
+	 * <p>simpleWoRMSGuidLookup.</p>
+	 *
+	 * @param scientificName a {@link java.lang.String} object.
+	 * @param scientificNameAuthorship a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String simpleWoRMSGuidLookup(String scientificName, String scientificNameAuthorship) { 
 		String result = "";
 		NameParserGBIF parser = new NameParserGBIF();
@@ -256,6 +279,13 @@ public class SciNameUtils {
 		return result;
 	}
 	
+	/**
+	 * <p>simpleGBIFGuidLookup.</p>
+	 *
+	 * @param scientificName a {@link java.lang.String} object.
+	 * @param scientificNameAuthorship a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String simpleGBIFGuidLookup(String scientificName, String scientificNameAuthorship) { 
 		String result = "";
 		NameParserGBIF parser = new NameParserGBIF();
@@ -286,7 +316,7 @@ public class SciNameUtils {
 
 	/**
 	 * Entry point for command line usage of SciNameUtils.
-	 * 
+	 *
 	 * @param args command line arguments, run with -h to list options.
 	 */
 	public static void main(String[] args) { 
@@ -406,11 +436,11 @@ public class SciNameUtils {
 	 * Attempt to parse the authorship and the canonical name (name without authorship) out of a scientific name
 	 * by first checking for matches in GNI where the parse is known, and if not found, failing over to using
 	 * GBIF's name parser code.
-	 * 
+	 *
 	 * @param scientificName the string to attempt to parse
-	 * @return a NameAuthorshipParse object containing the separate canonical name and authorship string parts 
+	 * @return a NameAuthorshipParse object containing the separate canonical name and authorship string parts
 	 *    of the provided scientific name
-	 * @throws UnparsableNameException if unable to parse
+	 * @throws org.gbif.nameparser.api.UnparsableNameException if unable to parse
 	 */
 	public static NameAuthorshipParse getNameWithoutAuthorship(String scientificName) throws UnparsableNameException {
 		NameAuthorshipParse result = null;
@@ -464,6 +494,23 @@ public class SciNameUtils {
 		return result;
 	}
 	
+	/**
+	 * <p>isSameClassificationInAuthority.</p>
+	 *
+	 * @param kingdom a {@link java.lang.String} object.
+	 * @param phylum a {@link java.lang.String} object.
+	 * @param taxonomic_class a {@link java.lang.String} object.
+	 * @param order a {@link java.lang.String} object.
+	 * @param family a {@link java.lang.String} object.
+	 * @param subfamily a {@link java.lang.String} object.
+	 * @param genus a {@link java.lang.String} object.
+	 * @param sourceAuthority a {@link org.filteredpush.qc.sciname.SciNameSourceAuthority} object.
+	 * @return a {@link org.filteredpush.qc.sciname.BooleanWithComment} object.
+	 * @throws java.io.IOException if any.
+	 * @throws org.marinespecies.aphia.v1_0.handler.ApiException if any.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 * @throws org.filteredpush.qc.sciname.UnsupportedSourceAuthorityException if any.
+	 */
 	public static BooleanWithComment isSameClassificationInAuthority(String kingdom, String phylum, String taxonomic_class, String order, String family, String subfamily, String genus, SciNameSourceAuthority sourceAuthority)
 			throws IOException, ApiException, org.irmng.aphia.v1_0.handler.ApiException, UnsupportedSourceAuthorityException 
 	{ 

@@ -39,9 +39,9 @@ import edu.harvard.mcz.nametools.NameAuthorshipParse;
 
 /**
  * Minimal implementation for requests to the GNI service.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class GNIService {
 
@@ -49,12 +49,14 @@ public class GNIService {
 
 	private static String endpoint = "https://resolver.globalnames.org/name_resolvers.json";
 	
-	/** Query GNI with a scientific name string and if a match is found, return the canonical name
+	/**
+	 * Query GNI with a scientific name string and if a match is found, return the canonical name
 	 * (name without authorship) for that scientific name from the matching authority.
+	 *
 	 * @param nameString to check against GNI
 	 * @return the canonical portion of the name, or an empty string if no match.
-	 * @throws IOException if there is an error with the service.
-	 * @throws ParseException if unable to parse the returned json from the service.
+	 * @throws java.io.IOException if there is an error with the service.
+	 * @throws org.json.simple.parser.ParseException if unable to parse the returned json from the service.
 	 */
 	public static String obtainCanonicalName(String nameString) throws IOException, ParseException { 
 		String result = "";
@@ -95,14 +97,15 @@ public class GNIService {
 		return result;
 	}
 	
-	/** Query GNI with a scientific name string and if a match is found, return the canonical name
+	/**
+	 * Query GNI with a scientific name string and if a match is found, return the canonical name
 	 * (name without authorship) for that scientific name from the matching authority.
+	 *
 	 * @param nameString to check against GNI
-	 * @return a NameAuthorshipParse object containing the canonical portion of the name and the authorship portion 
+	 * @return a NameAuthorshipParse object containing the canonical portion of the name and the authorship portion
 	 *   of the name.
-	 * @throws IOException if there is an error with the service.
-	 * @throws ParseException if unable to parse the returned json from the service.
-	 * 
+	 * @throws java.io.IOException if there is an error with the service.
+	 * @throws org.json.simple.parser.ParseException if unable to parse the returned json from the service.
 	 */
 	public static NameAuthorshipParse obtainNameAuthorParse(String nameString) throws IOException, ParseException { 
 		NameAuthorshipParse result = null;

@@ -16,8 +16,10 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 
 /**
- * @author mole
+ * <p>SciNameSingleton class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class SciNameSingleton {
 
@@ -44,14 +46,31 @@ public class SciNameSingleton {
 		
 	}
 	
+	/**
+	 * <p>Getter for the field <code>instance</code>.</p>
+	 *
+	 * @return a {@link org.filteredpush.qc.sciname.SciNameSingleton} object.
+	 */
 	public static synchronized SciNameSingleton getInstance() {
 		return instance;
 	}
 
+	/**
+	 * <p>getRank.</p>
+	 *
+	 * @param key a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getRank(String key) { 
 		return loader.getValuesCopy().get(key);
 	}
 	
+	/**
+	 * <p>checkRankKnown.</p>
+	 *
+	 * @param rank a {@link java.lang.String} object.
+	 * @return a {@link java.lang.Boolean} object.
+	 */
 	public Boolean checkRankKnown(String rank) { 
 		Boolean retval = null;
 		
@@ -62,7 +81,7 @@ public class SciNameSingleton {
 	
 	/**
 	 * Check cache of TGNCountry matches against a provided country.
-	 * 
+	 *
 	 * @param country to check for previous lookup
 	 * @return null if no match was found, otherwise the cached true or false value for
 	 * a match on that country.
@@ -80,7 +99,7 @@ public class SciNameSingleton {
 	
 	/**
 	 * Cache a match on a country name.
-	 * 
+	 *
 	 * @param country key to cache
 	 * @param match true or false to store in the cache, if null
 	 *  not added to the cache.

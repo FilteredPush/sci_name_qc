@@ -22,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Data object to hold parsed scientificName without authorship and scientific name authorship.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class NameAuthorshipParse {
 
@@ -35,9 +35,11 @@ public class NameAuthorshipParse {
 	private String nameWithAuthorship;
 	
 	/**
-	 * @param nameWithoutAuthorship
-	 * @param authorship
-	 * @param nameWithAuthorship
+	 * <p>Constructor for NameAuthorshipParse.</p>
+	 *
+	 * @param nameWithoutAuthorship a {@link java.lang.String} object.
+	 * @param authorship a {@link java.lang.String} object.
+	 * @param nameWithAuthorship a {@link java.lang.String} object.
 	 */
 	public NameAuthorshipParse(String nameWithoutAuthorship, String authorship, String nameWithAuthorship) {
 		this.nameWithoutAuthorship = nameWithoutAuthorship;
@@ -45,10 +47,15 @@ public class NameAuthorshipParse {
 		this.nameWithAuthorship = nameWithAuthorship;
 	}
 
+	/**
+	 * <p>Constructor for NameAuthorshipParse.</p>
+	 */
 	public NameAuthorshipParse() {
 	}
 
 	/**
+	 * <p>Getter for the field <code>nameWithoutAuthorship</code>.</p>
+	 *
 	 * @return the nameWithoutAuthorship
 	 */
 	public String getNameWithoutAuthorship() {
@@ -59,6 +66,8 @@ public class NameAuthorshipParse {
 	}
 
 	/**
+	 * <p>Setter for the field <code>nameWithoutAuthorship</code>.</p>
+	 *
 	 * @param nameWithoutAuthorship the nameWithoutAuthorship to set
 	 */
 	public void setNameWithoutAuthorship(String nameWithoutAuthorship) {
@@ -66,6 +75,8 @@ public class NameAuthorshipParse {
 	}
 
 	/**
+	 * <p>Getter for the field <code>authorship</code>.</p>
+	 *
 	 * @return the authorship
 	 */
 	public String getAuthorship() {
@@ -76,6 +87,8 @@ public class NameAuthorshipParse {
 	}
 
 	/**
+	 * <p>Setter for the field <code>authorship</code>.</p>
+	 *
 	 * @param authorship the authorship to set
 	 */
 	public void setAuthorship(String authorship) {
@@ -83,6 +96,8 @@ public class NameAuthorshipParse {
 	}
 
 	/**
+	 * <p>Getter for the field <code>nameWithAuthorship</code>.</p>
+	 *
 	 * @return the nameWithAuthorship
 	 */
 	public String getNameWithAuthorship() {
@@ -93,6 +108,8 @@ public class NameAuthorshipParse {
 	}
 
 	/**
+	 * <p>Setter for the field <code>nameWithAuthorship</code>.</p>
+	 *
 	 * @param nameWithAuthorship the nameWithAuthorship to set
 	 */
 	public void setNameWithAuthorship(String nameWithAuthorship) {

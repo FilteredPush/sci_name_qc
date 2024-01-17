@@ -19,9 +19,9 @@ package org.filteredpush.qc.sciname;
 
 /**
  * A list of source authorities for which implementations exist in this package.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public enum EnumSciNameSourceAuthority {
 
@@ -38,6 +38,11 @@ public enum EnumSciNameSourceAuthority {
     IRMNG,
     INVALID;
 
+	/**
+	 * <p>getName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName() {
 		// return the exact name of the enum instance.
 		return name();

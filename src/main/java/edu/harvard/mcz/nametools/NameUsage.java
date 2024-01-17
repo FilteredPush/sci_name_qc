@@ -37,19 +37,19 @@ import org.json.simple.JSONObject;
 import org.marinespecies.aphia.v1_0.model.AphiaRecord;
 
 /**
- * Representation of a usage of a scientific name, suitable for validation of names against 
- * authoritative sources.  Derived from an object that can handle NameUsage serializations 
- * returned from GBIF's API, with extensions to support similar data objects returned by 
- * the WoRMS aphia API, and by IndexFungorum, along with extensions to support metadata about 
- * an original pre-validation record and the comparision between pre- and post- validation 
+ * Representation of a usage of a scientific name, suitable for validation of names against
+ * authoritative sources.  Derived from an object that can handle NameUsage serializations
+ * returned from GBIF's API, with extensions to support similar data objects returned by
+ * the WoRMS aphia API, and by IndexFungorum, along with extensions to support metadata about
+ * an original pre-validation record and the comparision between pre- and post- validation
  * records.  Derived in part from the GBIF api class of the same name.
- * 
- * Has responsibility for NameUsage data objects, serialization of those objects, comparison 
+ *
+ * Has responsibility for NameUsage data objects, serialization of those objects, comparison
  * between values (e.g. authorships) between name usages, and assertion of constants describing
  * the nature of such comparisons.  Needs re-engineering.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class NameUsage implements LinneanClassification { 
 	
@@ -101,9 +101,9 @@ public class NameUsage implements LinneanClassification {
 	protected AuthorNameComparator authorComparator;
 	
 	/**
-	 * Utility methods, return the value associated with a key from a JSON object, 
+	 * Utility methods, return the value associated with a key from a JSON object,
 	 * or an empty string if the key is not matched.
-	 * 
+	 *
 	 * @param json JSONObject to check for key-value pair
 	 * @param key the key for which to find the value for.
 	 * @return String value or an empty string.
@@ -148,6 +148,9 @@ public class NameUsage implements LinneanClassification {
 		if (subgenus!=null && subgenus.trim().length()==0) { subgenus = null; }
 	}
 	
+	/**
+	 * <p>Constructor for NameUsage.</p>
+	 */
 	public NameUsage() { 
 		init();
 		authorComparator = new ICZNAuthorNameComparator(.75d,.5d);
@@ -156,7 +159,7 @@ public class NameUsage implements LinneanClassification {
 	/**
 	 * Construct a NameUsage instance with a given source authority
 	 * and authorship comparator.
-	 * 
+	 *
 	 * @param sourceAuthority the source authority for the name usage.
 	 * @param authorNameComparator the comparator to use when making comparisons
 	 * of authors with this name usage.
@@ -169,13 +172,13 @@ public class NameUsage implements LinneanClassification {
 	
 	/**
 	 * Construct a NameUsage instance with a specified original scientific name and
-	 * authorship, and with sourceAuthority and authorNameComparator.  Expected 
+	 * authorship, and with sourceAuthority and authorNameComparator.  Expected
 	 * formulation for a call to validate on SciNameServiceParent.
-	 * 
-	 * @param sourceAuthority
-	 * @param authorNameComparator
-	 * @param originalScientificName
-	 * @param originalAuthorship
+	 *
+	 * @param sourceAuthority a {@link java.lang.String} object.
+	 * @param authorNameComparator a {@link edu.harvard.mcz.nametools.AuthorNameComparator} object.
+	 * @param originalScientificName a {@link java.lang.String} object.
+	 * @param originalAuthorship a {@link java.lang.String} object.
 	 */
 	public NameUsage(String sourceAuthority, AuthorNameComparator authorNameComparator, String originalScientificName, String originalAuthorship) { 
 		init();
@@ -187,6 +190,11 @@ public class NameUsage implements LinneanClassification {
 	
 
 	
+	/**
+	 * <p>Constructor for NameUsage.</p>
+	 *
+	 * @param json a {@link org.json.simple.JSONObject} object.
+	 */
 	public NameUsage(JSONObject json) { 
 		init();
 		if (json!=null) { 
@@ -243,7 +251,7 @@ public class NameUsage implements LinneanClassification {
 	
 	/**
 	 * Construct a NameUsage instance from a gbif checklistbank NameUsage instance.
-	 * 
+	 *
 	 * @param record a gbif Checklist API NameUsage.
 	 * @see org.gbif.api.model.checklistbank.NameUsage
 	 */
@@ -278,7 +286,7 @@ public class NameUsage implements LinneanClassification {
 	/**
 	 * Construct a NameUsage instance from an marinespecies.org AphiaRecord instance,
 	 * assumes that the source authority is WoRMS.
-	 * 
+	 *
 	 * @param record an AphiaRecord from WoRMS.
 	 */
 	public NameUsage(org.marinespecies.aphia.v1_0.model.AphiaRecord record) {
@@ -305,7 +313,7 @@ public class NameUsage implements LinneanClassification {
 	/**
 	 * Construct a NameUsage instance from an irmng.org AphiaRecord instance,
 	 * assumes that the source authority is IRMNG.
-	 * 
+	 *
 	 * @param record an AphiaRecord from IRMNG.
 	 */
 	public NameUsage(org.irmng.aphia.v1_0.model.AphiaRecord record) {
@@ -329,6 +337,11 @@ public class NameUsage implements LinneanClassification {
         nullBlanks();
 	}		
 	
+	/**
+	 * <p>csvHeaderLine.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String csvHeaderLine() { 
 		return "\"scientificName\",\"canonicalName\",\"authorship\"," +
 				"\"taxonomicStatus\",\"acceptedName\",\"rank\"," +
@@ -338,6 +351,11 @@ public class NameUsage implements LinneanClassification {
 				"\n";
 	}
 	
+	/**
+	 * <p>toCSVLine.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String toCSVLine() { 
 		StringBuffer result = new StringBuffer();
 		result.append('"').append(scientificName).append("\",");
@@ -366,6 +384,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>key</code>.</p>
+	 *
 	 * @return the key
 	 */
 	public int getKey() {
@@ -373,6 +393,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>key</code>.</p>
+	 *
 	 * @param key the key to set
 	 */
 	public void setKey(int key) {
@@ -380,6 +402,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>acceptedKey</code>.</p>
+	 *
 	 * @return the acceptedKey
 	 */
 	public int getAcceptedKey() {
@@ -387,6 +411,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>acceptedKey</code>.</p>
+	 *
 	 * @param acceptedKey the acceptedKey to set
 	 */
 	public void setAcceptedKey(int acceptedKey) {
@@ -394,6 +420,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>acceptedName</code>.</p>
+	 *
 	 * @return the acceptedName or an empty string if acceptedName is null.
 	 */
 	public String getAcceptedName() {
@@ -404,6 +432,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>acceptedName</code>.</p>
+	 *
 	 * @param acceptedName the acceptedName to set
 	 */
 	public void setAcceptedName(String acceptedName) {
@@ -411,6 +441,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>datasetKey</code>.</p>
+	 *
 	 * @return the datasetKey
 	 */
 	public String getDatasetKey() {
@@ -418,6 +450,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>datasetKey</code>.</p>
+	 *
 	 * @param datasetKey the datasetKey to set
 	 */
 	public void setDatasetKey(String datasetKey) {
@@ -425,6 +459,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>parentKey</code>.</p>
+	 *
 	 * @return the parentKey
 	 */
 	public int getParentKey() {
@@ -432,6 +468,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>parentKey</code>.</p>
+	 *
 	 * @param parentKey the parentKey to set
 	 */
 	public void setParentKey(int parentKey) {
@@ -439,6 +477,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>parent</code>.</p>
+	 *
 	 * @return the parent
 	 */
 	public String getParent() {
@@ -446,6 +486,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>parent</code>.</p>
+	 *
 	 * @param parent the parent to set
 	 */
 	public void setParent(String parent) {
@@ -453,6 +495,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>scientificName</code>.</p>
+	 *
 	 * @return the scientificName or an empty string if scientificName is null
 	 */
 	public String getScientificName() {
@@ -463,6 +507,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>scientificName</code>.</p>
+	 *
 	 * @param scientificName the scientificName to set
 	 */
 	public void setScientificName(String scientificName) {
@@ -470,6 +516,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>canonicalName</code>.</p>
+	 *
 	 * @return the canonicalName
 	 */
 	public String getCanonicalName() {
@@ -480,6 +528,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>canonicalName</code>.</p>
+	 *
 	 * @param canonicalName the canonicalName to set
 	 */
 	public void setCanonicalName(String canonicalName) {
@@ -487,6 +537,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>taxonomicStatus</code>.</p>
+	 *
 	 * @return the status
 	 */
 	public String getTaxonomicStatus() {
@@ -497,6 +549,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>taxonomicStatus</code>.</p>
+	 *
 	 * @param status the status to set
 	 */
 	public void setTaxonomicStatus(String status) {
@@ -504,6 +558,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>numDescendants</code>.</p>
+	 *
 	 * @return the numDescendants
 	 */
 	public int getNumDescendants() {
@@ -511,6 +567,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>numDescendants</code>.</p>
+	 *
 	 * @param numDescendants the numDescendants to set
 	 */
 	public void setNumDescendants(int numDescendants) {
@@ -518,6 +576,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>sourceID</code>.</p>
+	 *
 	 * @return the sourceID
 	 */
 	public String getSourceID() {
@@ -525,6 +585,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>sourceID</code>.</p>
+	 *
 	 * @param sourceID the sourceID to set
 	 */
 	public void setSourceID(String sourceID) {
@@ -532,6 +594,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>link</code>.</p>
+	 *
 	 * @return the link
 	 */
 	public String getLink() {
@@ -539,6 +603,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>link</code>.</p>
+	 *
 	 * @param link the link to set
 	 */
 	public void setLink(String link) {
@@ -546,6 +612,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>rank</code>.</p>
+	 *
 	 * @return the rank
 	 */
 	public String getRank() {
@@ -557,6 +625,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>rank</code>.</p>
+	 *
 	 * @param rank the rank to set
 	 */
 	public void setRank(String rank) {
@@ -564,6 +634,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>kingdom</code>.</p>
+	 *
 	 * @return the kingdom
 	 */
 	public String getKingdom() {
@@ -573,14 +645,14 @@ public class NameUsage implements LinneanClassification {
 		return kingdom;
 	}
 
-	/**
-	 * @param kingdom the kingdom to set
-	 */
+	/** {@inheritDoc} */
 	public void setKingdom(String kingdom) {
 		this.kingdom = kingdom;
 	}
 
 	/**
+	 * <p>Getter for the field <code>authorship</code>.</p>
+	 *
 	 * @return the authorship or an empty string if authorship is null
 	 */
 	public String getAuthorship() {
@@ -592,6 +664,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>authorship</code>.</p>
+	 *
 	 * @param authorship the authorship to set
 	 */
 	public void setAuthorship(String authorship) {
@@ -599,6 +673,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>phylum</code>.</p>
+	 *
 	 * @return the phylum
 	 */
 	public String getPhylum() {
@@ -608,14 +684,14 @@ public class NameUsage implements LinneanClassification {
 		return phylum;
 	}
 
-	/**
-	 * @param phylum the phylum to set
-	 */
+	/** {@inheritDoc} */
 	public void setPhylum(String phylum) {
 		this.phylum = phylum;
 	}
 
 	/**
+	 * <p>Getter for the field <code>tclass</code>.</p>
+	 *
 	 * @return the tclass
 	 */
 	public String getTclass() {
@@ -626,6 +702,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>tclass</code>.</p>
+	 *
 	 * @param tclass the tclass to set
 	 */
 	public void setTclass(String tclass) {
@@ -633,6 +711,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>order</code>.</p>
+	 *
 	 * @return the order
 	 */
 	public String getOrder() {
@@ -642,14 +722,14 @@ public class NameUsage implements LinneanClassification {
 		return order;
 	}
 
-	/**
-	 * @param order the order to set
-	 */
+	/** {@inheritDoc} */
 	public void setOrder(String order) {
 		this.order = order;
 	}
 
 	/**
+	 * <p>Getter for the field <code>family</code>.</p>
+	 *
 	 * @return the family
 	 */
 	public String getFamily() {
@@ -659,14 +739,14 @@ public class NameUsage implements LinneanClassification {
 		return family;
 	}
 
-	/**
-	 * @param family the family to set
-	 */
+	/** {@inheritDoc} */
 	public void setFamily(String family) {
 		this.family = family;
 	}
 
 	/**
+	 * <p>Getter for the field <code>genus</code>.</p>
+	 *
 	 * @return the genus
 	 */
 	public String getGenus() {
@@ -676,23 +756,33 @@ public class NameUsage implements LinneanClassification {
 		return genus;
 	}
 
-	/**
-	 * @param genus the genus to set
-	 */
+	/** {@inheritDoc} */
 	public void setGenus(String genus) {
 		this.genus = genus;
 	}
 
     //insert by Tianhong
+    /**
+     * <p>Setter for the field <code>synonyms</code>.</p>
+     *
+     * @param synonyms a boolean.
+     */
     public void setSynonyms (boolean synonyms){
         this.synonyms = synonyms;
     }
 
+    /**
+     * <p>Getter for the field <code>synonyms</code>.</p>
+     *
+     * @return a boolean.
+     */
     public boolean getSynonyms(){
         return synonyms;
     }
     
 	/**
+	 * <p>Getter for the field <code>matchDescription</code>.</p>
+	 *
 	 * @return the matchDescription
 	 */
 	public String getMatchDescription() {
@@ -700,6 +790,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>matchDescription</code>.</p>
+	 *
 	 * @param matchDescription the matchDescription to set
 	 */
 	public void setMatchDescription(String matchDescription) {
@@ -707,6 +799,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>authorshipStringSimilarity</code>.</p>
+	 *
 	 * @return the authorshipStringSimilarity
 	 */
 	public double getAuthorshipStringSimilarity() {
@@ -714,6 +808,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>authorshipStringSimilarity</code>.</p>
+	 *
 	 * @param authorshipStringSimilarity the authorshipStringSimilarity to set
 	 */
 	public void setAuthorshipStringSimilarity(double authorshipStringSimilarity) {
@@ -721,6 +817,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>inputDbPK</code>.</p>
+	 *
 	 * @return the inputDbPK
 	 */
 	public int getInputDbPK() {
@@ -728,6 +826,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>inputDbPK</code>.</p>
+	 *
 	 * @param inputDbPK the inputDbPK to set
 	 */
 	public void setInputDbPK(int inputDbPK) {
@@ -735,6 +835,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>originalScientificName</code>.</p>
+	 *
 	 * @return the originalScientificName or an empty string if originalScientificName is null
 	 */
 	public String getOriginalScientificName() {
@@ -745,6 +847,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>originalScientificName</code>.</p>
+	 *
 	 * @param originalScientificName the originalScientificName to set
 	 */
 	public void setOriginalScientificName(String originalScientificName) {
@@ -752,6 +856,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>originalAuthorship</code>.</p>
+	 *
 	 * @return the originalAuthorship or an empty string if originalAuthorship is null
 	 */
 	public String getOriginalAuthorship() {
@@ -762,6 +868,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>originalAuthorship</code>.</p>
+	 *
 	 * @param originalAuthorship the originalAuthorship to set
 	 */
 	public void setOriginalAuthorship(String originalAuthorship) {
@@ -769,6 +877,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>acceptedAuthorship</code>.</p>
+	 *
 	 * @return the acceptedAuthorship or an empty string if acceptedAuthorship is null.
 	 */
 	public String getAcceptedAuthorship() {
@@ -779,6 +889,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>acceptedAuthorship</code>.</p>
+	 *
 	 * @param acceptedAuthorship the acceptedAuthorship to set
 	 */
 	public void setAcceptedAuthorship(String acceptedAuthorship) {
@@ -786,6 +898,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>getScientificNameStringEditDistance.</p>
+	 *
 	 * @return the scientificNameStringSimilarity
 	 */
 	public double getScientificNameStringEditDistance() {
@@ -793,6 +907,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>setScientificNameStringEditDistance.</p>
+	 *
 	 * @param scientificNameStringEditDistance the scientificNameStringEditDistance to set
 	 */
 	public void setScientificNameStringEditDistance(
@@ -802,6 +918,8 @@ public class NameUsage implements LinneanClassification {
 	
 	
 	/**
+	 * <p>getAuthorshipStringEditDistance.</p>
+	 *
 	 * @return the authorshipStringSimilarity
 	 */
 	public double getAuthorshipStringEditDistance() {
@@ -809,6 +927,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>setAuthorshipStringEditDistance.</p>
+	 *
 	 * @param authorshipStringEditDistance the authorshipStringEditDistance to set
 	 */
 	public void setAuthorshipStringEditDistance(double authorshipStringEditDistance) {
@@ -816,6 +936,8 @@ public class NameUsage implements LinneanClassification {
 	}	
 
 	/**
+	 * <p>Getter for the field <code>guid</code>.</p>
+	 *
 	 * @return the guid for the NameUsage, or an empty string if the guid is null
 	 */
 	public String getGuid() {
@@ -827,6 +949,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>guid</code>.</p>
+	 *
 	 * @param guid the guid to set
 	 */
 	public void setGuid(String guid) {
@@ -837,6 +961,8 @@ public class NameUsage implements LinneanClassification {
 	}
 	
 	/**
+	 * <p>Getter for the field <code>authorComparator</code>.</p>
+	 *
 	 * @return the authorComparator
 	 */
 	public AuthorNameComparator getAuthorComparator() {
@@ -844,6 +970,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>authorComparator</code>.</p>
+	 *
 	 * @param authorComparator the authorComparator to set
 	 */
 	public void setAuthorComparator(AuthorNameComparator authorComparator) {
@@ -851,7 +979,7 @@ public class NameUsage implements LinneanClassification {
 	}	
 	
 	/**
-	 * Fix certain known cases of errors in the formulation of an 
+	 * Fix certain known cases of errors in the formulation of an
 	 * authorship string, sensitive to relevant nomenclatural code.
 	 * Remove authorship from scientific name if present.
 	 */
@@ -924,43 +1052,52 @@ public class NameUsage implements LinneanClassification {
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getClazz() {
 		return this.tclass;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setClazz(String clazz) {
 		this.tclass = clazz;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getSpecies() {
 		return this.species;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setSpecies(String species) {
 		this.species = species;
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getSubgenus() {
 		return this.subgenus;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setSubgenus(String subgenus) {
 		this.subgenus = subgenus;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getHigherRank(Rank rank) {
 		return ClassificationUtils.getHigherRank(this, rank);
 	}
 
 	/**
+	 * <p>Getter for the field <code>sourceAuthority</code>.</p>
+	 *
 	 * @return the sourceAuthority
 	 */
 	public String getSourceAuthority() {
@@ -968,6 +1105,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>sourceAuthority</code>.</p>
+	 *
 	 * @param sourceAuthority the sourceAuthority to set
 	 */
 	public void setSourceAuthority(String sourceAuthority) {
@@ -975,6 +1114,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>unacceptReason</code>.</p>
+	 *
 	 * @return the unacceptReason
 	 */
 	public String getUnacceptReason() {
@@ -985,6 +1126,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>unacceptReason</code>.</p>
+	 *
 	 * @param unacceptReason the unacceptReason to set
 	 */
 	public void setUnacceptReason(String unacceptReason) {
@@ -992,6 +1135,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>extension</code>.</p>
+	 *
 	 * @return the extension
 	 */
 	public Map<String,String> getExtension() {
@@ -999,21 +1144,35 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>extension</code>.</p>
+	 *
 	 * @param extension the extension to set
 	 */
 	public void setExtension(Map<String,String> extension) {
 		this.extension = extension;
 	}
 
+	/**
+	 * <p>Getter for the field <code>nameMatchDescription</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getNameMatchDescription() {
 		return nameMatchDescription;
 	}
 
+	/**
+	 * <p>Setter for the field <code>nameMatchDescription</code>.</p>
+	 *
+	 * @param nameMatchDescription a {@link java.lang.String} object.
+	 */
 	public void setNameMatchDescription(String nameMatchDescription) {
 		this.nameMatchDescription = nameMatchDescription;
 	}
 
 	/**
+	 * <p>Getter for the field <code>superfamily</code>.</p>
+	 *
 	 * @return the superfamily
 	 */
 	public String getSuperfamily() {
@@ -1024,6 +1183,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>superfamily</code>.</p>
+	 *
 	 * @param superfamily the superfamily to set
 	 */
 	public void setSuperfamily(String superfamily) {
@@ -1031,6 +1192,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>subfamily</code>.</p>
+	 *
 	 * @return the subfamily
 	 */
 	public String getSubfamily() {
@@ -1041,6 +1204,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>subfamily</code>.</p>
+	 *
 	 * @param subfamily the subfamily to set
 	 */
 	public void setSubfamily(String subfamily) {
@@ -1048,6 +1213,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>tribe</code>.</p>
+	 *
 	 * @return the tribe
 	 */
 	public String getTribe() {
@@ -1058,6 +1225,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>tribe</code>.</p>
+	 *
 	 * @param tribe the tribe to set
 	 */
 	public void setTribe(String tribe) {
@@ -1065,6 +1234,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Getter for the field <code>subtribe</code>.</p>
+	 *
 	 * @return the subtribe
 	 */
 	public String getSubtribe() {
@@ -1075,6 +1246,8 @@ public class NameUsage implements LinneanClassification {
 	}
 
 	/**
+	 * <p>Setter for the field <code>subtribe</code>.</p>
+	 *
 	 * @param subtribe the subtribe to set
 	 */
 	public void setSubtribe(String subtribe) {

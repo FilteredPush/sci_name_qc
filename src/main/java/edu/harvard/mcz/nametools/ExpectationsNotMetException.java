@@ -18,14 +18,16 @@
 package edu.harvard.mcz.nametools;
 
 /**
- * @author mole
+ * <p>ExpectationsNotMetException class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ExpectationsNotMetException extends Exception {
 
 	/**
-	 * Construct a new exception with the provided message 
-	 * 
+	 * Construct a new exception with the provided message
+	 *
 	 * @param message about the unmet expectations
 	 */
 	public ExpectationsNotMetException(String message) {

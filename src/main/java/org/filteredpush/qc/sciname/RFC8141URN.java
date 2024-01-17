@@ -25,11 +25,11 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Utility class for working with URNs
- * 
- * @author mole
- * 
- * Test for RFC8141 compliant URNs https://tools.ietf.org/html/rfc8141
  *
+ * @author mole
+ *
+ * Test for RFC8141 compliant URNs https://tools.ietf.org/html/rfc8141
+ * @version $Id: $Id
  */
 public class RFC8141URN {
 	
@@ -37,6 +37,12 @@ public class RFC8141URN {
 	protected String nid;  // namespace id
 	protected String nss;  // namepace specific string
 	
+	/**
+	 * <p>Constructor for RFC8141URN.</p>
+	 *
+	 * @param urn a {@link java.lang.String} object.
+	 * @throws org.filteredpush.qc.sciname.URNFormatException if any.
+	 */
 	public RFC8141URN(String urn) throws URNFormatException { 
 		if (RFC8141URN.isRFC8141URN(urn)) {
 		  Pattern urn_pattern = Pattern.compile(URN_RFC8141);
@@ -52,6 +58,8 @@ public class RFC8141URN {
 
 
 	/**
+	 * <p>Getter for the field <code>nid</code>.</p>
+	 *
 	 * @return the nid Namespace identifier
 	 */
 	public String getNid() {
@@ -59,6 +67,8 @@ public class RFC8141URN {
 	}
 
 	/**
+	 * <p>Setter for the field <code>nid</code>.</p>
+	 *
 	 * @param nid the namespace identifer to set
 	 */
 	public void setNid(String nid) {
@@ -67,6 +77,8 @@ public class RFC8141URN {
 
 
 	/**
+	 * <p>Getter for the field <code>nss</code>.</p>
+	 *
 	 * @return the nss Namespace specific string
 	 */
 	public String getNss() {
@@ -75,6 +87,8 @@ public class RFC8141URN {
 
 
 	/**
+	 * <p>Setter for the field <code>nss</code>.</p>
+	 *
 	 * @param nss the namespace specific string to set
 	 */
 	public void setNss(String nss) {
@@ -152,6 +166,12 @@ public class RFC8141URN {
 	   */
 	  public static String URN_RFC8141 = "^" + ASSIGNED_NAME + RQ_COMPONENTS + "(#" + FRAGMENT + ")?$";
 
+	  /**
+	   * <p>isRFC8141URN.</p>
+	   *
+	   * @param stringToTest a {@link java.lang.String} object.
+	   * @return a boolean.
+	   */
 	  public static boolean isRFC8141URN(String stringToTest) {
 		  boolean result = false;
 		  if (stringToTest!=null) { 

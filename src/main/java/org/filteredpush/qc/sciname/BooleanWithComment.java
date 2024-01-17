@@ -21,10 +21,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Data structure to hold a Boolean and a string comment. 
- * 
- * @author mole
+ * Data structure to hold a Boolean and a string comment.
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class BooleanWithComment {
 
@@ -35,8 +35,8 @@ public class BooleanWithComment {
 	
 	/**
 	 * Construct an instance of BooleanWithComment with a specified value and comment
-	 * 
-	 * @param booleanValue true or false 
+	 *
+	 * @param booleanValue true or false
 	 * @param comment associated with booleanValue
 	 */
 	public BooleanWithComment(Boolean booleanValue, String comment) {
@@ -47,6 +47,8 @@ public class BooleanWithComment {
 	}
 
 	/**
+	 * <p>Getter for the field <code>booleanValue</code>.</p>
+	 *
 	 * @return the booleanValue
 	 */
 	public Boolean getBooleanValue() {
@@ -54,6 +56,8 @@ public class BooleanWithComment {
 	}
 
 	/**
+	 * <p>Setter for the field <code>booleanValue</code>.</p>
+	 *
 	 * @param booleanValue the booleanValue to set
 	 */
 	public void setBooleanValue(Boolean booleanValue) {
@@ -61,6 +65,8 @@ public class BooleanWithComment {
 	}
 
 	/**
+	 * <p>Getter for the field <code>comment</code>.</p>
+	 *
 	 * @return the comment as a string
 	 */
 	public String getComment() {
@@ -69,7 +75,7 @@ public class BooleanWithComment {
 
 	/**
 	 * Append a string to the comment
-	 * 
+	 *
 	 * @param comment the string to append to the comment
 	 */
 	public void addComment(String comment) {

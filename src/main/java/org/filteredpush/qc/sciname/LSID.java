@@ -22,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Utility class for testing strings that may be LSIDs.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class LSID extends RFC8141URN {
 
@@ -36,8 +36,10 @@ public class LSID extends RFC8141URN {
 	private String version;
 	
 	/**
-	 * @param urn
-	 * @throws URNFormatException
+	 * <p>Constructor for LSID.</p>
+	 *
+	 * @param urn a {@link java.lang.String} object.
+	 * @throws org.filteredpush.qc.sciname.URNFormatException if any.
 	 */
 	public LSID(String urn) throws URNFormatException {
 		super(urn);
@@ -68,6 +70,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Getter for the field <code>authority</code>.</p>
+	 *
 	 * @return the authority
 	 */
 	public String getAuthority() {
@@ -75,6 +79,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Setter for the field <code>authority</code>.</p>
+	 *
 	 * @param authority the authority to set
 	 */
 	public void setAuthority(String authority) {
@@ -82,6 +88,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Getter for the field <code>namespace</code>.</p>
+	 *
 	 * @return the namespace
 	 */
 	public String getNamespace() {
@@ -89,6 +97,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Setter for the field <code>namespace</code>.</p>
+	 *
 	 * @param namespace the namespace to set
 	 */
 	public void setNamespace(String namespace) {
@@ -96,6 +106,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Getter for the field <code>objectID</code>.</p>
+	 *
 	 * @return the objectID
 	 */
 	public String getObjectID() {
@@ -103,6 +115,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Setter for the field <code>objectID</code>.</p>
+	 *
 	 * @param objectID the objectID to set
 	 */
 	public void setObjectID(String objectID) {
@@ -110,6 +124,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Getter for the field <code>version</code>.</p>
+	 *
 	 * @return the version
 	 */
 	public String getVersion() {
@@ -117,6 +133,8 @@ public class LSID extends RFC8141URN {
 	}
 
 	/**
+	 * <p>Setter for the field <code>version</code>.</p>
+	 *
 	 * @param version the version to set
 	 */
 	public void setVersion(String version) {

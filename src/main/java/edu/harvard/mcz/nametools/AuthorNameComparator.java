@@ -26,16 +26,17 @@ import org.apache.commons.lang3.StringUtils;
  * Parent of class hierarchy for making comparisons between pairs of authorship strings
  * of scientific names.  Authorship strings can contain authors of names, authorship role
  * markers (parentheses, ex, :, in), asserted year of publication and actual year of publication.
- * Conventions vary between the codes and in some disciplines for how authorship strings 
+ * Conventions vary between the codes and in some disciplines for how authorship strings
  * are typically constructed.
- * 
- * @author mole
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public abstract class AuthorNameComparator {
 	
-	/** Obtain the similarity threshold for comparison.
-	 * 
+	/**
+	 * Obtain the similarity threshold for comparison.
+	 *
 	 * @return double representing the threshold value for considering strings similar.
 	 */
 	public abstract double getSimilarityThreshold();
@@ -43,19 +44,18 @@ public abstract class AuthorNameComparator {
 	/**
 	 * Compare two authorship strings, and assert a comparison between the
 	 * two in the form of a NameComparison.
-	 * 
+	 *
 	 * @param anAuthor  one authorship string for comparison
 	 * @param toOtherAuthor the other authorship string to comapare to.
-	 * @return a string description classifying the match between the two 
+	 * @return a string description classifying the match between the two
 	 * authorship strings, with awareness of string distance, parenthesies, and year.
-	 * 
 	 * @see NameComparison
 	 */
 	public abstract NameComparison compare(String anAuthor, String toOtherAuthor);
 	
 	/**
 	 * Given an authorship string and a kingdom, guess at the correct author name comparator to use.
-	 * 
+	 *
 	 * @param authorship a scientific name authorship string.
 	 * @param kingdom dwc:kingdom
 	 * @return an AuthorNameComparator probably appropriate for the authorship string presented.
@@ -103,10 +103,10 @@ public abstract class AuthorNameComparator {
 	
 	/**
 	 * Attempt to detect relevant code for authorship string from the authorship
-	 * 
+	 *
 	 * @param authorship to test for code
-	 * @param withCertainty if true Will only return one applicable code, and 
-	 *   will return false/false for simple strings that could fit in either code, 
+	 * @param withCertainty if true Will only return one applicable code, and
+	 *   will return false/false for simple strings that could fit in either code,
 	 *   otherwise could return true/true.
 	 * @return map of the codes with boolean true/false for detection of the code
 	 */
@@ -118,14 +118,15 @@ public abstract class AuthorNameComparator {
 		}
 	}
 	
-	/**Detect, if possible, which code is applicable for some combination of kingdom and authorship.  
-	 * 
+	/**
+	 *Detect, if possible, which code is applicable for some combination of kingdom and authorship.
+	 *
 	 * @param authorship to test
 	 * @param kingdom to consider
-	 * @param withCertainty of true, will only return one applicable code as true, will return false 
+	 * @param withCertainty of true, will only return one applicable code as true, will return false
 	 *   for each code if strings could fit multiple codes, if false, will return true for any code
 	 *   with which the authorship and kingdom are consistent.
-	 * @return map of the nomenclatural codes with boolean true/false marking detected applicability 
+	 * @return map of the nomenclatural codes with boolean true/false marking detected applicability
 	 *   of each code.
 	 */
 	public static Map<String,Boolean> detectApplicableCode(String authorship, String kingdom, boolean withCertainty) { 
@@ -136,10 +137,11 @@ public abstract class AuthorNameComparator {
 		}
 	}
 	
-	/** Detect, if possible, which code is applicable for some combination of kingdom, phylum, and 
-	 * authorship.  Will only return one applicable code, and will return false/false for 
+	/**
+	 * Detect, if possible, which code is applicable for some combination of kingdom, phylum, and
+	 * authorship.  Will only return one applicable code, and will return false/false for
 	 * simple strings that could fit in either code.
-	 * 
+	 *
 	 * @param authorship authorship string to test, for code
 	 * @param kingdom the kingdom to which the authorship string belongs, has primacy
 	 *   over other values, Animalia-use-ICZN, Fungi|Plantae-use-ICNafp
@@ -196,10 +198,11 @@ public abstract class AuthorNameComparator {
 		return result;
 	}
 	
-	/** Detect, if possible, which code is applicable for some combination of kingdom, phylum, and 
+	/**
+	 * Detect, if possible, which code is applicable for some combination of kingdom, phylum, and
 	 * authorship.  May return true/true if either code could apply, as in just a single author
 	 * name as the authorship string.
-	 * 
+	 *
 	 * @param authorship authorship string to test, for code
 	 * @param kingdom the kingdom to which the authorship string belongs, has primacy
 	 *   over other values, Animalia-use-ICZN, Fungi|Plantae-use-ICNafp
@@ -273,11 +276,10 @@ public abstract class AuthorNameComparator {
 	}	
 	
 	/**
-	 * Test to see if an authorship string appears to contain a year 
+	 * Test to see if an authorship string appears to contain a year
 	 * between 1000 and the current century.
-	 * 
+	 *
 	 * @param authorship string to test for a year.
-	 * 
 	 * @return true if a four digit number is found.
 	 */
 	public static boolean calculateHasYear(String authorship) { 
@@ -293,7 +295,7 @@ public abstract class AuthorNameComparator {
 	
 	/**
 	 * Test to see if an authorship string appears to contain parentheses.
-	 * 
+	 *
 	 * @param authorship to test for parentheses
 	 * @return true if authorship string contains '()';
 	 */
@@ -306,12 +308,12 @@ public abstract class AuthorNameComparator {
 	}
 	
 	/**
-	 * Test whether or not an authorship string is consistent with the 
-	 * expected forms of a zoological authorship string. 
-	 * 
+	 * Test whether or not an authorship string is consistent with the
+	 * expected forms of a zoological authorship string.
+	 *
 	 * @param authorship string to test
-	 * @return false if the string contains elements inconsistent with 
-	 * a zoological authorship string, otherwise returns true.  
+	 * @return false if the string contains elements inconsistent with
+	 * a zoological authorship string, otherwise returns true.
 	 */
 	public static boolean consistentWithICZNAuthor(String authorship) { 
 		boolean result = true;
@@ -337,12 +339,12 @@ public abstract class AuthorNameComparator {
 	}
 	
 	/**
-	 * Test whether or not an authorship string is consistent with the 
-	 * expected forms of a botanical authorship string. 
-	 * 
+	 * Test whether or not an authorship string is consistent with the
+	 * expected forms of a botanical authorship string.
+	 *
 	 * @param authorship string to test
-	 * @return false if the string contains elements inconsistent with 
-	 * a botanical authorship string, otherwise returns true.  
+	 * @return false if the string contains elements inconsistent with
+	 * a botanical authorship string, otherwise returns true.
 	 */
 	public static boolean consistentWithICNapfAuthor(String authorship) { 
 		boolean result = true;
@@ -360,11 +362,12 @@ public abstract class AuthorNameComparator {
 	}
 	
 	
-	/** Return a measure of case insensitive similarity between two authorship strings, 
-	 * ignoring commas and spaces, in a range of 0 (no similarity) to 1 (exact same 
-	 * strings), using a measure of the string edit distance scaled to the length 
-	 * difference of the two strings.  
-	 * 
+	/**
+	 * Return a measure of case insensitive similarity between two authorship strings,
+	 * ignoring commas and spaces, in a range of 0 (no similarity) to 1 (exact same
+	 * strings), using a measure of the string edit distance scaled to the length
+	 * difference of the two strings.
+	 *
 	 * @param anAuthor one authorship string
 	 * @param toOtherAuthor the second authorship string to make the comparason with.
 	 * @return a double in the range 0 to 1 where 0 is no similarity and 1 is an exact match.
@@ -375,12 +378,13 @@ public abstract class AuthorNameComparator {
 		return AuthorNameComparator.stringSimilarity(au, au1);
 	}
 
-	/** Return a measure of case insensitive similarity between just the alphabetic portion 
+	/**
+	 * Return a measure of case insensitive similarity between just the alphabetic portion
 	 * of two authorship strings, ignoring commas, spaces, numbers, punctuation, and
 	 * parentheses, in a range of 0 (no similarity) to 1 (no difference),
-	 * using a measure of the string edit distance scaled to the length 
-	 * difference of the two strings.  
-	 * 
+	 * using a measure of the string edit distance scaled to the length
+	 * difference of the two strings.
+	 *
 	 * @param anAuthor one authorship string
 	 * @param toOtherAuthor the second authorship string to make the comparason with.
 	 * @return a double in the range 0 to 1 where 0 is no similarity and 1 is an exact match.
@@ -395,7 +399,7 @@ public abstract class AuthorNameComparator {
 	 * Return a measure of the similarity between two strings in the range of
 	 * 0 (no similarity) to 1 (exact same strings), using a measure of the
 	 * string edit distance scaled to the length differences of the two strings.
-	 * 
+	 *
 	 * @param string1 one string for comparison
 	 * @param string2 the string to compare with string1
 	 * @return a double in the range 0 to 1.

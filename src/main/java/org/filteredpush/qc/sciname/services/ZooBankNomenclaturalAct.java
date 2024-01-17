@@ -20,8 +20,10 @@ package org.filteredpush.qc.sciname.services;
 import javax.json.JsonObject;
 
 /**
- * @author mole
+ * <p>ZooBankNomenclaturalAct class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class ZooBankNomenclaturalAct {
 	
@@ -52,6 +54,11 @@ public class ZooBankNomenclaturalAct {
 	private String cleanprotonym;
 	private String nomenclaturalCode;
 	
+	/**
+	 * <p>Constructor for ZooBankNomenclaturalAct.</p>
+	 *
+	 * @param jsonTNU a {@link javax.json.JsonObject} object.
+	 */
 	public ZooBankNomenclaturalAct(JsonObject jsonTNU) { 
 		tnuuuid = jsonTNU.getString("tnuuuid");
 		originalReferenceUUID = jsonTNU.getString("OriginalReferenceUUID");
@@ -70,6 +77,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>tnuuuid</code>.</p>
+	 *
 	 * @return the tnuuuid
 	 */
 	public String getTnuuuid() {
@@ -77,6 +86,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>tnuuuid</code>.</p>
+	 *
 	 * @param tnuuuid the tnuuuid to set
 	 */
 	public void setTnuuuid(String tnuuuid) {
@@ -84,6 +95,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>originalReferenceUUID</code>.</p>
+	 *
 	 * @return the originalReferenceUUID
 	 */
 	public String getOriginalReferenceUUID() {
@@ -91,6 +104,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>originalReferenceUUID</code>.</p>
+	 *
 	 * @param originalReferenceUUID the originalReferenceUUID to set
 	 */
 	public void setOriginalReferenceUUID(String originalReferenceUUID) {
@@ -98,6 +113,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>protonymUUID</code>.</p>
+	 *
 	 * @return the protonymUUID
 	 */
 	public String getProtonymUUID() {
@@ -105,6 +122,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>protonymUUID</code>.</p>
+	 *
 	 * @param protonymUUID the protonymUUID to set
 	 */
 	public void setProtonymUUID(String protonymUUID) {
@@ -112,6 +131,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>label</code>.</p>
+	 *
 	 * @return the label
 	 */
 	public String getLabel() {
@@ -119,6 +140,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>label</code>.</p>
+	 *
 	 * @param label the label to set
 	 */
 	public void setLabel(String label) {
@@ -126,6 +149,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
 	 * @return the value
 	 */
 	public String getValue() {
@@ -133,6 +158,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>value</code>.</p>
+	 *
 	 * @param value the value to set
 	 */
 	public void setValue(String value) {
@@ -140,6 +167,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>lsid</code>.</p>
+	 *
 	 * @return the lsid
 	 */
 	public String getLsid() {
@@ -147,6 +176,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>lsid</code>.</p>
+	 *
 	 * @param lsid the lsid to set
 	 */
 	public void setLsid(String lsid) {
@@ -154,6 +185,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>parentname</code>.</p>
+	 *
 	 * @return the parentname
 	 */
 	public String getParentname() {
@@ -161,6 +194,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>parentname</code>.</p>
+	 *
 	 * @param parentname the parentname to set
 	 */
 	public void setParentname(String parentname) {
@@ -168,6 +203,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>namestring</code>.</p>
+	 *
 	 * @return the namestring
 	 */
 	public String getNamestring() {
@@ -175,6 +212,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>namestring</code>.</p>
+	 *
 	 * @param namestring the namestring to set
 	 */
 	public void setNamestring(String namestring) {
@@ -182,6 +221,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>rankgroup</code>.</p>
+	 *
 	 * @return the rankgroup
 	 */
 	public String getRankgroup() {
@@ -189,6 +230,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>rankgroup</code>.</p>
+	 *
 	 * @param rankgroup the rankgroup to set
 	 */
 	public void setRankgroup(String rankgroup) {
@@ -196,6 +239,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>usageauthors</code>.</p>
+	 *
 	 * @return the usageauthors
 	 */
 	public String getUsageauthors() {
@@ -203,6 +248,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>usageauthors</code>.</p>
+	 *
 	 * @param usageauthors the usageauthors to set
 	 */
 	public void setUsageauthors(String usageauthors) {
@@ -210,6 +257,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>taxonnameRankId</code>.</p>
+	 *
 	 * @return the taxonnameRankId
 	 */
 	public String getTaxonnameRankId() {
@@ -217,6 +266,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>taxonnameRankId</code>.</p>
+	 *
 	 * @param taxonnameRankId the taxonnameRankId to set
 	 */
 	public void setTaxonnameRankId(String taxonnameRankId) {
@@ -224,6 +275,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>parentUsageUUID</code>.</p>
+	 *
 	 * @return the parentUsageUUID
 	 */
 	public String getParentUsageUUID() {
@@ -231,6 +284,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>parentUsageUUID</code>.</p>
+	 *
 	 * @param parentUsageUUID the parentUsageUUID to set
 	 */
 	public void setParentUsageUUID(String parentUsageUUID) {
@@ -238,6 +293,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>cleanprotonym</code>.</p>
+	 *
 	 * @return the cleanprotonym
 	 */
 	public String getCleanprotonym() {
@@ -245,6 +302,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>cleanprotonym</code>.</p>
+	 *
 	 * @param cleanprotonym the cleanprotonym to set
 	 */
 	public void setCleanprotonym(String cleanprotonym) {
@@ -252,6 +311,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Getter for the field <code>nomenclaturalCode</code>.</p>
+	 *
 	 * @return the nomenclaturalCode
 	 */
 	public String getNomenclaturalCode() {
@@ -259,6 +320,8 @@ public class ZooBankNomenclaturalAct {
 	}
 
 	/**
+	 * <p>Setter for the field <code>nomenclaturalCode</code>.</p>
+	 *
 	 * @param nomenclaturalCode the nomenclaturalCode to set
 	 */
 	public void setNomenclaturalCode(String nomenclaturalCode) {

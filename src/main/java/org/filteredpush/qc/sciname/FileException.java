@@ -18,8 +18,10 @@
 package org.filteredpush.qc.sciname;
 
 /**
- * @author mole
+ * <p>FileException class.</p>
  *
+ * @author mole
+ * @version $Id: $Id
  */
 public class FileException extends Exception {
 
@@ -29,14 +31,16 @@ public class FileException extends Exception {
 	private static final long serialVersionUID = 6778115847089618803L;
 
 	/**
-	 * 
+	 * <p>Constructor for FileException.</p>
 	 */
 	public FileException() {
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @param message
+	 * <p>Constructor for FileException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
 	 */
 	public FileException(String message) {
 		super(message);
@@ -44,7 +48,9 @@ public class FileException extends Exception {
 	}
 
 	/**
-	 * @param cause
+	 * <p>Constructor for FileException.</p>
+	 *
+	 * @param cause a {@link java.lang.Throwable} object.
 	 */
 	public FileException(Throwable cause) {
 		super(cause);
@@ -52,8 +58,10 @@ public class FileException extends Exception {
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * <p>Constructor for FileException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 * @param cause a {@link java.lang.Throwable} object.
 	 */
 	public FileException(String message, Throwable cause) {
 		super(message, cause);
@@ -61,10 +69,12 @@ public class FileException extends Exception {
 	}
 
 	/**
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
+	 * <p>Constructor for FileException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object.
+	 * @param cause a {@link java.lang.Throwable} object.
+	 * @param enableSuppression a boolean.
+	 * @param writableStackTrace a boolean.
 	 */
 	public FileException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
