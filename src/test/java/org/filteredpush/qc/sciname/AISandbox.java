@@ -115,19 +115,35 @@ public class AISandbox {
 	  valid URI, invalid format, and URI with only path. The DQResponse and ComplianceValue types are 
 	  imported from the provided classes.
 	  
-	  Notes:
+	  Commentary on the response: 
+	  
+	  Notes on the generated response:
+	  
 	  (1) UnitTest framework wasn't specified, selected a different one than in use in this project.
+	  
       (2) Class for validationTaxonidComplete wasn't specified, plausible TaxonIdValidator was asserted.
+      
       (3) Structure of DQResponse wasn't understood, so ComplianceValue.INTERNAL_PREREQUISITES_NOT_MET is
       incorrectly asserted instead of its place in the DQResponse structure.
       
-      (4) Not present in the specification is that response.getResultState() should return RUN_HAS_RESULT 
+      (4) Values used as test inputs are hallucinated, looking plausible, and fitting the specifications 
+      for the inputs, and using words reflecting domain concepts (taxon), but not representing real world
+      input values.
+      
+      General problems with the generated code from assumptions not present in the specification:
+      
+      (1) Not present in the specification is that response.getResultState() should return RUN_HAS_RESULT 
       when there is a ComplianceValue.
-      (5) Not present in the specification is that response.getValue() should be null when the result state
+      
+      (2) Not present in the specification is that response.getValue() should be null when the result state
       is not RUN_HAS_RESULT.
       
-	  (6) String taxonID = "http://example.com/scope:value"; assumes that scope:value is an http URI, not 
+      Disconnects between the specification and the assumptions made in the generation of the code: 
+      
+	  (1) String taxonID = "http://example.com/scope:value"; assumes that scope:value is an http URI, not 
 	  the expected scope:value, gbif:35252, of the specification writers.
+      
+      
       
 	}
 	*/
