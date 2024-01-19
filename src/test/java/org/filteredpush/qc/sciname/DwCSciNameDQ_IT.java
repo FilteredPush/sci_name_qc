@@ -191,7 +191,8 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		// failing to parse when passed from coldfusion, but not here.
-		scientificName = "Babelomurex dalli (Emerson & D'Attilio, 1963)";
+		//scientificName = "Babelomurex dalli (Emerson & D'Attilio, 1963)";
+		scientificName = "Babelomurex dalli (W.K.Emerson & D'Attilio, 1963)";
 		result = DwCSciNameDQ.validationScientificnameFound(scientificName,defaultAuthority);
 		logger.debug(result.getComment());
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
@@ -727,7 +728,7 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxon = new Taxon();
-		taxon.setTaxonID("https://www.gbif.org/species/5726780");
+		taxon.setScientificNameID("https://www.gbif.org/species/5726780");
 		taxon.setScientificName("");
 		taxon.setScientificNameAuthorship("");
 		taxon.setKingdom("");
@@ -991,7 +992,7 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxon = new Taxon();
-		taxon.setTaxonID("urn:lsid:marinespecies.org:taxname:216786");
+		taxon.setScientificNameID("urn:lsid:marinespecies.org:taxname:216786");
 		taxon.setScientificName("");
 		taxon.setScientificNameAuthorship("");
 		taxon.setKingdom("");
@@ -1001,6 +1002,8 @@ public class DwCSciNameDQ_IT {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+// TODO: Rework taxonID to scientificNameID from here.		
 		
 		// IRMNG service client, distinct from WORMS client 
 		taxon = new Taxon();

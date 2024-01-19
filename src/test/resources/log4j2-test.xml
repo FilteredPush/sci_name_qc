@@ -9,5 +9,11 @@
     <Root level="debug">
       <AppenderRef ref="Console"/>
     </Root>
+    <Logger name="org.filteredpush.qc.sciname" level="DEBUG">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="org.gbif.nameparser.NameParserGBIF" level="WARN">
+      <AppenderRef ref="Console"/>
+    </Logger>
   </Loggers>
 </Configuration>

@@ -91,8 +91,14 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>2.0.7</version>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>2.0.10</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
             <groupId>org.apache.commons</groupId>
@@ -153,8 +159,8 @@
     </dependency>
 
 
-    <!-- HTTP client: jersey-client -->
-    <!--
+		<!-- HTTP client: jersey-client -->
+		<!--
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-client</artifactId>
@@ -177,8 +183,8 @@
     </dependency>
     -->
 
-    <!-- JSON processing: jackson -->
-    <!-- 
+		<!-- JSON processing: jackson -->
+		<!-- 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -200,8 +206,8 @@
       <version>2.13.0-rc2</version>
     </dependency>
     -->
-    <!-- Base64 encoding that works in both JVM and Android -->
-    <!--
+		<!-- Base64 encoding that works in both JVM and Android -->
+		<!--
     <dependency>
       <groupId>com.brsanthu</groupId>
       <artifactId>migbase64</artifactId>
@@ -350,7 +356,7 @@
 								<excludes>
 									<exclude>axis:axis</exclude>
 									<exclude>commons:commons-logging</exclude>
-<!--
+									<!--
 									<exclude>org.apache.axis:axis-jaxrpc</exclude>
 									<exclude>org.apache.axis:axis-saaj</exclude>
 									-->
