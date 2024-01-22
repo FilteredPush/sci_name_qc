@@ -437,4 +437,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
         return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
     }
     
+// TODO: Implementation of AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON is not up to date with current version: https://rs.tdwg.org/bdq/terms/431467d6-9b4b-48fa-a197-cd5379f5e889/2023-09-17 see line: 150
+// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 276
+// TODO: Implementation of VALIDATION_CLASSIFICATION_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-09-18 see line: 421
 }

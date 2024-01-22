@@ -3055,7 +3055,7 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 1276
-// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1694
-// TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-09-18 see line: 1873
+// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 1278
+// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1696
+// TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-09-18 see line: 1875
 }
