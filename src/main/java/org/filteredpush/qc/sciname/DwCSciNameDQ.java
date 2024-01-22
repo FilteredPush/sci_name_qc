@@ -2259,7 +2259,7 @@ public class DwCSciNameDQ {
      * Does the value of dwc:taxonRank occur in bdq:sourceAuthority?
      *
      * Provides: #162 VALIDATION_TAXONRANK_STANDARD
-     * Version: 2022-03-22
+     * Version: 2023-09-18
      *
      * @param taxonRank the provided dwc:taxonRank to evaluate
      * @param sourceAuthority the authority for taxonRank values
@@ -2267,8 +2267,8 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
     @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/7bdb13a4-8a51-4ee5-be7f-20693fdb183e/2022-03-22")
-    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; COMPLIANT if the value of dwc:taxonRank is in the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/7bdb13a4-8a51-4ee5-be7f-20693fdb183e/2023-09-18")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; COMPLIANT if the value of dwc:taxonRank is in the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]}")
     public static DQResponse<ComplianceValue> validationTaxonrankStandard(
 		   @ActedUpon("dwc:taxonRank") String taxonRank,
 		   @Parameter(name="bdq:sourceAuthority") String sourceAuthority
@@ -2279,12 +2279,13 @@ public class DwCSciNameDQ {
        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank 
        // is EMPTY; COMPLIANT if the value of dwc:taxonRank is in 
-       // the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority 
-       // default = "GBIF Vocabulary: Taxonomic Rank" [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts] 
+       // the bdq:sourceAuthority; otherwise NOT_COMPLIANT. 
        // 
 
        // Parameters. This test is defined as parameterized.
        // bdq:sourceAuthority
+       // default = "GBIF Vocabulary: Taxonomic Rank" {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} 
+       // {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]} 
 
        if (SciNameUtils.isEmpty(sourceAuthority)) { 
     	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
@@ -2369,7 +2370,7 @@ public class DwCSciNameDQ {
     * Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.
     *
     * Provides: #163 AMENDMENT_TAXONRANK_STANDARDIZED
-    * Version: 2023-03-20
+    * Version: 2023-09-18
     *
     * @param taxonRank the provided dwc:taxonRank to evaluate
     * @return DQResponse the response of type AmendmentValue to return
@@ -2377,8 +2378,8 @@ public class DwCSciNameDQ {
     */
    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
-   @ProvidesVersion("https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-03-20")
-   @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; AMENDED the value of dwc:taxonRank if it can be unambiguously matched to a term in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]")
+   @ProvidesVersion("https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-09-18")
+   @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; AMENDED the value of dwc:taxonRank if it can be unambiguously matched to a term in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]}")
    public static DQResponse<AmendmentValue> amendmentTaxonrankStandardized(
 		@ActedUpon("dwc:taxonRank") String taxonRank,
    		@Parameter(name="bdq:sourceAuthority") String sourceAuthority
@@ -2394,7 +2395,8 @@ public class DwCSciNameDQ {
 
        // Parameters. This test is defined as parameterized.
        // bdq:sourceAuthority default = "GBIF Vocabulary: Taxonomic Rank" 
-       // [https://api.gbif.org/v1/vocabularies/TaxonRank/concepts] 
+       // {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} 
+       // {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]} 
        
        if (SciNameUtils.isEmpty(sourceAuthority)) { 
     	   sourceAuthority = "https://rs.gbif.org/vocabulary/gbif/rank.xml";
@@ -2937,8 +2939,6 @@ public class DwCSciNameDQ {
 // TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1685
 // TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-09-18 see line: 1863
 // TODO: Implementation of VALIDATION_CLASSIFICATION_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-09-18 see line: 2655
-// TODO: Implementation of VALIDATION_TAXONRANK_STANDARD is not up to date with current version: https://rs.tdwg.org/bdq/terms/7bdb13a4-8a51-4ee5-be7f-20693fdb183e/2023-09-18 see line: 2260
-// TODO: Implementation of AMENDMENT_TAXONRANK_STANDARDIZED is not up to date with current version: https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-09-18 see line: 2369
     /**
      * Does the value of dwc:scientificNameID contain a complete identifier?
      *
