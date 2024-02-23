@@ -901,7 +901,6 @@ public class ApiClient {
      * @param <T> Type
      * @param call An instance of the Call object
      * @param callback ApiCallback&lt;T&gt;
-     * @param callback ApiCallback&lt;T&gt;
      */
     public <T> void executeAsync(Call call, ApiCallback<T> callback) {
         executeAsync(call, null, callback);
@@ -915,7 +914,6 @@ public class ApiClient {
      * @param call The callback to be executed when the API call finishes
      * @param callback ApiCallback
      * @param returnType Return type
-     * @param callback ApiCallback
      */
     @SuppressWarnings("unchecked")
     public <T> void executeAsync(Call call, final Type returnType, final ApiCallback<T> callback) {

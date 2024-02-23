@@ -118,7 +118,6 @@ public class SciNameSourceAuthority {
 	 *
 	 * @param authority the authority to use
 	 * @param authoritySubDataset the specific authority (e.g. GBIF checklist) to use.
-	 * @param authoritySubDataset the specific authority (e.g. GBIF checklist) to use.
 	 */
 	public SciNameSourceAuthority(EnumSciNameSourceAuthority authority, String authoritySubDataset) {
 		this.authority = authority;

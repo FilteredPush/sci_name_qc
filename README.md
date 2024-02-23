@@ -104,6 +104,11 @@ To install in your local maven repository run:
 
 	mvn install
 
+If javadoc errors in generated code are blocking a build and you want to be able to produce an artifact before addressing those, you can 
+temporarily (these will still need to be addressed before deployment) suppress them to be just warnings with:
+
+   mvn clean package -DadditionalJOption=-Xdoclint:none
+
 # Testing on and offline
 
 Test are separated into those be run offline and those that require conection to remote services (GBIF API, WoRMS aphia API).

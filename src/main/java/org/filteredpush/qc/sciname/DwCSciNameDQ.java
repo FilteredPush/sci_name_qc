@@ -350,9 +350,7 @@ public class DwCSciNameDQ {
      * @param subfamily the provided dwc:subfamily to evaluate
      * @param genus the provided dwc:genus to evaluate
      * @param subgenus the provided dwc:subgenus to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate as ActedUpon.
      * @param scientificName the provided dwc:scientificName to evaluate
-     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param genericName the provided dwc:genericName to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
@@ -760,8 +758,6 @@ public class DwCSciNameDQ {
      * @param taxonRank the provided dwc:taxonRank to evaluate
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param family the provided dwc:family to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
-     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
      * @param order the provided dwc:order to evaluate
@@ -1857,7 +1853,6 @@ public class DwCSciNameDQ {
      * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param family the provided dwc:family to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param genericName the provided dwc:genericName to evaluate
      * @param infragenericEpithet the provided dwc:infragenericEpithet to evaluate
@@ -3366,7 +3361,7 @@ public class DwCSciNameDQ {
     * Provides: VALIDATION_CLASS_NOTEMPTY
     * Version: 2024-01-28
     *
-    * @param class the provided dwc:class to evaluate as ActedUpon.
+    * @param taxonomic_class the provided dwc:class to evaluate as ActedUpon.
     * @return DQResponse the response of type ComplianceValue  to return
     */
     @Validation(label="VALIDATION_CLASS_NOTEMPTY", description="Is there a value in dwc:class?")

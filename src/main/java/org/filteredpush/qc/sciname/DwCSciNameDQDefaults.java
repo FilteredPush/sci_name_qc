@@ -129,7 +129,6 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param scientificNameID the provided dwc:scientificNameID to evaluate
-     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param genericName the provided dwc:genericName to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
      * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate
@@ -138,7 +137,6 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * @param higherClassification the provided dwc:higherClassification to evaluate
      * @param vernacularName the provided dwc:vernacularName to evaluate
      * @param taxonConceptID the provided dwc:taxonConceptID to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param originalNameUsageID the provided dwc:originalNameUsageID to evaluate
      * @param acceptedNameUsageID the provided dwc:acceptedNameUsageID to evaluate
      * @param superfamily the provided dwc:superfamily to evaluate
@@ -212,8 +210,6 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * @param taxonRank the provided dwc:taxonRank to evaluate
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param family the provided dwc:family to evaluate
-     * @param scientificNameID the provided dwc:scientificNameID to evaluate
-     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param specificEpithet the provided dwc:specificEpithet to evaluate
      * @param order the provided dwc:order to evaluate

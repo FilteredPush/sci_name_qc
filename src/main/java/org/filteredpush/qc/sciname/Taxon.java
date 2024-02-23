@@ -150,9 +150,7 @@ public class Taxon {
 	 * @param subfamily a {@link java.lang.String} object.
 	 * @param genus a {@link java.lang.String} object.
 	 * @param subgenus a {@link java.lang.String} object.
-	 * @param scientificName
-	 * @param scientificNameAuthorship
-	 * @param scientificNameID
+	 * @param scientificName a {@link java.lang.String} object.
 	 * @param scientificNameAuthorship a {@link java.lang.String} object.
 	 * @param genericName a {@link java.lang.String} object.
 	 * @param specificEpithet a {@link java.lang.String} object.
