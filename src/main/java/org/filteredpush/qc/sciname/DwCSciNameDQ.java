@@ -3056,6 +3056,463 @@ public class DwCSciNameDQ {
     }
 
 // TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 1278
+    /**
+    * Is there a value in dwc:dataGeneralizations?
+    *
+    * Provides: ISSUE_DATAGENERALIZATIONS_NOTEMPTY
+    * Version: 2023-09-18
+    *
+    * @param dataGeneralizations the provided dwc:dataGeneralizations to evaluate as ActedUpon.
+    * @return DQResponse the response of type IssueValue to return
+    */
+    @Issue(label="ISSUE_DATAGENERALIZATIONS_NOTEMPTY", description="Is there a value in dwc:dataGeneralizations?")
+    @Provides("13d5a10e-188e-40fd-a22c-dbaa87b91df2")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/13d5a10e-188e-40fd-a22c-dbaa87b91df2/2023-09-18")
+    @Specification("POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; otherwise NOT_ISSUE ")
+    public DQResponse<IssueValue> issueDatageneralizationsNotempty(
+        @ActedUpon("dwc:dataGeneralizations") String dataGeneralizations
+    ) {
+        DQResponse<IssueValue> result = new DQResponse<IssueValue>();
+
+        //TODO:  Implement specification
+        // POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; 
+        // otherwise NOT_ISSUE 
+
+        return result;
+    }
+
 // TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1696
 // TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-09-18 see line: 1875
+    /**
+    * Is there a value in dwc:kingdom?
+    *
+    * Provides: VALIDATION_KINGDOM_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param kingdom the provided dwc:kingdom to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_KINGDOM_NOTEMPTY", description="Is there a value in dwc:kingdom?")
+    @Provides("36ed36c9-b1a7-40b2-b5e2-0d012e772098")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/36ed36c9-b1a7-40b2-b5e2-0d012e772098/2024-01-28")
+    @Specification("COMPLIANT if dwc:kingdom is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationKingdomNotempty(
+        @ActedUpon("dwc:kingdom") String kingdom
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:kingdom is not EMPTY; otherwise NOT_COMPLIANT 
+        // 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:scientificNameAuthorship?
+    *
+    * Provides: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY
+    * Version: 2024-02-04
+    *
+    * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY", description="Is there a value in dwc:scientificNameAuthorship?")
+    @Provides("49f1d386-5bed-43ae-bd43-deabf7df64fc")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/49f1d386-5bed-43ae-bd43-deabf7df64fc/2024-02-04")
+    @Specification("COMPLIANT if dwc:scientificNameAuthorship is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationScientificnameauthorshipNotempty(
+        @ActedUpon("dwc:scientificNameAuthorship") String scientificNameAuthorship
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:scientificNameAuthorship is not EMPTY; 
+        // otherwise NOT_COMPLIANT 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:namePublishedInYear?
+    *
+    * Provides: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY
+    * Version: 2024-02-07
+    *
+    * @param namePublishedInYear the provided dwc:namePublishedInYear to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY", description="Is there a value in dwc:namePublishedInYear?")
+    @Provides("ff59f77d-71e9-4eb1-aac9-8bd05c50ff70")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/ff59f77d-71e9-4eb1-aac9-8bd05c50ff70/2024-02-07")
+    @Specification("COMPLIANT if dwc:namePublishedInYear is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationNamepublishedinyearNotempty(
+        @ActedUpon("dwc:namePublishedInYear") String namePublishedInYear
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:namePublishedInYear is not EMPTY; otherwise 
+        // NOT_COMPLIANT 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:vernacularName?
+    *
+    * Provides: VALIDATION_VERNACULARNAME_NOTEMPTY
+    * Version: 2024-02-04
+    *
+    * @param vernacularName the provided dwc:vernacularName to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_VERNACULARNAME_NOTEMPTY", description="Is there a value in dwc:vernacularName?")
+    @Provides("eb9b70c7-9cf6-42ea-a708-5de527211df4")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/eb9b70c7-9cf6-42ea-a708-5de527211df4/2024-02-04")
+    @Specification("COMPLIANT if dwc:vernacularName is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationVernacularnameNotempty(
+        @ActedUpon("dwc:vernacularName") String vernacularName
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:vernacularName is not EMPTY; otherwise 
+        // NOT_COMPLIANT 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:typeStatus?
+    *
+    * Provides: VALIDATION_TYPESTATUS_NOTEMPTY
+    * Version: 2024-02-04
+    *
+    * @param typeStatus the provided dwc:typeStatus to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_TYPESTATUS_NOTEMPTY", description="Is there a value in dwc:typeStatus?")
+    @Provides("cd7cae15-f255-41a3-b002-c9620c40f620")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/cd7cae15-f255-41a3-b002-c9620c40f620/2024-02-04")
+    @Specification("COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationTypestatusNotempty(
+        @ActedUpon("dwc:typeStatus") String typeStatus
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT 
+        // 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:higherClassification?
+    *
+    * Provides: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY
+    * Version: 2024-01-29
+    *
+    * @param higherClassification the provided dwc:higherClassification to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY", description="Is there a value in dwc:higherClassification?")
+    @Provides("72ed16f1-0587-4afd-a9fc-602c2f3f1975")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/72ed16f1-0587-4afd-a9fc-602c2f3f1975/2024-01-29")
+    @Specification("COMPLIANT if dwc:higherClassification is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationHigherclassificationNotempty(
+        @ActedUpon("dwc:higherClassification") String higherClassification
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:higherClassification is not EMPTY; otherwise 
+        // NOT_COMPLIANT 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:specificEpithet?
+    *
+    * Provides: VALIDATION_SPECIFICEPITHET_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param specificEpithet the provided dwc:specificEpithet to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_SPECIFICEPITHET_NOTEMPTY", description="Is there a value in dwc:specificEpithet?")
+    @Provides("cdb37443-292e-49b6-a012-4718f0d7ba64")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/cdb37443-292e-49b6-a012-4718f0d7ba64/2024-01-28")
+    @Specification("COMPLIANT if dwc:specificEpithet is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationSpecificepithetNotempty(
+        @ActedUpon("dwc:specificEpithet") String specificEpithet
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:specificEpithet is not EMPTY; otherwise 
+        // NOT_COMPLIANT 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:phylum?
+    *
+    * Provides: VALIDATION_PHYLUM_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param phylum the provided dwc:phylum to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_PHYLUM_NOTEMPTY", description="Is there a value in dwc:phylum?")
+    @Provides("19bbd107-6b14-4c82-8d3e-f7a2a67df309")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/19bbd107-6b14-4c82-8d3e-f7a2a67df309/2024-01-28")
+    @Specification("COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationPhylumNotempty(
+        @ActedUpon("dwc:phylum") String phylum
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT 
+        // 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:order?
+    *
+    * Provides: VALIDATION_ORDER_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param order the provided dwc:order to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_ORDER_NOTEMPTY", description="Is there a value in dwc:order?")
+    @Provides("d1c40fc8-d8ad-4148-82e0-b4b7ead70051")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d1c40fc8-d8ad-4148-82e0-b4b7ead70051/2024-01-28")
+    @Specification("COMPLIANT if dwc:order is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationOrderNotempty(
+        @ActedUpon("dwc:order") String order
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:order is not EMPTY; otherwise NOT_COMPLIANT 
+        // 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:family?
+    *
+    * Provides: VALIDATION_FAMILY_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param family the provided dwc:family to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_FAMILY_NOTEMPTY", description="Is there a value in dwc:family?")
+    @Provides("5bfa043c-1e19-4224-8d55-b568ced347c2")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/5bfa043c-1e19-4224-8d55-b568ced347c2/2024-01-28")
+    @Specification("COMPLIANT if dwc:family is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationFamilyNotempty(
+        @ActedUpon("dwc:family") String family
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:family is not EMPTY; otherwise NOT_COMPLIANT 
+        // 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:genus?
+    *
+    * Provides: VALIDATION_GENUS_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param genus the provided dwc:genus to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_GENUS_NOTEMPTY", description="Is there a value in dwc:genus?")
+    @Provides("d02c1ffd-af28-49bd-9c9c-e8e23a8b7258")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d02c1ffd-af28-49bd-9c9c-e8e23a8b7258/2024-01-28")
+    @Specification("COMPLIANT if the value in dwc:taxonRank is higher than genus or if dwc:genus is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationGenusNotempty(
+        @ActedUpon("dwc:genus") String genus, 
+        @Consulted("dwc:taxonRank") String taxonRank
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if the value in dwc:taxonRank is higher than genus 
+        // or if dwc:genus is not EMPTY; otherwise NOT_COMPLIANT 
+
+        return result;
+    }
+
+    /**
+    * Is there a value in dwc:class?
+    *
+    * Provides: VALIDATION_CLASS_NOTEMPTY
+    * Version: 2024-01-28
+    *
+    * @param class the provided dwc:class to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_CLASS_NOTEMPTY", description="Is there a value in dwc:class?")
+    @Provides("b854b179-3572-48b6-aab2-879e3172fd7d")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-01-28")
+    @Specification("COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT ")
+    public DQResponse<ComplianceValue> validationClassNotempty(
+        @ActedUpon("dwc:class") String class
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT 
+        // 
+
+        return result;
+    }
+
+    /**
+    * Does the value of dwc:subtribe occur at rank of Subtribe in bdq:sourceAuthority?
+    *
+    * Provides: VALIDATION_SUBTRIBE_FOUND
+    * Version: 2023-09-22
+    *
+    * @param subtribe the provided dwc:subtribe to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_SUBTRIBE_FOUND", description="Does the value of dwc:subtribe occur at rank of Subtribe in bdq:sourceAuthority?")
+    @Provides("4527c47e-61d9-4abb-af3e-f2999191be17")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/4527c47e-61d9-4abb-af3e-f2999191be17/2023-09-22")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:subtribe is EMPTY; COMPLIANT if the value of dwc:subtribe was found as a value at the rank of subtribe by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
+    public DQResponse<ComplianceValue> validationSubtribeFound(
+        @ActedUpon("dwc:subtribe") String subtribe
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:subtribe 
+        // is EMPTY; COMPLIANT if the value of dwc:subtribe was found 
+        // as a value at the rank of subtribe by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        //TODO: Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority
+
+        return result;
+    }
+
+    /**
+    * Does the value of dwc:tribe occur at rank of Tribe in bdq:sourceAuthority?
+    *
+    * Provides: VALIDATION_TRIBE_FOUND
+    * Version: 2023-09-22
+    *
+    * @param tribe the provided dwc:tribe to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_TRIBE_FOUND", description="Does the value of dwc:tribe occur at rank of Tribe in bdq:sourceAuthority?")
+    @Provides("8c15f351-26d5-4edd-b38e-07541dc64fd0")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/8c15f351-26d5-4edd-b38e-07541dc64fd0/2023-09-22")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe is EMPTY; COMPLIANT if the value of dwc:tribe was found as a value at the rank of tribe by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
+    public DQResponse<ComplianceValue> validationTribeFound(
+        @ActedUpon("dwc:tribe") String tribe
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
+        // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
+        // as a value at the rank of tribe by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        //TODO: Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority
+
+        return result;
+    }
+
+    /**
+    * Does the value of dwc:superfamily occur at rank of Superfamily in bdq:sourceAuthority?
+    *
+    * Provides: VALIDATION_SUPERFAMILY_FOUND
+    * Version: 2023-09-22
+    *
+    * @param superfamily the provided dwc:superfamily to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_SUPERFAMILY_FOUND", description="Does the value of dwc:superfamily occur at rank of Superfamily in bdq:sourceAuthority?")
+    @Provides("2a45e0e9-446c-429f-992d-c3ec1d29eebb")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2a45e0e9-446c-429f-992d-c3ec1d29eebb/2023-09-22")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:superfamily is EMPTY; COMPLIANT if the value of dwc:superfamily was found as a value at the rank of superfamily by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
+    public DQResponse<ComplianceValue> validationSuperfamilyFound(
+        @ActedUpon("dwc:superfamily") String superfamily
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:superfamily 
+        // is EMPTY; COMPLIANT if the value of dwc:superfamily was 
+        // found as a value at the rank of superfamily by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
+        // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        //TODO: Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority
+
+        return result;
+    }
+
+// TODO: Implementation of VALIDATION_TAXONID_COMPLETE is not up to date with current version: https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2023-09-18 see line: 1994
+    /**
+    * The value of dwc:namePublishedInYear is between 1753-01-01 date and the current date, inclusive
+    *
+    * Provides: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE
+    * Version: 2024-02-15
+    *
+    * @param namePublishedInYear the provided dwc:namePublishedInYear to evaluate as ActedUpon.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE", description="The value of dwc:namePublishedInYear is between 1753-01-01 date and the current date, inclusive")
+    @Provides("399ef91d-425c-46f2-a6df-8a0fe4c3e86e")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/399ef91d-425c-46f2-a6df-8a0fe4c3e86e/2024-02-15")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:namePublishedInYear is EMPTY;  COMPLIANT if the value of dwc:namePublishedInYear is interpretable as a year between 1753 and the current year, inclusive ")
+    public DQResponse<ComplianceValue> validationNamepublishedinyearInrange(
+        @ActedUpon("dwc:namePublishedInYear") String namePublishedInYear
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        //TODO:  Implement specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:namePublishedInYear 
+        // is EMPTY; COMPLIANT if the value of dwc:namePublishedInYear 
+        // is interpretable as a year between 1753 and the current 
+        // year, inclusive 
+
+        return result;
+    }
+
 }

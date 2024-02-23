@@ -12,7 +12,7 @@
 
 <http://rs.tdwg.org/bdq/ffdq/Specification> rdfbeans:bindingClass "org.datakurator.ffdq.model.Specification" .
 
-<urn:uuid:2ca61387-0603-4ee7-8472-686bc294a5c6> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f> ;
+<urn:uuid:0b8d8de2-9000-45b5-a77e-769dc17d8c8e> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -36,80 +36,80 @@
 <rt:SingleRecord> a <http://rs.tdwg.org/bdq/ffdq/ResourceType> ;
 	rdfs:label "SingleRecord" .
 
-<urn:uuid:7565ca99-746f-4697-9f46-447ce9d157ff> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:81249601-50be-484b-9527-173b8a7b2b63> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:7ef2ce7d-f94d-4fe6-83be-43e3aa46c110> ;
+<urn:uuid:01a94ca7-5beb-4ea5-bd35-caae36672823> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/phylum> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:5b5b783e-7fc4-4364-8f9c-41db8126cb64> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:d11f7953-1364-4f77-976e-be47cff6cdd7> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:758e2d37-520d-4ad0-b518-c5133ecd1e6f> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:d11f7953-1364-4f77-976e-be47cff6cdd7> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:01a94ca7-5beb-4ea5-bd35-caae36672823> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:758e2d37-520d-4ad0-b518-c5133ecd1e6f> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?" ;
 	rdfs:label "Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:7ef2ce7d-f94d-4fe6-83be-43e3aa46c110> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Conformance: found" .
-
-<urn:uuid:81249601-50be-484b-9527-173b8a7b2b63> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/phylum> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:b270d136-fa21-48ce-bfd5-a41964f3b894> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:7565ca99-746f-4697-9f46-447ce9d157ff> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
 <urn:uuid:3667556d-d8f5-454c-922b-af8af38f613c> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:family is EMPTY; COMPLIANT if the value of dwc:family was found as a value at the rank of Family by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_FAMILY_FOUND" .
 
-<urn:uuid:7e0a5ee8-9235-4cb7-93b7-02a067b23ec2> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3667556d-d8f5-454c-922b-af8af38f613c> ;
+<urn:uuid:597d056f-ab70-4a48-ad30-338092ee38cb> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3667556d-d8f5-454c-922b-af8af38f613c> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:789ca650-e7e8-43bb-83d7-9a7f3f5d1f49> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:53a840bc-576e-4c3f-8224-d39ad74e3d1f> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:db7548e2-922a-4d49-9b7b-c4b04e79f596> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3667556d-d8f5-454c-922b-af8af38f613c> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:9a718a6d-57c3-4d62-ba89-78fc22308e27> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Conformance: found" .
 
-<urn:uuid:8141afff-cd29-4e80-beba-ef710d762238> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:dc61c663-7cc0-41e3-8b86-e778cb81607d> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:789ca650-e7e8-43bb-83d7-9a7f3f5d1f49> ;
+<urn:uuid:db7548e2-922a-4d49-9b7b-c4b04e79f596> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:de8643f6-3635-4d32-965d-a9d66892608f> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:9a718a6d-57c3-4d62-ba89-78fc22308e27> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?" ;
 	rdfs:label "Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:c7fcbfaa-045e-4781-85ac-074eea3513c6> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:8141afff-cd29-4e80-beba-ef710d762238> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3667556d-d8f5-454c-922b-af8af38f613c> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
-<urn:uuid:dc61c663-7cc0-41e3-8b86-e778cb81607d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/family> ;
+<urn:uuid:de8643f6-3635-4d32-965d-a9d66892608f> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/family> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:38e81e5a-fcd6-4909-a237-700fdf981b72> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3f335517-f442-4b98-b149-1e87ff16de45> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
 <urn:uuid:3f335517-f442-4b98-b149-1e87ff16de45> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY; COMPLIANT if there is a match of the contents of dwc:scientificName with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_SCIENTIFICNAME_FOUND" .
 
-<urn:uuid:a8b4054a-5a57-480d-b58a-262ced9c3607> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3f335517-f442-4b98-b149-1e87ff16de45> ;
-	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
-	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
-
-<urn:uuid:1743602f-6472-4d5b-8caa-2f23ae96c91e> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:c052d4f0-8955-44e4-8ccd-2b85da05875a> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3f335517-f442-4b98-b149-1e87ff16de45> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
-<urn:uuid:5d97e767-63e7-41f9-8f0f-24f1302bb37c> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificName> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:be2c4d17-0333-46c4-876e-c1ddf8dd6410> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Conformance: found" .
-
-<urn:uuid:c052d4f0-8955-44e4-8ccd-2b85da05875a> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:5d97e767-63e7-41f9-8f0f-24f1302bb37c> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:be2c4d17-0333-46c4-876e-c1ddf8dd6410> ;
+<urn:uuid:8a9f215b-ab40-4084-915a-f15918080b27> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:bc8a1d1e-af50-46f0-a210-79cbc849642d> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:bd854be1-f279-4194-ba8c-7f96ed7ac7c1> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?" ;
 	rdfs:label "Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:15417fae-e424-4c9a-b458-17da2f145928> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889> ;
-	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
-	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+<urn:uuid:bc8a1d1e-af50-46f0-a210-79cbc849642d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificName> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:bd854be1-f279-4194-ba8c-7f96ed7ac7c1> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:e7803db1-52b8-413e-8d42-12c01116d97f> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:8a9f215b-ab40-4084-915a-f15918080b27> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:3f335517-f442-4b98-b149-1e87ff16de45> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
 <urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available;  INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is not EMPTY or if all of dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, and dwc:cultivarEpithet are EMPTY, FILLED_IN the value of dwc:scientificNameID for an unambiguously resolved single taxon record in the bdq:sourceAuthority through (1) the value of dwc:scientificName or (2) if dwc:scientificName is EMPTY through values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship and dwc:cultivarEpithet, or (3) if ambiguity produced by multiple matches in (1) or (2) can be disambiguated to a single Taxon using the values of dwc:subtribe, dwc:tribe, dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:taxonID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID, dwc:taxonomicRank, and dwc:vernacularName; otherwise NOT_AMENDED bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON" .
+
+<urn:uuid:a92e57f9-317d-4813-8b34-ac5aa68380a4> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
 <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> rdfbeans:bindingClass "org.datakurator.ffdq.model.solutions.AmendmentMethod" .
 
@@ -119,53 +119,53 @@
 
 <http://rs.tdwg.org/bdq/ffdq/Enhancement> rdfbeans:bindingClass "org.datakurator.ffdq.model.Enhancement" .
 
-<urn:uuid:07278ca5-22c5-4ec7-b312-f25b8b61b98f> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
+<urn:uuid:20a60fca-cb8e-4e36-9c97-1696d45b76ff> a <http://rs.tdwg.org/bdq/ffdq/Enhancement> ;
+	rdfs:label "Conformance: taxon" .
+
+<urn:uuid:2c4ed86f-cec6-4bb1-bd82-afc45d435258> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
 
-<urn:uuid:132f2762-5c08-47e3-ad73-4ce7c8459c38> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:07278ca5-22c5-4ec7-b312-f25b8b61b98f> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasConsultedInformationElement> <urn:uuid:2030e341-0de2-4b48-8a45-5eb5862c8545> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasEnhancement> <urn:uuid:f9985956-31e4-4101-b79c-e683db84fcc5> ;
+<urn:uuid:7b6ca549-9b26-420f-918c-3f59f9a269ef> <http://rs.tdwg.org/bdq/ffdq/enhancementInContext> <urn:uuid:e5d6eb77-e5bd-4420-9b1c-9e04dbb46c70> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889> ;
+	a <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> .
+
+<urn:uuid:cb4097ae-ef48-4c8e-8987-cf164ef30204> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/acceptedNameUsageID> , <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/cultivarEpithet> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/higherClassification> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/originalNameUsageID> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/scientificNameAuthorship> , <http://rs.tdwg.org/dwc/terms/specificEpithet> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subgenus> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/taxonConceptID> , <http://rs.tdwg.org/dwc/terms/taxonID> , <http://rs.tdwg.org/dwc/terms/taxonRank> , <http://rs.tdwg.org/dwc/terms/tribe> , <http://rs.tdwg.org/dwc/terms/vernacularName> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Consulted> .
+
+<urn:uuid:e5d6eb77-e5bd-4420-9b1c-9e04dbb46c70> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:2c4ed86f-cec6-4bb1-bd82-afc45d435258> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasConsultedInformationElement> <urn:uuid:cb4097ae-ef48-4c8e-8987-cf164ef30204> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasEnhancement> <urn:uuid:20a60fca-cb8e-4e36-9c97-1696d45b76ff> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedEnhancement> ;
 	rdfs:comment "Propose amendment to the value of dwc:scientificNameID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms." ;
 	rdfs:label "Propose amendment to the value of dwc:scientificNameID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms.Amedment for SingleRecord" .
 
-<urn:uuid:2030e341-0de2-4b48-8a45-5eb5862c8545> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/acceptedNameUsageID> , <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/cultivarEpithet> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/higherClassification> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/originalNameUsageID> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/scientificNameAuthorship> , <http://rs.tdwg.org/dwc/terms/specificEpithet> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subgenus> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/taxonConceptID> , <http://rs.tdwg.org/dwc/terms/taxonID> , <http://rs.tdwg.org/dwc/terms/taxonRank> , <http://rs.tdwg.org/dwc/terms/tribe> , <http://rs.tdwg.org/dwc/terms/vernacularName> ;
-	a <http://rs.tdwg.org/bdq/ffdq/Consulted> .
-
-<urn:uuid:58a0a313-6d45-45b0-ac46-546ceb68b39a> <http://rs.tdwg.org/bdq/ffdq/enhancementInContext> <urn:uuid:132f2762-5c08-47e3-ad73-4ce7c8459c38> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:431467d6-9b4b-48fa-a197-cd5379f5e889> ;
-	a <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> .
-
-<urn:uuid:f9985956-31e4-4101-b79c-e683db84fcc5> a <http://rs.tdwg.org/bdq/ffdq/Enhancement> ;
-	rdfs:label "Conformance: taxon" .
-
 <urn:uuid:4c09f127-737b-4686-82a0-7c8e30841590> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of dwc:scientificNameID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:scientificNameID references a single taxon record in the bdq:sourceAuthority, or (2) dwc:scientificNameID is empty and dwc:scientificName references a single taxon record in the bdq:sourceAuthority, or (3) if dwc:scientificName and dwc:scientificNameID are EMPTY and if a combination of the values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, or (4) if ambiguity produced by multiple matches in (2) or (3) can be disambiguated to a unique Taxon using the values of dwc:tribe, dwc:subtribe, dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:taxonID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_TAXON_UNAMBIGUOUS" .
 
-<urn:uuid:ae508f7c-2f9f-49d4-bef9-8a4a95bc1d2c> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:4c09f127-737b-4686-82a0-7c8e30841590> ;
+<urn:uuid:5594431b-1c57-48a2-8194-c7c2137b780b> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:4c09f127-737b-4686-82a0-7c8e30841590> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:26bfde56-398e-4e3a-a888-af8170800df4> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:762afb1f-0a06-4db2-b643-330673371651> ;
+<urn:uuid:3a783431-1e6d-4737-9bdc-2847701bc661> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:aa335ae5-ea02-447d-ad85-665892d90c24> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:4c09f127-737b-4686-82a0-7c8e30841590> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:61eb910b-a236-444f-94e4-becd278c302e> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:569a8ae4-cb7c-4752-9a94-4bd2dfdaf46e> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Conformance: unambiguous" .
 
-<urn:uuid:762afb1f-0a06-4db2-b643-330673371651> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:ae379ece-4426-4bbe-9db2-02db14abcdf0> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:61eb910b-a236-444f-94e4-becd278c302e> ;
+<urn:uuid:a0c23b1a-4bab-48c8-96c7-5eada93e2ae5> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/acceptedNameUsageID> , <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/cultivarEpithet> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/higherClassification> , <http://rs.tdwg.org/dwc/terms/infragenericEpithet> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/originalNameUsageID> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/scientificNameAuthorship> , <http://rs.tdwg.org/dwc/terms/scientificNameID> , <http://rs.tdwg.org/dwc/terms/specificEpithet> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subgenus> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/taxonConceptID> , <http://rs.tdwg.org/dwc/terms/taxonID> , <http://rs.tdwg.org/dwc/terms/taxonRank> , <http://rs.tdwg.org/dwc/terms/tribe> , <http://rs.tdwg.org/dwc/terms/vernacularName> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:aa335ae5-ea02-447d-ad85-665892d90c24> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:a0c23b1a-4bab-48c8-96c7-5eada93e2ae5> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:569a8ae4-cb7c-4752-9a94-4bd2dfdaf46e> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?" ;
 	rdfs:label "Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms? Validation for SingleRecord" .
 
-<urn:uuid:ae379ece-4426-4bbe-9db2-02db14abcdf0> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/acceptedNameUsageID> , <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/cultivarEpithet> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/higherClassification> , <http://rs.tdwg.org/dwc/terms/infragenericEpithet> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/originalNameUsageID> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/scientificNameAuthorship> , <http://rs.tdwg.org/dwc/terms/scientificNameID> , <http://rs.tdwg.org/dwc/terms/specificEpithet> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subgenus> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/taxonConceptID> , <http://rs.tdwg.org/dwc/terms/taxonID> , <http://rs.tdwg.org/dwc/terms/taxonRank> , <http://rs.tdwg.org/dwc/terms/tribe> , <http://rs.tdwg.org/dwc/terms/vernacularName> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:051ae29d-152c-42ff-a3f2-7162ff5d32b7> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f01fb3f9-2f7e-418b-9f51-adf50f202aea> ;
+<urn:uuid:db8e52ba-a61c-46ca-be6a-0682714c12fd> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f01fb3f9-2f7e-418b-9f51-adf50f202aea> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -173,32 +173,32 @@
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY, the value of dwc:scientificNameID is ambiguous or dwc:scientificName was not EMPTY; FILLED_IN the value of dwc:scientificName if the value of scientificNameID could be unambiguously interpreted as a value in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID" .
 
-<urn:uuid:5affef3d-96e5-4be6-a429-72f20943b9c7> <http://rs.tdwg.org/bdq/ffdq/enhancementInContext> <urn:uuid:ab60f618-071b-49f2-9510-591562d2d0ff> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f01fb3f9-2f7e-418b-9f51-adf50f202aea> ;
-	a <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> .
-
-<urn:uuid:906b43f7-ecca-418e-a152-eef44f634cb4> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificName> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:a768d1b2-d0a5-45dd-92f3-07ede794f358> a <http://rs.tdwg.org/bdq/ffdq/Enhancement> ;
-	rdfs:label "Completeness: taxonid" .
-
-<urn:uuid:ab60f618-071b-49f2-9510-591562d2d0ff> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:906b43f7-ecca-418e-a152-eef44f634cb4> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasConsultedInformationElement> <urn:uuid:b011b13c-d0a5-46c8-b366-3b8f060d52a3> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasEnhancement> <urn:uuid:a768d1b2-d0a5-45dd-92f3-07ede794f358> ;
+<urn:uuid:0f80c11e-3e99-43e1-8bda-480bc5597ac0> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:85a2808f-e3aa-4923-a3b5-36ad80a580e3> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasConsultedInformationElement> <urn:uuid:d72fe062-d6c6-402a-bb56-8a0a1a4f02fb> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasEnhancement> <urn:uuid:ecd62dbc-b699-44d4-b90d-b9fd85409253> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedEnhancement> ;
 	rdfs:comment "Propose an amendment to the value of dwc:scientificName using the dwc:scientificNameID value from bdq:sourceAuthority." ;
 	rdfs:label "Propose an amendment to the value of dwc:scientificName using the dwc:scientificNameID value from bdq:sourceAuthority.Amedment for SingleRecord" .
 
-<urn:uuid:b011b13c-d0a5-46c8-b366-3b8f060d52a3> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
+<urn:uuid:2ce98f14-7fa9-46e9-9b3e-892efcb795dd> <http://rs.tdwg.org/bdq/ffdq/enhancementInContext> <urn:uuid:0f80c11e-3e99-43e1-8bda-480bc5597ac0> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f01fb3f9-2f7e-418b-9f51-adf50f202aea> ;
+	a <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> .
+
+<urn:uuid:85a2808f-e3aa-4923-a3b5-36ad80a580e3> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificName> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:d72fe062-d6c6-402a-bb56-8a0a1a4f02fb> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Consulted> .
+
+<urn:uuid:ecd62dbc-b699-44d4-b90d-b9fd85409253> a <http://rs.tdwg.org/bdq/ffdq/Enhancement> ;
+	rdfs:label "Completeness: taxonid" .
 
 <urn:uuid:13d5a10e-188e-40fd-a22c-dbaa87b91df2> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; otherwise NOT_ISSUE " ;
 	rdfs:label "ISSUE_DATAGENERALIZATIONS_NOTEMPTY" .
 
-<urn:uuid:97709951-183d-499c-b659-30b53fcff6ef> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:13d5a10e-188e-40fd-a22c-dbaa87b91df2> ;
+<urn:uuid:6feaae76-9b20-4097-9312-88a67dc47bc4> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:13d5a10e-188e-40fd-a22c-dbaa87b91df2> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -208,43 +208,43 @@
 
 <http://rs.tdwg.org/bdq/ffdq/ProblemMethod> rdfbeans:bindingClass "org.datakurator.ffdq.model.solutions.ProblemMethod" .
 
-<urn:uuid:151248a7-0305-41d7-b460-81ff176c2634> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:13d5a10e-188e-40fd-a22c-dbaa87b91df2> ;
-	<http://rs.tdwg.org/bdq/ffdq/issueInContext> <urn:uuid:4e31c16a-e4e6-4790-b60b-f99decf3d86e> ;
+<urn:uuid:049f72c0-5f0d-4999-83ed-364e509fe056> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:13d5a10e-188e-40fd-a22c-dbaa87b91df2> ;
+	<http://rs.tdwg.org/bdq/ffdq/issueInContext> <urn:uuid:72807c34-26ed-4508-a4b7-2913fd313007> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ProblemMethod> .
 
-<urn:uuid:4e31c16a-e4e6-4790-b60b-f99decf3d86e> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:66652a57-371d-4d1a-acad-c34c97f9a20e> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasIssue> <urn:uuid:cf1d50bc-bacf-4d45-abdb-f9b421f82df1> ;
+<urn:uuid:10c3989a-db88-4afd-96bf-ef8fe7603316> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/dataGeneralizations> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:72807c34-26ed-4508-a4b7-2913fd313007> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:10c3989a-db88-4afd-96bf-ef8fe7603316> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasIssue> <urn:uuid:a73ccdfc-70c9-49bf-9ff5-193f2ed03c00> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedIssue> ;
 	rdfs:comment "Is there a value in dwc:dataGeneralizations?" ;
 	rdfs:label "Is there a value in dwc:dataGeneralizations? Issue for SingleRecord" .
 
-<urn:uuid:66652a57-371d-4d1a-acad-c34c97f9a20e> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/dataGeneralizations> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:cf1d50bc-bacf-4d45-abdb-f9b421f82df1> a <http://rs.tdwg.org/bdq/ffdq/Issue> ;
+<urn:uuid:a73ccdfc-70c9-49bf-9ff5-193f2ed03c00> a <http://rs.tdwg.org/bdq/ffdq/Issue> ;
 	rdfs:label "Resolution: notempty" .
 
 <urn:uuid:2cd6884e-3d14-4476-94f7-1191cfff309b> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:class is EMPTY; COMPLIANT if the value of dwc:class was found as a value at the rank of Class in the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_CLASS_FOUND" .
 
-<urn:uuid:7da755c6-aa1a-4b07-af6d-e9b7fd3f3d3f> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2cd6884e-3d14-4476-94f7-1191cfff309b> ;
+<urn:uuid:56c43153-ffb8-48b9-8303-b07119f167a1> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2cd6884e-3d14-4476-94f7-1191cfff309b> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:429857f7-2e52-4280-8458-f042509e0497> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:dad61829-a312-46bf-9383-5dd5e09d8856> ;
+<urn:uuid:3bbd6c20-7d41-4b36-8c90-2aa27f56d0a2> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:ceef4249-c39d-4d22-ba33-8f58eea3ae45> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2cd6884e-3d14-4476-94f7-1191cfff309b> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:51661fef-f398-45b4-b47b-e06daec59fd1> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/class> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:bbd3b9a5-643e-4b74-8abd-cff8c5e86e91> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:3f1a6895-3740-4703-96ed-7463e9342088> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Conformance: found" .
 
-<urn:uuid:dad61829-a312-46bf-9383-5dd5e09d8856> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:51661fef-f398-45b4-b47b-e06daec59fd1> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:bbd3b9a5-643e-4b74-8abd-cff8c5e86e91> ;
+<urn:uuid:5ec61758-e3f8-463a-ace4-172b95244a21> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/class> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:ceef4249-c39d-4d22-ba33-8f58eea3ae45> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:5ec61758-e3f8-463a-ace4-172b95244a21> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:3f1a6895-3740-4703-96ed-7463e9342088> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?" ;
@@ -254,28 +254,28 @@
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:kingdom is EMPTY; COMPLIANT if the value of dwc:kingdom was found as a value at the rank of kingdom by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_KINGDOM_FOUND" .
 
-<urn:uuid:ec8415b0-2660-4e30-a260-6ac2386aca73> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:125b5493-052d-4a0d-a3e1-ed5bf792689e> ;
+<urn:uuid:422ec63e-7370-458c-b71b-41a2758d6c69> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:125b5493-052d-4a0d-a3e1-ed5bf792689e> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:07738844-57df-4c51-a60b-b33a1dd6be0a> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/kingdom> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:aca62728-c6e7-45e3-a4ab-f2d3495f8bea> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:2ae93a0b-521f-4ecf-96de-833eecc8601d> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Conformance: found" .
 
-<urn:uuid:b1e7a622-92e5-4ddc-9fb6-f34e61309380> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:07738844-57df-4c51-a60b-b33a1dd6be0a> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:aca62728-c6e7-45e3-a4ab-f2d3495f8bea> ;
+<urn:uuid:4dd9eac2-9e76-44d9-aa64-ba5cf2939e2d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/kingdom> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:866fa6da-89c4-4449-b68d-967d8d1fcce7> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:4dd9eac2-9e76-44d9-aa64-ba5cf2939e2d> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:2ae93a0b-521f-4ecf-96de-833eecc8601d> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?" ;
 	rdfs:label "Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:bba1fa15-8d3d-46f6-a420-6d96bd27855e> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:b1e7a622-92e5-4ddc-9fb6-f34e61309380> ;
+<urn:uuid:ec9f071d-3719-4b2c-871f-6b4e6a8fdd75> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:866fa6da-89c4-4449-b68d-967d8d1fcce7> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:125b5493-052d-4a0d-a3e1-ed5bf792689e> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:090632d4-1480-438f-94ce-f1d221bac468> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7c4b9498-a8d9-4ebb-85f1-9f200c788595> ;
+<urn:uuid:0c6d23c5-e83f-4364-bde7-46d1205aadff> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7c4b9498-a8d9-4ebb-85f1-9f200c788595> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -283,24 +283,24 @@
 	rdfs:comment "COMPLIANT if dwc:scientificName is not EMPTY; otherwise NOT_COMPLIANT " ;
 	rdfs:label "VALIDATION_SCIENTIFICNAME_NOTEMPTY" .
 
-<urn:uuid:549c41a8-a022-40fb-b12b-cc58efb57c9a> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificName> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:6bf89095-9808-4417-bc79-8b681fc09c18> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:6fb2bf06-0e61-4639-8794-cbe885153b2d> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7c4b9498-a8d9-4ebb-85f1-9f200c788595> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
-<urn:uuid:6fb2bf06-0e61-4639-8794-cbe885153b2d> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:549c41a8-a022-40fb-b12b-cc58efb57c9a> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:7ede0c4f-187c-4a2d-ab73-a96e91873b12> ;
+<urn:uuid:0ae83570-8a1b-4857-9fff-d5555b4eca6b> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:277b8166-3fef-4702-980f-df2e42c3d6bb> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:2cc10667-1b09-490e-b530-bdd318a45340> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is there a value in dwc:scientificName?" ;
 	rdfs:label "Is there a value in dwc:scientificName? Validation for SingleRecord" .
 
-<urn:uuid:7ede0c4f-187c-4a2d-ab73-a96e91873b12> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:277b8166-3fef-4702-980f-df2e42c3d6bb> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificName> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:2cc10667-1b09-490e-b530-bdd318a45340> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Completeness: notempty" .
 
-<urn:uuid:10bbdf8f-484d-4a8e-b2fa-e42afdcdf553> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:81cc974d-43cc-4c0f-a5e0-afa23b455aa3> ;
+<urn:uuid:31e534e8-b52d-4531-9352-57b58b90906a> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:0ae83570-8a1b-4857-9fff-d5555b4eca6b> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7c4b9498-a8d9-4ebb-85f1-9f200c788595> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:4a782b05-dc85-4d1f-b2a2-186210ce22f6> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:81cc974d-43cc-4c0f-a5e0-afa23b455aa3> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -308,74 +308,74 @@
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:order is EMPTY; COMPLIANT if the value of dwc:order was found as a value at the rank of Order by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_ORDER_FOUND" .
 
-<urn:uuid:3c096959-921c-411a-bf8e-f5d54d01699e> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/order> ;
+<urn:uuid:54bb6922-f296-4a58-befb-0f1623f1dbc5> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:d44d5f3b-c39c-4f94-83d4-def4bdeab169> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:81cc974d-43cc-4c0f-a5e0-afa23b455aa3> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:90568c58-da3b-4c9b-8f7c-f87204764046> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:c768c563-5c18-497d-a424-58b7e0d80467> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/order> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
 
-<urn:uuid:5636e3b5-b39a-494e-b047-b19c299c4cc7> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:3c096959-921c-411a-bf8e-f5d54d01699e> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:6d1555a6-17a9-465a-8b31-a8eb729e1d30> ;
+<urn:uuid:d44d5f3b-c39c-4f94-83d4-def4bdeab169> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:c768c563-5c18-497d-a424-58b7e0d80467> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:90568c58-da3b-4c9b-8f7c-f87204764046> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?" ;
 	rdfs:label "Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:6d1555a6-17a9-465a-8b31-a8eb729e1d30> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Conformance: found" .
-
-<urn:uuid:cebb52d2-a1d7-4117-838d-a229499dc270> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:5636e3b5-b39a-494e-b047-b19c299c4cc7> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:81cc974d-43cc-4c0f-a5e0-afa23b455aa3> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
 <urn:uuid:17f03f1f-f74d-40c0-8071-2927cfc9487b> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY, or all of dwc:genericName, dwc:specificEpithet and dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, as represented in dwc:scientificName, is consistent with NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. " ;
 	rdfs:label "VALIDATION_POLYNOMIAL_CONSISTENT" .
 
-<urn:uuid:4f58e647-8e35-4207-86f3-e469230c5f35> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:17f03f1f-f74d-40c0-8071-2927cfc9487b> ;
+<urn:uuid:cddf1c7c-cecc-43b2-90b0-5c1b54707be9> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:17f03f1f-f74d-40c0-8071-2927cfc9487b> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:4a098f10-4117-429a-848b-e101c81742b0> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:625ed1ef-0ae3-4eeb-946c-f0a1c1120b55> ;
+<urn:uuid:4479d83a-af80-49a9-bac7-cbd11e8ce40f> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:6ef066bf-712a-4c4f-a9a9-81b62d9b5a41> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:17f03f1f-f74d-40c0-8071-2927cfc9487b> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:625ed1ef-0ae3-4eeb-946c-f0a1c1120b55> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:c1a0e237-dc8c-446a-a3c2-5394f17da0f3> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:dfe28c78-572b-46a0-abeb-6d9b5b7590ce> ;
+<urn:uuid:4ea2af78-5369-4c79-bcf2-c235fdf356a3> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/specificEpithet> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:6ef066bf-712a-4c4f-a9a9-81b62d9b5a41> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:4ea2af78-5369-4c79-bcf2-c235fdf356a3> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:e9aabaf4-fb96-4ddf-8927-d82d69dca51d> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?" ;
 	rdfs:label "Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet? Validation for SingleRecord" .
 
-<urn:uuid:c1a0e237-dc8c-446a-a3c2-5394f17da0f3> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/specificEpithet> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:dfe28c78-572b-46a0-abeb-6d9b5b7590ce> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:e9aabaf4-fb96-4ddf-8927-d82d69dca51d> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Consistency: consistent" .
 
 <urn:uuid:06851339-843f-4a43-8422-4e61b9a00e75> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "COMPLIANT if at least one term needed to determine the taxon of the entity exists and is not EMPTY; otherwise NOT_COMPLIANT " ;
 	rdfs:label "VALIDATION_TAXON_NOTEMPTY" .
 
-<urn:uuid:3dfbadc0-ff1f-43e4-b81e-0d8bcfa9a4f4> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:06851339-843f-4a43-8422-4e61b9a00e75> ;
+<urn:uuid:b37ec5cd-41fa-495c-9583-cf6df672bdd6> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:06851339-843f-4a43-8422-4e61b9a00e75> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:1849e23b-d2e3-4009-ac66-3e029b066cba> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/acceptedNameUsageID> , <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/cultivarEpithet> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/higherClassification> , <http://rs.tdwg.org/dwc/terms/infragenericEpithet> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/originalNameUsageID> , <http://rs.tdwg.org/dwc/terms/parentNameUsageID> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/scientificNameID> , <http://rs.tdwg.org/dwc/terms/specificEpithet> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subgenus> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/taxonConceptID> , <http://rs.tdwg.org/dwc/terms/taxonID> , <http://rs.tdwg.org/dwc/terms/tribe> , <http://rs.tdwg.org/dwc/terms/vernacularName> ;
+<urn:uuid:318e1041-a826-4c3a-9620-61bf34d6f2eb> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:57ed9747-7cd4-4987-a864-1c06510e5f23> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/acceptedNameUsageID> , <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/cultivarEpithet> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genericName> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/higherClassification> , <http://rs.tdwg.org/dwc/terms/infragenericEpithet> , <http://rs.tdwg.org/dwc/terms/infraspecificEpithet> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/originalNameUsageID> , <http://rs.tdwg.org/dwc/terms/parentNameUsageID> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/scientificName> , <http://rs.tdwg.org/dwc/terms/scientificNameID> , <http://rs.tdwg.org/dwc/terms/specificEpithet> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subgenus> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/taxonConceptID> , <http://rs.tdwg.org/dwc/terms/taxonID> , <http://rs.tdwg.org/dwc/terms/tribe> , <http://rs.tdwg.org/dwc/terms/vernacularName> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
 
-<urn:uuid:55a9b537-cb06-4734-8432-966eef9da337> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:6bd2fbec-5e68-4066-b227-0b21367c84a6> ;
+<urn:uuid:666c5e35-5bb9-46b9-8463-26d7bf2af77c> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:91ff9d54-9f7e-47a2-87b5-ba0a56eddc7c> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:06851339-843f-4a43-8422-4e61b9a00e75> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:5b8b6377-005c-4e25-a024-58761afb5f16> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Completeness: notempty" .
-
-<urn:uuid:6bd2fbec-5e68-4066-b227-0b21367c84a6> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:1849e23b-d2e3-4009-ac66-3e029b066cba> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:5b8b6377-005c-4e25-a024-58761afb5f16> ;
+<urn:uuid:91ff9d54-9f7e-47a2-87b5-ba0a56eddc7c> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:57ed9747-7cd4-4987-a864-1c06510e5f23> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:318e1041-a826-4c3a-9620-61bf34d6f2eb> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is there a value in any of the terms needed to determine that the taxon exists?" ;
 	rdfs:label "Is there a value in any of the terms needed to determine that the taxon exists? Validation for SingleRecord" .
 
-<urn:uuid:21a8152c-8512-41eb-bc38-b3117db09fc8> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:401bf207-9a55-4dff-88a5-abcd58ad97fa> ;
+<urn:uuid:1a1bff19-7ec3-42ea-bb44-d9578dfd6116> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:401bf207-9a55-4dff-88a5-abcd58ad97fa> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -383,24 +383,24 @@
 	rdfs:comment "COMPLIANT if dwc:scientificNameID is not EMPTY; otherwise NOT_COMPLIANT " ;
 	rdfs:label "VALIDATION_SCIENTIFICNAMEID_NOTEMPTY" .
 
-<urn:uuid:5affd83c-c2e3-4a3e-998f-9b54bba465c6> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
+<urn:uuid:3ab7c4e1-1c3f-4f56-af52-6f9f257cf5a0> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
 
-<urn:uuid:5cdf3e20-c404-4a5b-9969-61f3c4f08d94> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:cc113096-88cc-458b-85f2-2199c5ba9d8c> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:401bf207-9a55-4dff-88a5-abcd58ad97fa> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
-<urn:uuid:692db4f4-9013-4f8b-bdde-5ad0b680730e> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Completeness: notempty" .
-
-<urn:uuid:cc113096-88cc-458b-85f2-2199c5ba9d8c> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:5affd83c-c2e3-4a3e-998f-9b54bba465c6> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:692db4f4-9013-4f8b-bdde-5ad0b680730e> ;
+<urn:uuid:a42a31ca-0495-4411-99bb-1878306ce837> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:3ab7c4e1-1c3f-4f56-af52-6f9f257cf5a0> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:c84fb5ce-bd7a-4ff1-bc9a-7a65d532d4e4> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is there a value in dwc:scientificNameID?" ;
 	rdfs:label "Is there a value in dwc:scientificNameID? Validation for SingleRecord" .
 
-<urn:uuid:1cf03e7b-23e1-4c1d-939a-634fbce7ab17> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f2ce7d55-5b1d-426a-b00e-6d4efe3058ec> ;
+<urn:uuid:c84fb5ce-bd7a-4ff1-bc9a-7a65d532d4e4> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:c87a94e1-8e3a-4a17-9363-bc0f13de5b03> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:a42a31ca-0495-4411-99bb-1878306ce837> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:401bf207-9a55-4dff-88a5-abcd58ad97fa> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:d7bfcf42-f6a7-4af7-b9a8-88bc28c83489> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f2ce7d55-5b1d-426a-b00e-6d4efe3058ec> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -408,99 +408,99 @@
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available;  INTERNAL_PREREQUISITES_NOT_MET if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus was found as a value at the rank of genus by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_GENUS_FOUND" .
 
-<urn:uuid:2db36adf-a946-4079-a71f-03144faa7fdf> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:dce4dfd2-97b0-47d2-869d-977bf4c3d61d> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:f9e9250a-fbf8-4ab4-8c83-5ea9911432ca> ;
+<urn:uuid:189c1952-e152-4d9d-937b-daf069876422> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:f5b76f8a-2ee7-47f5-a380-e3af07c37747> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f2ce7d55-5b1d-426a-b00e-6d4efe3058ec> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:6d789e1c-7c29-46c3-821a-7ab7c8647aa5> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/genus> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:6ed2e5d3-23fe-449b-a5a1-b124080b47b0> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:f5b76f8a-2ee7-47f5-a380-e3af07c37747> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:6d789e1c-7c29-46c3-821a-7ab7c8647aa5> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:6ed2e5d3-23fe-449b-a5a1-b124080b47b0> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?" ;
 	rdfs:label "Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:c13924af-d9ea-48ae-a5f7-f8dcff676e04> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:2db36adf-a946-4079-a71f-03144faa7fdf> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:f2ce7d55-5b1d-426a-b00e-6d4efe3058ec> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
-<urn:uuid:dce4dfd2-97b0-47d2-869d-977bf4c3d61d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/genus> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:f9e9250a-fbf8-4ab4-8c83-5ea9911432ca> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Conformance: found" .
-
 <urn:uuid:2750c040-1d4a-4149-99fe-0512785f2d5f> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the lowest ranking matched element in the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;
 	rdfs:label "VALIDATION_CLASSIFICATION_CONSISTENT" .
 
-<urn:uuid:884eab44-d374-4801-b6e2-336d920dcc2d> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2750c040-1d4a-4149-99fe-0512785f2d5f> ;
+<urn:uuid:31ab58dd-783b-4857-8283-f092c39cd5ed> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2750c040-1d4a-4149-99fe-0512785f2d5f> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:5330238e-56fb-41ff-a5b5-8ce54af765b6> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:8cd7e8c5-ce69-4a8c-a85a-648a719c25f9> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2750c040-1d4a-4149-99fe-0512785f2d5f> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+<urn:uuid:81599043-577b-4af0-b08a-6819fa996d39> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/tribe> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
 
-<urn:uuid:8cd7e8c5-ce69-4a8c-a85a-648a719c25f9> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:f9804e16-6c93-4129-b53c-c59fa47272a5> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:b107d282-d9bd-4fcc-9669-57e9f03b5955> ;
+<urn:uuid:ba3e7d38-0a8a-40d7-be17-c345fd67d275> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:81599043-577b-4af0-b08a-6819fa996d39> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:d612ee13-51f4-49fc-8c9a-96035c1f7df8> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?" ;
 	rdfs:label "Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:b107d282-d9bd-4fcc-9669-57e9f03b5955> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+<urn:uuid:d612ee13-51f4-49fc-8c9a-96035c1f7df8> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
 	rdfs:label "Consistency: consistent" .
 
-<urn:uuid:f9804e16-6c93-4129-b53c-c59fa47272a5> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/class> , <http://rs.tdwg.org/dwc/terms/family> , <http://rs.tdwg.org/dwc/terms/genus> , <http://rs.tdwg.org/dwc/terms/kingdom> , <http://rs.tdwg.org/dwc/terms/order> , <http://rs.tdwg.org/dwc/terms/phylum> , <http://rs.tdwg.org/dwc/terms/subfamily> , <http://rs.tdwg.org/dwc/terms/subtribe> , <http://rs.tdwg.org/dwc/terms/superfamily> , <http://rs.tdwg.org/dwc/terms/tribe> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+<urn:uuid:df218ab9-083a-4519-9f3d-c3f309d1ce2f> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:ba3e7d38-0a8a-40d7-be17-c345fd67d275> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2750c040-1d4a-4149-99fe-0512785f2d5f> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
 <urn:uuid:14da5b87-8304-4b2b-911d-117e3c29e890> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "COMPLIANT if dwc:taxonRank is not EMPTY; otherwise NOT_COMPLIANT " ;
 	rdfs:label "VALIDATION_TAXONRANK_NOTEMPTY" .
 
-<urn:uuid:9eab9a57-2b4b-4318-b2d3-6925be5aa55d> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:14da5b87-8304-4b2b-911d-117e3c29e890> ;
+<urn:uuid:c4a22fcc-b2f0-4dc0-90b4-c477d849dd97> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:14da5b87-8304-4b2b-911d-117e3c29e890> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:361af2b0-ca7c-4609-9235-322f60f0ff79> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+<urn:uuid:10bc6160-397d-4ff9-b1ef-edb3d0137db7> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
 
-<urn:uuid:6c5f34af-6f3e-4c90-92a5-a6c6f27bc473> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:ba117bf5-d05e-44b6-b48c-e89da8d50733> ;
+<urn:uuid:51a5b5cf-e9d6-43d9-861e-51a3046e1716> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:9122c942-d399-4f97-9359-247678ad23e1> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:14da5b87-8304-4b2b-911d-117e3c29e890> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:ba117bf5-d05e-44b6-b48c-e89da8d50733> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:361af2b0-ca7c-4609-9235-322f60f0ff79> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:d1a8f689-b857-4ba7-9182-0baccf32c3d6> ;
+<urn:uuid:74dc6f1c-4c46-4cf7-b45c-2d620633f109> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:9122c942-d399-4f97-9359-247678ad23e1> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:74dc6f1c-4c46-4cf7-b45c-2d620633f109> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:10bc6160-397d-4ff9-b1ef-edb3d0137db7> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Is there a value in dwc:taxonRank?" ;
 	rdfs:label "Is there a value in dwc:taxonRank? Validation for SingleRecord" .
 
-<urn:uuid:d1a8f689-b857-4ba7-9182-0baccf32c3d6> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Completeness: notempty" .
-
-<urn:uuid:0ea27a49-fe74-48c7-8a71-b344a2e82ba2> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7bdb13a4-8a51-4ee5-be7f-20693fdb183e> ;
-	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
-	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
-
 <urn:uuid:7bdb13a4-8a51-4ee5-be7f-20693fdb183e> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; COMPLIANT if the value of dwc:taxonRank is in the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority default = \"GBIF Vocabulary: Taxonomic Rank\" {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]}" ;
 	rdfs:label "VALIDATION_TAXONRANK_STANDARD" .
 
-<urn:uuid:2205cbe1-9fa7-4f77-9120-34defee8fb31> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+<urn:uuid:bb0bcbe2-05a8-46d0-92e3-327241a14c59> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7bdb13a4-8a51-4ee5-be7f-20693fdb183e> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:5e0d7918-7919-42c5-b146-bd8b48cc3231> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Conformance: standard" .
-
-<urn:uuid:86424913-91f1-4636-8bf2-0f860876dae2> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:b7f9ef29-8395-4745-a0f0-35c837e11d12> ;
+<urn:uuid:43933be0-e6d6-43e3-a69e-9a9ec3a5f72b> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:ba9bdce3-6248-4939-b062-f9976d3e776d> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:7bdb13a4-8a51-4ee5-be7f-20693fdb183e> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
 
-<urn:uuid:b7f9ef29-8395-4745-a0f0-35c837e11d12> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:2205cbe1-9fa7-4f77-9120-34defee8fb31> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:5e0d7918-7919-42c5-b146-bd8b48cc3231> ;
+<urn:uuid:a0c40798-19cd-4a35-abf2-b384d5d60b69> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:a5204139-fe5d-4201-bcd9-3418322ad9d4> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: standard" .
+
+<urn:uuid:ba9bdce3-6248-4939-b062-f9976d3e776d> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:a0c40798-19cd-4a35-abf2-b384d5d60b69> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:a5204139-fe5d-4201-bcd9-3418322ad9d4> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:taxonRank occur in bdq:sourceAuthority?" ;
 	rdfs:label "Does the value of dwc:taxonRank occur in bdq:sourceAuthority? Validation for SingleRecord" .
 
-<urn:uuid:c9a7965a-9237-40d4-a743-f8ea27a3d958> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:e39098df-ef46-464c-9aef-bcdeee2a88cb> ;
+<urn:uuid:3442b164-61f8-4d92-8278-d064d6619936> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:e39098df-ef46-464c-9aef-bcdeee2a88cb> ;
 	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
@@ -508,44 +508,473 @@
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; AMENDED the value of dwc:taxonRank if it can be unambiguously matched to a term in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = \"GBIF Vocabulary: Taxonomic Rank\" {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]}" ;
 	rdfs:label "AMENDMENT_TAXONRANK_STANDARDIZED" .
 
-<urn:uuid:0ab70d37-d640-4ded-a025-cea2c338c68f> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:d1e8257c-85de-45b2-aace-f9270e157739> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasEnhancement> <urn:uuid:4b800b1b-8f8c-4a2b-86dc-5e844b9e4dcf> ;
+<urn:uuid:029daa54-d3ce-433e-b28a-0c06cf051978> <http://rs.tdwg.org/bdq/ffdq/enhancementInContext> <urn:uuid:d5ab7d90-48b2-476c-aac1-7974cfd88ecd> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:e39098df-ef46-464c-9aef-bcdeee2a88cb> ;
+	a <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> .
+
+<urn:uuid:c4bdbc6a-e817-462f-976b-22c643db627e> a <http://rs.tdwg.org/bdq/ffdq/Enhancement> ;
+	rdfs:label "Conformance: standardized" .
+
+<urn:uuid:d5ab7d90-48b2-476c-aac1-7974cfd88ecd> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:eec3961d-bb95-4815-b64a-76204a1ff42d> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasEnhancement> <urn:uuid:c4bdbc6a-e817-462f-976b-22c643db627e> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedEnhancement> ;
 	rdfs:comment "Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority." ;
 	rdfs:label "Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.Amedment for SingleRecord" .
 
-<urn:uuid:4b800b1b-8f8c-4a2b-86dc-5e844b9e4dcf> a <http://rs.tdwg.org/bdq/ffdq/Enhancement> ;
-	rdfs:label "Conformance: standardized" .
-
-<urn:uuid:60813518-310c-48cc-ba51-7965631db102> <http://rs.tdwg.org/bdq/ffdq/enhancementInContext> <urn:uuid:0ab70d37-d640-4ded-a025-cea2c338c68f> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:e39098df-ef46-464c-9aef-bcdeee2a88cb> ;
-	a <http://rs.tdwg.org/bdq/ffdq/AmendmentMethod> .
-
-<urn:uuid:d1e8257c-85de-45b2-aace-f9270e157739> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
+<urn:uuid:eec3961d-bb95-4815-b64a-76204a1ff42d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:21487e28-c8a5-4169-bbd1-61789bdd27a0> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:6eeac3ed-f691-457f-a42e-eaa9c8a71ce8> ;
-	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
-	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
 <urn:uuid:6eeac3ed-f691-457f-a42e-eaa9c8a71ce8> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY; COMPLIANT if (1) dwc:scientificNameID is a validly formed LSID, or (2) dwc:scientificNameID is a validly formed URN with at least NID and NSS present, or (3) dwc:scientificNameID is in the form scope:value, or (4) dwc:scientificNameID is a validly formed URI with host and path where path consists of more than just \"/\"; otherwise NOT_COMPLIANT " ;
 	rdfs:label "VALIDATION_SCIENTIFICNAMEID_COMPLETE" .
 
-<urn:uuid:776a1ec9-d42b-47ef-ad49-88da3124e1b3> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
-	rdfs:label "Completeness: complete" .
+<urn:uuid:cd1edbba-2722-470e-a245-8562f9c7ee2d> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:6eeac3ed-f691-457f-a42e-eaa9c8a71ce8> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
-<urn:uuid:7a4b34ba-8df4-493d-80f8-6ec33206ed4b> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
-
-<urn:uuid:9ed5d75d-7e59-4b38-8d0e-f1ae6b4d9e4f> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:bdc4193d-4bd5-4c79-a2a5-b4d9a30e29bb> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:6eeac3ed-f691-457f-a42e-eaa9c8a71ce8> ;
-	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
-
-<urn:uuid:bdc4193d-4bd5-4c79-a2a5-b4d9a30e29bb> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:7a4b34ba-8df4-493d-80f8-6ec33206ed4b> ;
-	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:776a1ec9-d42b-47ef-ad49-88da3124e1b3> ;
+<urn:uuid:4fe29723-beb2-4a62-b0aa-ac9b7bcd8c25> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:68664559-3611-455b-bc75-d9e7a9f40eb4> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:86502ac4-215c-4b32-bfb9-a25f3e699e98> ;
 	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
 	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
 	rdfs:comment "Does the value of dwc:scientificNameID contain a complete identifier?" ;
 	rdfs:label "Does the value of dwc:scientificNameID contain a complete identifier? Validation for SingleRecord" .
+
+<urn:uuid:68664559-3611-455b-bc75-d9e7a9f40eb4> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameID> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:86502ac4-215c-4b32-bfb9-a25f3e699e98> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: complete" .
+
+<urn:uuid:88597a1c-b23f-4991-9f52-6f7fa96b8087> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:4fe29723-beb2-4a62-b0aa-ac9b7bcd8c25> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:6eeac3ed-f691-457f-a42e-eaa9c8a71ce8> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:36ed36c9-b1a7-40b2-b5e2-0d012e772098> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:kingdom is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_KINGDOM_NOTEMPTY" .
+
+<urn:uuid:48c95b2a-78b5-4737-ae06-e87426b53403> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:36ed36c9-b1a7-40b2-b5e2-0d012e772098> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:100fe1d1-1db6-4a69-8d6e-44432197e1fa> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:85696b17-c29b-436e-8784-bbedf9280387> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:4921894c-f56b-4622-9af2-ab69f5c9e6f5> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:kingdom?" ;
+	rdfs:label "Is there a value in dwc:kingdom? Validation for SingleRecord" .
+
+<urn:uuid:4921894c-f56b-4622-9af2-ab69f5c9e6f5> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:85696b17-c29b-436e-8784-bbedf9280387> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/kingdom> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:d74c3adc-3d03-431f-8066-97607db338f3> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:100fe1d1-1db6-4a69-8d6e-44432197e1fa> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:36ed36c9-b1a7-40b2-b5e2-0d012e772098> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:49f1d386-5bed-43ae-bd43-deabf7df64fc> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:scientificNameAuthorship is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY" .
+
+<urn:uuid:8caaf8f8-bdea-46fd-a4eb-afa7543e525b> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:49f1d386-5bed-43ae-bd43-deabf7df64fc> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:32130146-0e7f-499d-a44f-89c8d800e0ab> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:f7aed814-ff3b-4752-b900-98ab520d52a1> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:d18df6ae-d065-4663-9d78-01709d88ec70> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:scientificNameAuthorship?" ;
+	rdfs:label "Is there a value in dwc:scientificNameAuthorship? Validation for SingleRecord" .
+
+<urn:uuid:66861aab-0542-4453-8be5-6ca5b41ac7c6> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:32130146-0e7f-499d-a44f-89c8d800e0ab> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:49f1d386-5bed-43ae-bd43-deabf7df64fc> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:d18df6ae-d065-4663-9d78-01709d88ec70> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:f7aed814-ff3b-4752-b900-98ab520d52a1> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/scientificNameAuthorship> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:dbef0cfc-a7c7-4892-a3f6-126ce5c02d66> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:namePublishedInYear is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY" .
+
+<urn:uuid:18d2e8a4-4eef-40d7-a82d-d14b44a6bef2> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:b114f83e-456d-496a-b54a-5682d8dae093> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:f423a98b-90da-4464-823f-0c2c7a39e498> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:b5935bb3-f05c-444d-bfdf-fd16c3162fde> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/namePublishedInYear> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:f423a98b-90da-4464-823f-0c2c7a39e498> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:b5935bb3-f05c-444d-bfdf-fd16c3162fde> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:18d2e8a4-4eef-40d7-a82d-d14b44a6bef2> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:namePublishedInYear?" ;
+	rdfs:label "Is there a value in dwc:namePublishedInYear? Validation for SingleRecord" .
+
+<urn:uuid:b8f0e791-8cf3-4d26-97a4-32906e8bbfb3> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:eb9b70c7-9cf6-42ea-a708-5de527211df4> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:eb9b70c7-9cf6-42ea-a708-5de527211df4> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:vernacularName is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_VERNACULARNAME_NOTEMPTY" .
+
+<urn:uuid:656d9133-2e8d-4a70-8f9a-fb8e34f1a21b> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:e81779f1-196e-45b2-a1d2-d05c5590380e> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:b14161d3-be81-4f51-a442-002068749978> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:vernacularName?" ;
+	rdfs:label "Is there a value in dwc:vernacularName? Validation for SingleRecord" .
+
+<urn:uuid:b14161d3-be81-4f51-a442-002068749978> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:bcf1eb05-978a-4feb-bd84-ae209b32d5dd> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:656d9133-2e8d-4a70-8f9a-fb8e34f1a21b> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:eb9b70c7-9cf6-42ea-a708-5de527211df4> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:e81779f1-196e-45b2-a1d2-d05c5590380e> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/vernacularName> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:a5401f6e-1136-492f-8c06-5c9a3e369990> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:cd7cae15-f255-41a3-b002-c9620c40f620> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:cd7cae15-f255-41a3-b002-c9620c40f620> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_TYPESTATUS_NOTEMPTY" .
+
+<urn:uuid:660b328b-97e3-4c95-b714-e5d17937e562> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:cf0e56a9-829f-46d1-8836-1439269417b7> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:bd10bbc2-de13-49b1-b7ef-21b3f3c8e66e> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:typeStatus?" ;
+	rdfs:label "Is there a value in dwc:typeStatus? Validation for SingleRecord" .
+
+<urn:uuid:aa13b1ea-aa9a-44d8-83cf-d00bc760c2a6> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:660b328b-97e3-4c95-b714-e5d17937e562> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:cd7cae15-f255-41a3-b002-c9620c40f620> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:bd10bbc2-de13-49b1-b7ef-21b3f3c8e66e> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:cf0e56a9-829f-46d1-8836-1439269417b7> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/typeStatus> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:72ed16f1-0587-4afd-a9fc-602c2f3f1975> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:higherClassification is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY" .
+
+<urn:uuid:b666fc89-6e90-4298-a580-b89d1681d536> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:72ed16f1-0587-4afd-a9fc-602c2f3f1975> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:1ed90502-0df6-44db-be5c-2a12d095a86d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/higherClassification> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:4af384eb-49a6-45b2-b247-995279fadfcd> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:71aca7de-6969-42de-b3a1-d9c16a1e0547> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:8a45f9f1-e375-47a5-9e19-f36d19678b92> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:72ed16f1-0587-4afd-a9fc-602c2f3f1975> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:8a45f9f1-e375-47a5-9e19-f36d19678b92> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:1ed90502-0df6-44db-be5c-2a12d095a86d> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:4af384eb-49a6-45b2-b247-995279fadfcd> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:higherClassification?" ;
+	rdfs:label "Is there a value in dwc:higherClassification? Validation for SingleRecord" .
+
+<urn:uuid:0beca660-9fad-4b1e-b6b4-95b2ccc14e43> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:cdb37443-292e-49b6-a012-4718f0d7ba64> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:cdb37443-292e-49b6-a012-4718f0d7ba64> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:specificEpithet is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_SPECIFICEPITHET_NOTEMPTY" .
+
+<urn:uuid:05e23eba-1a54-446e-81d6-cd0fce794b25> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:f6c24485-cf4f-463b-ab26-65f5da4fcb01> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:ccc6ec4d-a814-42cd-b174-1e93ff49aab6> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:specificEpithet?" ;
+	rdfs:label "Is there a value in dwc:specificEpithet? Validation for SingleRecord" .
+
+<urn:uuid:9ec5bf94-b35a-4b6e-921e-8352ce4174e8> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:05e23eba-1a54-446e-81d6-cd0fce794b25> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:cdb37443-292e-49b6-a012-4718f0d7ba64> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:ccc6ec4d-a814-42cd-b174-1e93ff49aab6> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:f6c24485-cf4f-463b-ab26-65f5da4fcb01> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/specificEpithet> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:19bbd107-6b14-4c82-8d3e-f7a2a67df309> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_PHYLUM_NOTEMPTY" .
+
+<urn:uuid:330d2ec3-a228-4795-ab93-0afff4dc6059> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:19bbd107-6b14-4c82-8d3e-f7a2a67df309> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:367450bd-1f49-421b-80fb-476112a03fb5> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:3d4aa5b7-b2bb-4e1d-a729-15cf7703da23> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:19bbd107-6b14-4c82-8d3e-f7a2a67df309> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:3d4aa5b7-b2bb-4e1d-a729-15cf7703da23> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:d9f7b5d2-71ce-4ef2-a4a5-c31053a49f0e> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:59c2daa0-1fcd-4df0-bb80-92985bcdcd84> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:phylum?" ;
+	rdfs:label "Is there a value in dwc:phylum? Validation for SingleRecord" .
+
+<urn:uuid:59c2daa0-1fcd-4df0-bb80-92985bcdcd84> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:d9f7b5d2-71ce-4ef2-a4a5-c31053a49f0e> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/phylum> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:51fb2951-ecf5-4802-9e35-1cf3b7973457> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:d1c40fc8-d8ad-4148-82e0-b4b7ead70051> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:d1c40fc8-d8ad-4148-82e0-b4b7ead70051> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:order is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_ORDER_NOTEMPTY" .
+
+<urn:uuid:1675a698-049d-43cb-b523-f80469976a8a> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:260d5ab2-c112-4916-bb58-9b51d3131d75> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:d994c727-fd26-4832-b142-36fcae0af1b6> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:1675a698-049d-43cb-b523-f80469976a8a> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:order?" ;
+	rdfs:label "Is there a value in dwc:order? Validation for SingleRecord" .
+
+<urn:uuid:d86aec9f-894b-4f04-bd92-c0a231b5a22d> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:260d5ab2-c112-4916-bb58-9b51d3131d75> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:d1c40fc8-d8ad-4148-82e0-b4b7ead70051> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:d994c727-fd26-4832-b142-36fcae0af1b6> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/order> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:0d97a807-af87-4a24-a6b1-23e24f0d544c> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:5bfa043c-1e19-4224-8d55-b568ced347c2> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:5bfa043c-1e19-4224-8d55-b568ced347c2> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:family is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_FAMILY_NOTEMPTY" .
+
+<urn:uuid:134c685e-694d-422c-b4bd-8530752c96c1> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:d6c780bf-a6c5-42c9-a52c-d2ebe26bb317> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:5bfa043c-1e19-4224-8d55-b568ced347c2> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:89627659-603c-499c-ad3a-56a8214924ad> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/family> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:d6c780bf-a6c5-42c9-a52c-d2ebe26bb317> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:89627659-603c-499c-ad3a-56a8214924ad> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:fac5f980-f1fe-459b-bd9e-8d5c5717f2ef> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:family?" ;
+	rdfs:label "Is there a value in dwc:family? Validation for SingleRecord" .
+
+<urn:uuid:fac5f980-f1fe-459b-bd9e-8d5c5717f2ef> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:292f4e51-3303-44ea-988e-438fa2c57142> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:d02c1ffd-af28-49bd-9c9c-e8e23a8b7258> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:d02c1ffd-af28-49bd-9c9c-e8e23a8b7258> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if the value in dwc:taxonRank is higher than genus or if dwc:genus is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_GENUS_NOTEMPTY" .
+
+<urn:uuid:2f709f59-8b9f-405f-8b46-afcd64f7482f> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:f49141e2-fbf5-498e-ab69-42ece3b08d07> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasConsultedInformationElement> <urn:uuid:b92f0d79-551d-4532-abe5-bf1edaa00f9d> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:d2699a9f-e1e7-4c07-b017-829f23ae10d3> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:genus?" ;
+	rdfs:label "Is there a value in dwc:genus? Validation for SingleRecord" .
+
+<urn:uuid:3a117f36-cdfc-4622-bff8-13307e6170ac> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:2f709f59-8b9f-405f-8b46-afcd64f7482f> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:d02c1ffd-af28-49bd-9c9c-e8e23a8b7258> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:b92f0d79-551d-4532-abe5-bf1edaa00f9d> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonRank> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Consulted> .
+
+<urn:uuid:d2699a9f-e1e7-4c07-b017-829f23ae10d3> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:f49141e2-fbf5-498e-ab69-42ece3b08d07> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/genus> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:b854b179-3572-48b6-aab2-879e3172fd7d> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_CLASS_NOTEMPTY" .
+
+<urn:uuid:ec5b3315-a3ff-4285-9c8a-1fdb3572fd1d> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:b854b179-3572-48b6-aab2-879e3172fd7d> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:5cffa02b-30f9-4f97-8bb3-5b359c1bd647> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:604f875c-6320-4e1f-ba09-8ed3c8a292a5> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:b854b179-3572-48b6-aab2-879e3172fd7d> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:604f875c-6320-4e1f-ba09-8ed3c8a292a5> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:cfd79aef-fa35-466e-8668-b072320531a7> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:6fe3c186-f226-4577-94cd-469478b013b3> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Is there a value in dwc:class?" ;
+	rdfs:label "Is there a value in dwc:class? Validation for SingleRecord" .
+
+<urn:uuid:6fe3c186-f226-4577-94cd-469478b013b3> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: notempty" .
+
+<urn:uuid:cfd79aef-fa35-466e-8668-b072320531a7> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/class> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:4527c47e-61d9-4abb-af3e-f2999191be17> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:subtribe is EMPTY; COMPLIANT if the value of dwc:subtribe was found as a value at the rank of subtribe by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]" ;
+	rdfs:label "VALIDATION_SUBTRIBE_FOUND" .
+
+<urn:uuid:a771c5b6-42a0-4428-b49e-3f9f1a2c664e> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:4527c47e-61d9-4abb-af3e-f2999191be17> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:514e5dcc-feae-47c4-9bea-9dbe4679d53b> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:a7f96437-6d87-4827-aa17-852c6fb6b78a> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:e67e7b0e-82ed-4cca-a4f7-bc90f8583a65> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Does the value of dwc:subtribe occur at rank of Subtribe in bdq:sourceAuthority?" ;
+	rdfs:label "Does the value of dwc:subtribe occur at rank of Subtribe in bdq:sourceAuthority? Validation for SingleRecord" .
+
+<urn:uuid:75908c97-8c23-4797-b017-d802309b3a03> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:514e5dcc-feae-47c4-9bea-9dbe4679d53b> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:4527c47e-61d9-4abb-af3e-f2999191be17> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:a7f96437-6d87-4827-aa17-852c6fb6b78a> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/subtribe> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:e67e7b0e-82ed-4cca-a4f7-bc90f8583a65> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:3d0252d9-59be-4505-93f7-2cbe5de41c17> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:8c15f351-26d5-4edd-b38e-07541dc64fd0> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:8c15f351-26d5-4edd-b38e-07541dc64fd0> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe is EMPTY; COMPLIANT if the value of dwc:tribe was found as a value at the rank of tribe by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]" ;
+	rdfs:label "VALIDATION_TRIBE_FOUND" .
+
+<urn:uuid:7b6acbb1-c7bc-4a3e-84e7-5db6b9edcd12> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/tribe> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:951ff1c2-3da7-4757-9cf6-74abdff3b94e> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:d6662ac2-a06d-4e91-bdbb-52fca3fc132d> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:7b6acbb1-c7bc-4a3e-84e7-5db6b9edcd12> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:951ff1c2-3da7-4757-9cf6-74abdff3b94e> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Does the value of dwc:tribe occur at rank of Tribe in bdq:sourceAuthority?" ;
+	rdfs:label "Does the value of dwc:tribe occur at rank of Tribe in bdq:sourceAuthority? Validation for SingleRecord" .
+
+<urn:uuid:f8b5cca1-7cc9-4c60-a0e1-a890d6d53dc8> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:d6662ac2-a06d-4e91-bdbb-52fca3fc132d> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:8c15f351-26d5-4edd-b38e-07541dc64fd0> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:2a45e0e9-446c-429f-992d-c3ec1d29eebb> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:superfamily is EMPTY; COMPLIANT if the value of dwc:superfamily was found as a value at the rank of superfamily by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]" ;
+	rdfs:label "VALIDATION_SUPERFAMILY_FOUND" .
+
+<urn:uuid:38be378a-09ea-4ef9-ad99-61502e510c01> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2a45e0e9-446c-429f-992d-c3ec1d29eebb> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:66ba269c-82d9-4c9a-ac2d-ae272661984f> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:7fded52e-e0cb-4895-a5af-26bd0f627e18> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:2a45e0e9-446c-429f-992d-c3ec1d29eebb> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:7fded52e-e0cb-4895-a5af-26bd0f627e18> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:a1357480-1563-4f96-b7d1-d22fb31f6851> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:88d19615-b5fa-4df6-bf6c-040e679622c0> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Does the value of dwc:superfamily occur at rank of Superfamily in bdq:sourceAuthority?" ;
+	rdfs:label "Does the value of dwc:superfamily occur at rank of Superfamily in bdq:sourceAuthority? Validation for SingleRecord" .
+
+<urn:uuid:88d19615-b5fa-4df6-bf6c-040e679622c0> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: found" .
+
+<urn:uuid:a1357480-1563-4f96-b7d1-d22fb31f6851> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/superfamily> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:a82c7e3a-3a50-4438-906c-6d0fefa9e984> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; COMPLIANT if (1) taxonID is a validly formed LSID, or (2) taxonID is a validly formed URN with at least NID and NSS present, or (3) taxonID is in the form scope:value, or (4) taxonID is a validly formed URI with host and path where path consists of more than just \"/\"; otherwise NOT_COMPLIANT " ;
+	rdfs:label "VALIDATION_TAXONID_COMPLETE" .
+
+<urn:uuid:d00b5084-3561-4546-9721-183dd17cc870> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:a82c7e3a-3a50-4438-906c-6d0fefa9e984> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:1e17a317-74df-4917-933b-823bc2df55f3> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:68463c65-3459-4599-b187-74123bdc31bf> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:a82c7e3a-3a50-4438-906c-6d0fefa9e984> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
+
+<urn:uuid:28d858fd-15c7-4b51-a6d7-48e0e5717029> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Completeness: complete" .
+
+<urn:uuid:42adaef9-16a0-4baa-aa44-f674f9d0a9ce> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/taxonID> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:68463c65-3459-4599-b187-74123bdc31bf> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:42adaef9-16a0-4baa-aa44-f674f9d0a9ce> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:28d858fd-15c7-4b51-a6d7-48e0e5717029> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "Does the value of dwc:taxonID contain a complete identifier?" ;
+	rdfs:label "Does the value of dwc:taxonID contain a complete identifier? Validation for SingleRecord" .
+
+<urn:uuid:36bcf2f8-19f7-4fb0-b108-0b568c008eb0> <http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:399ef91d-425c-46f2-a6df-8a0fe4c3e86e> ;
+	<http://rs.tdwg.org/bdq/ffdq/implementedBy> <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> ;
+	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
+
+<urn:uuid:399ef91d-425c-46f2-a6df-8a0fe4c3e86e> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
+	rdfs:comment "INTERNAL_PREREQUISITES_NOT_MET if dwc:namePublishedInYear is EMPTY;  COMPLIANT if the value of dwc:namePublishedInYear is interpretable as a year between 1753 and the current year, inclusive " ;
+	rdfs:label "VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE" .
+
+<urn:uuid:8f1d5186-2c3e-477a-8909-c66d9ccb251a> a <http://rs.tdwg.org/bdq/ffdq/Criterion> ;
+	rdfs:label "Conformance: outofrange" .
+
+<urn:uuid:9b435d49-e534-411a-8896-84ec166b2afe> <http://rs.tdwg.org/bdq/ffdq/hasActedUponInformationElement> <urn:uuid:9f73c3c7-d3f5-4806-9964-0db28628503a> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasCriterion> <urn:uuid:8f1d5186-2c3e-477a-8909-c66d9ccb251a> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasResourceType> <rt:SingleRecord> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ContextualizedCriterion> ;
+	rdfs:comment "The value of dwc:namePublishedInYear is between 1753-01-01 date and the current date, inclusive" ;
+	rdfs:label "The value of dwc:namePublishedInYear is between 1753-01-01 date and the current date, inclusive Validation for SingleRecord" .
+
+<urn:uuid:9f73c3c7-d3f5-4806-9964-0db28628503a> <http://rs.tdwg.org/bdq/ffdq/composedOf> <http://rs.tdwg.org/dwc/terms/namePublishedInYear> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ActedUpon> .
+
+<urn:uuid:f7c6a8a0-d61c-48ec-866d-edde67e7f678> <http://rs.tdwg.org/bdq/ffdq/criterionInContext> <urn:uuid:9b435d49-e534-411a-8896-84ec166b2afe> ;
+	<http://rs.tdwg.org/bdq/ffdq/hasSpecification> <urn:uuid:399ef91d-425c-46f2-a6df-8a0fe4c3e86e> ;
+	a <http://rs.tdwg.org/bdq/ffdq/ValidationMethod> .
