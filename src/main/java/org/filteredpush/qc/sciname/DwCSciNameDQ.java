@@ -3374,7 +3374,7 @@ public class DwCSciNameDQ {
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-01-28")
     @Specification("COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT ")
     public DQResponse<ComplianceValue> validationClassNotempty(
-        @ActedUpon("dwc:class") String class
+        @ActedUpon("dwc:class") String taxonomic_class
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
