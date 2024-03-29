@@ -111,6 +111,8 @@ public class BatchRunner {
 			if (validator.supportedExtensionTerms().size() > 0) {
 				headerNames.addAll(validator.supportedExtensionTerms());
 			}
+			headerNames.add("acceptedAsName");
+			headerNames.add("acceptedAsNameAuthorship");
 
 			BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 			CSVPrinter printer = new CSVPrinter(writer, 
@@ -154,6 +156,8 @@ public class BatchRunner {
 								// add in the order of the supportedExtenstionTerms list, to match the header.
 								columns.add(terms.get(addedTermIterator.next()));
 							}
+							columns.add(vUsage.getAcceptedName());
+							columns.add(vUsage.getAcceptedAuthorship());
 							printer.printRecord(columns);
 							//printer.printRecord(Integer.valueOf(vUsage.getInputDbPK()).toString(),vUsage.getScientificName(),vUsage.getAuthorship(),vUsage.getGuid(),vUsage.getMatchDescription(),vUsage.getOriginalScientificName(), vUsage.getOriginalAuthorship(), Double.valueOf(vUsage.getAuthorshipStringEditDistance()).toString(), added);
 						} else { 

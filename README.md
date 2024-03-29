@@ -97,6 +97,12 @@ matches of those names against the authority.
                           WoRMS+ZooBank).
      -t,--test            Test connectivity with an example name
 
+#### Processing output to sql
+
+Example regex (in vim) to convert csv output to sql queries to add WoRMS guids to MCZbase:
+
+	%s/"\([0-9]\+\)","[A-Za-z.() ]\+",".*","\(urn:lsid:marinespecies.org:taxname:[0-9]\+\)",".*$/update taxonomy set taxonid = '\2', taxonid_guid_type = 'WoRMS LSID' where taxonid is null and taxon_name_id = \1;/
+
 
 ## DwCSciNameQC - for Fit4U Framework
 

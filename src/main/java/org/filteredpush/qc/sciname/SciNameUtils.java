@@ -324,7 +324,7 @@ public class SciNameUtils {
 		CommandLineParser parser = new DefaultParser();
 		
 		Options options = new Options();
-		options.addOption( "f", "file", true, "Input csv file from which to lookup names.  Assumes a csv file, first three columns being dbpk, scientificname, authorship, (TODO: family), columns after the third are ignored. " );
+		options.addOption( "f", "file", true, "Input csv file from which to lookup names.  Assumes a csv file, first three columns being dbpk, scientificName, authorship, (optionally: kingdom, family), columns after the third are ignored. " );
 		options.addOption("o","output", true, "Output file into which to write results of lookup, default output.csv");
 		options.addOption("s","service", true, "Service to lookup names against  WoRMS, GBIF_BACKBONE, GBIF_ITIS, GBIF_FAUNA_EUROPEA, GBIF_UKSI, GBIF_IPNI, GBIF_INDEXFUNGORUM, GBIF_COL, GBIF_PALEOBIOLOGYDB, or ZooBank (TODO: WoRMS+ZooBank). ");
 		options.addOption("t","test", false, "Test connectivity with an example name");
