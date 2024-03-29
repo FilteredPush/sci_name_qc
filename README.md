@@ -75,6 +75,28 @@ Currently recognised comparisons:
 
 ### SciNameUtils
 
+Limited command line access is provided to process a CSV file containing
+taxon names, checking those names against a specified authority and asserting
+matches of those names against the authority.
+
+#### Command line usage
+
+    $ java -jar sci_name_qc-1.0.2-SNAPSHOT-{commit}-executable.jar --help
+    usage: SciNameUtils
+     -f,--file <arg>      Input csv file from which to lookup names.  Assumes
+                          a csv file, first three columns being dbpk,
+                          scientificname, authorship, (TODO: family), columns
+                          after the third are ignored.
+     -h,--help            Print this message
+     -o,--output <arg>    Output file into which to write results of lookup,
+                          default output.csv
+     -s,--service <arg>   Service to lookup names against  WoRMS,
+                          GBIF_BACKBONE, GBIF_ITIS, GBIF_FAUNA_EUROPEA,
+                          GBIF_UKSI, GBIF_IPNI, GBIF_INDEXFUNGORUM, GBIF_COL,
+                          GBIF_PALEOBIOLOGYDB, or ZooBank (TODO:
+                          WoRMS+ZooBank).
+     -t,--test            Test connectivity with an example name
+
 
 ## DwCSciNameQC - for Fit4U Framework
 
