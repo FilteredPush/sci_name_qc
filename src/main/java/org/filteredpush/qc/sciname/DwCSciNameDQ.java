@@ -21,6 +21,7 @@ package org.filteredpush.qc.sciname;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -85,6 +86,7 @@ import org.datakurator.ffdq.api.result.*;
  *
  * Supplementary tests:
  * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
+ * #64 VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE 399ef91d-425c-46f2-a6df-8a0fe4c3e86e
  *
  * @author mole
  * @version $Id: $Id
@@ -3483,10 +3485,11 @@ public class DwCSciNameDQ {
     }
 
 // TODO: Implementation of VALIDATION_TAXONID_COMPLETE is not up to date with current version: https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2023-09-18 see line: 1994
+    
     /**
     * The value of dwc:namePublishedInYear is between 1753-01-01 date and the current date, inclusive
     *
-    * Provides: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE
+    * Provides: #64 VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE
     * Version: 2024-02-15
     *
     * @param namePublishedInYear the provided dwc:namePublishedInYear to evaluate as ActedUpon.
@@ -3496,17 +3499,47 @@ public class DwCSciNameDQ {
     @Provides("399ef91d-425c-46f2-a6df-8a0fe4c3e86e")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/399ef91d-425c-46f2-a6df-8a0fe4c3e86e/2024-02-15")
     @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:namePublishedInYear is EMPTY;  COMPLIANT if the value of dwc:namePublishedInYear is interpretable as a year between 1753 and the current year, inclusive ")
-    public DQResponse<ComplianceValue> validationNamepublishedinyearInrange(
+    public static DQResponse<ComplianceValue> validationNamepublishedinyearInrange(
         @ActedUpon("dwc:namePublishedInYear") String namePublishedInYear
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // INTERNAL_PREREQUISITES_NOT_MET if dwc:namePublishedInYear 
         // is EMPTY; COMPLIANT if the value of dwc:namePublishedInYear 
         // is interpretable as a year between 1753 and the current 
         // year, inclusive 
 
+    	Integer lowerBound = 1753;
+    	Integer upperBound = LocalDateTime.now().getYear();
+    	
+    	if (SciNameUtils.isEmpty(namePublishedInYear)) {
+    		result.addComment("No value provided for dwc:namePublishedInYear.");
+    		result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+    	} else if (namePublishedInYear.trim().length()<4) {
+    		result.addComment("Value provided for dwc:namePublishedInYear not interpretable as a year after 1752.");
+    		result.setResultState(ResultState.RUN_HAS_RESULT);
+    		result.setValue(ComplianceValue.NOT_COMPLIANT);
+    	} else { 
+    		try { 
+    			String testValue = namePublishedInYear.replaceAll("[\\[\\]()?]", "");
+    			int numericYear = Integer.parseInt(testValue.trim().substring(0, 4));
+    			if (numericYear<lowerBound || numericYear>upperBound) { 
+    				result.setValue(ComplianceValue.NOT_COMPLIANT);
+    				result.addComment("Provided value for dwc:namePublishedInYear '" + namePublishedInYear + "' is not an integer in the range " + lowerBound.toString() + " to " + upperBound.toString() + " (current year).");
+    			} else { 
+    				result.setValue(ComplianceValue.COMPLIANT);
+    				result.addComment("Provided value for dwc:namePublishedInYear '" + namePublishedInYear + "' is an integer in the range " + lowerBound.toString() + " to " + upperBound.toString() + " (current year).");
+    			}
+    			result.setResultState(ResultState.RUN_HAS_RESULT);
+    		} catch (NumberFormatException e) {
+    			logger.debug(e.getMessage());
+   				result.setValue(ComplianceValue.NOT_COMPLIANT);
+    			result.setResultState(ResultState.RUN_HAS_RESULT);
+    			result.addComment("Unable to parse dwc:namePublishedInYear as an integer:" + e.getMessage());
+    		}
+    	}
+        
         return result;
     }
 

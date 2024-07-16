@@ -17,8 +17,12 @@ package org.filteredpush.qc.sciname;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datakurator.ffdq.annotations.ActedUpon;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.api.result.AmendmentValue;
 import org.datakurator.ffdq.api.result.ComplianceValue;
@@ -749,5 +753,97 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		
 	}
-
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationNamepublishedinyearInrange(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationNamepublishedinyearInrange() {
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:namePublishedInYear 
+        // is EMPTY; COMPLIANT if the value of dwc:namePublishedInYear 
+        // is interpretable as a year between 1753 and the current 
+        // year, inclusive 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationNamepublishedinyearInrange(null);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET, result.getResultState());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		String year = "1980";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "1700";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		logger.debug(result.getComment());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "700";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "1752";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "1753";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "1754";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "?1754";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "1754?";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		int numericyear = LocalDateTime.now().getYear() + 1;
+		year = Integer.toString(numericyear);
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		numericyear = LocalDateTime.now().getYear();
+		year = Integer.toString(numericyear);
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "[1754]";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		year = "1884 [1881]";
+		result = DwCSciNameDQ.validationNamepublishedinyearInrange(year);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
 }
