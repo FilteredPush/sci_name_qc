@@ -661,7 +661,103 @@ public class TestDwCSciNameDQ {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationKingdomNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationKingdomNotempty() {
+        // COMPLIANT if dwc:kingdom is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationKingdomNotempty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationKingdomNotempty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationKingdomNotempty("Animalia");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationScientificnameauthorshipNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationScientificnameauthorshipNotempty() {
+        // COMPLIANT if dwc:scientificnameauthorship is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationScientificnameauthorshipNotempty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationScientificnameauthorshipNotempty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationScientificnameauthorshipNotempty("Cuvier");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
 
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationNamepublishedinyearNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationNamepublishedinyearNotempty() {
+        // COMPLIANT if dwc:namePublishedInYear is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationNamepublishedinyearNotempty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationNamepublishedinyearNotempty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationNamepublishedinyearNotempty("1840");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationVernacularnameNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationVernacularnameNotempty() {
+        // COMPLIANT if dwc:validationVernacularnameNotempty is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationVernacularnameNotempty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationVernacularnameNotempty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationVernacularnameNotempty("Fox");
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.COMPLIANT, result.getValue());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonrankNotstandard(java.lang.String)}.
 	 */

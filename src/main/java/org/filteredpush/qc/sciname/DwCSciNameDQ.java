@@ -75,6 +75,9 @@ import org.datakurator.ffdq.api.result.*;
  * #101	VALIDATION_POLYNOMIAL_CONSISTENT 17f03f1f-f74d-40c0-8071-2927cfc9487b
  * #161	VALIDATION_TAXONRANK_NOTEMPTY 14da5b87-8304-4b2b-911d-117e3c29e890
  * #162	VALIDATION_TAXONRANK_STANDARD 7bdb13a4-8a51-4ee5-be7f-20693fdb183e
+ * #216 VALIDATION_KINGDOM_NOTEMPTY 36ed36c9-b1a7-40b2-b5e2-0d012e772098/2024-01-28
+ * #244 VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY 49f1d386-5bed-43ae-bd43-deabf7df64fc"
+ * #259 VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY ff59f77d-71e9-4eb1-aac9-8bd05c50ff70
  *
  * #57	AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71	AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
@@ -87,6 +90,7 @@ import org.datakurator.ffdq.api.result.*;
  * Supplementary tests:
  * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
  * #64 VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE 399ef91d-425c-46f2-a6df-8a0fe4c3e86e
+ * #254 VALIDATION_VERNACULARNAME_NOTEMPTY eb9b70c7-9cf6-42ea-a708-5de527211df4
  *
  * @author mole
  * @version $Id: $Id
@@ -1261,6 +1265,7 @@ public class DwCSciNameDQ {
         return result;
     }
     
+// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 1278
     /**
      * Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.
      *
@@ -1678,6 +1683,7 @@ public class DwCSciNameDQ {
         return result;
     }
 
+// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1696
     /**
      * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
@@ -1835,6 +1841,7 @@ public class DwCSciNameDQ {
     }
 
     
+// TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-09-18 see line: 1875
     /**
      * Is there a value in any of the terms needed to determine that the taxon exists?
      *
@@ -1978,6 +1985,7 @@ public class DwCSciNameDQ {
 
         // 
     
+// TODO: Implementation of VALIDATION_TAXONID_COMPLETE is not up to date with current version: https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2023-09-18 see line: 1994
     /**
      * Does the value of dwc:taxonID contain a complete identifier?
      *
@@ -3052,38 +3060,11 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 1278
-    /**
-    * Is there a value in dwc:dataGeneralizations?
-    *
-    * Provides: ISSUE_DATAGENERALIZATIONS_NOTEMPTY
-    * Version: 2023-09-18
-    *
-    * @param dataGeneralizations the provided dwc:dataGeneralizations to evaluate as ActedUpon.
-    * @return DQResponse the response of type IssueValue to return
-    */
-    @Issue(label="ISSUE_DATAGENERALIZATIONS_NOTEMPTY", description="Is there a value in dwc:dataGeneralizations?")
-    @Provides("13d5a10e-188e-40fd-a22c-dbaa87b91df2")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/13d5a10e-188e-40fd-a22c-dbaa87b91df2/2023-09-18")
-    @Specification("POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; otherwise NOT_ISSUE ")
-    public DQResponse<IssueValue> issueDatageneralizationsNotempty(
-        @ActedUpon("dwc:dataGeneralizations") String dataGeneralizations
-    ) {
-        DQResponse<IssueValue> result = new DQResponse<IssueValue>();
 
-        //TODO:  Implement specification
-        // POTENTIAL_ISSUE if dwc:dataGeneralizations is not EMPTY; 
-        // otherwise NOT_ISSUE 
-
-        return result;
-    }
-
-// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1696
-// TODO: Implementation of VALIDATION_TAXON_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/06851339-843f-4a43-8422-4e61b9a00e75/2023-09-18 see line: 1875
     /**
     * Is there a value in dwc:kingdom?
     *
-    * Provides: VALIDATION_KINGDOM_NOTEMPTY
+    * Provides: #216 VALIDATION_KINGDOM_NOTEMPTY
     * Version: 2024-01-28
     *
     * @param kingdom the provided dwc:kingdom to evaluate as ActedUpon.
@@ -3093,22 +3074,32 @@ public class DwCSciNameDQ {
     @Provides("36ed36c9-b1a7-40b2-b5e2-0d012e772098")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/36ed36c9-b1a7-40b2-b5e2-0d012e772098/2024-01-28")
     @Specification("COMPLIANT if dwc:kingdom is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationKingdomNotempty(
+    public static DQResponse<ComplianceValue> validationKingdomNotempty(
         @ActedUpon("dwc:kingdom") String kingdom
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if dwc:kingdom is not EMPTY; otherwise NOT_COMPLIANT 
         // 
 
+		if (SciNameUtils.isEmpty(kingdom)) {
+			result.addComment("No value provided for kingdom.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for kingdom.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:scientificNameAuthorship?
     *
-    * Provides: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY
+    * Provides: #244 VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY
     * Version: 2024-02-04
     *
     * @param scientificNameAuthorship the provided dwc:scientificNameAuthorship to evaluate as ActedUpon.
@@ -3118,22 +3109,32 @@ public class DwCSciNameDQ {
     @Provides("49f1d386-5bed-43ae-bd43-deabf7df64fc")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/49f1d386-5bed-43ae-bd43-deabf7df64fc/2024-02-04")
     @Specification("COMPLIANT if dwc:scientificNameAuthorship is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationScientificnameauthorshipNotempty(
+    public static DQResponse<ComplianceValue> validationScientificnameauthorshipNotempty(
         @ActedUpon("dwc:scientificNameAuthorship") String scientificNameAuthorship
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if dwc:scientificNameAuthorship is not EMPTY; 
         // otherwise NOT_COMPLIANT 
 
+		if (SciNameUtils.isEmpty(scientificNameAuthorship)) {
+			result.addComment("No value provided for scientificNameAuthorship.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for scientificNameAuthorship.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:namePublishedInYear?
     *
-    * Provides: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY
+    * Provides: #259 VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY
     * Version: 2024-02-07
     *
     * @param namePublishedInYear the provided dwc:namePublishedInYear to evaluate as ActedUpon.
@@ -3143,22 +3144,32 @@ public class DwCSciNameDQ {
     @Provides("ff59f77d-71e9-4eb1-aac9-8bd05c50ff70")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/ff59f77d-71e9-4eb1-aac9-8bd05c50ff70/2024-02-07")
     @Specification("COMPLIANT if dwc:namePublishedInYear is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationNamepublishedinyearNotempty(
+    public static DQResponse<ComplianceValue> validationNamepublishedinyearNotempty(
         @ActedUpon("dwc:namePublishedInYear") String namePublishedInYear
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if dwc:namePublishedInYear is not EMPTY; otherwise 
         // NOT_COMPLIANT 
 
+		if (SciNameUtils.isEmpty(namePublishedInYear)) {
+			result.addComment("No value provided for namePublishedInYear.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for namePublishedInYear.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:vernacularName?
     *
-    * Provides: VALIDATION_VERNACULARNAME_NOTEMPTY
+    * Provides: 254 VALIDATION_VERNACULARNAME_NOTEMPTY
     * Version: 2024-02-04
     *
     * @param vernacularName the provided dwc:vernacularName to evaluate as ActedUpon.
@@ -3168,15 +3179,25 @@ public class DwCSciNameDQ {
     @Provides("eb9b70c7-9cf6-42ea-a708-5de527211df4")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/eb9b70c7-9cf6-42ea-a708-5de527211df4/2024-02-04")
     @Specification("COMPLIANT if dwc:vernacularName is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationVernacularnameNotempty(
+    public static DQResponse<ComplianceValue> validationVernacularnameNotempty(
         @ActedUpon("dwc:vernacularName") String vernacularName
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if dwc:vernacularName is not EMPTY; otherwise 
         // NOT_COMPLIANT 
 
+		if (SciNameUtils.isEmpty(vernacularName)) {
+			result.addComment("No value provided for vernacularName.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for vernacularName.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
@@ -3484,7 +3505,6 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of VALIDATION_TAXONID_COMPLETE is not up to date with current version: https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2023-09-18 see line: 1994
     
     /**
     * The value of dwc:namePublishedInYear is between 1753-01-01 date and the current date, inclusive
