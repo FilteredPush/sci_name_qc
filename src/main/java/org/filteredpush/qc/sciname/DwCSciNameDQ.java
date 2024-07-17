@@ -91,6 +91,11 @@ import org.datakurator.ffdq.api.result.*;
  * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
  * #64 VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE 399ef91d-425c-46f2-a6df-8a0fe4c3e86e
  * #254 VALIDATION_VERNACULARNAME_NOTEMPTY eb9b70c7-9cf6-42ea-a708-5de527211df4
+ * #218 VALIDATION_PHYLUM_NOTEMPTY 19bbd107-6b14-4c82-8d3e-f7a2a67df309
+ * #213 VALIDATION_CLASS_NOTEMPTY "b854b179-3572-48b6-aab2-879e3172fd7d
+ * #217 VALIDATION_ORDER_NOTEMPTY "d1c40fc8-d8ad-4148-82e0-b4b7ead70051
+ * #215 VALIDATION_FAMILY_NOTEMPTY 5bfa043c-1e19-4224-8d55-b568ced347c2
+ * #214 VALIDATION_GENUS_NOTEMPTY d02c1ffd-af28-49bd-9c9c-e8e23a8b7258
  *
  * @author mole
  * @version $Id: $Id
@@ -3279,82 +3284,198 @@ public class DwCSciNameDQ {
     /**
     * Is there a value in dwc:phylum?
     *
-    * Provides: VALIDATION_PHYLUM_NOTEMPTY
+    * Provides: 218 VALIDATION_PHYLUM_NOTEMPTY
     * Version: 2024-01-28
     *
     * @param phylum the provided dwc:phylum to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
     * @return DQResponse the response of type ComplianceValue  to return
     */
     @Validation(label="VALIDATION_PHYLUM_NOTEMPTY", description="Is there a value in dwc:phylum?")
     @Provides("19bbd107-6b14-4c82-8d3e-f7a2a67df309")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/19bbd107-6b14-4c82-8d3e-f7a2a67df309/2024-01-28")
     @Specification("COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationPhylumNotempty(
-        @ActedUpon("dwc:phylum") String phylum
+    public static DQResponse<ComplianceValue> validationPhylumNotempty(
+        @ActedUpon("dwc:phylum") String phylum,
+        @Consulted("dwc:taxonRank") String taxonRank
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT 
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum is EMPTY and 
+        // dwc:taxonRank contains a value that is not interpretable as 
+        // a taxon rank; COMPLIANT if dwc:phylum is not EMPTY, or 
+        // dwc:phylum is EMPTY and the value in dwc:taxonRank is 
+        // higher than phylum; otherwise NOT_COMPLIANT.
         // 
-
+        
+		if (SciNameUtils.isEmpty(phylum)) {
+			Boolean rankTest = SciNameUtils.isRankAbove("phylum",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAtOrAbove("phylum",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for phylum, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:phylum should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for phylum, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:phylum should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for phylum, bur taxonRank value is above Phylum indicating that dwc:phylum is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for phylum and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for phylum.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
         return result;
     }
 
     /**
     * Is there a value in dwc:order?
     *
-    * Provides: VALIDATION_ORDER_NOTEMPTY
+    * Provides: 217 VALIDATION_ORDER_NOTEMPTY
     * Version: 2024-01-28
     *
     * @param order the provided dwc:order to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
     * @return DQResponse the response of type ComplianceValue  to return
     */
     @Validation(label="VALIDATION_ORDER_NOTEMPTY", description="Is there a value in dwc:order?")
     @Provides("d1c40fc8-d8ad-4148-82e0-b4b7ead70051")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d1c40fc8-d8ad-4148-82e0-b4b7ead70051/2024-01-28")
     @Specification("COMPLIANT if dwc:order is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationOrderNotempty(
-        @ActedUpon("dwc:order") String order
+    public static DQResponse<ComplianceValue> validationOrderNotempty(
+        @ActedUpon("dwc:order") String order,
+        @Consulted("dwc:taxonRank") String taxonRank
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:order is not EMPTY; otherwise NOT_COMPLIANT 
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:order is EMPTY 
+        // and dwc:taxonRank contains a value that is not interpretable 
+        // as a taxon rank; COMPLIANT if dwc:order is not EMPTY, 
+        // or dwc:order is EMPTY and the value in dwc:taxonRank 
+        // is higher than order; otherwise NOT_COMPLIANT.
         // 
 
+		if (SciNameUtils.isEmpty(order)) {
+			Boolean rankTest = SciNameUtils.isRankAbove("order",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAtOrAbove("order",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for order, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:order should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for order, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:order should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for order, bur taxonRank value is above Order indicating that dwc:order is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for order and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for order.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:family?
     *
-    * Provides: VALIDATION_FAMILY_NOTEMPTY
+    * Provides: 215 VALIDATION_FAMILY_NOTEMPTY
     * Version: 2024-01-28
     *
     * @param family the provided dwc:family to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
     * @return DQResponse the response of type ComplianceValue  to return
     */
     @Validation(label="VALIDATION_FAMILY_NOTEMPTY", description="Is there a value in dwc:family?")
     @Provides("5bfa043c-1e19-4224-8d55-b568ced347c2")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/5bfa043c-1e19-4224-8d55-b568ced347c2/2024-01-28")
     @Specification("COMPLIANT if dwc:family is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationFamilyNotempty(
-        @ActedUpon("dwc:family") String family
+    public static DQResponse<ComplianceValue> validationFamilyNotempty(
+        @ActedUpon("dwc:family") String family,
+        @Consulted("dwc:taxonRank") String taxonRank
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:family is not EMPTY; otherwise NOT_COMPLIANT 
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:family is EMPTY and 
+        // dwc:taxonRank contains a value that is not interpretable as 
+        // a taxon rank; COMPLIANT if dwc:family is not EMPTY, 
+        // or dwc:family is EMPTY and the value in dwc:taxonRank 
+        // is higher than family; otherwise NOT_COMPLIANT.
         // 
 
+		if (SciNameUtils.isEmpty(family)) {
+			Boolean rankTest = SciNameUtils.isRankAbove("family",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAtOrAbove("family",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for family, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:family should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for family, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:family should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for family, bur taxonRank value is above Family indicating that dwc:family is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for family and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for family.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:genus?
     *
-    * Provides: VALIDATION_GENUS_NOTEMPTY
+    * Provides: 214 VALIDATION_GENUS_NOTEMPTY
     * Version: 2024-01-28
     *
     * @param genus the provided dwc:genus to evaluate as ActedUpon.
@@ -3363,42 +3484,112 @@ public class DwCSciNameDQ {
     */
     @Validation(label="VALIDATION_GENUS_NOTEMPTY", description="Is there a value in dwc:genus?")
     @Provides("d02c1ffd-af28-49bd-9c9c-e8e23a8b7258")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d02c1ffd-af28-49bd-9c9c-e8e23a8b7258/2024-01-28")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d02c1ffd-af28-49bd-9c9c-e8e23a8b7258/2024-06-05")
     @Specification("COMPLIANT if the value in dwc:taxonRank is higher than genus or if dwc:genus is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationGenusNotempty(
+    public static DQResponse<ComplianceValue> validationGenusNotempty(
         @ActedUpon("dwc:genus") String genus, 
         @Consulted("dwc:taxonRank") String taxonRank
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // COMPLIANT if the value in dwc:taxonRank is higher than genus 
-        // or if dwc:genus is not EMPTY; otherwise NOT_COMPLIANT 
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:genus is EMPTY and dwc:taxonRank 
+        // contains a value that is not interpretable as a taxon rank; 
+        // COMPLIANT if dwc:genus is not EMPTY, or dwc:genus is EMPTY and 
+        // the value in dwc:taxonRank is higher than genus; otherwise NOT_COMPLIANT.
 
+		if (SciNameUtils.isEmpty(genus)) {
+			Boolean rankTest = SciNameUtils.isRankAbove("genus",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAtOrAbove("genus",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for genus, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:genus should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for genus, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:genus should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for genus, bur taxonRank value is above Genus indicating that dwc:genus is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for genus and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for genus.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+		
         return result;
     }
 
     /**
     * Is there a value in dwc:class?
     *
-    * Provides: VALIDATION_CLASS_NOTEMPTY
+    * Provides: 213 VALIDATION_CLASS_NOTEMPTY
     * Version: 2024-01-28
     *
     * @param taxonomic_class the provided dwc:class to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
     * @return DQResponse the response of type ComplianceValue  to return
     */
     @Validation(label="VALIDATION_CLASS_NOTEMPTY", description="Is there a value in dwc:class?")
     @Provides("b854b179-3572-48b6-aab2-879e3172fd7d")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-01-28")
     @Specification("COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationClassNotempty(
-        @ActedUpon("dwc:class") String taxonomic_class
+    public static DQResponse<ComplianceValue> validationClassNotempty(
+        @ActedUpon("dwc:class") String taxonomic_class,
+        @Consulted("dwc:taxonRank") String taxonRank
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
         //TODO:  Implement specification
         // COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT 
         // 
+
+		if (SciNameUtils.isEmpty(taxonomic_class)) {
+			Boolean rankTest = SciNameUtils.isRankAbove("class",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAtOrAbove("class",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for class, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:class should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for class, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:class should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for class, bur taxonRank value is above Class indicating that dwc:class is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for class and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for class.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
 
         return result;
     }

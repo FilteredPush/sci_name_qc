@@ -20,7 +20,9 @@ package org.filteredpush.qc.sciname;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +68,109 @@ public class SciNameUtils {
 	public SciNameUtils() { 
 		
 	} 
+	
+	/**
+	 * Obtain a list of taxonomic rank names, ordered from highest to lowest rank, such that
+	 * indexOf("kingdom") will return an index smaller than indexOf("phylum")
+	 * 
+	 * @return a list of rank names in lower case
+	 */
+	public static final List<String> getRankListLC() { 
+		final LinkedList<String> values = new LinkedList<String>();
+		values.addLast("domain");
+		values.addLast("kingdom");
+		values.addLast("subkingdom");
+		values.addLast("superphylum");
+		values.addLast("phylum");
+		values.addLast("subphylum");
+		values.addLast("superclass");
+		values.addLast("class");
+		values.addLast("subclass");
+		values.addLast("supercohort");
+		values.addLast("cohort");
+		values.addLast("subcohort");
+		values.addLast("superorder");
+		values.addLast("order");
+		values.addLast("suborder");
+		values.addLast("infraorder");
+		values.addLast("superfamily");
+		values.addLast("family");
+		values.addLast("subfamily");
+		values.addLast("tribe");
+		values.addLast("subtribe");
+		values.addLast("genus");
+		values.addLast("subgenus");
+		values.addLast("section");
+		values.addLast("subsection");
+		values.addLast("series");
+		values.addLast("subseries");
+		values.addLast("speciesAggregate");
+		values.addLast("species");
+		values.addLast("subspecificAggregate");
+		values.addLast("subspecies");
+		values.addLast("variety");
+		values.addLast("subvariety");
+		values.addLast("form");
+		values.addLast("subform");
+		values.addLast("cultivarGroup");
+		values.addLast("cultivar");
+		values.addLast("strain");
+		return values;
+	}
+	
+	/**
+	 * Test to see if one taxonomic rank string represents the same or higher rank than 
+	 * an other.  Case insensitive, and ignores any leading/trailing whitespace.
+	 * 
+	 * @param lowerRank to evaluate as the lower taxon rank
+	 * @param higherRank to evaluate as the higher taxon rank
+	 * @return null if either lowerRank or higherRank are not found in the list of ranks, 
+	 *    true if lowerRank is at the same or a lower taxonomic rank than higherRank, 
+	 *    false if higherRank is below lowerRank in taxonomic rank, for example
+	 *    given lowerRank = genus and higherRank = kingdom will return true.
+	 */
+	public static Boolean isRankAtOrAbove(String lowerRank, String higherRank) { 
+		Boolean result = null;
+		lowerRank = lowerRank.trim().toLowerCase();
+		higherRank = higherRank.trim().toLowerCase();
+		List ranks = getRankListLC();
+		if (ranks.contains(lowerRank) && ranks.contains(higherRank)) { 
+			if (lowerRank.equals(higherRank)) { 
+				result = true;
+			} else { 
+				result = ranks.indexOf(lowerRank) > ranks.indexOf(higherRank);
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Test to see if one taxonomic rank string represents a higher rank than 
+	 * an other.  Case insensitive, and ignores any leading/trailing whitespace.
+	 * 
+	 * @param lowerRank to evaluate as the lower taxon rank
+	 * @param higherRank to evaluate as the higher taxon rank
+	 * @return null if either lowerRank or higherRank are not found in the list of ranks, 
+	 *    true if lowerRank is at a lower taxonomic rank than higherRank, 
+	 *    false if higherRank is the same or below lowerRank in taxonomic rank, for example
+	 *    given lowerRank = genus and higherRank = kingdom will return true.
+	 */
+	public static Boolean isRankAbove(String lowerRank, String higherRank) { 
+		Boolean result = null;
+		if (lowerRank!=null && higherRank!=null) { 
+			lowerRank = lowerRank.trim().toLowerCase();
+			higherRank = higherRank.trim().toLowerCase();
+			List ranks = getRankListLC();
+			if (ranks.contains(lowerRank) && ranks.contains(higherRank)) { 
+				if (lowerRank.equals(higherRank)) { 
+					result = true;
+				} else { 
+					result = ranks.indexOf(lowerRank) > ranks.indexOf(higherRank);
+				}
+			}
+		}
+		return result;
+	}
 	
 	/**
 	 * <p>validateTaxonID.</p>
