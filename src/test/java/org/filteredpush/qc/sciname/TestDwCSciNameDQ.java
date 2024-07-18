@@ -663,11 +663,63 @@ public class TestDwCSciNameDQ {
 	}
 	
 	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTypestatusNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTypestatusEmpty() {
+		//COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTypestatusNotempty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationTypestatusNotempty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationTypestatusNotempty("holotype of Pinus radiata D.Don");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationHigherclassificationNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationHigherclassificationNotempty() {
+		//COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationHigherclassificationNotempty(null);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationHigherclassificationNotempty("string");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationHigherclassificationNotempty("Animailia|Mollusca|Gastropoda");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
+	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationPhylumNotempty(java.lang.String)}.
 	 */
 	@Test
 	public void testvalidationPhylumNotempty() {
-        // COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT 
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum is EMPTY and 
+        // dwc:taxonRank contains a value that is not interpretable as 
+        // a taxon rank; COMPLIANT if dwc:phylum is not EMPTY, or 
+        // dwc:phylum is EMPTY and the value in dwc:taxonRank is 
+        // higher than phylum; otherwise NOT_COMPLIANT.
 		
 		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationPhylumNotempty(null,null);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
@@ -699,6 +751,11 @@ public class TestDwCSciNameDQ {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		result = DwCSciNameDQ.validationPhylumNotempty("","Genus");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationPhylumNotempty("","var");
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
@@ -749,6 +806,12 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationClassNotempty("","var.");
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 	}
 	
 	/**
@@ -792,6 +855,12 @@ public class TestDwCSciNameDQ {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		result = DwCSciNameDQ.validationOrderNotempty("","Genus");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationOrderNotempty("","var.");
+		logger.debug(result.getComment());
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
@@ -841,6 +910,12 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationFamilyNotempty("","var.");
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 	}
 	
 	/**
@@ -884,6 +959,11 @@ public class TestDwCSciNameDQ {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 		result = DwCSciNameDQ.validationGenusNotempty("","Species");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationGenusNotempty("","var.");
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
@@ -1167,6 +1247,122 @@ public class TestDwCSciNameDQ {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationSpecificepithetNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationSpecificepithetNotempty() {
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:specificEpithet is EMPTY 
+        // and dwc:taxonRank contains a value that is not interpretable as a 
+        // taxon rank; COMPLIANT if dwc:specificEpithet is not EMPTY, or 
+        // dwc:specificEpithet is EMPTY and the value in dwc:taxonRank is 
+        // higher than specific epithet; otherwise NOT_COMPLIANTNT 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationSpecificepithetNotempty(null,null);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty(null,"Foo");
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty("string", null);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty("string","foo");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty("Muricidae","Family");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty(null,"Kingdom");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		logger.debug(result.getComment());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty("","subspecies");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationSpecificepithetNotempty("","var.");
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationInfraspecificepithetNotempty(java.lang.String)}.
+	 */
+	@Test
+	public void testvalidationInfraspecificepithetNotempty() {
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum is EMPTY and 
+        // dwc:taxonRank contains a value that is not interpretable as 
+        // a taxon rank; COMPLIANT if dwc:phylum is not EMPTY, or 
+        // dwc:phylum is EMPTY and the value in dwc:taxonRank is 
+        // higher than phylum; otherwise NOT_COMPLIANT. 
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationInfraspecificepithetNotempty(null,null);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty(null,"Foo");
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty("string", null);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty("string","foo");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty("Muricidae","Family");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty(null,"Kingdom");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		logger.debug(result.getComment());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty(null,"Species");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		logger.debug(result.getComment());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty("","subspecies");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty("","variety");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationInfraspecificepithetNotempty("","var.");
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 	}
 	
 }

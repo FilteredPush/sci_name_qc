@@ -131,14 +131,16 @@ public class SciNameUtils {
 	 */
 	public static Boolean isRankAtOrAbove(String lowerRank, String higherRank) { 
 		Boolean result = null;
-		lowerRank = lowerRank.trim().toLowerCase();
-		higherRank = higherRank.trim().toLowerCase();
-		List ranks = getRankListLC();
-		if (ranks.contains(lowerRank) && ranks.contains(higherRank)) { 
-			if (lowerRank.equals(higherRank)) { 
-				result = true;
-			} else { 
-				result = ranks.indexOf(lowerRank) > ranks.indexOf(higherRank);
+		if (lowerRank!=null && higherRank!=null) { 
+			lowerRank = lowerRank.trim().toLowerCase();
+			higherRank = higherRank.trim().toLowerCase();
+			List ranks = getRankListLC();
+			if (ranks.contains(lowerRank) && ranks.contains(higherRank)) { 
+				if (lowerRank.equals(higherRank)) { 
+					result = true;
+				} else { 
+					result = ranks.indexOf(lowerRank) > ranks.indexOf(higherRank);
+				}
 			}
 		}
 		return result;

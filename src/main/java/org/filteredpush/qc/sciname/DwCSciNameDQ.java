@@ -91,11 +91,15 @@ import org.datakurator.ffdq.api.result.*;
  * #121	VALIDATION_TAXONID_COMPLETE a82c7e3a-3a50-4438-906c-6d0fefa9e984
  * #64 VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE 399ef91d-425c-46f2-a6df-8a0fe4c3e86e
  * #254 VALIDATION_VERNACULARNAME_NOTEMPTY eb9b70c7-9cf6-42ea-a708-5de527211df4
+ * #229 VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY 72ed16f1-0587-4afd-a9fc-602c2f3f1975
  * #218 VALIDATION_PHYLUM_NOTEMPTY 19bbd107-6b14-4c82-8d3e-f7a2a67df309
  * #213 VALIDATION_CLASS_NOTEMPTY "b854b179-3572-48b6-aab2-879e3172fd7d
  * #217 VALIDATION_ORDER_NOTEMPTY "d1c40fc8-d8ad-4148-82e0-b4b7ead70051
  * #215 VALIDATION_FAMILY_NOTEMPTY 5bfa043c-1e19-4224-8d55-b568ced347c2
  * #214 VALIDATION_GENUS_NOTEMPTY d02c1ffd-af28-49bd-9c9c-e8e23a8b7258
+ * #246 VALIDATION_TYPESTATUS_NOTEMPTY cd7cae15-f255-41a3-b002-c9620c40f620
+ * #220 VALIDATION_SPECIFICEPITHET_NOTEMPTY cdb37443-292e-49b6-a012-4718f0d7ba64
+ * #219 VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY 77c6fde2-c3ca-4ad3-b2f2-3b81bba9a673
  *
  * @author mole
  * @version $Id: $Id
@@ -2462,12 +2466,16 @@ public class DwCSciNameDQ {
     			   values.add("speciesAggregate");
     			   values.add("species");
     			   mapping.put("sp.", "species");
+    			   mapping.put("sp", "species");
     			   values.add("subspecificAggregate");
     			   values.add("subspecies");
     			   values.add("variety");
     			   mapping.put("var.", "variety");
     			   mapping.put("var", "variety");
     			   values.add("subvariety");
+    			   mapping.put("subvar", "subvariety");
+    			   mapping.put("subvar", "subvariety");
+    			   mapping.put("sub var.", "subvariety");
     			   values.add("form");
     			   mapping.put("f.", "form");
     			   mapping.put("forma", "form");
@@ -3209,7 +3217,11 @@ public class DwCSciNameDQ {
     /**
     * Is there a value in dwc:typeStatus?
     *
-    * Provides: VALIDATION_TYPESTATUS_NOTEMPTY
+    * The vast majority of current biodiversity data will be expected to not have a value in dwc:typeStatus. 
+    * This test does not have general utility, but could have value in assessing fittness for use for a 
+    * set of data quality needs/use cases related to type specimens.
+    *
+    * Provides: 246 VALIDATION_TYPESTATUS_NOTEMPTY
     * Version: 2024-02-04
     *
     * @param typeStatus the provided dwc:typeStatus to evaluate as ActedUpon.
@@ -3219,22 +3231,31 @@ public class DwCSciNameDQ {
     @Provides("cd7cae15-f255-41a3-b002-c9620c40f620")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/cd7cae15-f255-41a3-b002-c9620c40f620/2024-02-04")
     @Specification("COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationTypestatusNotempty(
+    public static DQResponse<ComplianceValue> validationTypestatusNotempty(
         @ActedUpon("dwc:typeStatus") String typeStatus
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if dwc:typeStatus is not EMPTY; otherwise NOT_COMPLIANT 
         // 
-
+		if (SciNameUtils.isEmpty(typeStatus)) {
+			result.addComment("No value provided for typeStatus.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for typeStatus.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:higherClassification?
     *
-    * Provides: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY
+    * Provides: 229 VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY
     * Version: 2024-01-29
     *
     * @param higherClassification the provided dwc:higherClassification to evaluate as ActedUpon.
@@ -3244,43 +3265,155 @@ public class DwCSciNameDQ {
     @Provides("72ed16f1-0587-4afd-a9fc-602c2f3f1975")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/72ed16f1-0587-4afd-a9fc-602c2f3f1975/2024-01-29")
     @Specification("COMPLIANT if dwc:higherClassification is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationHigherclassificationNotempty(
+    public static DQResponse<ComplianceValue> validationHigherclassificationNotempty(
         @ActedUpon("dwc:higherClassification") String higherClassification
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // COMPLIANT if dwc:higherClassification is not EMPTY; otherwise 
         // NOT_COMPLIANT 
 
+		if (SciNameUtils.isEmpty(higherClassification)) {
+			result.addComment("No value provided for higherClassification.");
+			result.setValue(ComplianceValue.NOT_COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} else { 
+			result.addComment("Some value provided for higherClassification.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
     /**
     * Is there a value in dwc:specificEpithet?
     *
-    * Provides: VALIDATION_SPECIFICEPITHET_NOTEMPTY
-    * Version: 2024-01-28
+    * Provides: 220 VALIDATION_SPECIFICEPITHET_NOTEMPTY
+    * Version: 2024-06-05
     *
     * @param specificEpithet the provided dwc:specificEpithet to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
     * @return DQResponse the response of type ComplianceValue  to return
     */
     @Validation(label="VALIDATION_SPECIFICEPITHET_NOTEMPTY", description="Is there a value in dwc:specificEpithet?")
     @Provides("cdb37443-292e-49b6-a012-4718f0d7ba64")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/cdb37443-292e-49b6-a012-4718f0d7ba64/2024-01-28")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/cdb37443-292e-49b6-a012-4718f0d7ba64/2024-06-05")
     @Specification("COMPLIANT if dwc:specificEpithet is not EMPTY; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationSpecificepithetNotempty(
-        @ActedUpon("dwc:specificEpithet") String specificEpithet
+    public static DQResponse<ComplianceValue> validationSpecificepithetNotempty(
+        @ActedUpon("dwc:specificEpithet") String specificEpithet,
+        @Consulted("dwc:taxonRank") String taxonRank
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:specificEpithet is not EMPTY; otherwise 
-        // NOT_COMPLIANT 
-
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:specificEpithet is EMPTY 
+        // and dwc:taxonRank contains a value that is not interpretable as a 
+        // taxon rank; COMPLIANT if dwc:specificEpithet is not EMPTY, or 
+        // dwc:specificEpithet is EMPTY and the value in dwc:taxonRank is 
+        // higher than specific epithet; otherwise NOT_COMPLIANT
+        
+		if (SciNameUtils.isEmpty(specificEpithet)) {
+			Boolean rankTest = SciNameUtils.isRankAbove("species",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				logger.debug(lookupRank.getResultState().getLabel());
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAbove("species",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for specificEpithet, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:specificEpithet should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for specificEpithet, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:specificEpithet should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for specificEpithet, bur taxonRank value is above species indicating that dwc:specificEpithet is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for specificEpithet and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for specificEpithet.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
         return result;
     }
 
+    /**
+    * Is there a value in dwc:infraspecificEpithet?
+    *
+    * Provides: 219 VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY
+    * Version: 2024-06-05
+    *
+    * @param infraspecificEpithet the provided dwc:infraspecificEpithet to evaluate as ActedUpon.
+    * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
+    * @return DQResponse the response of type ComplianceValue  to return
+    */
+    @Validation(label="VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY", description="Is there a value in dwc:infraspecificEpithet?")
+    @Provides("77c6fde2-c3ca-4ad3-b2f2-3b81bba9a673")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/77c6fde2-c3ca-4ad3-b2f2-3b81bba9a673/2024-06-05")
+    @Specification("COMPLIANT if dwc:infraspecificEpithet is not EMPTY; otherwise NOT_COMPLIANT ")
+    public static DQResponse<ComplianceValue> validationInfraspecificepithetNotempty(
+        @ActedUpon("dwc:infraspecificEpithet") String infraspecificEpithet,
+        @Consulted("dwc:taxonRank") String taxonRank
+    ) {
+        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:infraspecificEpithet is EMPTY 
+        // and dwc:taxonRank contains a value that is not interpretable as a 
+        // taxon rank; COMPLIANT if dwc:infraspecificEpithet is not EMPTY, or 
+        // dwc:infraspecificEpithet is EMPTY and the value in dwc:taxonRank is 
+        // higher than specific epithet; otherwise NOT_COMPLIANT
+        
+		if (SciNameUtils.isEmpty(infraspecificEpithet)) {
+			Boolean rankTest = SciNameUtils.isRankAtOrAbove("species",taxonRank);
+			if (rankTest==null) { 
+				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
+					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
+					rankTest = SciNameUtils.isRankAtOrAbove("species",ammendedRank);
+					if (rankTest==null) { 
+						result.addComment("No value provided for infraspecificEpithet, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:infraspecificEpithet should be empty or not.");
+						result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+					}
+				} else { 
+					result.addComment("No value provided for infraspecificEpithet, but provided value for dwc:taxonRank ["+taxonRank+"] not interpretable to determine if dwc:infraspecificEpithet should be empty or not.");
+					result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
+				}
+			} 
+			if (rankTest !=null) { 
+				if (rankTest==true) { 
+					result.addComment("No value provided for infraspecificEpithet, bur taxonRank value is species or above indicating that dwc:infraspecificEpithet is correctly empty.");
+					result.setValue(ComplianceValue.COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				} else { 
+					result.addComment("No value provided for infraspecificEpithet and taxonRank indicates that a value should be present.");
+					result.setValue(ComplianceValue.NOT_COMPLIANT);
+					result.setResultState(ResultState.RUN_HAS_RESULT);
+				}
+			}
+		} else { 
+			result.addComment("Some value provided for infraspecificEpithet.");
+			result.setValue(ComplianceValue.COMPLIANT);
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		}
+        
+        return result;
+    }
+    
     /**
     * Is there a value in dwc:phylum?
     *
@@ -3313,7 +3446,7 @@ public class DwCSciNameDQ {
 			Boolean rankTest = SciNameUtils.isRankAbove("phylum",taxonRank);
 			if (rankTest==null) { 
 				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
-				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
 					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
 					rankTest = SciNameUtils.isRankAtOrAbove("phylum",ammendedRank);
 					if (rankTest==null) { 
@@ -3376,7 +3509,9 @@ public class DwCSciNameDQ {
 			Boolean rankTest = SciNameUtils.isRankAbove("order",taxonRank);
 			if (rankTest==null) { 
 				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
-				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+				logger.debug(lookupRank.getResultState().getLabel());
+				logger.debug(lookupRank.getComment());
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
 					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
 					rankTest = SciNameUtils.isRankAtOrAbove("order",ammendedRank);
 					if (rankTest==null) { 
@@ -3440,7 +3575,7 @@ public class DwCSciNameDQ {
 			Boolean rankTest = SciNameUtils.isRankAbove("family",taxonRank);
 			if (rankTest==null) { 
 				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
-				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
 					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
 					rankTest = SciNameUtils.isRankAtOrAbove("family",ammendedRank);
 					if (rankTest==null) { 
@@ -3502,7 +3637,8 @@ public class DwCSciNameDQ {
 			Boolean rankTest = SciNameUtils.isRankAbove("genus",taxonRank);
 			if (rankTest==null) { 
 				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
-				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+				logger.debug(lookupRank.getResultState().getLabel());
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
 					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
 					rankTest = SciNameUtils.isRankAtOrAbove("genus",ammendedRank);
 					if (rankTest==null) { 
@@ -3562,7 +3698,7 @@ public class DwCSciNameDQ {
 			Boolean rankTest = SciNameUtils.isRankAbove("class",taxonRank);
 			if (rankTest==null) { 
 				DQResponse<AmendmentValue> lookupRank = amendmentTaxonrankStandardized(taxonRank,null);
-				if (lookupRank.getResultState()==ResultState.FILLED_IN) { 
+				if (lookupRank.getResultState()==ResultState.AMENDED) { 
 					String ammendedRank = lookupRank.getValue().getObject().get("dwc:taxonRank");
 					rankTest = SciNameUtils.isRankAtOrAbove("class",ammendedRank);
 					if (rankTest==null) { 
