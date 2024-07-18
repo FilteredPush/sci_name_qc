@@ -3695,8 +3695,12 @@ public class DwCSciNameDQ {
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
-        // COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT 
+        // Specification
+        // INTERNAL_PREREQUISITES_NOT_MET if dwc:class is EMPTY and dwc:taxonRank 
+        // contains a value that is not interpretable as a taxon rank; 
+        // COMPLIANT if dwc:class is not EMPTY, or dwc:class is EMPTY and 
+        // the value in dwc:taxonRank is higher than class; 
+        // otherwise NOT_COMPLIANT.
         // 
 
 		if (SciNameUtils.isEmpty(taxonomic_class)) {
@@ -3756,7 +3760,7 @@ public class DwCSciNameDQ {
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:subtribe 
         // is EMPTY; COMPLIANT if the value of dwc:subtribe was found 
@@ -3766,7 +3770,7 @@ public class DwCSciNameDQ {
         // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei]
         // NOTE: GBIF backbone taxonomy does not yet include subtribe data
 
@@ -3846,7 +3850,7 @@ public class DwCSciNameDQ {
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-        //TODO:  Implement specification
+        // Secification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:superfamily 
         // is EMPTY; COMPLIANT if the value of dwc:superfamily was 
@@ -3856,7 +3860,7 @@ public class DwCSciNameDQ {
         // endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
-        //TODO: Parameters. This test is defined as parameterized.
+        // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority default bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei]
         // NOTE: GBIF backbone taxonomy does not yet include tribe data
         
