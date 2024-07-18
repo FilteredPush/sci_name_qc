@@ -270,6 +270,16 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
+		scientificName="Hakea decurrens physocarpa";
+		genericName="Hakea";
+		specificEpithet="decurrens";
+		infraspecificEpithet="physocarpa";  
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+		
 		// Validation dataID: 812
 		scientificName="Hakea decurrens ssp. physocarpa";
 		genericName="";
@@ -280,6 +290,16 @@ public class TestDwCSciNameDQ {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+		
+		scientificName="Hakea decurrens";
+		genericName="Hakea";
+		specificEpithet="decurrens";
+		infraspecificEpithet="physocarpa";  
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
 		scientificName = "Ausareum bus cus";
 		genericName = "Aus";

@@ -1697,12 +1697,11 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1696
     /**
      * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
      * Provides: #101 VALIDATION_POLYNOMIAL_CONSISTENT
-     * Version: 2022-04-03
+     * Version: 2022-09-18
      *
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param genericName the provided dwc:genericName to evaluate
@@ -1712,7 +1711,7 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_POLYNOMIAL_CONSISTENT", description="Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?")
     @Provides("17f03f1f-f74d-40c0-8071-2927cfc9487b")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2022-04-03")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2022-09-18")
     @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY, or all of dwc:genericName, dwc:specificEpithet and dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, as represented in dwc:scientificName, is consistent with NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. ")
     public static DQResponse<ComplianceValue> validationPolynomialConsistent(
     		@ActedUpon("dwc:scientificName") String scientificName, 
@@ -1748,7 +1747,7 @@ public class DwCSciNameDQ {
   				result.setResultState(ResultState.RUN_HAS_RESULT);
         	} else if (scientificName.equals(genericName) && SciNameUtils.isEmpty(specificEpithet) && SciNameUtils.isEmpty(infraspecificEpithet) ) { 
         		// simple uninomial match
-   				result.addComment("Exact match of scientificName to genericName");
+   				result.addComment("Exact match of scientificName to genericName.");
   				result.setValue(ComplianceValue.COMPLIANT);
   				result.setResultState(ResultState.RUN_HAS_RESULT);
         	} else if (SciNameUtils.isEmpty(infraspecificEpithet) && scientificName.equals(genericName+" "+specificEpithet)) { 
@@ -1759,6 +1758,20 @@ public class DwCSciNameDQ {
         	} else if (!SciNameUtils.isEmpty(genericName) &&  !sciNameTrailingSpace.startsWith(genericName+" ")) { 
         		// failure case, doesn't start with generic name
    				result.addComment("Provided dwc:scientificName does not start with genericName");
+  				result.setValue(ComplianceValue.NOT_COMPLIANT);
+  				result.setResultState(ResultState.RUN_HAS_RESULT);
+        	} else if (!SciNameUtils.isEmpty(specificEpithet) &&
+        			scientificName.matches("^[A-Z][a-z]+ [a-z]+( [a-z]){0,1}$") &&
+        			!sciNameTrailingSpace.matches("^[A-Z][a-z]+ " + specificEpithet + " ([a-z]+ ){0,1}$")) { 
+        		// failure case, two or three words, doesn't contain the specificEpithet as second word
+   				result.addComment("Provided dwc:scientificName does not contain the specificEpithet [" + specificEpithet + "]");
+  				result.setValue(ComplianceValue.NOT_COMPLIANT);
+  				result.setResultState(ResultState.RUN_HAS_RESULT);
+        	} else if (!SciNameUtils.isEmpty(infraspecificEpithet) && 
+        			scientificName.matches("^[A-Z][a-z]+ [a-z]+ [a-z]$") &&
+        			!sciNameTrailingSpace.matches("^[A-Z][a-z]+ [a-z]+ " + infraspecificEpithet + "$")) { 
+        		// failure case, three words, doesn't contain the infraspecificEpithet as second word
+   				result.addComment("Provided dwc:scientificName does not contain the specificEpithet [" + specificEpithet + "]");
   				result.setValue(ComplianceValue.NOT_COMPLIANT);
   				result.setResultState(ResultState.RUN_HAS_RESULT);
         	} else { 
