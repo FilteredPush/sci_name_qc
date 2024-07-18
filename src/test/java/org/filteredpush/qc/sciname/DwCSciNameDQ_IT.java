@@ -1829,6 +1829,146 @@ public class DwCSciNameDQ_IT {
 		
 	}
 	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTribeNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTribeFound() {
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
+        // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
+        // as a value at the rank of Tribe by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTribeFound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationTribeFound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		
+		// GBIF backbone taxonomy does not yet include Tribe data
+//		result = DwCSciNameDQ.validationTribeFound("Papilionini",authority);
+//		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+//		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationTribeFound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		result = DwCSciNameDQ.validationTribeFound("Cypraeini",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+	}
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationSuperfamilyNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationSuperfamilyFound() {
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
+        // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
+        // as a value at the rank of Superfamily by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
 
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationSuperfamilyFound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationSuperfamilyFound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		
+		// GBIF backbone taxonomy does not yet include Superfamily data
+//		result = DwCSciNameDQ.validationSuperfamilyFound("Papilionoidea",authority);
+//		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+//		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationSuperfamilyFound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		result = DwCSciNameDQ.validationSuperfamilyFound("Cypraeoidea",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	}
+
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationSubtribeNotfound(java.lang.String)}.
+	 */
+	@Test
+	public void testValidationSubtribeFound() {
+		
+        // Specification
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
+        // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
+        // as a value at the rank of Subtribe by the bdq:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // 
+
+        // Parameters. This test is defined as parameterized.
+        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+		
+		SciNameSourceAuthority authority = new SciNameSourceAuthority();
+		
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationSubtribeFound(null,authority);
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+		assertNull(result.getValue());
+		result = DwCSciNameDQ.validationSubtribeFound("a3555144X",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT, result.getResultState());
+		assertEquals(ComplianceValue.NOT_COMPLIANT, result.getValue());	
+		
+		// GBIF backbone taxonomy does not yet include Subtribe data
+//		result = DwCSciNameDQ.validationSubtribeFound("Nasuina",authority);
+//		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+//		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		
+		result = DwCSciNameDQ.validationSubtribeFound("Murex",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());			
+		
+		try {
+			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
+		} catch (SourceAuthorityException e) {
+			fail(e.getMessage());
+		}
+		result = DwCSciNameDQ.validationSubtribeFound("Bubocorophiina",authority);
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	}
+	
 }

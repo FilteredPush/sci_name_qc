@@ -46,6 +46,12 @@ import org.datakurator.ffdq.api.result.*;
  * #57 AMENDMENT_TAXONID_FROM_TAXON 431467d6-9b4b-48fa-a197-cd5379f5e889
  * #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID f01fb3f9-2f7e-418b-9f51-adf50f202aea
  *
+ * Supplementary tests where the default source authority does not yet provide data
+ * and thus will not return COMPLIANT until GBIF adds these ranks
+ * #207 VALIDATION_TRIBE_FOUND 8c15f351-26d5-4edd-b38e-07541dc64fd0 
+ * #208 VALIDATION_SUBTRIBE_FOUND 4527c47e-61d9-4abb-af3e-f2999191be17
+ * #206 VALIDATION_SUPERFAMILY_FOUND 2a45e0e9-446c-429f-992d-c3ec1d29eebb
+ * 
  * @author mole
  * @version $Id: $Id
  */
@@ -432,6 +438,69 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     ) {
         return DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, taxonmic_class, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
     }
+    
+    /**
+     * Does the value of dwc:subtribe occur at rank of Subtribe in bdq:sourceAuthority?
+     * using the default GBIF backbone taxonomy.
+     * NOTE: GBIF backbone taxonomy does not yet include subtribe data, until it does, this will never return compliant.
+     *
+     * Provides: 208 VALIDATION_SUBTRIBE_FOUND
+     * Version: 2023-09-22
+     *
+     * @param subtribe the provided dwc:subtribe to evaluate as ActedUpon.
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
+     @Validation(label="VALIDATION_SUBTRIBE_FOUND", description="Does the value of dwc:subtribe occur at rank of Subtribe in bdq:sourceAuthority?")
+     @Provides("4527c47e-61d9-4abb-af3e-f2999191be17")
+     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/4527c47e-61d9-4abb-af3e-f2999191be17/2023-09-22")
+     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:subtribe is EMPTY; COMPLIANT if the value of dwc:subtribe was found as a value at the rank of subtribe by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
+     public static DQResponse<ComplianceValue> validationSubtribeFound(
+         @ActedUpon("dwc:subtribe") String subtribe
+     ) {
+         return validationSubtribeFound(subtribe, null);
+     }
+
+     /**
+     * Does the value of dwc:tribe occur at rank of Tribe in bdq:sourceAuthority
+     * using the default GBIF backbone taxonomy.
+     * NOTE: GBIF backbone taxonomy does not yet include tribe data, until it does, this will never return compliant.
+     *
+     * Provides: 207 VALIDATION_TRIBE_FOUND
+     * Version: 2023-09-22
+     *
+     * @param tribe the provided dwc:tribe to evaluate as ActedUpon.
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
+     @Validation(label="VALIDATION_TRIBE_FOUND", description="Does the value of dwc:tribe occur at rank of Tribe in bdq:sourceAuthority?")
+     @Provides("8c15f351-26d5-4edd-b38e-07541dc64fd0")
+     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/8c15f351-26d5-4edd-b38e-07541dc64fd0/2023-09-22")
+     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe is EMPTY; COMPLIANT if the value of dwc:tribe was found as a value at the rank of tribe by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
+     public static DQResponse<ComplianceValue> validationTribeFound(
+         @ActedUpon("dwc:tribe") String tribe
+     ) {
+         return validationTribeFound(tribe, null);
+     }
+
+     /**
+     * Does the value of dwc:superfamily occur at rank of Superfamily in bdq:sourceAuthority
+     * using the default GBIF backbone taxonomy.
+     * NOTE: GBIF backbone taxonomy does not yet include tribe data, until it does, this will never return compliant.
+     *
+     * Provides: 206 VALIDATION_SUPERFAMILY_FOUND
+     * Version: 2023-09-22
+     *
+     * @param superfamily the provided dwc:superfamily to evaluate as ActedUpon.
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
+     @Validation(label="VALIDATION_SUPERFAMILY_FOUND", description="Does the value of dwc:superfamily occur at rank of Superfamily in bdq:sourceAuthority?")
+     @Provides("2a45e0e9-446c-429f-992d-c3ec1d29eebb")
+     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2a45e0e9-446c-429f-992d-c3ec1d29eebb/2023-09-22")
+     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:superfamily is EMPTY; COMPLIANT if the value of dwc:superfamily was found as a value at the rank of superfamily by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
+     public static DQResponse<ComplianceValue> validationSuperfamilyFound(
+         @ActedUpon("dwc:superfamily") String superfamily
+     ) {
+         return validationSuperfamilyFound(superfamily, null);
+     }
     
 // TODO: Implementation of AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON is not up to date with current version: https://rs.tdwg.org/bdq/terms/431467d6-9b4b-48fa-a197-cd5379f5e889/2023-09-17 see line: 150
 // TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-09-18 see line: 276
