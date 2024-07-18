@@ -1614,6 +1614,7 @@ public class DwCSciNameDQ_IT {
 		phylum="Arthropoda";
 		phylclass="Magnoliopsida";
 		order="Coleoptera";
+		superfamily = "";
 		family="Curculionidae";
 		subfamily="";
 		genus="";
@@ -1641,6 +1642,7 @@ public class DwCSciNameDQ_IT {
 		phylum="Chordata";
 		phylclass="";
 		order="Carnivora";
+		superfamily = "Canoidea";
 		family="Canidae";
 		subfamily="";
 		tribe = "";
@@ -1654,8 +1656,41 @@ public class DwCSciNameDQ_IT {
 		
 		kingdom="Animalia";
 		phylum="Chordata";
+		phylclass="";
+		order="Carnivora";
+		superfamily = "";
+		family="";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="Canis";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Chordata";
+		phylclass="";
+		order="Carnivora";
+		superfamily = "";
+		family="Ursidae";
+		subfamily="";
+		tribe = "";
+		subtribe = "";
+		genus="Canis";
+		result = DwCSciNameDQ.validationClassificationConsistent(kingdom, phylum, phylclass, order, superfamily, family, subfamily, tribe, subtribe, genus, null);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		kingdom="Animalia";
+		phylum="Chordata";
 		phylclass="Mammalia";
 		order="Carnivora";
+		superfamily = "Canoidea";
 		family="Canidae";
 		subfamily="";
 		tribe = "";
@@ -1671,6 +1706,7 @@ public class DwCSciNameDQ_IT {
 		phylum="Annelida";
 		phylclass="Polychaeta";
 		order="Amphinomida";
+		superfamily="";
 		family="Amphinomidae";
 		subfamily="";
 		tribe = "";

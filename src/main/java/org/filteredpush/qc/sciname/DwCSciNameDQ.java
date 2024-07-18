@@ -2721,7 +2721,7 @@ public class DwCSciNameDQ {
     ) {
     	DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
 
-    	// TODO: Specification
+    	// Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
         // of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, 
@@ -2739,8 +2739,6 @@ public class DwCSciNameDQ {
     	// {[https://doi.org/10.15468/39omei]} 
     	// {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]} 
 
-    	// TODO: Confirm that this implementation provides "consistent with the lowest ranking matched element" 
-    	
     	if (sourceAuthority==null) { 
     		sourceAuthority = new SciNameSourceAuthority();
     	}
