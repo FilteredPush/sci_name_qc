@@ -2008,21 +2008,18 @@ public class DwCSciNameDQ {
     }
 
 
-        // 
-    
-// TODO: Implementation of VALIDATION_TAXONID_COMPLETE is not up to date with current version: https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2023-09-18 see line: 1994
     /**
      * Does the value of dwc:taxonID contain a complete identifier?
      *
      * Provides: #121 VALIDATION_TAXONID_COMPLETE
-     * Version: 2022-11-07
+     * Version: 2023-09-18
      *
      * @param taxonID the provided dwc:taxonID to evaluate
      * @return DQResponse the response of type ComplianceValue  to return
      */
     @Validation(label="VALIDATION_TAXONID_COMPLETE", description="Does the value of dwc:taxonID contain a complete identifier?")
     @Provides("a82c7e3a-3a50-4438-906c-6d0fefa9e984")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2022-11-07")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/a82c7e3a-3a50-4438-906c-6d0fefa9e984/2023-09-18")
     @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY; COMPLIANT if (1) taxonID is a validly formed LSID, or (2) taxonID is a validly formed URN with at least NID and NSS present, or (3) taxonID is in the form scope:value, or (4) taxonID is a validly formed URI with host and path where path consists of more than just '/'; otherwise NOT_COMPLIANT ")
     public static DQResponse<ComplianceValue> validationTaxonidComplete(@ActedUpon("dwc:taxonID") String taxonID) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
@@ -2044,7 +2041,7 @@ public class DwCSciNameDQ {
         	result.setResultState(ResultState.RUN_HAS_RESULT);
         	result.setValue(ComplianceValue.COMPLIANT);
         } else if (taxonID.matches("^[0-9]+$")) { 
-        	result.addComment("Provided taxonID ["+ taxonID +"] is a bare integer without an authority and this is incomplete.");
+        	result.addComment("Provided taxonID ["+ taxonID +"] is a bare integer without an authority and thus is incomplete.");
         	result.setResultState(ResultState.RUN_HAS_RESULT);
         	result.setValue(ComplianceValue.NOT_COMPLIANT);
         } else { 
@@ -2086,6 +2083,12 @@ public class DwCSciNameDQ {
         			result.setValue(ComplianceValue.COMPLIANT);
         		} else if (taxonID.toLowerCase().matches("^[a-z]+:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")) { 
         			result.addComment("Provided taxonID ["+taxonID+"] matches the pattern scope:value where value is a uuid.");
+        			result.setResultState(ResultState.RUN_HAS_RESULT);
+        			result.setValue(ComplianceValue.COMPLIANT);
+        		} else if (taxonID.toLowerCase().matches("^[a-z0-9]+:[a-z0-9]+$")) {
+        			// scope:value is not well defined, adding a alphanumericscope:alphanumericvalue pattern as a match
+        			// other valid scope:value pairs might exist and need to have support added.
+        			result.addComment("Provided taxonID ["+taxonID+"] matches the pattern scope:value where scope and value are alpha numeric strings.");
         			result.setResultState(ResultState.RUN_HAS_RESULT);
         			result.setValue(ComplianceValue.COMPLIANT);
         		} else { 

@@ -99,6 +99,13 @@ public class TestDwCSciNameDQ {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		taxonID = "scope:value";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 		taxonID = "https://www.gbif.org/";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
