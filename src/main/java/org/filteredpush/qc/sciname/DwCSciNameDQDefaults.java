@@ -270,7 +270,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * Provides: #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID
      * Version: 2022-12-13
      *
-     * @param taxonID the provided dwc:taxonID to evaluate
+     * @param scientificNameID the provided dwc:taxonID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @return DQResponse the response of type AmendmentValue to return
      */
@@ -279,7 +279,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2023-12-13")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName was not EMPTY; FILLED_IN the value of dwc:scientificName if the value of dwc:taxonID could be unambiguously interpreted as a value in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(
-    		@Consulted("dwc:taxonID") String scientificNameID, 
+    		@Consulted("dwc:scientificNameID") String scientificNameID, 
     		@ActedUpon("dwc:scientificName") String scientificName
     	) {
     	return amendmentScientificnameFromScientificnameid(scientificNameID, scientificName, null);
