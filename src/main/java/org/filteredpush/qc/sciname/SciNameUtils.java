@@ -176,6 +176,7 @@ public class SciNameUtils {
 	
 	/**
 	 * <p>validateTaxonID.</p>
+	 * Determine if a taxonID value has a single exact match in a source authority.
 	 *
 	 * @param taxonID a {@link java.lang.String} object.
 	 * @param sourceAuthority a {@link org.filteredpush.qc.sciname.SciNameSourceAuthority} object.
@@ -190,8 +191,11 @@ public class SciNameUtils {
 		if (sourceAuthority.isGBIFChecklist()) { 
 			String id = taxonID.replaceFirst("http[s]{0,1}://[wapi]{3}\\.gbif\\.org/[v1/]{0,3}species/", "");
 			id = id.replace("https://www.gbif.org/species/", "");
+			id = id.replaceFirst("^gbif:", ""); // expected case of gbif:{integer}
+			logger.debug(id);
 			String matches = GBIFService.fetchTaxonByID(id, sourceAuthority.getAuthoritySubDataset());
         	List<NameUsage>matchList = GBIFService.parseAllNameUsagesFromJSON(matches);
+        	logger.debug(matches.length());
         	if (matchList.size()==1) { 
         		logger.debug(matchList.get(0).getScientificName());
         		result = true;

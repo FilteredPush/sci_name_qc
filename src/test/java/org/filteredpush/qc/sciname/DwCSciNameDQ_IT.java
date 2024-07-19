@@ -656,6 +656,56 @@ public class DwCSciNameDQ_IT {
 		assertEquals("urn:lsid:marinespecies.org:taxname:234156",response.getValue().getObject().get("dwc:taxonID"));		
 	}
 
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonUnmbiguousProblemCase() {
+		// this case was failing, separating out for clearer following of log messages
+		SciNameSourceAuthority defaultAuthorityAuth = new SciNameSourceAuthority();
+		String defaultAuthority = defaultAuthorityAuth.getName();
+		Taxon taxon = new Taxon();
+		taxon = new Taxon();
+		taxon.setScientificNameID("gbif:8154161");
+		taxon.setScientificName("Chicoreus palmarosae");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Plantae"); // missmatch ignored as match on taxonID and scientific name
+		taxon.setTaxonomic_class("Crustacea");  // missmatch ignored as match on scientificNameID and scientific name
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("");
+		taxon.setSubtribe("Ignored value");
+		DQResponse<ComplianceValue>  result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	} 
+	
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonUnmbiguousProblemCase2() {
+		// this case was failing, separating out for clearer following of log messages
+		SciNameSourceAuthority defaultAuthorityAuth = new SciNameSourceAuthority();
+		String defaultAuthority = defaultAuthorityAuth.getName();
+		Taxon taxon = new Taxon();
+		taxon = new Taxon();
+		taxon.setScientificNameID("https://www.gbif.org/species/5726780");
+		taxon.setScientificName("Murex brevispina Lamarck, 1822");
+		taxon.setScientificNameAuthorship("Lamarck, 1822");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	} 
+
+	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
 	 */
@@ -716,7 +766,7 @@ public class DwCSciNameDQ_IT {
 		assertNull(result.getValue());
 		
 		taxon = new Taxon();
-		taxon.setTaxonID("https://www.gbif.org/species/5726780");
+		taxon.setScientificNameID("https://www.gbif.org/species/5726780");
 		taxon.setScientificName("Murex brevispina Lamarck, 1822");
 		taxon.setScientificNameAuthorship("Lamarck, 1822");
 		taxon.setKingdom("Animalia");
@@ -740,7 +790,7 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxon = new Taxon();
-		taxon.setTaxonID("gbif:5726780");
+		taxon.setScientificNameID("gbif:5726780");
 		taxon.setScientificName("Murex brevispina");
 		taxon.setScientificNameAuthorship("");
 		taxon.setKingdom("");
@@ -753,6 +803,7 @@ public class DwCSciNameDQ_IT {
 		
 		
 		taxon = new Taxon();
+		taxon.setScientificNameID("");
 		taxon.setTaxonID("gbif:5726780");
 		taxon.setScientificName("Murex brevispiaria");
 		taxon.setScientificNameAuthorship("");
@@ -765,6 +816,7 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxon = new Taxon();
+		taxon.setScientificNameID("");
 		taxon.setTaxonID("gbif:5726780");
 		taxon.setScientificName("Murex");
 		taxon.setScientificNameAuthorship("");
@@ -778,7 +830,7 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxon = new Taxon();
-		taxon.setTaxonID("");
+		taxon.setScientificNameID("");
 		taxon.setScientificName("Murex brevispina Lamarck, 1822");
 		taxon.setScientificNameAuthorship("Lamarck, 1822");
 		taxon.setKingdom("Animalia");
@@ -791,7 +843,7 @@ public class DwCSciNameDQ_IT {
 	
 		// dataID:524
 		taxon = new Taxon();
-		taxon.setTaxonID("");
+		taxon.setScientificNameID("");
 		taxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
 		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
 		taxon.setKingdom("Animalia");
@@ -806,7 +858,7 @@ public class DwCSciNameDQ_IT {
 		
 		// dataID: 525
 		taxon = new Taxon();
-		taxon.setTaxonID("");
+		taxon.setScientificNameID("");
 		taxon.setScientificName("Chicoreus palmarosae (Lamarck)");
 		taxon.setScientificNameAuthorship("(Lamarck)");
 		taxon.setKingdom("Animalia");
@@ -821,7 +873,7 @@ public class DwCSciNameDQ_IT {
 		
 		// dataID: 526
 		taxon = new Taxon();
-		taxon.setTaxonID("");
+		taxon.setScientificNameID("");
 		taxon.setScientificName("Chicoreus palmarosae (L., 1822)");
 		taxon.setScientificNameAuthorship("(L., 1822)");
 		taxon.setKingdom("Animalia");
@@ -1128,8 +1180,7 @@ public class DwCSciNameDQ_IT {
 		logger.debug(result.getComment());
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
-		// TODO: Fix implementation
-		//assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		// check just passing genus to genericName, no scientific name or taxonID
 		taxon = new Taxon();
