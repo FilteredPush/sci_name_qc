@@ -17,7 +17,7 @@
 	a <http://rs.tdwg.org/bdq/ffdq/Implementation> .
 
 <urn:uuid:90516df7-838c-4d53-81d9-8131be6ac713> a <http://rs.tdwg.org/bdq/ffdq/Mechanism> ;
-	rdfs:label "Kurator: Scientific Name Validator - DwCSciNameDQ:v1.0.2-SNAPSHOT" .
+	rdfs:label "Kurator: Scientific Name Validator - DwCSciNameDQ:v1.1.0-SNAPSHOT" .
 
 <urn:uuid:eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f> a <http://rs.tdwg.org/bdq/ffdq/Specification> ;
 	rdfs:comment "EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum was found as a value at the rank of Phylum by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = \"GBIF Backbone Taxonomy\" {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}" ;

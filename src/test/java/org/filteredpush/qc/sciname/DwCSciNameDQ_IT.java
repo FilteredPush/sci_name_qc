@@ -1230,17 +1230,17 @@ public class DwCSciNameDQ_IT {
 	}
 
 	/**
-	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#amendmentScientificnameFromTaxonid(java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#amendmentScientificnameFromScientificnameid(java.lang.String, java.lang.String)}.
 	 */
 	@Test
-	public void testAmendmentScientificnameFromTaxonid() {
+	public void testAmendmentScientificnameFromScientificnameid() {
 		
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
-        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID 
-        // is EMPTY, the value of dwc:taxonID is ambiguous or dwc:scientificName 
-        // was not EMPTY; FILLED_IN the value of dwc:scientificName 
-        // if the value of dwc:taxonID could be unambiguously interpreted 
-        // as a value in bdq:sourceAuthority; otherwise NOT_AMENDED 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; 
+		// INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY, the value 
+		// of dwc:scientificNameID is ambiguous or dwc:scientificName was not EMPTY; 
+		// FILLED_IN the value of dwc:scientificName if the value of scientificNameID 
+		// could be unambiguously interpreted as a value in bdq:sourceAuthority; 
+		// otherwise NOT_AMENDED
         // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
         // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
@@ -1256,49 +1256,49 @@ public class DwCSciNameDQ_IT {
 		}
 		
 		String scientificName = "Murex pecten"; 
-		String taxonId = null;
-		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		String scientificNameId = null;
+		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 
 		scientificName = ""; 
-		taxonId = "https://www.gbif.org/species/5219243";
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "https://www.gbif.org/species/5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
 		
 		scientificName = ""; 
-		taxonId = "gbif:5219243";
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "gbif:5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
 		
 		scientificName = ""; 
-		taxonId = "https://api.gbif.org/v1/species/5219243";
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "https://api.gbif.org/v1/species/5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("Vulpes vulpes (Linnaeus, 1758)",response.getValue().getObject().get("dwc:scientificName"));
 		
 		scientificName = "Vulpes vulpes"; 
-		taxonId = "https://www.gbif.org/species/5219243";
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "https://www.gbif.org/species/5219243";
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		scientificName = ""; 
-		taxonId = "5219243";  // bare integer is ambiguous.
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "5219243";  // bare integer is ambiguous.
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
 		
 		scientificName = ""; 
-		taxonId = "urn:lsid:marinespecies.org:taxname:390090";
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "urn:lsid:marinespecies.org:taxname:390090";
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.NOT_AMENDED.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
@@ -1310,15 +1310,15 @@ public class DwCSciNameDQ_IT {
 		}
 		
 		scientificName = ""; 
-		taxonId = "urn:lsid:marinespecies.org:taxname:390090";
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "urn:lsid:marinespecies.org:taxname:390090";
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
 		assertEquals("Perkinsus honshuensis Dungan & Reece, 2006",response.getValue().getObject().get("dwc:scientificName"));
 	
 		scientificName = ""; 
-		taxonId = "390090";  // bare integer is ambiguous.
-		response = DwCSciNameDQ.amendmentScientificnameFromTaxonid(taxonId, scientificName, authority);
+		scientificNameId = "390090";  // bare integer is ambiguous.
+		response = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(scientificNameId, scientificName, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), response.getResultState().getLabel());
 		assertNull(response.getValue());
