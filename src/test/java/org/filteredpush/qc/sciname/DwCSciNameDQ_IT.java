@@ -232,28 +232,30 @@ public class DwCSciNameDQ_IT {
 	public void testAmendmentTaxonidFromTaxon() {
 		
         // Specification
-	    // INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is not EMPTY 
-        // or if all of dwc:scientificName, dwc:genericName, dwc:specificEpithet, 
-        // dwc:infraspecificEpithet, dwc:scientificNameAuthorship, 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID 
+        // is not EMPTY or if all of dwc:scientificName, dwc:genericName, 
+        // dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, 
         // and dwc:cultivarEpithet are EMPTY, FILLED_IN the value of 
-        // taxonID for an unambiguously resolved single taxon record 
-        // in the bdq:sourceAuthority through (1) the value of dwc:scientificName 
-        // or (2) if dwc:scientificName is EMPTY through values of 
-        // the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, 
-        // dwc:scientificNameAuthorship and dwc:cultivarEpithet, or 
-        // (3) if ambiguity produced by multiple matches in (1) or 
-        // (2) can be disambiguated to a single Taxon using the values 
-        // of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, 
+        // dwc:scientificNameID for an unambiguously resolved single 
+        // taxon record in the bdq:sourceAuthority through (1) the 
+        // value of dwc:scientificName or (2) if dwc:scientificName 
+        // is EMPTY through values of the terms dwc:genericName, dwc:specificEpithet, 
+        // dwc:infraspecificEpithet, dwc:scientificNameAuthorship and 
+        // dwc:cultivarEpithet, or (3) if ambiguity produced by multiple 
+        // matches in (1) or (2) can be disambiguated to a single Taxon 
+        // using the values of dwc:subtribe, dwc:tribe, dwc:subgenus, 
+        // dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, 
         // dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, 
-        // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
+        // dwc:taxonID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
         // dwc:taxonConceptID, dwc:taxonomicRank, and dwc:vernacularName; 
-        // otherwise NOT_AMENDED bdq:sourceAuthority default = "GBIF 
-        // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
-        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
+        // otherwise NOT_AMENDED 
         // 
 
         // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // [https://doi.org/10.15468/39omei], "API 
+        // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 		
 		SciNameSourceAuthority authority = null;
 		try {
@@ -264,29 +266,29 @@ public class DwCSciNameDQ_IT {
 		
 		String family = null;
 		String scientificName = "Murex pecten";  // GBIF returns two matches, pick the one that is accepted by the other
-		String taxonId = null;
+		String scientificNameId = null;
 		String scientificNameAuthorship = null;
 		Taxon taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		DQResponse<AmendmentValue> response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5726736", response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("gbif:5726736", response.getValue().getObject().get("dwc:scientificNameID"));
 
 		family = null;
 		scientificName = "Vulpes vulpes";  // no authorship provided
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = null;
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:scientificNameID"));
 		
 		family = null;
 		scientificName = "Vulpes vulpes";  // not formed according to the dwc:scientificName definition, should include authorship
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -294,11 +296,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:scientificNameID"));		
 		
 		family = null;
 		scientificName = "Vulpes vulpes";  // not formed according to the dwc:scientificName definition, should include authorship
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "(Linnaeus)";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -306,11 +308,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:scientificNameID"));		
 		
 		family = null;
 		scientificName = "Vulpes vulpes (Linnaeus, 1758)";  // correctly formed, with authorship included
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -318,11 +320,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));		
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:scientificNameID"));		
 	
 		family = null;
 		scientificName = "Vulpes vulpes (Linnaeus, 1758)";  // correctly formed, with authorship included
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "(Linnaeus, 1758)";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -330,11 +332,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, null);   /// null authority should be GBIF
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:scientificNameID"));
 		
 		family = null;
 		scientificName = "Vulpes vulpes (Linnaeus)";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "(Linnaeus)";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -342,11 +344,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:taxonID"));			
+		assertEquals("gbif:5219243",response.getValue().getObject().get("dwc:scientificNameID"));			
 		
 		family = "Muricidae";
 		scientificName = "";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "Rafinesque, 1815";   // not known to GBIF, so can't be sure of match, so won't change
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -360,7 +362,7 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Muricidae"; // not used for matching, only to disambuguate.
 		scientificName = "";  // no value to match on
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -372,7 +374,7 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Muricidae";
 		scientificName = "Muricidae";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -381,9 +383,9 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:taxonID"));	
+		assertEquals("gbif:2304120",response.getValue().getObject().get("dwc:scientificNameID"));	
 		
-		taxonId=""; 
+		scientificNameId=""; 
 		scientificName="Chicoreus palmarosae (Lamarck, 1822)"; 
 		String kingdom="Animalia"; 
 		String phylum="Mollusca"; 
@@ -402,7 +404,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship="(Lamarck, 1822)"; 
 		String taxonRank="";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setTaxonID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setKingdom(kingdom);
@@ -415,7 +417,7 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("gbif:4365662",response.getValue().getObject().get("dwc:taxonID"));	
+		assertEquals("gbif:4365662",response.getValue().getObject().get("dwc:scientificNameID"));	
 		
 		try {
 			authority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.WORMS);
@@ -425,7 +427,7 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Muricidae";
 		scientificName = "Muricidae";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "Rafinesque, 1815";   
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -434,11 +436,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:148", response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:148", response.getValue().getObject().get("dwc:scientificNameID"));
 		
 		family = "Muricidae";
 		scientificName = "Murex pecten";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "Lightfoot, 1786";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -447,11 +449,11 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:scientificNameID"));
 		
 		family = "Muricidae";
 		scientificName = "Murex pecten Lightfoot, 1786";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "Lightfoot, 1786";
 		taxon = new Taxon();
 		taxon.setScientificName(scientificName);
@@ -460,14 +462,14 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:404683",response.getValue().getObject().get("dwc:scientificNameID"));
 		
 		family = "Chaetodermatidae ";
 		scientificName = "Falcidens macrafrondis";
-		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
+		scientificNameId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
@@ -478,10 +480,10 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Chaetodermatidae ";
 		scientificName = "Falcidens macrafrondis Scheltema";
-		taxonId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
+		scientificNameId = "urn:lsid:marinespecies.org:taxname:545069";   // correct value, shouldn't suggest ammendment
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
@@ -492,39 +494,39 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:scientificNameID"));
 	
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis Scheltema";
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:scientificNameID"));
 				
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis";
-		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
+		scientificNameId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
 			// but has a value, so will be internal prerequisites not met.
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
@@ -534,11 +536,11 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis Scheltema";
-		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
+		scientificNameId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
 			// but has a value, so will be internal prerequisites not met.
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
@@ -549,24 +551,24 @@ public class DwCSciNameDQ_IT {
 		// test non-standard overwrite behavior.
 		family = "Chaetodermatidae";
 		scientificName = "Falcidens macrafrondis Scheltema";
-		taxonId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
+		scientificNameId = "https://www.gbif.org/species/4584165";   // gbif record, but we are asking for WoRMS guid
 		scientificNameAuthorship = "Scheltema";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority, true);  // requesting overwrite, not standard behavior
 		logger.debug(response.getComment());
 		assertEquals(ResultState.AMENDED.getLabel(), response.getResultState().getLabel());  // overwrite
-		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:545069",response.getValue().getObject().get("dwc:scientificNameID"));
 				
 		family = "Muricidae";
 		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
-		taxonId = "";  
+		scientificNameId = "";  
 		scientificNameAuthorship = "";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
@@ -577,34 +579,34 @@ public class DwCSciNameDQ_IT {
 		
 		family = "Muricidae";
 		scientificName = "Murex monoceros";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
-		taxonId = "";  
+		scientificNameId = "";  
 		scientificNameAuthorship = "Sowerby, 1841";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:scientificNameID"));
 
 		family = "Muricidae";
 		scientificName = "Murex monoceros Sowerby, 1841";  // Homonym  d'Orbigny, 1841 (junior) and  G.B. Sowerby II, 1841 (senior)
-		taxonId = "";  
+		scientificNameId = "";  
 		scientificNameAuthorship = "Sowerby, 1841";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:taxonID"));
+		assertEquals("urn:lsid:marinespecies.org:taxname:404582",response.getValue().getObject().get("dwc:scientificNameID"));
 		
 		
-		taxonId=""; 
+		scientificNameId=""; 
 		scientificName="Chicoreus palmarosae (Lamarck, 1822)"; 
 		kingdom="Animalia"; 
 		phylum="Mollusca"; 
@@ -623,7 +625,7 @@ public class DwCSciNameDQ_IT {
 		scientificNameAuthorship="(Lamarck, 1822)"; 
 		taxonRank="";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setKingdom(kingdom);
@@ -636,24 +638,24 @@ public class DwCSciNameDQ_IT {
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:208134",response.getValue().getObject().get("dwc:taxonID"));		
+		assertEquals("urn:lsid:marinespecies.org:taxname:208134",response.getValue().getObject().get("dwc:scientificNameID"));		
 		
 		
         // for Babelomurex benoiti (Tiberi, 1855)  should be urn:lsid:marinespecies.org:taxname:234156
         // for taxon_name_id=182110 in MCZbase.
 		family = "Muricidae";
 		scientificName = "Babelomurex benoiti (Tiberi, 1855)";  // correctly formed, with authorship included
-		taxonId = null;
+		scientificNameId = null;
 		scientificNameAuthorship = "(Tiberi, 1855)";
 		taxon = new Taxon();
-		taxon.setTaxonID(taxonId);
+		taxon.setScientificNameID(scientificNameId);
 		taxon.setScientificName(scientificName);
 		taxon.setScientificNameAuthorship(scientificNameAuthorship);
 		taxon.setFamily(family);
 		response = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, authority);
 		logger.debug(response.getComment());
 		assertEquals(ResultState.FILLED_IN.getLabel(), response.getResultState().getLabel());
-		assertEquals("urn:lsid:marinespecies.org:taxname:234156",response.getValue().getObject().get("dwc:taxonID"));		
+		assertEquals("urn:lsid:marinespecies.org:taxname:234156",response.getValue().getObject().get("dwc:scientificNameID"));		
 	}
 
 	

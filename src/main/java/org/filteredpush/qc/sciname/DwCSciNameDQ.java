@@ -480,7 +480,7 @@ public class DwCSciNameDQ {
 
 		DQResponse<AmendmentValue> result = new DQResponse<AmendmentValue>();
 
-        //TODO:  Implement specification
+        // Specification
         // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID 
         // is not EMPTY or if all of dwc:scientificName, dwc:genericName, 
@@ -517,8 +517,8 @@ public class DwCSciNameDQ {
 		// only replaceExisting=false will return INTERNAL_PREREQUSITES_NOT_MET if provided taxonID 
 		// contains a value 
 		// **********
-		if (!replaceExisting && !SciNameUtils.isEmpty(taxon.getTaxonID())) { 
-			result.addComment("dwc:taxonID already contains a value.  [" + taxon.getTaxonID() + "].");
+		if (!replaceExisting && !SciNameUtils.isEmpty(taxon.getScientificNameID())) { 
+			result.addComment("dwc:scientificNameID already contains a value.  [" + taxon.getScientificNameID() + "].");
 			result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
 		} else if (SciNameUtils.isEmpty(taxon.getScientificName()) 
 				&& SciNameUtils.isEmpty(taxon.getGenericName()) 
@@ -643,7 +643,7 @@ public class DwCSciNameDQ {
 									if (!matchedGUIDS.contains(Integer.toString(match.getAcceptedKey()))) {
 										hasMatch=true;
 										matchCounter++;
-										kvp.put("dwc:taxonID", match.getGuid());
+										kvp.put("dwc:scientificNameID", match.getGuid());
 										matchedGUIDS.add(Integer.toString(match.getKey()));
 									} else {  
 										logger.debug("Additional potential match has accepted key of previous match, skipping.");
@@ -652,7 +652,7 @@ public class DwCSciNameDQ {
 								} else { 
 									hasMatch=true;
 									matchCounter++;
-									kvp.put("dwc:taxonID", match.getGuid());
+									kvp.put("dwc:scientificNameID", match.getGuid());
 								}
 							}
 						} else { 
@@ -695,7 +695,8 @@ public class DwCSciNameDQ {
 							// result.setResultState(ResultState.AMBIGUOUS);  Discussed in TG2 call 2022 Jan 30, use NOT_AMENDED and discuss ambiguity in comments.
 							// separate examination of ambiguity into a separate validation, rather than asserting as a result.
 						} else { 
-							if (kvp.get("dwc:taxonID").equals(taxon.getTaxonID())) { 
+							logger.debug(kvp.get("dwc:scientificNameID"));
+							if (kvp.get("dwc:scientificNameID").equals(taxon.getScientificNameID())) { 
 								result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ", matching the current value of dwc:taxonID");
 								result.setResultState(ResultState.NOT_AMENDED);
 							} else  {
@@ -706,7 +707,7 @@ public class DwCSciNameDQ {
 									result.addComment("Exact match to provided taxon found in " + sourceAuthority.getName() + ".");
 									AmendmentValue ammendedTaxonID = new AmendmentValue(kvp);
 									result.setValue(ammendedTaxonID);
-									if (SciNameUtils.isEmpty(taxon.getTaxonID())) { 
+									if (SciNameUtils.isEmpty(taxon.getScientificNameID())) { 
 										result.setResultState(ResultState.FILLED_IN);
 									} else { 
 										result.addComment("Existing value changed to conform to the specified sourceAuthority " + sourceAuthority.getName());
