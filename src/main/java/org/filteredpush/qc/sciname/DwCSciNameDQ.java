@@ -1184,6 +1184,12 @@ public class DwCSciNameDQ {
         									} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_SAMEBUTABBREVIATED)) {
         										result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
         										authorshipOK = true;
+        									} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_L_EXACTYEAR) && taxon.getKingdom()=="Animalia") {
+        										result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with ambiguous L., but same year: " + authorshipComparison.getRemark());
+        										authorshipOK = true;
+        									} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_L) && taxon.getKingdom()=="Animalia") {
+        										result.addComment("Match for provided (animal) taxon in " + sourceAuthority.getName() + " with ambiguous L.: " + authorshipComparison.getRemark());
+        										authorshipOK = true;
         									} else {
         										result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " has different author: " + authorshipComparison.getRemark());
         										authorshipOK = false;
