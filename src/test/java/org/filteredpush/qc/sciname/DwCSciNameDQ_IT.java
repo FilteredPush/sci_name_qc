@@ -1082,6 +1082,23 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
+		// Clause (3) scientific name id and scientific name empty.
+		taxon = new Taxon();
+		taxon.setScientificNameID("");
+		taxon.setScientificName("");
+		taxon.setScientificNameAuthorship("(Lamarck, 1822)");
+		taxon.setKingdom("Animalia");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		taxon.setGenericName("Chicoreus");
+		taxon.setSpecificEpithet("palmarosae");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
 		taxon = new Taxon();
 		taxon.setScientificNameID("gbif:8154161");
 		taxon.setScientificName("Chicoreus palmarosae (Lamarck, 1822)");
@@ -1146,6 +1163,22 @@ public class DwCSciNameDQ_IT {
 		taxon.setTaxonomic_class("Gastropoda");
 		taxon.setFamily("Muricidae");
 		taxon.setGenus("Chicoreus");
+		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxon = new Taxon();
+		taxon.setScientificNameID("");
+		taxon.setScientificName("");
+		taxon.setScientificNameAuthorship("(Lamarck)");
+		taxon.setKingdom("");
+		taxon.setTaxonomic_class("Gastropoda");
+		taxon.setFamily("Muricidae");
+		taxon.setGenus("Chicoreus");
+		taxon.setGenericName("Chicoreus");
+		taxon.setSpecificEpithet("palmarosae");
 		result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
 		logger.debug(result.getComment());
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
