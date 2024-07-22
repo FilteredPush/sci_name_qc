@@ -2549,6 +2549,63 @@ public class DwCSciNameDQ {
      *
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param phylum the provided dwc:phylum to evaluate
+     * @param taxonomic_class the provided dwc:class to evaluate.
+     * @param order the provided dwc:order to evaluate
+     * @param superfamily the provided dwc:superfamily to evaluate
+     * @param family the provided dwc:family to evaluate
+     * @param subfamily the provided dwc:subfamily to evaluate
+     * @param tribe the provided dwc:tribe to evaluate
+     * @param subtribe the provided dwc:subtribe to evaluate
+     * @param genus the provided dwc:genus to evaluate
+     * @param sourceAuthorityString identifier for the source authority in which to look up the taxon
+     * @return DQResponse the response of type ComplianceValue  to return
+     */
+    @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
+    @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-09-18")
+    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the lowest ranking matched element in the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
+    public static DQResponse<ComplianceValue> validationClassificationConsistentString(
+    		@ActedUpon("dwc:kingdom") String kingdom, 
+    		@ActedUpon("dwc:phylum") String phylum, 
+    		@ActedUpon("dwc:class") String taxonomic_class, 
+    		@ActedUpon("dwc:order") String order,
+    		@ActedUpon("dwc:superfamily") String superfamily,
+    		@ActedUpon("dwc:family") String family, 
+    		@ActedUpon("dwc:subfamily") String subfamily,
+    		@ActedUpon("dwc:tribe") String tribe,
+    		@ActedUpon("dwc:subtribe") String subtribe,
+    		@ActedUpon("dwc:genus") String genus,
+    		@Parameter(name="bdq:sourceAuthority") String sourceAuthorityString
+    ) {
+ 	
+    	DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
+    	SciNameSourceAuthority sourceAuthority = null;
+
+    	try {
+    		if (SciNameUtils.isEmpty(sourceAuthorityString)) { 
+    			sourceAuthority = new SciNameSourceAuthority(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY);
+    		} else { 
+    			sourceAuthority = new SciNameSourceAuthority(sourceAuthorityString);
+    		}
+    		result = validationClassificationConsistent(kingdom, phylum, taxonomic_class, order, superfamily, family, subfamily, tribe, subtribe, genus, sourceAuthority);
+    	} catch (SourceAuthorityException e) {
+    		logger.error(e.getMessage());
+    		result.addComment("Unable to process:" + e.getMessage());
+    		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+    	}
+
+    	return result;
+    }
+    
+    /**
+     * Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?
+     *
+     * Provides: #123 VALIDATION_CLASSIFICATION_CONSISTENT
+     * Version: 2023-09-18
+     *
+     * @param kingdom the provided dwc:kingdom to evaluate
+     * @param phylum the provided dwc:phylum to evaluate
+     * @param taxonomic_class the provided dwc:class to evaluate.
      * @param order the provided dwc:order to evaluate
      * @param superfamily the provided dwc:superfamily to evaluate
      * @param family the provided dwc:family to evaluate
@@ -2558,7 +2615,6 @@ public class DwCSciNameDQ {
      * @param genus the provided dwc:genus to evaluate
      * @param sourceAuthority in which to look up the taxon
      * @return DQResponse the response of type ComplianceValue  to return
-     * @param taxonomic_class a {@link java.lang.String} object.
      */
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
     @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
@@ -2646,7 +2702,10 @@ public class DwCSciNameDQ {
     		lowestRank = "Kingdom";
     	} 
 
-    	if (SciNameUtils.isEmpty(lowestRankingTaxon)) { 
+    	if (sourceAuthority.getName().equals(EnumSciNameSourceAuthority.INVALID.getName())) { 
+    		result.addComment("Invalid source authority.");
+    		result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+    	} else if (SciNameUtils.isEmpty(lowestRankingTaxon)) { 
     		result.addComment("No value provided for kingdom, phylum, class, order, or family.");
     		result.setResultState(ResultState.INTERNAL_PREREQUISITES_NOT_MET);
     	} else {
