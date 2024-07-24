@@ -36,6 +36,7 @@ public enum EnumSciNameSourceAuthority {
     GBIF_ARBITRARY,
     WORMS,
     IRMNG,
+    ANSL_APNI, 
     INVALID;
 
 	/**

@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.annotations.*;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.model.ResultState;
+import org.filteredpush.qc.sciname.services.APNIService;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.IRMNGService;
 import org.filteredpush.qc.sciname.services.ServiceException;
@@ -978,6 +979,8 @@ public class DwCSciNameDQ {
         					matchList = WoRMSService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
         				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
         					matchList = IRMNGService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());        						
+        				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.ANSL_APNI)) {
+        					matchList = APNIService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());        						
         				} else { 
         					throw new UnsupportedSourceAuthorityException("Source Authority Not Implemented");
         				} 

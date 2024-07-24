@@ -34,6 +34,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.filteredpush.qc.sciname.services.APNIService;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.GNIService;
 import org.filteredpush.qc.sciname.services.IRMNGService;
@@ -210,6 +211,14 @@ public class SciNameUtils {
 		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
 			String id = taxonID.replace("urn:lsid:irmng.org:taxname:", "");
 			NameUsage match = IRMNGService.lookupTaxonByID(id);
+			if (match!=null) { 
+				logger.debug(match.getScientificName());
+				result=true;
+			}
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.ANSL_APNI)) {
+			// TODO implement
+			String id = taxonID.replace("https://id.biodiversity.org.au/name/apni/", "");
+			NameUsage match = APNIService.lookupTaxonByID(id);
 			if (match!=null) { 
 				logger.debug(match.getScientificName());
 				result=true;

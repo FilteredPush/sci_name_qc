@@ -88,6 +88,10 @@ public class SciNameSourceAuthority {
 	    	this.authority = EnumSciNameSourceAuthority.IRMNG;	
 	    } else if (authorityString.toUpperCase().equals("IRMNG")) {
 	    	this.authority = EnumSciNameSourceAuthority.IRMNG;	
+	    } else if (authorityString.toUpperCase().equals("https://api.biodiversity.org.au/name/check?dataset=APNI".toUpperCase())) {
+	    	this.authority = EnumSciNameSourceAuthority.ANSL_APNI;	
+	    } else if (authorityString.toUpperCase().equals("APNI")) {
+	    	this.authority = EnumSciNameSourceAuthority.ANSL_APNI;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_BACKBONE_TAXONOMY;
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_COL.getName())) {
