@@ -1141,21 +1141,20 @@ public class DwCSciNameDQ {
         return result;
     }
     
-// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2023-12-13 see line: 1156
     /**
      * Propose an amendment to the value of dwc:scientificName using the dwc:scientificNameID value from bdq:sourceAuthority.
      *
      * Provides: #71 AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID
-     * Version: 2022-12-13
+     * Version: 2023-12-13
      *
      * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param sourceAuthority the bdq:sourceAuthority to consult, defaults to GBIF Backbone Taxonomy if null
      * @return DQResponse the response of type AmendmentValue to return
      */
-    @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID", description="Propose an amendment to the value of dwc:scientificName using the taxonID value from bdq:sourceAuthority.")
+    @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID", description="Propose an amendment to the value of dwc:scientificName using the dwc:scientificNameID value from bdq:sourceAuthority.")
     @Provides("f01fb3f9-2f7e-418b-9f51-adf50f202aea")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2022-12-13")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2023-12-13")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY, the value of dwc:scientificNameID is ambiguous or dwc:scientificName was not EMPTY; FILLED_IN the value of dwc:scientificName if the value of scientificNameID could be unambiguously interpreted as a value in bdq:sourceAuthority; otherwise NOT_AMENDED. bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<AmendmentValue> amendmentScientificnameFromScientificnameid(
     		@Consulted("dwc:scientificNameID") String scientificNameID, 
@@ -1170,8 +1169,8 @@ public class DwCSciNameDQ {
         // INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY, 
         // the value of dwc:scientificNameID is ambiguous or dwc:scientificName was 
         // not EMPTY; FILLED_IN the value of dwc:scientificName if the value of 
-        // scientificNameID could be unambiguously interpreted as a value in 
-        // bdq:sourceAuthority; otherwise NOT_AMENDED
+        // scientificNameID could be unambiguously interpreted as a value 
+        // in bdq:sourceAuthority; otherwise NOT_AMENDED
 
         // Parameters. This test is defined as parameterized.
         // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei],API 
@@ -1187,7 +1186,7 @@ public class DwCSciNameDQ {
 		// dwc:scientificNameID=gbif:8102122 to the resolvable endpoint
 		// https://api.gbif.org/v1/species/8102122 The pseudo-namespace gbif: is
 		// recommeded by GBIF for use in scientificNameID to reference GBIF taxon records. Where
-		// resolvable persistent identifiers exist for taxonID values, they should be
+		// resolvable persistent identifiers exist for dwc:scientificNameID values, they should be
 		// used in full, but implementors will need to support at least the gbif:
 		// pseudo-namespace.
 
@@ -1559,12 +1558,11 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1574
     /**
      * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
      * Provides: #101 VALIDATION_POLYNOMIAL_CONSISTENT
-     * Version: 2022-09-18
+     * Version: 2023-09-18
      *
      * @param scientificName the provided dwc:scientificName to evaluate
      * @param genericName the provided dwc:genericName to evaluate
@@ -1574,7 +1572,7 @@ public class DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_POLYNOMIAL_CONSISTENT", description="Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?")
     @Provides("17f03f1f-f74d-40c0-8071-2927cfc9487b")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2022-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18")
     @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY, or all of dwc:genericName, dwc:specificEpithet and dwc:infraspecificEpithet are EMPTY; COMPLIANT if the polynomial, as represented in dwc:scientificName, is consistent with NOT_EMPTY values of dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet; otherwise NOT_COMPLIANT. ")
     public static DQResponse<ComplianceValue> validationPolynomialConsistent(
     		@ActedUpon("dwc:scientificName") String scientificName, 
@@ -3353,12 +3351,11 @@ public class DwCSciNameDQ {
         return result;
     }
     
-// TODO: Implementation of VALIDATION_PHYLUM_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/19bbd107-6b14-4c82-8d3e-f7a2a67df309/2024-07-17 see line: 3365
     /**
     * Is there a value in dwc:phylum?
     *
     * Provides: 218 VALIDATION_PHYLUM_NOTEMPTY
-    * Version: 2024-01-28
+    * Version: 2024-07-17
     *
     * @param phylum the provided dwc:phylum to evaluate as ActedUpon.
     * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
@@ -3366,8 +3363,8 @@ public class DwCSciNameDQ {
     */
     @Validation(label="VALIDATION_PHYLUM_NOTEMPTY", description="Is there a value in dwc:phylum?")
     @Provides("19bbd107-6b14-4c82-8d3e-f7a2a67df309")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/19bbd107-6b14-4c82-8d3e-f7a2a67df309/2024-01-28")
-    @Specification("COMPLIANT if dwc:phylum is not EMPTY; otherwise NOT_COMPLIANT ")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/19bbd107-6b14-4c82-8d3e-f7a2a67df309/2024-07-17")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum is EMPTY and dwc:taxonRank contains a value that is not interpretable as a taxon rank; COMPLIANT if dwc:phylum is not EMPTY, or dwc:phylum is EMPTY and the value in dwc:taxonRank is higher than phylum; otherwise NOT_COMPLIANT.")
     public static DQResponse<ComplianceValue> validationPhylumNotempty(
         @ActedUpon("dwc:phylum") String phylum,
         @Consulted("dwc:taxonRank") String taxonRank
@@ -3417,12 +3414,11 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of VALIDATION_ORDER_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/d1c40fc8-d8ad-4148-82e0-b4b7ead70051/2024-07-17 see line: 3428
     /**
     * Is there a value in dwc:order?
     *
     * Provides: 217 VALIDATION_ORDER_NOTEMPTY
-    * Version: 2024-01-28
+    * Version: 2024-07-17
     *
     * @param order the provided dwc:order to evaluate as ActedUpon.
     * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
@@ -3430,8 +3426,8 @@ public class DwCSciNameDQ {
     */
     @Validation(label="VALIDATION_ORDER_NOTEMPTY", description="Is there a value in dwc:order?")
     @Provides("d1c40fc8-d8ad-4148-82e0-b4b7ead70051")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d1c40fc8-d8ad-4148-82e0-b4b7ead70051/2024-01-28")
-    @Specification("COMPLIANT if dwc:order is not EMPTY; otherwise NOT_COMPLIANT ")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/d1c40fc8-d8ad-4148-82e0-b4b7ead70051/2024-07-17")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:order is EMPTY and dwc:taxonRank contains a value that is not interpretable as a taxon rank; COMPLIANT if dwc:order is not EMPTY, or dwc:order is EMPTY and the value in dwc:taxonRank is higher than order; otherwise NOT_COMPLIANT.")
     public static DQResponse<ComplianceValue> validationOrderNotempty(
         @ActedUpon("dwc:order") String order,
         @Consulted("dwc:taxonRank") String taxonRank
@@ -3484,12 +3480,11 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of VALIDATION_FAMILY_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/5bfa043c-1e19-4224-8d55-b568ced347c2/2024-07-17 see line: 3494
     /**
     * Is there a value in dwc:family?
     *
     * Provides: 215 VALIDATION_FAMILY_NOTEMPTY
-    * Version: 2024-01-28
+    * Version: 2024-07-17
     *
     * @param family the provided dwc:family to evaluate as ActedUpon.
     * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
@@ -3497,8 +3492,8 @@ public class DwCSciNameDQ {
     */
     @Validation(label="VALIDATION_FAMILY_NOTEMPTY", description="Is there a value in dwc:family?")
     @Provides("5bfa043c-1e19-4224-8d55-b568ced347c2")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/5bfa043c-1e19-4224-8d55-b568ced347c2/2024-01-28")
-    @Specification("COMPLIANT if dwc:family is not EMPTY; otherwise NOT_COMPLIANT ")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/5bfa043c-1e19-4224-8d55-b568ced347c2/2024-07-17")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:family is EMPTY and dwc:taxonRank contains a value that is not interpretable as a taxon rank; COMPLIANT if dwc:family is not EMPTY, or dwc:family is EMPTY and the value in dwc:taxonRank is higher than family; otherwise NOT_COMPLIANT.")
     public static DQResponse<ComplianceValue> validationFamilyNotempty(
         @ActedUpon("dwc:family") String family,
         @Consulted("dwc:taxonRank") String taxonRank
@@ -3553,7 +3548,7 @@ public class DwCSciNameDQ {
     * Is there a value in dwc:genus?
     *
     * Provides: 214 VALIDATION_GENUS_NOTEMPTY
-    * Version: 2024-01-28
+    * Version: 2024-06-05
     *
     * @param genus the provided dwc:genus to evaluate as ActedUpon.
     * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
@@ -3612,12 +3607,11 @@ public class DwCSciNameDQ {
         return result;
     }
 
-// TODO: Implementation of VALIDATION_CLASS_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-07-17 see line: 3621
     /**
     * Is there a value in dwc:class?
     *
     * Provides: 213 VALIDATION_CLASS_NOTEMPTY
-    * Version: 2024-01-28
+    * Version: 2024-07-17
     *
     * @param taxonomic_class the provided dwc:class to evaluate as ActedUpon.
     * @param taxonRank the provided dwc:taxonRank to evaluate as Consulted.
@@ -3625,8 +3619,8 @@ public class DwCSciNameDQ {
     */
     @Validation(label="VALIDATION_CLASS_NOTEMPTY", description="Is there a value in dwc:class?")
     @Provides("b854b179-3572-48b6-aab2-879e3172fd7d")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-01-28")
-    @Specification("COMPLIANT if dwc:class is not EMPTY; otherwise NOT_COMPLIANT ")
+    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-07-17")
+    @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:class is EMPTY and dwc:taxonRank contains a value that is not interpretable as a taxon rank; COMPLIANT if dwc:class is not EMPTY, or dwc:class is EMPTY and the value in dwc:taxonRank is higher than class; otherwise NOT_COMPLIANT.")
     public static DQResponse<ComplianceValue> validationClassNotempty(
         @ActedUpon("dwc:class") String taxonomic_class,
         @Consulted("dwc:taxonRank") String taxonRank
