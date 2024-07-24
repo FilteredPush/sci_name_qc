@@ -1141,6 +1141,7 @@ public class DwCSciNameDQ {
         return result;
     }
     
+// TODO: Implementation of AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID is not up to date with current version: https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2023-12-13 see line: 1156
     /**
      * Propose an amendment to the value of dwc:scientificName using the dwc:scientificNameID value from bdq:sourceAuthority.
      *
@@ -1558,6 +1559,7 @@ public class DwCSciNameDQ {
         return result;
     }
 
+// TODO: Implementation of VALIDATION_POLYNOMIAL_CONSISTENT is not up to date with current version: https://rs.tdwg.org/bdq/terms/17f03f1f-f74d-40c0-8071-2927cfc9487b/2023-09-18 see line: 1574
     /**
      * Is the polynomial represented in dwc:scientificName consistent with the equivalent values in dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet?
      *
@@ -3351,6 +3353,7 @@ public class DwCSciNameDQ {
         return result;
     }
     
+// TODO: Implementation of VALIDATION_PHYLUM_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/19bbd107-6b14-4c82-8d3e-f7a2a67df309/2024-07-17 see line: 3365
     /**
     * Is there a value in dwc:phylum?
     *
@@ -3414,6 +3417,7 @@ public class DwCSciNameDQ {
         return result;
     }
 
+// TODO: Implementation of VALIDATION_ORDER_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/d1c40fc8-d8ad-4148-82e0-b4b7ead70051/2024-07-17 see line: 3428
     /**
     * Is there a value in dwc:order?
     *
@@ -3480,6 +3484,7 @@ public class DwCSciNameDQ {
         return result;
     }
 
+// TODO: Implementation of VALIDATION_FAMILY_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/5bfa043c-1e19-4224-8d55-b568ced347c2/2024-07-17 see line: 3494
     /**
     * Is there a value in dwc:family?
     *
@@ -3607,6 +3612,7 @@ public class DwCSciNameDQ {
         return result;
     }
 
+// TODO: Implementation of VALIDATION_CLASS_NOTEMPTY is not up to date with current version: https://rs.tdwg.org/bdq/terms/b854b179-3572-48b6-aab2-879e3172fd7d/2024-07-17 see line: 3621
     /**
     * Is there a value in dwc:class?
     *
