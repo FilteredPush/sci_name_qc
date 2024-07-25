@@ -27,7 +27,6 @@ import java.io.IOException;
 
 
 import org.marinespecies.aphia.v1_0.model.AphiaRecord;
-import org.marinespecies.aphia.v1_0.model.Vernacular;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,38 +34,63 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>VernacularsApi class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class VernacularsApi {
     private ApiClient apiClient;
 
+    /**
+     * <p>Constructor for VernacularsApi.</p>
+     */
     public VernacularsApi() {
         this(Configuration.getDefaultApiClient());
     }
 
+    /**
+     * <p>Constructor for VernacularsApi.</p>
+     *
+     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public VernacularsApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
+    /**
+     * <p>Getter for the field <code>apiClient</code>.</p>
+     *
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
+    /**
+     * <p>Setter for the field <code>apiClient</code>.</p>
+     *
+     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaRecordsByVernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
-    public okhttp3.Call aphiaRecordsByVernacularCall(String vernacular, Boolean like, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call aphiaRecordsByVernacularCall(String vernacular, Boolean like, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
-
+        
         // create path and map variables
         String localVarPath = "/AphiaRecordsByVernacular/{Vernacular}"
             .replaceAll("\\{" + "Vernacular" + "\\}", apiClient.escapeString(vernacular.toString()));
@@ -95,10 +119,10 @@ public class VernacularsApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new okhttp3.Interceptor() {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
-                public okhttp3.Response intercept(okhttp3.Interceptor.Chain chain) throws IOException {
-                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
                     return originalResponse.newBuilder()
                     .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
@@ -109,27 +133,32 @@ public class VernacularsApi {
         String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
-
+    
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call aphiaRecordsByVernacularValidateBeforeCall(String vernacular, Boolean like, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call aphiaRecordsByVernacularValidateBeforeCall(String vernacular, Boolean like, Integer offset, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'vernacular' is set
         if (vernacular == null) {
             throw new ApiException("Missing the required parameter 'vernacular' when calling aphiaRecordsByVernacular(Async)");
         }
-
-        okhttp3.Call call = aphiaRecordsByVernacularCall(vernacular, like, offset, progressListener, progressRequestListener);
+        
+        com.squareup.okhttp.Call call = aphiaRecordsByVernacularCall(vernacular, like, offset, progressListener, progressRequestListener);
         return call;
 
+        
+        
+        
+        
     }
 
     /**
      * Get one or more Aphia Records (max. 50) for a given vernacular
      * Get one or more Aphia Records (max. 50) for a given vernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @return List&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<AphiaRecord> aphiaRecordsByVernacular(String vernacular, Boolean like, Integer offset) throws ApiException {
         ApiResponse<List<AphiaRecord>> resp = aphiaRecordsByVernacularWithHttpInfo(vernacular, like, offset);
@@ -139,14 +168,15 @@ public class VernacularsApi {
     /**
      * Get one or more Aphia Records (max. 50) for a given vernacular
      * Get one or more Aphia Records (max. 50) for a given vernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @return ApiResponse&lt;List&lt;AphiaRecord&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<AphiaRecord>> aphiaRecordsByVernacularWithHttpInfo(String vernacular, Boolean like, Integer offset) throws ApiException {
-        okhttp3.Call call = aphiaRecordsByVernacularValidateBeforeCall(vernacular, like, offset, null, null);
+        com.squareup.okhttp.Call call = aphiaRecordsByVernacularValidateBeforeCall(vernacular, like, offset, null, null);
         Type localVarReturnType = new TypeToken<List<AphiaRecord>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -154,14 +184,15 @@ public class VernacularsApi {
     /**
      * Get one or more Aphia Records (max. 50) for a given vernacular (asynchronously)
      * Get one or more Aphia Records (max. 50) for a given vernacular
+     *
      * @param vernacular The vernacular to find records for (required)
      * @param like Add a &#x27;%&#x27;-sign before and after the input (SQL LIKE &#x27;%vernacular%&#x27; function). Default&#x3D;false (optional, default to false)
      * @param offset Starting recordnumber, when retrieving next chunk of (50) records. Default&#x3D;1 (optional)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public okhttp3.Call aphiaRecordsByVernacularAsync(String vernacular, Boolean like, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
+    public com.squareup.okhttp.Call aphiaRecordsByVernacularAsync(String vernacular, Boolean like, Integer offset, final ApiCallback<List<AphiaRecord>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -182,22 +213,23 @@ public class VernacularsApi {
             };
         }
 
-        okhttp3.Call call = aphiaRecordsByVernacularValidateBeforeCall(vernacular, like, offset, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = aphiaRecordsByVernacularValidateBeforeCall(vernacular, like, offset, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<AphiaRecord>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
      * Build call for aphiaVernacularsByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
-    public okhttp3.Call aphiaVernacularsByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call aphiaVernacularsByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
-
+        
         // create path and map variables
         String localVarPath = "/AphiaVernacularsByAphiaID/{ID}"
             .replaceAll("\\{" + "ID" + "\\}", apiClient.escapeString(ID.toString()));
@@ -210,7 +242,7 @@ public class VernacularsApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            "application/json"
+            
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -222,10 +254,10 @@ public class VernacularsApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new okhttp3.Interceptor() {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
-                public okhttp3.Response intercept(okhttp3.Interceptor.Chain chain) throws IOException {
-                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
                     return originalResponse.newBuilder()
                     .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
@@ -236,53 +268,57 @@ public class VernacularsApi {
         String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
-
+    
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call aphiaVernacularsByAphiaIDValidateBeforeCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call aphiaVernacularsByAphiaIDValidateBeforeCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'ID' is set
         if (ID == null) {
             throw new ApiException("Missing the required parameter 'ID' when calling aphiaVernacularsByAphiaID(Async)");
         }
-
-        okhttp3.Call call = aphiaVernacularsByAphiaIDCall(ID, progressListener, progressRequestListener);
+        
+        com.squareup.okhttp.Call call = aphiaVernacularsByAphiaIDCall(ID, progressListener, progressRequestListener);
         return call;
 
+        
+        
+        
+        
     }
 
     /**
      * Get all vernaculars for a given AphiaID
      * Get all vernaculars for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
-     * @return List&lt;Vernacular&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public List<Vernacular> aphiaVernacularsByAphiaID(Integer ID) throws ApiException {
-        ApiResponse<List<Vernacular>> resp = aphiaVernacularsByAphiaIDWithHttpInfo(ID);
-        return resp.getData();
+    public void aphiaVernacularsByAphiaID(Integer ID) throws ApiException {
+        aphiaVernacularsByAphiaIDWithHttpInfo(ID);
     }
 
     /**
      * Get all vernaculars for a given AphiaID
      * Get all vernaculars for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
-     * @return ApiResponse&lt;List&lt;Vernacular&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @return ApiResponse&lt;Void&gt;
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<List<Vernacular>> aphiaVernacularsByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
-        okhttp3.Call call = aphiaVernacularsByAphiaIDValidateBeforeCall(ID, null, null);
-        Type localVarReturnType = new TypeToken<List<Vernacular>>(){}.getType();
-        return apiClient.execute(call, localVarReturnType);
+    public ApiResponse<Void> aphiaVernacularsByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
+        com.squareup.okhttp.Call call = aphiaVernacularsByAphiaIDValidateBeforeCall(ID, null, null);
+        return apiClient.execute(call);
     }
 
     /**
      * Get all vernaculars for a given AphiaID (asynchronously)
      * Get all vernaculars for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public okhttp3.Call aphiaVernacularsByAphiaIDAsync(Integer ID, final ApiCallback<List<Vernacular>> callback) throws ApiException {
+    public com.squareup.okhttp.Call aphiaVernacularsByAphiaIDAsync(Integer ID, final ApiCallback<Void> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -303,9 +339,8 @@ public class VernacularsApi {
             };
         }
 
-        okhttp3.Call call = aphiaVernacularsByAphiaIDValidateBeforeCall(ID, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<List<Vernacular>>(){}.getType();
-        apiClient.executeAsync(call, localVarReturnType, callback);
+        com.squareup.okhttp.Call call = aphiaVernacularsByAphiaIDValidateBeforeCall(ID, progressListener, progressRequestListener);
+        apiClient.executeAsync(call, callback);
         return call;
     }
 }

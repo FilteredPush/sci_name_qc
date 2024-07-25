@@ -12,8 +12,13 @@
 
 package org.marinespecies.aphia.v1_0.handler;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:20:50.462036505Z[GMT]")
-public class StringUtil {
+/**
+ * <p>StringUtil class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).
    *

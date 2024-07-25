@@ -19,12 +19,15 @@ import java.util.List;
 import org.irmng.aphia.v1_0.model.AphiaRecord;
 /**
  * AphiaRecordsArray
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:58:14.073139290Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")
 public class AphiaRecordsArray extends ArrayList<AphiaRecord> {
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -36,12 +39,14 @@ public class AphiaRecordsArray extends ArrayList<AphiaRecord> {
     return super.equals(o);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(super.hashCode());
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

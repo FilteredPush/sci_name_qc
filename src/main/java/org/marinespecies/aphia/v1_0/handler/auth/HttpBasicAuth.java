@@ -14,33 +14,60 @@ package org.marinespecies.aphia.v1_0.handler.auth;
 
 import org.marinespecies.aphia.v1_0.handler.Pair;
 
-import okhttp3.Credentials;
+import com.squareup.okhttp.Credentials;
 
 import java.util.Map;
 import java.util.List;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+ * <p>HttpBasicAuth class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class HttpBasicAuth implements Authentication {
     private String username;
     private String password;
 
+    /**
+     * <p>Getter for the field <code>username</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * <p>Setter for the field <code>username</code>.</p>
+     *
+     * @param username a {@link java.lang.String} object.
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * <p>Getter for the field <code>password</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * <p>Setter for the field <code>password</code>.</p>
+     *
+     * @param password a {@link java.lang.String} object.
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams) {
         if (username == null && password == null) {

@@ -12,10 +12,10 @@
 
 package org.marinespecies.aphia.v1_0.handler;
 
-import okhttp3.*;
-import okhttp3.internal.http.HttpMethod;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
+import com.squareup.okhttp.*;
+import com.squareup.okhttp.internal.http.HttpMethod;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor.Level;
 import okio.BufferedSink;
 import okio.Okio;
 import org.threeten.bp.LocalDate;
@@ -51,6 +51,12 @@ import org.marinespecies.aphia.v1_0.handler.auth.HttpBasicAuth;
 import org.marinespecies.aphia.v1_0.handler.auth.ApiKeyAuth;
 import org.marinespecies.aphia.v1_0.handler.auth.OAuth;
 
+/**
+ * <p>ApiClient class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class ApiClient {
 
     private String basePath = "https://www.marinespecies.org/rest";
@@ -65,6 +71,10 @@ public class ApiClient {
     private boolean lenientDatetimeFormat;
     private int dateLength;
 
+    private InputStream sslCaCert;
+    private boolean verifyingSsl;
+    private KeyManager[] keyManagers;
+
     private OkHttpClient httpClient;
     private JSON json;
 
@@ -73,9 +83,14 @@ public class ApiClient {
     /*
      * Constructor for ApiClient
      */
+    /**
+     * <p>Constructor for ApiClient.</p>
+     */
     public ApiClient() {
         httpClient = new OkHttpClient();
 
+
+        verifyingSsl = true;
 
         json = new JSON();
 
@@ -110,7 +125,7 @@ public class ApiClient {
 
     /**
      * Get HTTP client
-     * Use to update with modification for e.g. setHttpClient(getHttpClient.newBuilder().readTimeout(5, TimeUnit.SECONDS).build())
+     *
      * @return An instance of OkHttpClient
      */
     public OkHttpClient getHttpClient() {
@@ -119,7 +134,7 @@ public class ApiClient {
 
     /**
      * Set HTTP client
-     * Update with a modified instance using for e.g. setHttpClient(getHttpClient.newBuilder().readTimeout(5, TimeUnit.SECONDS).build())
+     *
      * @param httpClient An instance of OkHttpClient
      * @return Api Client
      */
@@ -148,30 +163,132 @@ public class ApiClient {
         return this;
     }
 
+    /**
+     * True if isVerifyingSsl flag is on
+     *
+     * @return True if isVerifySsl flag is on
+     */
+    public boolean isVerifyingSsl() {
+        return verifyingSsl;
+    }
+
+    /**
+     * Configure whether to verify certificate and hostname when making https requests.
+     * Default to true.
+     * NOTE: Do NOT set to false in production code, otherwise you would face multiple types of cryptographic attacks.
+     *
+     * @param verifyingSsl True to verify TLS/SSL connection
+     * @return ApiClient
+     */
+    public ApiClient setVerifyingSsl(boolean verifyingSsl) {
+        this.verifyingSsl = verifyingSsl;
+        applySslSettings();
+        return this;
+    }
+
+    /**
+     * Get SSL CA cert.
+     *
+     * @return Input stream to the SSL CA cert
+     */
+    public InputStream getSslCaCert() {
+        return sslCaCert;
+    }
+
+    /**
+     * Configure the CA certificate to be trusted when making https requests.
+     * Use null to reset to default.
+     *
+     * @param sslCaCert input stream for SSL CA cert
+     * @return ApiClient
+     */
+    public ApiClient setSslCaCert(InputStream sslCaCert) {
+        this.sslCaCert = sslCaCert;
+        applySslSettings();
+        return this;
+    }
+
+    /**
+     * <p>Getter for the field <code>keyManagers</code>.</p>
+     *
+     * @return an array of {@link javax.net.ssl.KeyManager} objects.
+     */
+    public KeyManager[] getKeyManagers() {
+        return keyManagers;
+    }
+
+    /**
+     * Configure client keys to use for authorization in an SSL session.
+     * Use null to reset to default.
+     *
+     * @param managers The KeyManagers to use
+     * @return ApiClient
+     */
+    public ApiClient setKeyManagers(KeyManager[] managers) {
+        this.keyManagers = managers;
+        applySslSettings();
+        return this;
+    }
+
+    /**
+     * <p>Getter for the field <code>dateFormat</code>.</p>
+     *
+     * @return a {@link java.text.DateFormat} object.
+     */
     public DateFormat getDateFormat() {
         return dateFormat;
     }
 
+    /**
+     * <p>Setter for the field <code>dateFormat</code>.</p>
+     *
+     * @param dateFormat a {@link java.text.DateFormat} object.
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient setDateFormat(DateFormat dateFormat) {
         this.json.setDateFormat(dateFormat);
         return this;
     }
 
+    /**
+     * <p>setSqlDateFormat.</p>
+     *
+     * @param dateFormat a {@link java.text.DateFormat} object.
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient setSqlDateFormat(DateFormat dateFormat) {
         this.json.setSqlDateFormat(dateFormat);
         return this;
     }
 
+    /**
+     * <p>setOffsetDateTimeFormat.</p>
+     *
+     * @param dateFormat a {@link org.threeten.bp.format.DateTimeFormatter} object.
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient setOffsetDateTimeFormat(DateTimeFormatter dateFormat) {
         this.json.setOffsetDateTimeFormat(dateFormat);
         return this;
     }
 
+    /**
+     * <p>setLocalDateFormat.</p>
+     *
+     * @param dateFormat a {@link org.threeten.bp.format.DateTimeFormatter} object.
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient setLocalDateFormat(DateTimeFormatter dateFormat) {
         this.json.setLocalDateFormat(dateFormat);
         return this;
     }
 
+    /**
+     * <p>setLenientOnJson.</p>
+     *
+     * @param lenientOnJson a boolean.
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient setLenientOnJson(boolean lenientOnJson) {
         this.json.setLenientOnJson(lenientOnJson);
         return this;
@@ -348,6 +465,71 @@ public class ApiClient {
     }
 
     /**
+     * Get connection timeout (in milliseconds).
+     *
+     * @return Timeout in milliseconds
+     */
+    public int getConnectTimeout() {
+        return httpClient.getConnectTimeout();
+    }
+
+    /**
+     * Sets the connect timeout (in milliseconds).
+     * A value of 0 means no timeout, otherwise values must be between 1 and
+     *
+     * @param connectionTimeout connection timeout in milliseconds
+     * @return Api client
+     */
+    public ApiClient setConnectTimeout(int connectionTimeout) {
+        httpClient.setConnectTimeout(connectionTimeout, TimeUnit.MILLISECONDS);
+        return this;
+    }
+
+    /**
+     * Get read timeout (in milliseconds).
+     *
+     * @return Timeout in milliseconds
+     */
+    public int getReadTimeout() {
+        return httpClient.getReadTimeout();
+    }
+
+    /**
+     * Sets the read timeout (in milliseconds).
+     * A value of 0 means no timeout, otherwise values must be between 1 and
+     * {@link java.lang.Integer#MAX_VALUE}.
+     *
+     * @param readTimeout read timeout in milliseconds
+     * @return Api client
+     */
+    public ApiClient setReadTimeout(int readTimeout) {
+        httpClient.setReadTimeout(readTimeout, TimeUnit.MILLISECONDS);
+        return this;
+    }
+
+    /**
+     * Get write timeout (in milliseconds).
+     *
+     * @return Timeout in milliseconds
+     */
+    public int getWriteTimeout() {
+        return httpClient.getWriteTimeout();
+    }
+
+    /**
+     * Sets the write timeout (in milliseconds).
+     * A value of 0 means no timeout, otherwise values must be between 1 and
+     * {@link java.lang.Integer#MAX_VALUE}.
+     *
+     * @param writeTimeout connection timeout in milliseconds
+     * @return Api client
+     */
+    public ApiClient setWriteTimeout(int writeTimeout) {
+        httpClient.setWriteTimeout(writeTimeout, TimeUnit.MILLISECONDS);
+        return this;
+    }
+
+    /**
      * Format the given parameter object into string.
      *
      * @param param Parameter
@@ -384,7 +566,7 @@ public class ApiClient {
      * @return A list containing a single {@code Pair} object.
      */
     public List<Pair> parameterToPair(String name, Object value) {
-        List<Pair> params = new ArrayList<>();
+        List<Pair> params = new ArrayList<Pair>();
 
         // preconditions
         if (name == null || name.isEmpty() || value == null || value instanceof Collection) return params;
@@ -404,7 +586,7 @@ public class ApiClient {
      * @return A list of {@code Pair} objects.
      */
     public List<Pair> parameterToPairs(String collectionFormat, String name, Collection value) {
-        List<Pair> params = new ArrayList<>();
+        List<Pair> params = new ArrayList<Pair>();
 
         // preconditions
         if (name == null || name.isEmpty() || value == null || value.isEmpty()) {
@@ -462,6 +644,7 @@ public class ApiClient {
      *   APPLICATION/JSON
      *   application/vnd.company+json
      * "* / *" is also default to JSON
+     *
      * @param mime MIME (Multipurpose Internet Mail Extensions)
      * @return True if the given MIME is JSON, false otherwise.
      */
@@ -534,11 +717,11 @@ public class ApiClient {
      * @param response HTTP response
      * @param returnType The type of the Java object
      * @return The deserialized Java object
-     * @throws ApiException If fail to deserialize response body, i.e. cannot read response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to deserialize response body, i.e. cannot read response body
      *   or the Content-Type of the response is not supported.
      */
     @SuppressWarnings("unchecked")
-    private <T> T deserialize(Response response, Type returnType) throws ApiException {
+    public <T> T deserialize(Response response, Type returnType) throws ApiException {
         if (response == null || returnType == null) {
             return null;
         }
@@ -595,15 +778,15 @@ public class ApiClient {
      * @param obj The Java object
      * @param contentType The request Content-Type
      * @return The serialized request body
-     * @throws ApiException If fail to serialize the given object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the given object
      */
-    private RequestBody serialize(Object obj, String contentType) throws ApiException {
+    public RequestBody serialize(Object obj, String contentType) throws ApiException {
         if (obj instanceof byte[]) {
             // Binary (byte array) body parameter support.
-            return RequestBody.create((byte[]) obj, MediaType.parse(contentType));
+            return RequestBody.create(MediaType.parse(contentType), (byte[]) obj);
         } else if (obj instanceof File) {
             // File body parameter support.
-            return RequestBody.create((File) obj, MediaType.parse(contentType));
+            return RequestBody.create(MediaType.parse(contentType), (File) obj);
         } else if (isJsonMime(contentType)) {
             String content;
             if (obj != null) {
@@ -611,7 +794,7 @@ public class ApiClient {
             } else {
                 content = null;
             }
-            return RequestBody.create(content, MediaType.parse(contentType));
+            return RequestBody.create(MediaType.parse(contentType), content);
         } else {
             throw new ApiException("Content type \"" + contentType + "\" is not supported");
         }
@@ -621,7 +804,7 @@ public class ApiClient {
      * Download file from the given response.
      *
      * @param response An instance of the Response object
-     * @throws ApiException If fail to read file content from response and write to disk
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to read file content from response and write to disk
      * @return Downloaded file
      */
     public File downloadFileFromResponse(Response response) throws ApiException {
@@ -640,7 +823,7 @@ public class ApiClient {
      * Prepare file for download
      *
      * @param response An instance of the Response object
-     * @throws IOException If fail to prepare file for download
+     * @throws java.io.IOException If fail to prepare file for download
      * @return Prepared file for the download
      */
     public File prepareDownloadFile(Response response) throws IOException {
@@ -684,7 +867,7 @@ public class ApiClient {
      *
      * @param <T> Type
      * @param call An instance of the Call object
-     * @throws ApiException If fail to execute the call
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to execute the call
      * @return ApiResponse&lt;T&gt;
      */
     public <T> ApiResponse<T> execute(Call call) throws ApiException {
@@ -700,7 +883,7 @@ public class ApiClient {
      * @return ApiResponse object containing response status, headers and
      *   data, which is a Java object deserialized from response body and would be null
      *   when returnType is null.
-     * @throws ApiException If fail to execute the call
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to execute the call
      */
     public <T> ApiResponse<T> execute(Call call, Type returnType) throws ApiException {
         try {
@@ -729,19 +912,19 @@ public class ApiClient {
      * @see #execute(Call, Type)
      * @param <T> Type
      * @param call The callback to be executed when the API call finishes
-     * @param returnType Return type
      * @param callback ApiCallback
+     * @param returnType Return type
      */
     @SuppressWarnings("unchecked")
     public <T> void executeAsync(Call call, final Type returnType, final ApiCallback<T> callback) {
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(Request request, IOException e) {
                 callback.onFailure(new ApiException(e), 0, null);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Response response) throws IOException {
                 T result;
                 try {
                     result = (T) handleResponse(response, returnType);
@@ -760,17 +943,21 @@ public class ApiClient {
      * @param <T> Type
      * @param response Response
      * @param returnType Return type
-     * @throws ApiException If the response has a unsuccessful status code or
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If the response has a unsuccessful status code or
      *   fail to deserialize the response body
      * @return Type
      */
-    private <T> T handleResponse(Response response, Type returnType) throws ApiException {
+    public <T> T handleResponse(Response response, Type returnType) throws ApiException {
         if (response.isSuccessful()) {
             if (returnType == null || response.code() == 204) {
                 // returning null if the returnType is not defined,
                 // or the status code is 204 (No Content)
                 if (response.body() != null) {
-                    response.body().close();
+                    try {
+                        response.body().close();
+                    } catch (IOException e) {
+                        throw new ApiException(response.message(), e, response.code(), response.headers().toMultimap());
+                    }
                 }
                 return null;
             } else {
@@ -802,7 +989,7 @@ public class ApiClient {
      * @param authNames The authentications to apply
      * @param progressRequestListener Progress request listener
      * @return The HTTP call
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public Call buildCall(String path, String method, List<Pair> queryParams, List<Pair> collectionQueryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, String[] authNames, ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Request request = buildRequest(path, method, queryParams, collectionQueryParams, body, headerParams, formParams, authNames, progressRequestListener);
@@ -823,7 +1010,7 @@ public class ApiClient {
      * @param authNames The authentications to apply
      * @param progressRequestListener Progress request listener
      * @return The HTTP request
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
     public Request buildRequest(String path, String method, List<Pair> queryParams, List<Pair> collectionQueryParams, Object body, Map<String, String> headerParams, Map<String, Object> formParams, String[] authNames, ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         updateParamsForAuth(authNames, queryParams, headerParams);
@@ -851,7 +1038,7 @@ public class ApiClient {
                 reqBody = null;
             } else {
                 // use an empty request body (for POST, PUT and PATCH)
-                reqBody = RequestBody.create("", MediaType.parse(contentType));
+                reqBody = RequestBody.create(MediaType.parse(contentType), "");
             }
         } else {
             reqBody = serialize(body, contentType);
@@ -877,7 +1064,7 @@ public class ApiClient {
      * @param collectionQueryParams The collection query parameters
      * @return The full URL
      */
-    private String buildUrl(String path, List<Pair> queryParams, List<Pair> collectionQueryParams) {
+    public String buildUrl(String path, List<Pair> queryParams, List<Pair> collectionQueryParams) {
         final StringBuilder url = new StringBuilder();
         url.append(basePath).append(path);
 
@@ -924,7 +1111,7 @@ public class ApiClient {
      * @param headerParams Header parameters in the ofrm of Map
      * @param reqBuilder Reqeust.Builder
      */
-    private void processHeaderParams(Map<String, String> headerParams, Request.Builder reqBuilder) {
+    public void processHeaderParams(Map<String, String> headerParams, Request.Builder reqBuilder) {
         for (Entry<String, String> param : headerParams.entrySet()) {
             reqBuilder.header(param.getKey(), parameterToString(param.getValue()));
         }
@@ -942,7 +1129,7 @@ public class ApiClient {
      * @param queryParams  List of query parameters
      * @param headerParams  Map of header parameters
      */
-    private void updateParamsForAuth(String[] authNames, List<Pair> queryParams, Map<String, String> headerParams) {
+    public void updateParamsForAuth(String[] authNames, List<Pair> queryParams, Map<String, String> headerParams) {
         for (String authName : authNames) {
             Authentication auth = authentications.get(authName);
             if (auth == null) throw new RuntimeException("Authentication undefined: " + authName);
@@ -956,8 +1143,8 @@ public class ApiClient {
      * @param formParams Form parameters in the form of Map
      * @return RequestBody
      */
-    private RequestBody buildRequestBodyFormEncoding(Map<String, Object> formParams) {
-        FormBody.Builder formBuilder  = new FormBody.Builder();
+    public RequestBody buildRequestBodyFormEncoding(Map<String, Object> formParams) {
+        FormEncodingBuilder formBuilder  = new FormEncodingBuilder();
         for (Entry<String, Object> param : formParams.entrySet()) {
             formBuilder.add(param.getKey(), parameterToString(param.getValue()));
         }
@@ -971,8 +1158,8 @@ public class ApiClient {
      * @param formParams Form parameters in the form of Map
      * @return RequestBody
      */
-    private RequestBody buildRequestBodyMultipart(Map<String, Object> formParams) {
-        MultipartBody.Builder mpBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+    public RequestBody buildRequestBodyMultipart(Map<String, Object> formParams) {
+        MultipartBuilder mpBuilder = new MultipartBuilder().type(MultipartBuilder.FORM);
         for (Entry<String, Object> param : formParams.entrySet()) {
             if (param.getValue() instanceof File) {
                 File file = (File) param.getValue();
@@ -981,7 +1168,7 @@ public class ApiClient {
                 mpBuilder.addPart(partHeaders, RequestBody.create(mediaType, file));
             } else {
                 Headers partHeaders = Headers.of("Content-Disposition", "form-data; name=\"" + param.getKey() + "\"");
-                mpBuilder.addPart(partHeaders, RequestBody.create(parameterToString(param.getValue()), null));
+                mpBuilder.addPart(partHeaders, RequestBody.create(null, parameterToString(param.getValue())));
             }
         }
         return mpBuilder.build();
@@ -993,7 +1180,7 @@ public class ApiClient {
      * @param file The given file
      * @return The guessed Content-Type
      */
-    private String guessContentTypeFromFile(File file) {
+    public String guessContentTypeFromFile(File file) {
         String contentType = URLConnection.guessContentTypeFromName(file.getName());
         if (contentType == null) {
             return "application/octet-stream";
@@ -1002,4 +1189,67 @@ public class ApiClient {
         }
     }
 
+    /**
+     * Apply SSL related settings to httpClient according to the current values of
+     * verifyingSsl and sslCaCert.
+     */
+    private void applySslSettings() {
+        try {
+            TrustManager[] trustManagers = null;
+            HostnameVerifier hostnameVerifier = null;
+            if (!verifyingSsl) {
+                TrustManager trustAll = new X509TrustManager() {
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() { return null; }
+                };
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                trustManagers = new TrustManager[]{ trustAll };
+                hostnameVerifier = new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) { return true; }
+                };
+            } else if (sslCaCert != null) {
+                char[] password = null; // Any password will work.
+                CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+                Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(sslCaCert);
+                if (certificates.isEmpty()) {
+                    throw new IllegalArgumentException("expected non-empty set of trusted certificates");
+                }
+                KeyStore caKeyStore = newEmptyKeyStore(password);
+                int index = 0;
+                for (Certificate certificate : certificates) {
+                    String certificateAlias = "ca" + Integer.toString(index++);
+                    caKeyStore.setCertificateEntry(certificateAlias, certificate);
+                }
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                trustManagerFactory.init(caKeyStore);
+                trustManagers = trustManagerFactory.getTrustManagers();
+            }
+
+            if (keyManagers != null || trustManagers != null) {
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(keyManagers, trustManagers, new SecureRandom());
+                httpClient.setSslSocketFactory(sslContext.getSocketFactory());
+            } else {
+                httpClient.setSslSocketFactory(null);
+            }
+            httpClient.setHostnameVerifier(hostnameVerifier);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private KeyStore newEmptyKeyStore(char[] password) throws GeneralSecurityException {
+        try {
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, password);
+            return keyStore;
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+    }
 }

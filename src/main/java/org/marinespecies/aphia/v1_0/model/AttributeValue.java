@@ -26,10 +26,12 @@ import java.util.List;
 import org.marinespecies.aphia.v1_0.model.AttributeValue;
 /**
  * AttributeValue
+ *
+ * @author mole
+ * @version $Id: $Id
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:20:50.462036505Z[GMT]")
-
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
 public class AttributeValue {
   @SerializedName("measurementValueID")
   private Integer measurementValueID = null;
@@ -43,65 +45,113 @@ public class AttributeValue {
   @SerializedName("children")
   private List<AttributeValue> children = null;
 
+  /**
+   * <p>measurementValueID.</p>
+   *
+   * @param measurementValueID a {@link java.lang.Integer} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   */
   public AttributeValue measurementValueID(Integer measurementValueID) {
     this.measurementValueID = measurementValueID;
     return this;
   }
 
-   /**
+  /**
    * An identifier for facts stored in the column measurementValue
+   *
    * @return measurementValueID
-  **/
+   */
   @Schema(example = "185", description = "An identifier for facts stored in the column measurementValue")
   public Integer getMeasurementValueID() {
     return measurementValueID;
   }
 
+  /**
+   * <p>Setter for the field <code>measurementValueID</code>.</p>
+   *
+   * @param measurementValueID a {@link java.lang.Integer} object.
+   */
   public void setMeasurementValueID(Integer measurementValueID) {
     this.measurementValueID = measurementValueID;
   }
 
+  /**
+   * <p>measurementValue.</p>
+   *
+   * @param measurementValue a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   */
   public AttributeValue measurementValue(String measurementValue) {
     this.measurementValue = measurementValue;
     return this;
   }
 
-   /**
+  /**
    * The value of the measurement, fact, characteristic, or assertion
+   *
    * @return measurementValue
-  **/
+   */
   @Schema(example = "macrobenthos", description = "The value of the measurement, fact, characteristic, or assertion")
   public String getMeasurementValue() {
     return measurementValue;
   }
 
+  /**
+   * <p>Setter for the field <code>measurementValue</code>.</p>
+   *
+   * @param measurementValue a {@link java.lang.String} object.
+   */
   public void setMeasurementValue(String measurementValue) {
     this.measurementValue = measurementValue;
   }
 
+  /**
+   * <p>measurementValueCode.</p>
+   *
+   * @param measurementValueCode a {@link java.lang.String} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   */
   public AttributeValue measurementValueCode(String measurementValueCode) {
     this.measurementValueCode = measurementValueCode;
     return this;
   }
 
-   /**
+  /**
    * Additional info/code that helps to the describe/define the measurementValue
+   *
    * @return measurementValueCode
-  **/
+   */
   @Schema(description = "Additional info/code that helps to the describe/define the measurementValue")
   public String getMeasurementValueCode() {
     return measurementValueCode;
   }
 
+  /**
+   * <p>Setter for the field <code>measurementValueCode</code>.</p>
+   *
+   * @param measurementValueCode a {@link java.lang.String} object.
+   */
   public void setMeasurementValueCode(String measurementValueCode) {
     this.measurementValueCode = measurementValueCode;
   }
 
+  /**
+   * <p>children.</p>
+   *
+   * @param children a {@link java.util.List} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   */
   public AttributeValue children(List<AttributeValue> children) {
     this.children = children;
     return this;
   }
 
+  /**
+   * <p>addChildrenItem.</p>
+   *
+   * @param childrenItem a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   * @return a {@link org.marinespecies.aphia.v1_0.model.AttributeValue} object.
+   */
   public AttributeValue addChildrenItem(AttributeValue childrenItem) {
     if (this.children == null) {
       this.children = new ArrayList<AttributeValue>();
@@ -110,20 +160,27 @@ public class AttributeValue {
     return this;
   }
 
-   /**
+  /**
    * Child measurementValues that are more specific
+   *
    * @return children
-  **/
+   */
   @Schema(description = "Child measurementValues that are more specific")
   public List<AttributeValue> getChildren() {
     return children;
   }
 
+  /**
+   * <p>Setter for the field <code>children</code>.</p>
+   *
+   * @param children a {@link java.util.List} object.
+   */
   public void setChildren(List<AttributeValue> children) {
     this.children = children;
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -139,12 +196,14 @@ public class AttributeValue {
         Objects.equals(this.children, attributeValue.children);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(measurementValueID, measurementValue, measurementValueCode, children);
   }
 
 
+  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

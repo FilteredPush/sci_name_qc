@@ -12,8 +12,8 @@
 
 package org.irmng.aphia.v1_0.handler;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
 
 import java.io.IOException;
 
@@ -23,6 +23,12 @@ import okio.ForwardingSink;
 import okio.Okio;
 import okio.Sink;
 
+/**
+ * <p>ProgressRequestBody class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class ProgressRequestBody extends RequestBody {
 
     public interface ProgressRequestListener {
@@ -33,21 +39,30 @@ public class ProgressRequestBody extends RequestBody {
 
     private final ProgressRequestListener progressListener;
 
+    /**
+     * <p>Constructor for ProgressRequestBody.</p>
+     *
+     * @param requestBody a {@link com.squareup.okhttp.RequestBody} object.
+     * @param progressListener a {@link org.irmng.aphia.v1_0.handler.ProgressRequestBody.ProgressRequestListener} object.
+     */
     public ProgressRequestBody(RequestBody requestBody, ProgressRequestListener progressListener) {
         this.requestBody = requestBody;
         this.progressListener = progressListener;
     }
 
+    /** {@inheritDoc} */
     @Override
     public MediaType contentType() {
         return requestBody.contentType();
     }
 
+    /** {@inheritDoc} */
     @Override
     public long contentLength() throws IOException {
         return requestBody.contentLength();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void writeTo(BufferedSink sink) throws IOException {
         BufferedSink bufferedSink = Okio.buffer(sink(sink));

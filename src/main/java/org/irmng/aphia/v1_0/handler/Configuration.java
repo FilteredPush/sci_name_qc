@@ -12,8 +12,13 @@
 
 package org.irmng.aphia.v1_0.handler;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:58:14.073139290Z[GMT]")
-public class Configuration {
+/**
+ * <p>Configuration class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")public class Configuration {
     private static ApiClient defaultApiClient = new ApiClient();
 
     /**

@@ -34,37 +34,62 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>ExternalIdentifiersApi class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
 public class ExternalIdentifiersApi {
     private ApiClient apiClient;
 
+    /**
+     * <p>Constructor for ExternalIdentifiersApi.</p>
+     */
     public ExternalIdentifiersApi() {
         this(Configuration.getDefaultApiClient());
     }
 
+    /**
+     * <p>Constructor for ExternalIdentifiersApi.</p>
+     *
+     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ExternalIdentifiersApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
+    /**
+     * <p>Getter for the field <code>apiClient</code>.</p>
+     *
+     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
+    /**
+     * <p>Setter for the field <code>apiClient</code>.</p>
+     *
+     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
+     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaExternalIDByAphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param type Type of external identifier to return. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
-    public okhttp3.Call aphiaExternalIDByAphiaIDCall(Integer ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call aphiaExternalIDByAphiaIDCall(Integer ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
-
+        
         // create path and map variables
         String localVarPath = "/AphiaExternalIDByAphiaID/{ID}"
             .replaceAll("\\{" + "ID" + "\\}", apiClient.escapeString(ID.toString()));
@@ -91,10 +116,10 @@ public class ExternalIdentifiersApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new okhttp3.Interceptor() {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
-                public okhttp3.Response intercept(okhttp3.Interceptor.Chain chain) throws IOException {
-                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
                     return originalResponse.newBuilder()
                     .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
@@ -105,26 +130,31 @@ public class ExternalIdentifiersApi {
         String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
-
+    
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call aphiaExternalIDByAphiaIDValidateBeforeCall(Integer ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call aphiaExternalIDByAphiaIDValidateBeforeCall(Integer ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'ID' is set
         if (ID == null) {
             throw new ApiException("Missing the required parameter 'ID' when calling aphiaExternalIDByAphiaID(Async)");
         }
-
-        okhttp3.Call call = aphiaExternalIDByAphiaIDCall(ID, type, progressListener, progressRequestListener);
+        
+        com.squareup.okhttp.Call call = aphiaExternalIDByAphiaIDCall(ID, type, progressListener, progressRequestListener);
         return call;
 
+        
+        
+        
+        
     }
 
     /**
      * Get any external identifier(s) for a given AphiaID
      * Get any external identifier(s) for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param type Type of external identifier to return. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @return List&lt;String&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<String> aphiaExternalIDByAphiaID(Integer ID, String type) throws ApiException {
         ApiResponse<List<String>> resp = aphiaExternalIDByAphiaIDWithHttpInfo(ID, type);
@@ -134,13 +164,14 @@ public class ExternalIdentifiersApi {
     /**
      * Get any external identifier(s) for a given AphiaID
      * Get any external identifier(s) for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param type Type of external identifier to return. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @return ApiResponse&lt;List&lt;String&gt;&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<String>> aphiaExternalIDByAphiaIDWithHttpInfo(Integer ID, String type) throws ApiException {
-        okhttp3.Call call = aphiaExternalIDByAphiaIDValidateBeforeCall(ID, type, null, null);
+        com.squareup.okhttp.Call call = aphiaExternalIDByAphiaIDValidateBeforeCall(ID, type, null, null);
         Type localVarReturnType = new TypeToken<List<String>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -148,13 +179,14 @@ public class ExternalIdentifiersApi {
     /**
      * Get any external identifier(s) for a given AphiaID (asynchronously)
      * Get any external identifier(s) for a given AphiaID
+     *
      * @param ID The AphiaID to search for (required)
      * @param type Type of external identifier to return. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public okhttp3.Call aphiaExternalIDByAphiaIDAsync(Integer ID, String type, final ApiCallback<List<String>> callback) throws ApiException {
+    public com.squareup.okhttp.Call aphiaExternalIDByAphiaIDAsync(Integer ID, String type, final ApiCallback<List<String>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -175,23 +207,24 @@ public class ExternalIdentifiersApi {
             };
         }
 
-        okhttp3.Call call = aphiaExternalIDByAphiaIDValidateBeforeCall(ID, type, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = aphiaExternalIDByAphiaIDValidateBeforeCall(ID, type, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<String>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
      * Build call for aphiaRecordByExternalID
+     *
      * @param ID The external identifier to search for (required)
      * @param type Type of external identifier to search for. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws ApiException If fail to serialize the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
      */
-    public okhttp3.Call aphiaRecordByExternalIDCall(String ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call aphiaRecordByExternalIDCall(String ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
-
+        
         // create path and map variables
         String localVarPath = "/AphiaRecordByExternalID/{ID}"
             .replaceAll("\\{" + "ID" + "\\}", apiClient.escapeString(ID.toString()));
@@ -218,10 +251,10 @@ public class ExternalIdentifiersApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new okhttp3.Interceptor() {
+            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
                 @Override
-                public okhttp3.Response intercept(okhttp3.Interceptor.Chain chain) throws IOException {
-                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
+                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
                     return originalResponse.newBuilder()
                     .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
@@ -232,26 +265,31 @@ public class ExternalIdentifiersApi {
         String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
-
+    
     @SuppressWarnings("rawtypes")
-    private okhttp3.Call aphiaRecordByExternalIDValidateBeforeCall(String ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call aphiaRecordByExternalIDValidateBeforeCall(String ID, String type, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'ID' is set
         if (ID == null) {
             throw new ApiException("Missing the required parameter 'ID' when calling aphiaRecordByExternalID(Async)");
         }
-
-        okhttp3.Call call = aphiaRecordByExternalIDCall(ID, type, progressListener, progressRequestListener);
+        
+        com.squareup.okhttp.Call call = aphiaRecordByExternalIDCall(ID, type, progressListener, progressRequestListener);
         return call;
 
+        
+        
+        
+        
     }
 
     /**
      * Get the Aphia Record for a given external identifier
      * Get the Aphia Record for a given external identifier
+     *
      * @param ID The external identifier to search for (required)
      * @param type Type of external identifier to search for. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @return AphiaRecord
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public AphiaRecord aphiaRecordByExternalID(String ID, String type) throws ApiException {
         ApiResponse<AphiaRecord> resp = aphiaRecordByExternalIDWithHttpInfo(ID, type);
@@ -261,13 +299,14 @@ public class ExternalIdentifiersApi {
     /**
      * Get the Aphia Record for a given external identifier
      * Get the Aphia Record for a given external identifier
+     *
      * @param ID The external identifier to search for (required)
      * @param type Type of external identifier to search for. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @return ApiResponse&lt;AphiaRecord&gt;
-     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<AphiaRecord> aphiaRecordByExternalIDWithHttpInfo(String ID, String type) throws ApiException {
-        okhttp3.Call call = aphiaRecordByExternalIDValidateBeforeCall(ID, type, null, null);
+        com.squareup.okhttp.Call call = aphiaRecordByExternalIDValidateBeforeCall(ID, type, null, null);
         Type localVarReturnType = new TypeToken<AphiaRecord>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -275,13 +314,14 @@ public class ExternalIdentifiersApi {
     /**
      * Get the Aphia Record for a given external identifier (asynchronously)
      * Get the Aphia Record for a given external identifier
+     *
      * @param ID The external identifier to search for (required)
      * @param type Type of external identifier to search for. The type should be one of the following values:&lt;br/&gt;&lt;ul&gt;&lt;li&gt;&lt;u&gt;algaebase&lt;/u&gt;: Algaebase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;bold&lt;/u&gt;: Barcode of Life Database (BOLD) TaxID&lt;/li&gt;&lt;li&gt;&lt;u&gt;dyntaxa&lt;/u&gt;: Dyntaxa ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;fishbase&lt;/u&gt;: FishBase species ID&lt;/li&gt;&lt;li&gt;&lt;u&gt;iucn&lt;/u&gt;: IUCN Red List Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;lsid&lt;/u&gt;: Life Science Identifier&lt;/li&gt;&lt;li&gt;&lt;u&gt;ncbi&lt;/u&gt;: NCBI Taxonomy ID (Genbank)&lt;/li&gt;&lt;li&gt;&lt;u&gt;tsn&lt;/u&gt;: ITIS Taxonomic Serial Number&lt;/li&gt;&lt;li&gt;&lt;u&gt;gisd&lt;/u&gt;: Global Invasive Species Database&lt;/li&gt;&lt;/ul&gt; (optional, default to tsn)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public okhttp3.Call aphiaRecordByExternalIDAsync(String ID, String type, final ApiCallback<AphiaRecord> callback) throws ApiException {
+    public com.squareup.okhttp.Call aphiaRecordByExternalIDAsync(String ID, String type, final ApiCallback<AphiaRecord> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -302,7 +342,7 @@ public class ExternalIdentifiersApi {
             };
         }
 
-        okhttp3.Call call = aphiaRecordByExternalIDValidateBeforeCall(ID, type, progressListener, progressRequestListener);
+        com.squareup.okhttp.Call call = aphiaRecordByExternalIDValidateBeforeCall(ID, type, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<AphiaRecord>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

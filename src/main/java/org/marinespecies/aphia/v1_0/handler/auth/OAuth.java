@@ -17,18 +17,34 @@ import org.marinespecies.aphia.v1_0.handler.Pair;
 import java.util.Map;
 import java.util.List;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:20:50.462036505Z[GMT]")
-public class OAuth implements Authentication {
+/**
+ * <p>OAuth class.</p>
+ *
+ * @author mole
+ * @version $Id: $Id
+ */
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")public class OAuth implements Authentication {
   private String accessToken;
 
+  /**
+   * <p>Getter for the field <code>accessToken</code>.</p>
+   *
+   * @return a {@link java.lang.String} object.
+   */
   public String getAccessToken() {
     return accessToken;
   }
 
+  /**
+   * <p>Setter for the field <code>accessToken</code>.</p>
+   *
+   * @param accessToken a {@link java.lang.String} object.
+   */
   public void setAccessToken(String accessToken) {
     this.accessToken = accessToken;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams) {
     if (accessToken != null) {
