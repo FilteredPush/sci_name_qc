@@ -115,7 +115,8 @@ public class APNIService {
 	
 	public static  List<NameUsage> lookupTaxon(String taxon,  String authorship) throws ApiException { 
 		List<NameUsage> result  = new ArrayList<NameUsage>();
-		// TODO: Implement
+
+		// Cultivar names need correct quotes to find match
 		// wrong quotes, 
 		// https://api.biodiversity.org.au/name/check?dataset=APNI&q=Solanum%20centrale%20%E2%80%98Desert%20Tang%E2%80%99
 		// wrong quotes
@@ -130,8 +131,6 @@ public class APNIService {
 		} catch (UnsupportedEncodingException e) {
 			logger.debug(e.getMessage());
 		}
-		
-		// lookup = "https://api.biodiversity.org.au/name/check?dataset=APNI&q=Solanum%20centrale%20%27Desert%20Tang%27";
 		
 		logger.debug(lookup);
 		URI lookupURI = URI.create(lookup);
