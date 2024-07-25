@@ -56,7 +56,7 @@ import org.datakurator.ffdq.api.result.*;
  * @version $Id: $Id
  */
 @Mechanism(value="90516df7-838c-4d53-81d9-8131be6ac713",
-	label="Kurator: Scientific Name Validator - DwCSciNameDQ:v1.1.0")
+	label="Kurator: Scientific Name Validator - DwCSciNameDQ:v1.1.1-SNAPSHOT")
 public class DwCSciNameDQDefaults extends DwCSciNameDQ {
 	
 	private static final Log logger = LogFactory.getLog(DwCSciNameDQDefaults.class);
