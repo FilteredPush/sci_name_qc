@@ -17,12 +17,6 @@ import org.irmng.aphia.v1_0.handler.Pair;
 import java.util.Map;
 import java.util.List;
 
-/**
- * <p>Authentication interface.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
 public interface Authentication {
     /**
      * Apply authentication settings to header and query params.

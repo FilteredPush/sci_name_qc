@@ -12,8 +12,8 @@
 
 package org.marinespecies.aphia.v1_0.handler;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.ResponseBody;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 
 import java.io.IOException;
 
@@ -23,12 +23,6 @@ import okio.ForwardingSource;
 import okio.Okio;
 import okio.Source;
 
-/**
- * <p>ProgressResponseBody class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
 public class ProgressResponseBody extends ResponseBody {
 
     public interface ProgressListener {
@@ -39,32 +33,23 @@ public class ProgressResponseBody extends ResponseBody {
     private final ProgressListener progressListener;
     private BufferedSource bufferedSource;
 
-    /**
-     * <p>Constructor for ProgressResponseBody.</p>
-     *
-     * @param responseBody a {@link com.squareup.okhttp.ResponseBody} object.
-     * @param progressListener a {@link org.marinespecies.aphia.v1_0.handler.ProgressResponseBody.ProgressListener} object.
-     */
     public ProgressResponseBody(ResponseBody responseBody, ProgressListener progressListener) {
         this.responseBody = responseBody;
         this.progressListener = progressListener;
     }
 
-    /** {@inheritDoc} */
     @Override
     public MediaType contentType() {
         return responseBody.contentType();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public long contentLength() throws IOException {
+    public long contentLength() {
         return responseBody.contentLength();
     }
 
-    /** {@inheritDoc} */
     @Override
-    public BufferedSource source() throws IOException {
+    public BufferedSource source() {
         if (bufferedSource == null) {
             bufferedSource = Okio.buffer(source(responseBody.source()));
         }

@@ -40,12 +40,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 
-/**
- * <p>JSON class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
 public class JSON {
     private Gson gson;
     private boolean isLenientOnJson = false;
@@ -53,13 +47,7 @@ public class JSON {
     private SqlDateTypeAdapter sqlDateTypeAdapter = new SqlDateTypeAdapter();
     private OffsetDateTimeTypeAdapter offsetDateTimeTypeAdapter = new OffsetDateTimeTypeAdapter();
     private LocalDateTypeAdapter localDateTypeAdapter = new LocalDateTypeAdapter();
-	private BooleanTypeAdapter booleanTypeAdapter = new BooleanTypeAdapter();
 
-    /**
-     * <p>createGson.</p>
-     *
-     * @return a {@link com.google.gson.GsonBuilder} object.
-     */
     public static GsonBuilder createGson() {
         GsonFireBuilder fireBuilder = new GsonFireBuilder()
         ;
@@ -82,16 +70,12 @@ public class JSON {
         return clazz;
     }
 
-    /**
-     * <p>Constructor for JSON.</p>
-     */
     public JSON() {
         gson = createGson()
             .registerTypeAdapter(Date.class, dateTypeAdapter)
             .registerTypeAdapter(java.sql.Date.class, sqlDateTypeAdapter)
             .registerTypeAdapter(OffsetDateTime.class, offsetDateTimeTypeAdapter)
             .registerTypeAdapter(LocalDate.class, localDateTypeAdapter)
-            .registerTypeAdapter(Boolean.class, booleanTypeAdapter)
             .create();
     }
 
@@ -115,12 +99,6 @@ public class JSON {
         return this;
     }
 
-    /**
-     * <p>setLenientOnJson.</p>
-     *
-     * @param lenientOnJson a boolean.
-     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
-     */
     public JSON setLenientOnJson(boolean lenientOnJson) {
         isLenientOnJson = lenientOnJson;
         return this;
@@ -249,23 +227,11 @@ public class JSON {
         }
     }
 
-    /**
-     * <p>setOffsetDateTimeFormat.</p>
-     *
-     * @param dateFormat a {@link org.threeten.bp.format.DateTimeFormatter} object.
-     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
-     */
     public JSON setOffsetDateTimeFormat(DateTimeFormatter dateFormat) {
         offsetDateTimeTypeAdapter.setFormat(dateFormat);
         return this;
     }
 
-    /**
-     * <p>setLocalDateFormat.</p>
-     *
-     * @param dateFormat a {@link org.threeten.bp.format.DateTimeFormatter} object.
-     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
-     */
     public JSON setLocalDateFormat(DateTimeFormatter dateFormat) {
         localDateTypeAdapter.setFormat(dateFormat);
         return this;
@@ -384,61 +350,14 @@ public class JSON {
         }
     }
 
-    /**
-     * <p>setDateFormat.</p>
-     *
-     * @param dateFormat a {@link java.text.DateFormat} object.
-     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
-     */
     public JSON setDateFormat(DateFormat dateFormat) {
         dateTypeAdapter.setFormat(dateFormat);
         return this;
     }
 
-    /**
-     * <p>setSqlDateFormat.</p>
-     *
-     * @param dateFormat a {@link java.text.DateFormat} object.
-     * @return a {@link org.irmng.aphia.v1_0.handler.JSON} object.
-     */
     public JSON setSqlDateFormat(DateFormat dateFormat) {
         sqlDateTypeAdapter.setFormat(dateFormat);
         return this;
-    }
-
-    /**
-     * Gson TypeAdapter for Boolean serialized as 0/1/null
-     */
-    public class BooleanTypeAdapter extends TypeAdapter<Boolean> {
-
-        @Override
-        public void write(JsonWriter out, Boolean value) throws IOException {
-            if (value == null) {
-                out.nullValue();
-            } else {
-            	if (value) { 
-            		out.value(1);
-            	} else { 
-            		out.value(0);
-            	}
-            }
-        }
-
-        @Override
-        public Boolean read(JsonReader in) throws IOException {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    Integer inValue = in.nextInt();
-                    Boolean returnValue = true;
-                    if (inValue == 0) { 
-                    	returnValue = false;
-                    }
-                    return returnValue;
-            }
-        }
     }
 
 }

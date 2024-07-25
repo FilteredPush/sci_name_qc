@@ -12,22 +12,11 @@
 
 package org.marinespecies.aphia.v1_0.handler;
 
-/**
- * <p>Pair class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")public class Pair {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:20:50.462036505Z[GMT]")
+public class Pair {
     private String name = "";
     private String value = "";
 
-    /**
-     * <p>Constructor for Pair.</p>
-     *
-     * @param name a {@link java.lang.String} object.
-     * @param value a {@link java.lang.String} object.
-     */
     public Pair (String name, String value) {
         setName(name);
         setValue(value);
@@ -45,20 +34,10 @@ package org.marinespecies.aphia.v1_0.handler;
         this.value = value;
     }
 
-    /**
-     * <p>Getter for the field <code>name</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getName() {
         return this.name;
     }
 
-    /**
-     * <p>Getter for the field <code>value</code>.</p>
-     *
-     * @return a {@link java.lang.String} object.
-     */
     public String getValue() {
         return this.value;
     }

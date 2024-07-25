@@ -34,61 +34,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>SourcesApi class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
 public class SourcesApi {
     private ApiClient apiClient;
 
-    /**
-     * <p>Constructor for SourcesApi.</p>
-     */
     public SourcesApi() {
         this(Configuration.getDefaultApiClient());
     }
 
-    /**
-     * <p>Constructor for SourcesApi.</p>
-     *
-     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
-     */
     public SourcesApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
-    /**
-     * <p>Getter for the field <code>apiClient</code>.</p>
-     *
-     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
-     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
-    /**
-     * <p>Setter for the field <code>apiClient</code>.</p>
-     *
-     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
-     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaSourcesByAphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
+     * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call aphiaSourcesByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public okhttp3.Call aphiaSourcesByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
-        
+
         // create path and map variables
         String localVarPath = "/AphiaSourcesByAphiaID/{ID}"
             .replaceAll("\\{" + "ID" + "\\}", apiClient.escapeString(ID.toString()));
@@ -113,10 +88,10 @@ public class SourcesApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+            apiClient.getHttpClient().networkInterceptors().add(new okhttp3.Interceptor() {
                 @Override
-                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
-                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                public okhttp3.Response intercept(okhttp3.Interceptor.Chain chain) throws IOException {
+                    okhttp3.Response originalResponse = chain.proceed(chain.request());
                     return originalResponse.newBuilder()
                     .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
@@ -127,30 +102,25 @@ public class SourcesApi {
         String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
-    
+
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call aphiaSourcesByAphiaIDValidateBeforeCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private okhttp3.Call aphiaSourcesByAphiaIDValidateBeforeCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'ID' is set
         if (ID == null) {
             throw new ApiException("Missing the required parameter 'ID' when calling aphiaSourcesByAphiaID(Async)");
         }
-        
-        com.squareup.okhttp.Call call = aphiaSourcesByAphiaIDCall(ID, progressListener, progressRequestListener);
+
+        okhttp3.Call call = aphiaSourcesByAphiaIDCall(ID, progressListener, progressRequestListener);
         return call;
 
-        
-        
-        
-        
     }
 
     /**
      * Get one or more sources/references including links, for one AphiaID
      * Get one or more sources/references including links, for one AphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @return List&lt;Source&gt;
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<Source> aphiaSourcesByAphiaID(Integer ID) throws ApiException {
         ApiResponse<List<Source>> resp = aphiaSourcesByAphiaIDWithHttpInfo(ID);
@@ -160,13 +130,12 @@ public class SourcesApi {
     /**
      * Get one or more sources/references including links, for one AphiaID
      * Get one or more sources/references including links, for one AphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @return ApiResponse&lt;List&lt;Source&gt;&gt;
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<Source>> aphiaSourcesByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
-        com.squareup.okhttp.Call call = aphiaSourcesByAphiaIDValidateBeforeCall(ID, null, null);
+        okhttp3.Call call = aphiaSourcesByAphiaIDValidateBeforeCall(ID, null, null);
         Type localVarReturnType = new TypeToken<List<Source>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -174,13 +143,12 @@ public class SourcesApi {
     /**
      * Get one or more sources/references including links, for one AphiaID (asynchronously)
      * Get one or more sources/references including links, for one AphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call aphiaSourcesByAphiaIDAsync(Integer ID, final ApiCallback<List<Source>> callback) throws ApiException {
+    public okhttp3.Call aphiaSourcesByAphiaIDAsync(Integer ID, final ApiCallback<List<Source>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -201,7 +169,7 @@ public class SourcesApi {
             };
         }
 
-        com.squareup.okhttp.Call call = aphiaSourcesByAphiaIDValidateBeforeCall(ID, progressListener, progressRequestListener);
+        okhttp3.Call call = aphiaSourcesByAphiaIDValidateBeforeCall(ID, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<Source>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;

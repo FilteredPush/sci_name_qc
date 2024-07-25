@@ -12,13 +12,8 @@
 
 package org.irmng.aphia.v1_0.handler;
 
-/**
- * <p>StringUtil class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")public class StringUtil {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:58:14.073139290Z[GMT]")
+public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).
    *

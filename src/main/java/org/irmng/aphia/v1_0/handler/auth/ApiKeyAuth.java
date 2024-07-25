@@ -17,85 +17,43 @@ import org.irmng.aphia.v1_0.handler.Pair;
 import java.util.Map;
 import java.util.List;
 
-/**
- * <p>ApiKeyAuth class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")public class ApiKeyAuth implements Authentication {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:58:14.073139290Z[GMT]")
+public class ApiKeyAuth implements Authentication {
   private final String location;
   private final String paramName;
 
   private String apiKey;
   private String apiKeyPrefix;
 
-  /**
-   * <p>Constructor for ApiKeyAuth.</p>
-   *
-   * @param location a {@link java.lang.String} object.
-   * @param paramName a {@link java.lang.String} object.
-   */
   public ApiKeyAuth(String location, String paramName) {
     this.location = location;
     this.paramName = paramName;
   }
 
-  /**
-   * <p>Getter for the field <code>location</code>.</p>
-   *
-   * @return a {@link java.lang.String} object.
-   */
   public String getLocation() {
     return location;
   }
 
-  /**
-   * <p>Getter for the field <code>paramName</code>.</p>
-   *
-   * @return a {@link java.lang.String} object.
-   */
   public String getParamName() {
     return paramName;
   }
 
-  /**
-   * <p>Getter for the field <code>apiKey</code>.</p>
-   *
-   * @return a {@link java.lang.String} object.
-   */
   public String getApiKey() {
     return apiKey;
   }
 
-  /**
-   * <p>Setter for the field <code>apiKey</code>.</p>
-   *
-   * @param apiKey a {@link java.lang.String} object.
-   */
   public void setApiKey(String apiKey) {
     this.apiKey = apiKey;
   }
 
-  /**
-   * <p>Getter for the field <code>apiKeyPrefix</code>.</p>
-   *
-   * @return a {@link java.lang.String} object.
-   */
   public String getApiKeyPrefix() {
     return apiKeyPrefix;
   }
 
-  /**
-   * <p>Setter for the field <code>apiKeyPrefix</code>.</p>
-   *
-   * @param apiKeyPrefix a {@link java.lang.String} object.
-   */
   public void setApiKeyPrefix(String apiKeyPrefix) {
     this.apiKeyPrefix = apiKeyPrefix;
   }
 
-  /** {@inheritDoc} */
   @Override
   public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams) {
     if (apiKey == null) {

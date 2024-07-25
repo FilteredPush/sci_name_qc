@@ -12,12 +12,6 @@
 
 package org.irmng.aphia.v1_0.handler.auth;
 
-/**
- * <p>OAuthFlow class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
 public enum OAuthFlow {
     accessCode, implicit, password, application
 }

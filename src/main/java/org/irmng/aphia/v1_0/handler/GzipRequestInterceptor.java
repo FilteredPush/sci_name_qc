@@ -12,7 +12,7 @@
 
 package org.irmng.aphia.v1_0.handler;
 
-import com.squareup.okhttp.*;
+import okhttp3.*;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.GzipSink;
@@ -26,7 +26,6 @@ import java.io.IOException;
  * Taken from https://github.com/square/okhttp/issues/350
  */
 class GzipRequestInterceptor implements Interceptor {
-    /** {@inheritDoc} */
     @Override public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
         if (originalRequest.body() == null || originalRequest.header("Content-Encoding") != null) {

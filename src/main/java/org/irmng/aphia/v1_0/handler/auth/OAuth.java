@@ -17,34 +17,18 @@ import org.irmng.aphia.v1_0.handler.Pair;
 import java.util.Map;
 import java.util.List;
 
-/**
- * <p>OAuth class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-09-09T19:25:08.764Z[GMT]")public class OAuth implements Authentication {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:58:14.073139290Z[GMT]")
+public class OAuth implements Authentication {
   private String accessToken;
 
-  /**
-   * <p>Getter for the field <code>accessToken</code>.</p>
-   *
-   * @return a {@link java.lang.String} object.
-   */
   public String getAccessToken() {
     return accessToken;
   }
 
-  /**
-   * <p>Setter for the field <code>accessToken</code>.</p>
-   *
-   * @param accessToken a {@link java.lang.String} object.
-   */
   public void setAccessToken(String accessToken) {
     this.accessToken = accessToken;
   }
 
-  /** {@inheritDoc} */
   @Override
   public void applyToParams(List<Pair> queryParams, Map<String, String> headerParams) {
     if (accessToken != null) {

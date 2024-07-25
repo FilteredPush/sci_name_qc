@@ -26,12 +26,10 @@ import java.util.List;
 import org.marinespecies.aphia.v1_0.model.Attribute;
 /**
  * AphiaAttributeSet
- *
- * @author mole
- * @version $Id: $Id
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:20:50.462036505Z[GMT]")
+
 public class AphiaAttributeSet {
   @SerializedName("AphiaID")
   private Integer aphiaID = null;
@@ -39,53 +37,29 @@ public class AphiaAttributeSet {
   @SerializedName("Attributes")
   private List<Attribute> attributes = null;
 
-  /**
-   * <p>aphiaID.</p>
-   *
-   * @param aphiaID a {@link java.lang.Integer} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.AphiaAttributeSet} object.
-   */
   public AphiaAttributeSet aphiaID(Integer aphiaID) {
     this.aphiaID = aphiaID;
     return this;
   }
 
-  /**
+   /**
    * Unique and persistent identifier within WoRMS. Primary key in the database
-   *
    * @return aphiaID
-   */
+  **/
   @Schema(example = "127160", description = "Unique and persistent identifier within WoRMS. Primary key in the database")
   public Integer getAphiaID() {
     return aphiaID;
   }
 
-  /**
-   * <p>Setter for the field <code>aphiaID</code>.</p>
-   *
-   * @param aphiaID a {@link java.lang.Integer} object.
-   */
   public void setAphiaID(Integer aphiaID) {
     this.aphiaID = aphiaID;
   }
 
-  /**
-   * <p>attributes.</p>
-   *
-   * @param attributes a {@link java.util.List} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.AphiaAttributeSet} object.
-   */
   public AphiaAttributeSet attributes(List<Attribute> attributes) {
     this.attributes = attributes;
     return this;
   }
 
-  /**
-   * <p>addAttributesItem.</p>
-   *
-   * @param attributesItem a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.AphiaAttributeSet} object.
-   */
   public AphiaAttributeSet addAttributesItem(Attribute attributesItem) {
     if (this.attributes == null) {
       this.attributes = new ArrayList<Attribute>();
@@ -94,27 +68,20 @@ public class AphiaAttributeSet {
     return this;
   }
 
-  /**
+   /**
    * Get attributes
-   *
    * @return attributes
-   */
+  **/
   @Schema(description = "")
   public List<Attribute> getAttributes() {
     return attributes;
   }
 
-  /**
-   * <p>Setter for the field <code>attributes</code>.</p>
-   *
-   * @param attributes a {@link java.util.List} object.
-   */
   public void setAttributes(List<Attribute> attributes) {
     this.attributes = attributes;
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -128,14 +95,12 @@ public class AphiaAttributeSet {
         Objects.equals(this.attributes, aphiaAttributeSet.attributes);
   }
 
-  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(aphiaID, attributes);
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

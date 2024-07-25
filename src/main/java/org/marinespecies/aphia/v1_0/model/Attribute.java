@@ -26,12 +26,10 @@ import java.util.List;
 import org.marinespecies.aphia.v1_0.model.Attribute;
 /**
  * Attribute
- *
- * @author mole
- * @version $Id: $Id
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-04-27T19:29:57.442Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2024-07-25T16:20:50.462036505Z[GMT]")
+
 public class Attribute {
   @SerializedName("AphiaID")
   private Integer aphiaID = null;
@@ -63,293 +61,173 @@ public class Attribute {
   @SerializedName("children")
   private List<Attribute> children = null;
 
-  /**
-   * <p>aphiaID.</p>
-   *
-   * @param aphiaID a {@link java.lang.Integer} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute aphiaID(Integer aphiaID) {
     this.aphiaID = aphiaID;
     return this;
   }
 
-  /**
+   /**
    * Unique and persistent identifier within WoRMS
-   *
    * @return aphiaID
-   */
+  **/
   @Schema(example = "127160", description = "Unique and persistent identifier within WoRMS")
   public Integer getAphiaID() {
     return aphiaID;
   }
 
-  /**
-   * <p>Setter for the field <code>aphiaID</code>.</p>
-   *
-   * @param aphiaID a {@link java.lang.Integer} object.
-   */
   public void setAphiaID(Integer aphiaID) {
     this.aphiaID = aphiaID;
   }
 
-  /**
-   * <p>measurementTypeID.</p>
-   *
-   * @param measurementTypeID a {@link java.lang.Integer} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute measurementTypeID(Integer measurementTypeID) {
     this.measurementTypeID = measurementTypeID;
     return this;
   }
 
-  /**
+   /**
    * The corresponding AttributeKey its measurementTypeID
-   *
    * @return measurementTypeID
-   */
+  **/
   @Schema(example = "15", description = "The corresponding AttributeKey its measurementTypeID")
   public Integer getMeasurementTypeID() {
     return measurementTypeID;
   }
 
-  /**
-   * <p>Setter for the field <code>measurementTypeID</code>.</p>
-   *
-   * @param measurementTypeID a {@link java.lang.Integer} object.
-   */
   public void setMeasurementTypeID(Integer measurementTypeID) {
     this.measurementTypeID = measurementTypeID;
   }
 
-  /**
-   * <p>measurementType.</p>
-   *
-   * @param measurementType a {@link java.lang.String} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute measurementType(String measurementType) {
     this.measurementType = measurementType;
     return this;
   }
 
-  /**
+   /**
    * The corresponding AttributeKey its measurementType
-   *
    * @return measurementType
-   */
+  **/
   @Schema(example = "Body size", description = "The corresponding AttributeKey its measurementType")
   public String getMeasurementType() {
     return measurementType;
   }
 
-  /**
-   * <p>Setter for the field <code>measurementType</code>.</p>
-   *
-   * @param measurementType a {@link java.lang.String} object.
-   */
   public void setMeasurementType(String measurementType) {
     this.measurementType = measurementType;
   }
 
-  /**
-   * <p>measurementValue.</p>
-   *
-   * @param measurementValue a {@link java.lang.String} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute measurementValue(String measurementValue) {
     this.measurementValue = measurementValue;
     return this;
   }
 
-  /**
+   /**
    * The value of the measurement, fact, characteristic, or assertion
-   *
    * @return measurementValue
-   */
+  **/
   @Schema(example = "70", description = "The value of the measurement, fact, characteristic, or assertion")
   public String getMeasurementValue() {
     return measurementValue;
   }
 
-  /**
-   * <p>Setter for the field <code>measurementValue</code>.</p>
-   *
-   * @param measurementValue a {@link java.lang.String} object.
-   */
   public void setMeasurementValue(String measurementValue) {
     this.measurementValue = measurementValue;
   }
 
-  /**
-   * <p>sourceId.</p>
-   *
-   * @param sourceId a {@link java.lang.Integer} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute sourceId(Integer sourceId) {
     this.sourceId = sourceId;
     return this;
   }
 
-  /**
+   /**
    * The identifier for the AphiaSource for this attribute
-   *
    * @return sourceId
-   */
+  **/
   @Schema(example = "232308", description = "The identifier for the AphiaSource for this attribute")
   public Integer getSourceId() {
     return sourceId;
   }
 
-  /**
-   * <p>Setter for the field <code>sourceId</code>.</p>
-   *
-   * @param sourceId a {@link java.lang.Integer} object.
-   */
   public void setSourceId(Integer sourceId) {
     this.sourceId = sourceId;
   }
 
-  /**
-   * <p>reference.</p>
-   *
-   * @param reference a {@link java.lang.String} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute reference(String reference) {
     this.reference = reference;
     return this;
   }
 
-  /**
+   /**
    * The AphiaSource reference for this attribute
-   *
    * @return reference
-   */
+  **/
   @Schema(description = "The AphiaSource reference for this attribute")
   public String getReference() {
     return reference;
   }
 
-  /**
-   * <p>Setter for the field <code>reference</code>.</p>
-   *
-   * @param reference a {@link java.lang.String} object.
-   */
   public void setReference(String reference) {
     this.reference = reference;
   }
 
-  /**
-   * <p>qualitystatus.</p>
-   *
-   * @param qualitystatus a {@link java.lang.String} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute qualitystatus(String qualitystatus) {
     this.qualitystatus = qualitystatus;
     return this;
   }
 
-  /**
+   /**
    * Quality status of the record. Possible values: &#x27;checked&#x27;, &#x27;trusted&#x27; or &#x27;unreviewed&#x27;. See &lt;a href&#x3D;&#x27;https://www.marinespecies.org/aphia.php?p&#x3D;manual#topic22&#x27; target&#x3D;&#x27;_blank&#x27;&gt;https://www.marinespecies.org/aphia.php?p&#x3D;manual#topic22&lt;/a&gt;
-   *
    * @return qualitystatus
-   */
+  **/
   @Schema(example = "checked", description = "Quality status of the record. Possible values: 'checked', 'trusted' or 'unreviewed'. See <a href='https://www.marinespecies.org/aphia.php?p=manual#topic22' target='_blank'>https://www.marinespecies.org/aphia.php?p=manual#topic22</a>")
   public String getQualitystatus() {
     return qualitystatus;
   }
 
-  /**
-   * <p>Setter for the field <code>qualitystatus</code>.</p>
-   *
-   * @param qualitystatus a {@link java.lang.String} object.
-   */
   public void setQualitystatus(String qualitystatus) {
     this.qualitystatus = qualitystatus;
   }
 
-  /**
-   * <p>categoryID.</p>
-   *
-   * @param categoryID a {@link java.lang.Integer} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute categoryID(Integer categoryID) {
     this.categoryID = categoryID;
     return this;
   }
 
-  /**
+   /**
    * The category identifier to list possible attribute values for this attribute definition
-   *
    * @return categoryID
-   */
+  **/
   @Schema(description = "The category identifier to list possible attribute values for this attribute definition")
   public Integer getCategoryID() {
     return categoryID;
   }
 
-  /**
-   * <p>Setter for the field <code>categoryID</code>.</p>
-   *
-   * @param categoryID a {@link java.lang.Integer} object.
-   */
   public void setCategoryID(Integer categoryID) {
     this.categoryID = categoryID;
   }
 
-  /**
-   * <p>aphiaIDInherited.</p>
-   *
-   * @param aphiaIDInherited a {@link java.lang.Integer} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute aphiaIDInherited(Integer aphiaIDInherited) {
     this.aphiaIDInherited = aphiaIDInherited;
     return this;
   }
 
-  /**
+   /**
    * The AphiaID from where this attribute is inherited
-   *
    * @return aphiaIDInherited
-   */
+  **/
   @Schema(example = "126132", description = "The AphiaID from where this attribute is inherited")
   public Integer getAphiaIDInherited() {
     return aphiaIDInherited;
   }
 
-  /**
-   * <p>Setter for the field <code>aphiaIDInherited</code>.</p>
-   *
-   * @param aphiaIDInherited a {@link java.lang.Integer} object.
-   */
   public void setAphiaIDInherited(Integer aphiaIDInherited) {
     this.aphiaIDInherited = aphiaIDInherited;
   }
 
-  /**
-   * <p>children.</p>
-   *
-   * @param children a {@link java.util.List} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute children(List<Attribute> children) {
     this.children = children;
     return this;
   }
 
-  /**
-   * <p>addChildrenItem.</p>
-   *
-   * @param childrenItem a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   * @return a {@link org.marinespecies.aphia.v1_0.model.Attribute} object.
-   */
   public Attribute addChildrenItem(Attribute childrenItem) {
     if (this.children == null) {
       this.children = new ArrayList<Attribute>();
@@ -358,27 +236,20 @@ public class Attribute {
     return this;
   }
 
-  /**
+   /**
    * The possible child attributes that help to describe to current attribute
-   *
    * @return children
-   */
+  **/
   @Schema(description = "The possible child attributes that help to describe to current attribute")
   public List<Attribute> getChildren() {
     return children;
   }
 
-  /**
-   * <p>Setter for the field <code>children</code>.</p>
-   *
-   * @param children a {@link java.util.List} object.
-   */
   public void setChildren(List<Attribute> children) {
     this.children = children;
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -400,14 +271,12 @@ public class Attribute {
         Objects.equals(this.children, attribute.children);
   }
 
-  /** {@inheritDoc} */
   @Override
   public int hashCode() {
     return Objects.hash(aphiaID, measurementTypeID, measurementType, measurementValue, sourceId, reference, qualitystatus, categoryID, aphiaIDInherited, children);
   }
 
 
-  /** {@inheritDoc} */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
