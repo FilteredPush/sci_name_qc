@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.filteredpush</groupId>
 	<artifactId>sci_name_qc</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<name>sci_name_qc</name>
 	<description>FilteredPush dwc:scientificName data quality library..</description>
 	<url>https://wiki.filteredpush.org/</url>
@@ -424,7 +424,7 @@
 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
 						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.7</version>
+						<version>1.6.13</version>
 						<extensions>true</extensions>
 						<configuration>
 							<serverId>ossrh</serverId>

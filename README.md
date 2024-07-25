@@ -81,7 +81,7 @@ matches of those names against the authority.
 
 #### Command line usage
 
-    $ java -jar sci_name_qc-1.1.0-SNAPSHOT-{commit}-executable.jar --help
+    $ java -jar sci_name_qc-1.1.0-{commit}-executable.jar --help
     usage: SciNameUtils
      -f,--file <arg>      Input csv file from which to lookup names.  Assumes
                           a csv file, first three columns being dbpk,
@@ -118,7 +118,7 @@ Available in Maven Central.
     <dependency>
         <groupId>org.filteredpush</groupId>
         <artifactId>sci_name_qc</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
     </dependency>
 
 
