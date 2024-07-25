@@ -23,8 +23,6 @@ import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.api.result.AmendmentValue;
 import org.filteredpush.qc.sciname.services.GBIFService;
 
-import com.squareup.okhttp.logging.HttpLoggingInterceptor.Logger;
-
 /**
  * Identify source authorities for scientific names, handling both specific services
  * and services which can take some form of dataset identifier (such as GBIF's API)
