@@ -2907,7 +2907,7 @@ public class DwCSciNameDQ {
     @Provides("6eeac3ed-f691-457f-a42e-eaa9c8a71ce8")
     @ProvidesVersion("https://rs.tdwg.org/bdq/terms/6eeac3ed-f691-457f-a42e-eaa9c8a71ce8/2023-09-18")
     @Specification("INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY; COMPLIANT if (1) dwc:scientificNameID is a validly formed LSID, or (2) dwc:scientificNameID is a validly formed URN with at least NID and NSS present, or (3) dwc:scientificNameID is in the form scope:value, or (4) dwc:scientificNameID is a validly formed URI with host and path where path consists of more than just '/'; otherwise NOT_COMPLIANT ")
-    public DQResponse<ComplianceValue> validationScientificnameidComplete(
+    public static DQResponse<ComplianceValue> validationScientificnameidComplete(
         @ActedUpon("dwc:scientificNameID") String scientificNameID
     ) {
         DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();

@@ -165,7 +165,7 @@ public class APNIService {
 					logger.debug(match.get("nameType"));
 					logger.debug(match.get("scientificNameID"));
 					logger.debug(match.get("scientificNameAuthorship"));
-					String matchAuthor = match.get("scientificNameAuthorship").toString();
+					String matchAuthor = (String)match.get("scientificNameAuthorship");
 					if (matchAuthor != null && matchAuthor.length()>0) {
 						nameUsage.setAuthorship(matchAuthor);
 						AuthorNameComparator authorComparator = AuthorNameComparator.authorNameComparatorFactory(authorship, "Plantae");
