@@ -80,6 +80,8 @@ public class SciNameSourceAuthority {
 	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
 	    } else if (authorityString.toUpperCase().equals("WORMS")) {
 	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
+	    } else if (authorityString.toUpperCase().equals("WORLD REGISTER OF MARINE SPECIES (WORMS)")) {
+	    	this.authority = EnumSciNameSourceAuthority.WORMS;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.IRMNG.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.IRMNG;	
 	    } else if (authorityString.toUpperCase().equals("IRMNG.ORG")) {
