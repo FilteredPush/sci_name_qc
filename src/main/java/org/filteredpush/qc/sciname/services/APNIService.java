@@ -176,6 +176,7 @@ public class APNIService {
 					nameUsage.setAcceptedKey(Integer.parseInt(id.replace("https://id.biodiversity.org.au/name/apni/", "")));
 					if (resultNameMatchType.equals("Exact")) { 
 						nameUsage.setNameMatchDescription(NameComparison.MATCH_EXACT);
+						nameUsage.setGuid(id);
 					}
 					result.add(nameUsage);
 				}

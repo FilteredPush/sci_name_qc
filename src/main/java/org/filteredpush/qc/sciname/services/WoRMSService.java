@@ -807,7 +807,7 @@ public class WoRMSService implements Validator {
 	 * @return a {@link java.util.Map} object.
 	 * @throws org.marinespecies.aphia.v1_0.handler.ApiException if any.
 	 */
-	protected Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
+	public Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
 		Map<String,String> attributes = new HashMap<String,String>();
 		if (ar!=null)  {
 			wormsService.setApiClient(new ApiClient());
