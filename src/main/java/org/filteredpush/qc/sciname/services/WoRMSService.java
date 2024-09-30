@@ -603,6 +603,10 @@ public class WoRMSService implements Validator {
 	@Override
 	public NameUsage validate(NameUsage taxonNameToValidate) throws ServiceException {
 		logger.debug("Checking: " + taxonNameToValidate.getScientificName() + " " + taxonNameToValidate.getAuthorship());
+		if (taxonNameToValidate.getScientificName().trim().equals("?")) {
+			logger.debug("Not looking up scientificName = ?, will produce forbidden exception on service");
+			return null;
+		}
 		NameUsage result = null;
 		depth++;   
 		try {
@@ -769,19 +773,26 @@ public class WoRMSService implements Validator {
 			    }
 			}
 		} catch (ApiException e) {
-			if (e.getMessage().equals("Connection timed out")) { 
-				logger.error(e.getMessage() + " " + taxonNameToValidate.getScientificName() + " " + taxonNameToValidate.getInputDbPK());
-			} else if (e.getCause()!=null && e.getCause().getClass().equals(UnknownHostException.class)) { 
-				logger.error("Connection Probably Lost.  UnknownHostException: "+ e.getMessage());
-			} else {
-				logger.error(e.getMessage(), e);
-			}
-			if (depth<=MAX_RETRIES) {
-				// Try again, up to MAX_RETRIES times.
-				result = this.validate(taxonNameToValidate);
+			if (e.getMessage().equals("Forbidden")) {
+				// Form of name provided is invalid, GBIF Parser can return '? epithet', which WoRMS can't lookup.
+				logger.error(e.getMessage() + " Request to lookup [" + taxonNameToValidate.getScientificName() +"] denied");
+				depth = MAX_RETRIES + 1;
+				result = null;
 			} else { 
-				depth = 1;
-				throw new ServiceException(e.getMessage());
+				if (e.getMessage().equals("Connection timed out")) { 
+					logger.error(e.getMessage() + " " + taxonNameToValidate.getScientificName() + " " + taxonNameToValidate.getInputDbPK());
+				} else if (e.getCause()!=null && e.getCause().getClass().equals(UnknownHostException.class)) { 
+					logger.error("Connection Probably Lost.  UnknownHostException: "+ e.getMessage());
+				} else {
+					logger.error(e.getMessage(), e);
+				}
+				if (depth<=MAX_RETRIES) {
+					// Try again, up to MAX_RETRIES times.
+					result = this.validate(taxonNameToValidate);
+				} else { 
+					depth = 1;
+					throw new ServiceException(e.getMessage());
+				}
 			}
 		}
 		depth--;
