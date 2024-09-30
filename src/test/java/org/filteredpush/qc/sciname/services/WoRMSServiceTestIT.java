@@ -264,6 +264,19 @@ public class WoRMSServiceTestIT {
 		} catch (ServiceException e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
+		// Test failure case coming out of change in GBIF name parser for single lower case word 
+		sciName = "? null";
+		authorship = "";
+		toTest = new NameUsage("WoRMS", AuthorNameComparator.authorNameComparatorFactory(authorship, "Animalia"), sciName, authorship); 
+		toTest.setScientificName(sciName);
+		toTest.setAuthorship(authorship);
+		try {
+			result = service.validate(toTest);
+			assertNull(result);
+		} catch (ServiceException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+		
 	}
 
 	

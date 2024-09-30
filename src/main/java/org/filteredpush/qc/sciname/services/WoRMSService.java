@@ -607,6 +607,10 @@ public class WoRMSService implements Validator {
 			logger.debug("Not looking up scientificName = ?, will produce forbidden exception on service");
 			return null;
 		}
+		if (taxonNameToValidate.getScientificName().trim().startsWith("? ")) {
+			logger.debug("Not looking up scientificName starting with '? ', will produce forbidden exception on service");
+			return null;
+		}
 		NameUsage result = null;
 		depth++;   
 		try {
