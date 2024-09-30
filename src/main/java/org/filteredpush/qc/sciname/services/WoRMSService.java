@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -608,6 +607,7 @@ public class WoRMSService implements Validator {
 			return null;
 		}
 		if (taxonNameToValidate.getScientificName().trim().startsWith("? ")) {
+			// Note, URL encoding doesn't solve this
 			logger.debug("Not looking up scientificName starting with '? ', will produce forbidden exception on service");
 			return null;
 		}
