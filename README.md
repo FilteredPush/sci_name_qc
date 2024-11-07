@@ -5,7 +5,7 @@ Abstracted from the FilteredPush FP-KurationServices Scientific Name Service cla
 
 DOI: 10.5281/zenodo.7026712
 
-[![DOI](https://zenodo.org/badge/70093157.svg)](https://zenodo.org/badge/latestdoi/70093157)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14052951.svg)](https://doi.org/10.5281/zenodo.14052951)
 
 ## Primitives
 
