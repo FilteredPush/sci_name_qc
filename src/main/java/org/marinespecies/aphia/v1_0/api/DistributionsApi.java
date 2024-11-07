@@ -34,61 +34,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>DistributionsApi class.</p>
- *
- * @author mole
- * @version $Id: $Id
- */
 public class DistributionsApi {
     private ApiClient apiClient;
 
-    /**
-     * <p>Constructor for DistributionsApi.</p>
-     */
     public DistributionsApi() {
         this(Configuration.getDefaultApiClient());
     }
 
-    /**
-     * <p>Constructor for DistributionsApi.</p>
-     *
-     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
-     */
     public DistributionsApi(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
-    /**
-     * <p>Getter for the field <code>apiClient</code>.</p>
-     *
-     * @return a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
-     */
     public ApiClient getApiClient() {
         return apiClient;
     }
 
-    /**
-     * <p>Setter for the field <code>apiClient</code>.</p>
-     *
-     * @param apiClient a {@link org.marinespecies.aphia.v1_0.handler.ApiClient} object.
-     */
     public void setApiClient(ApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     /**
      * Build call for aphiaDistributionsByAphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @param progressListener Progress listener
      * @param progressRequestListener Progress request listener
      * @return Call to execute
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to serialize the request body object
+     * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call aphiaDistributionsByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public okhttp3.Call aphiaDistributionsByAphiaIDCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = null;
-        
+
         // create path and map variables
         String localVarPath = "/AphiaDistributionsByAphiaID/{ID}"
             .replaceAll("\\{" + "ID" + "\\}", apiClient.escapeString(ID.toString()));
@@ -113,10 +88,10 @@ public class DistributionsApi {
         localVarHeaderParams.put("Content-Type", localVarContentType);
 
         if(progressListener != null) {
-            apiClient.getHttpClient().networkInterceptors().add(new com.squareup.okhttp.Interceptor() {
+            apiClient.getHttpClient().networkInterceptors().add(new okhttp3.Interceptor() {
                 @Override
-                public com.squareup.okhttp.Response intercept(com.squareup.okhttp.Interceptor.Chain chain) throws IOException {
-                    com.squareup.okhttp.Response originalResponse = chain.proceed(chain.request());
+                public okhttp3.Response intercept(okhttp3.Interceptor.Chain chain) throws IOException {
+                    okhttp3.Response originalResponse = chain.proceed(chain.request());
                     return originalResponse.newBuilder()
                     .body(new ProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
@@ -127,30 +102,25 @@ public class DistributionsApi {
         String[] localVarAuthNames = new String[] {  };
         return apiClient.buildCall(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAuthNames, progressRequestListener);
     }
-    
+
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call aphiaDistributionsByAphiaIDValidateBeforeCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private okhttp3.Call aphiaDistributionsByAphiaIDValidateBeforeCall(Integer ID, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'ID' is set
         if (ID == null) {
             throw new ApiException("Missing the required parameter 'ID' when calling aphiaDistributionsByAphiaID(Async)");
         }
-        
-        com.squareup.okhttp.Call call = aphiaDistributionsByAphiaIDCall(ID, progressListener, progressRequestListener);
+
+        okhttp3.Call call = aphiaDistributionsByAphiaIDCall(ID, progressListener, progressRequestListener);
         return call;
 
-        
-        
-        
-        
     }
 
     /**
      * Get all distributions for a given AphiaID
      * Get all distributions for a given AphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @return List&lt;Distribution&gt;
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public List<Distribution> aphiaDistributionsByAphiaID(Integer ID) throws ApiException {
         ApiResponse<List<Distribution>> resp = aphiaDistributionsByAphiaIDWithHttpInfo(ID);
@@ -160,13 +130,12 @@ public class DistributionsApi {
     /**
      * Get all distributions for a given AphiaID
      * Get all distributions for a given AphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @return ApiResponse&lt;List&lt;Distribution&gt;&gt;
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
+     * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
     public ApiResponse<List<Distribution>> aphiaDistributionsByAphiaIDWithHttpInfo(Integer ID) throws ApiException {
-        com.squareup.okhttp.Call call = aphiaDistributionsByAphiaIDValidateBeforeCall(ID, null, null);
+        okhttp3.Call call = aphiaDistributionsByAphiaIDValidateBeforeCall(ID, null, null);
         Type localVarReturnType = new TypeToken<List<Distribution>>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
@@ -174,13 +143,12 @@ public class DistributionsApi {
     /**
      * Get all distributions for a given AphiaID (asynchronously)
      * Get all distributions for a given AphiaID
-     *
      * @param ID The AphiaID to search for (required)
      * @param callback The callback to be executed when the API call finishes
      * @return The request call
-     * @throws org.marinespecies.aphia.v1_0.handler.ApiException If fail to process the API call, e.g. serializing the request body object
+     * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call aphiaDistributionsByAphiaIDAsync(Integer ID, final ApiCallback<List<Distribution>> callback) throws ApiException {
+    public okhttp3.Call aphiaDistributionsByAphiaIDAsync(Integer ID, final ApiCallback<List<Distribution>> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -201,7 +169,7 @@ public class DistributionsApi {
             };
         }
 
-        com.squareup.okhttp.Call call = aphiaDistributionsByAphiaIDValidateBeforeCall(ID, progressListener, progressRequestListener);
+        okhttp3.Call call = aphiaDistributionsByAphiaIDValidateBeforeCall(ID, progressListener, progressRequestListener);
         Type localVarReturnType = new TypeToken<List<Distribution>>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
