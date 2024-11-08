@@ -7,6 +7,33 @@ DOI: 10.5281/zenodo.7026712
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14052951.svg)](https://doi.org/10.5281/zenodo.14052951)
 
+## BDQ Core Tests
+
+The sci_name_qc library implements the following BDQ Core tests, with these implementations passing against all test validation records. 
+
+- [VALIDATION_TAXONRANK_STANDARD](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_TAXONRANK_STANDARD) 
+- [AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON) 
+- [AMENDMENT_TAXONRANK_STANDARDIZED](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#AMENDMENT_TAXONRANK_STANDARDIZED) 
+- [VALIDATION_FAMILY_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_FAMILY_FOUND) 
+- [AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID) 
+- [VALIDATION_KINGDOM_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_KINGDOM_FOUND) 
+- [VALIDATION_SCIENTIFICNAMEID_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_SCIENTIFICNAMEID_NOTEMPTY) 
+- [VALIDATION_SCIENTIFICNAMEID_COMPLETE](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_SCIENTIFICNAMEID_COMPLETE) 
+- [VALIDATION_KINGDOM_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_KINGDOM_NOTEMPTY) 
+- [VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY) 
+- [VALIDATION_TAXONRANK_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_TAXONRANK_NOTEMPTY) 
+- [VALIDATION_POLYNOMIAL_CONSISTENT](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_POLYNOMIAL_CONSISTENT) 
+- [VALIDATION_TAXON_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_TAXON_NOTEMPTY) 
+- [VALIDATION_ORDER_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_ORDER_FOUND) 
+- [VALIDATION_CLASSIFICATION_CONSISTENT](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_CLASSIFICATION_CONSISTENT) 
+- [VALIDATION_PHYLUM_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_PHYLUM_FOUND) 
+- [VALIDATION_SCIENTIFICNAME_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_SCIENTIFICNAME_NOTEMPTY) 
+- [VALIDATION_TAXON_UNAMBIGUOUS](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_TAXON_UNAMBIGUOUS) 
+- [VALIDATION_GENUS_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_GENUS_FOUND) 
+- [VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY) 
+- [VALIDATION_CLASS_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_CLASS_FOUND) 
+- [VALIDATION_SCIENTIFICNAME_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqcore/index.md#VALIDATION_SCIENTIFICNAME_FOUND)
+
 ## Primitives
 
 ### AuthorNameComparator
