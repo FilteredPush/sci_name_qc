@@ -17,8 +17,8 @@ Generate Turtle RDF using kurator-ffdq using (from a kurator-ffdq directory in t
 
 Stub DwCSciNameDQ class and Turtle RDF can be generated using kurator-ffdq using (from a kurator-ffdq directory in the same parent directory as sci_name_qc) with:
 
-   ./test-util.sh -config ../sci_name_qc/generation/sci_name_qc_DwCSciNameQC_stubs_kurator_ffdq.config -in ../sci_name_qc/generation/name_tests.csv -out ../sci_name_qc/generation/name_tests.ttl -generateClass -srcDir ../sci_name_qc/src/main/java/ -ieGuidFile ../bdq/tg2/core/information_element_guids.csv  -guidFile ../event_date_qc/generation/additional_guids.csv
+   ./test-util.sh -config ../sci_name_qc/generation/sci_name_qc_DwCSciNameQC_stubs_kurator_ffdq.config -in ../sci_name_qc/generation/name_tests.csv -out ../sci_name_qc/generation/name_tests.ttl -generateClass -srcDir ../sci_name_qc/src/main/java/ -ieGuidFile ../bdq/tg2/core/information_element_guids.csv  -guidFile ../sci_name_qc/generation/additional_guids.csv
 
 Add comments to the end of a java class noting out of date implementations and adding stubs for any unimplemented methods using kurator-ffdq (from a kurator-ffdq directory in the same parent directory as sci_name_qc) with: 
 
-   ./test-util.sh -config ../sci_name_qc/generation/sci_name_qc_DwCSciNameQC_kurator_ffdq.config -in ../sci_name_qc/generation/name_tests.csv -out ../sci_name_qc/generation/name_tests.ttl -checkVersion -appendClass -srcDir ../sci_name_qc/src/main/java/ -ieGuidFile ../bdq/tg2/core/information_element_guids.csv  -guidFile ../event_date_qc/generation/additional_guids.csv
+   ./test-util.sh -config ../sci_name_qc/generation/sci_name_qc_DwCSciNameQC_kurator_ffdq.config -in ../sci_name_qc/generation/name_tests.csv -out ../sci_name_qc/generation/name_tests.ttl -checkVersion -appendClass -srcDir ../sci_name_qc/src/main/java/ -ieGuidFile ../bdq/tg2/core/information_element_guids.csv  -guidFile ../sci_name_qc/generation/additional_guids.csv
