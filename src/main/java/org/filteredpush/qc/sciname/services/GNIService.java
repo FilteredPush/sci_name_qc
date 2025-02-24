@@ -47,7 +47,10 @@ public class GNIService {
 
 	private static final Log logger = LogFactory.getLog(GNIService.class);
 
-	private static String endpoint = "https://resolver.globalnames.org/name_resolvers.json";
+	// private static String parserEndpoint = "https://resolver.globalnames.org/name_resolvers.json";
+	
+	// New end point for parser - distinct from validator 
+	private static String parserEndpoint = "https://parser.globalnames.org/api/v1/";
 	
 	/**
 	 * Query GNI with a scientific name string and if a match is found, return the canonical name
@@ -62,7 +65,8 @@ public class GNIService {
 		String result = "";
 		
 		StringBuilder request = new StringBuilder();
-		request.append(endpoint).append("?names=").append(URLEncoder.encode(nameString, "utf-8")).append("&best_match_only=true");
+		// request.append(parserEndpoint).append("?names=").append(URLEncoder.encode(nameString, "utf-8")).append("&best_match_only=true");
+		request.append(parserEndpoint).append(URLEncoder.encode(nameString, "utf-8"));
 		
 		StringBuilder requestResponse = new StringBuilder();
 		URL url = new URL(request.toString());
@@ -81,13 +85,14 @@ public class GNIService {
 		
 		if (requestResponse.length() > 0) { 
 			try { 
-				JSONObject parse = (JSONObject) new JSONParser().parse(requestResponse.toString());
-				JSONArray data = (JSONArray) parse.get("data");
-				JSONObject data0 = (JSONObject) data.get(0);
-				JSONArray results = (JSONArray) data0.get("results");
+				//JSONObject parse = (JSONObject) new JSONParser().parse(requestResponse.toString());
+				//JSONArray data = (JSONArray) parse.get("data");
+				//JSONObject data0 = (JSONObject) data.get(0);
+				JSONArray results = (JSONArray) new JSONParser().parse(requestResponse.toString());
 				if (results!=null) { 
 					JSONObject match = (JSONObject) results.get(0);
-					result = (String) match.get("canonical_form");
+					JSONObject canonical = (JSONObject) match.get("canonical");
+					result = (String) canonical.get("full");
 				}
 			} catch (Exception e) { 
 				logger.debug(e.getMessage());
@@ -111,7 +116,8 @@ public class GNIService {
 		NameAuthorshipParse result = null;
 		
 		StringBuilder request = new StringBuilder();
-		request.append(endpoint).append("?names=").append(URLEncoder.encode(nameString,"utf-8")).append("&best_match_only=true");
+		//request.append(parserEndpoint).append("?names=").append(URLEncoder.encode(nameString,"utf-8")).append("&best_match_only=true");
+		request.append(parserEndpoint).append(URLEncoder.encode(nameString,"utf-8"));
 		
 		StringBuilder requestResponse = new StringBuilder();
 		URL url = new URL(request.toString());
@@ -132,16 +138,18 @@ public class GNIService {
 		
 		if (requestResponse.length() > 0) { 
 			try { 
-				JSONObject parse = (JSONObject) new JSONParser().parse(requestResponse.toString());
-				JSONArray data = (JSONArray) parse.get("data");
-				JSONObject data0 = (JSONObject) data.get(0);
-				JSONArray results = (JSONArray) data0.get("results");
+				JSONArray results = (JSONArray) new JSONParser().parse(requestResponse.toString());
+				//JSONArray data = (JSONArray) parse.get("data");
+				//JSONObject data0 = (JSONObject) data.get(0);
+				//JSONArray results = (JSONArray) data0.get("results");
+				//JSONArray results = parse. ;
 				if (results!=null) { 
 					JSONObject match = (JSONObject) results.get(0);
 					logger.debug(match.toJSONString());
 					logger.debug(match.keySet());
-					String canonicalForm = (String) match.get("canonical_form");
-					String fullString = (String) match.get("name_string");
+					JSONObject canonical = (JSONObject) match.get("canonical");
+					String canonicalForm = (String) canonical.get("full");
+					String fullString = (String) match.get("verbatim");
 					result = new NameAuthorshipParse();
 					result.setNameWithoutAuthorship(canonicalForm);
 					result.setAuthorship(fullString.replace(canonicalForm, "").trim());

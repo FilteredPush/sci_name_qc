@@ -248,7 +248,8 @@ public class WoRMSServiceTestIT {
 			setUp();
 		}
 		String sciName = "Partula lutea";
-		String authorship = "Lesson, 1831";
+		// String authorship = "Lesson, 1831";  // value changed in WoRMS
+		String authorship = "R. P. Lesson, 1831";
 		NameUsage toTest = new NameUsage("WoRMS", AuthorNameComparator.authorNameComparatorFactory(authorship, "Animalia"), sciName, authorship); 
 		toTest.setScientificName(sciName);
 		toTest.setAuthorship(authorship);
