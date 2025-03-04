@@ -64,6 +64,12 @@ public class TestDwCSciNameDQ {
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
 		
+		taxonID = null;
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.INTERNAL_PREREQUISITES_NOT_MET.getLabel(), result.getResultState().getLabel());
+
 		taxonID = "3256236";
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
@@ -93,6 +99,20 @@ public class TestDwCSciNameDQ {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 		
 		taxonID = "gbif:2529789";
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "gbif:" + Integer.toString(Integer.MAX_VALUE);
+		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		taxonID = "EPSG:4326";  // not a relevant identifier, but should be compliant for this test.
 		result = DwCSciNameDQ.validationTaxonidComplete(taxonID);
 		logger.debug(result.getComment());
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
@@ -200,6 +220,41 @@ public class TestDwCSciNameDQ {
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 
+		scientificName = " ";
+		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		scientificName = null;
+		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		scientificName = "NOT_A_NAME";
+		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		scientificName = Integer.toString(Integer.MAX_VALUE);
+		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		scientificName = Integer.toString(Integer.MIN_VALUE);
+		result = DwCSciNameDQ.validationScientificnameNotempty(scientificName);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
 	}
 
 
@@ -309,6 +364,36 @@ public class TestDwCSciNameDQ {
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		
 		scientificName = "Ausareum bus cus";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "some random string";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "somerandomstring";
+		genericName = "Aus";
+		specificEpithet = "bus";
+		infraspecificEpithet = "cus";
+		result = DwCSciNameDQ.validationPolynomialConsistent(scientificName, genericName, specificEpithet, infraspecificEpithet);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());
+		
+		scientificName = "somerandomstring bus cus";
 		genericName = "Aus";
 		specificEpithet = "bus";
 		infraspecificEpithet = "cus";
@@ -662,6 +747,34 @@ public class TestDwCSciNameDQ {
 		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());		
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
+		taxonId = " ";
+		result = DwCSciNameDQ.validationscientificNameIDNotempty(taxonId);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());		
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		taxonId = null;
+		result = DwCSciNameDQ.validationscientificNameIDNotempty(taxonId);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());		
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		taxonId = "SOME_TEXT";
+		result = DwCSciNameDQ.validationscientificNameIDNotempty(taxonId);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		taxonId = "gbif:325522";
+		result = DwCSciNameDQ.validationscientificNameIDNotempty(taxonId);
+		logger.debug(result.getComment());
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());		
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
 	}
 
 
@@ -685,6 +798,16 @@ public class TestDwCSciNameDQ {
 		result = DwCSciNameDQ.validationTaxonrankNotempty("species");
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationTaxonrankNotempty("");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationTaxonrankNotempty(" ");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 	}
@@ -711,6 +834,16 @@ public class TestDwCSciNameDQ {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
+		result = DwCSciNameDQ.validationTypestatusNotempty(" ");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationTypestatusNotempty("");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
 	}
 	
 	/**
@@ -733,6 +866,16 @@ public class TestDwCSciNameDQ {
 		result = DwCSciNameDQ.validationHigherclassificationNotempty("Animailia|Mollusca|Gastropoda");
 		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationHigherclassificationNotempty("");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		
+		result = DwCSciNameDQ.validationHigherclassificationNotempty(" ");
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.NOT_COMPLIANT.getLabel(), result.getValue().getLabel());	
 		assertFalse(SciNameUtils.isEmpty(result.getComment()));
 		
 	}
