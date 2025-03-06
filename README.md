@@ -1,4 +1,7 @@
-# sci_name_qc
+# sci_name_qc 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.filteredpush/sci_name_qc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.filteredpush/sci_name_qc)
+[![Javadocs](http://javadoc.io/badge/org.filteredpush/sci_name_qc.svg)](http://javadoc.io/doc/org.filteredpush/sci_name_qc)
+
 Data Quality library for dwc:scientificName and dwc:scientificNameAuthorship and related terms
 
 Abstracted from the FilteredPush FP-KurationServices Scientific Name Service classes.
@@ -6,6 +9,8 @@ Abstracted from the FilteredPush FP-KurationServices Scientific Name Service cla
 DOI: 10.5281/zenodo.7026712
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14052951.svg)](https://doi.org/10.5281/zenodo.14052951)
+
+This library provides a set of methods for validating information related to scientific names, expressed as Darwin Core terms.  It implements the TDWG Biodiversity Data Quality BDQ Core tests for scientific names, and provides a set of utilities for comparing scientific name authorship strings. 
 
 ## BDQ Core Tests
 
