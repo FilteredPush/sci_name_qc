@@ -62,6 +62,17 @@ public class IRMNGService implements Validator {
 	private final static String IRMNGGUIDPREFIX = "urn:lsid:irmng.org:taxname:";
 	private final static String IRMNGBASEPATH = "https://www.irmng.org/rest";
 
+	/** No argument constructor for IRMNGService.
+	 *
+	 * @throws java.io.IOException if any.
+	 */
+	public IRMNGService() throws IOException {
+		super();
+		irmngService = new TaxonomicDataApi();
+		irmngService.getApiClient().setBasePath(IRMNGBASEPATH);
+		depth = 0;
+	}
+
 	/**
 	 * <p>Constructor for IRMNGService.</p>
 	 *

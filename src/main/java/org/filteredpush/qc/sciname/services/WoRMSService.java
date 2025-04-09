@@ -66,6 +66,18 @@ public class WoRMSService implements Validator {
 	private final static String WORMSGUIDPREFIX = "urn:lsid:marinespecies.org:taxname:";
 
 	/**
+	 * No argument constructor, creates the service, doesn't run a test.
+	 * 
+	 * @throws IOException
+	 */
+	public WoRMSService() throws IOException { 
+		wormsService = new TaxonomicDataApi();
+		wormsService.setApiClient(new ApiClient());
+		depth = MAX_RETRIES;  // on test failure, don't retry
+		depth = 0;
+	}
+	
+	/**
 	 * <p>Constructor for WoRMSService.</p>
 	 *
 	 * @param test a boolean.
