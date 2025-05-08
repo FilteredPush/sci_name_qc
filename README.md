@@ -10,11 +10,11 @@ DOI: 10.5281/zenodo.7026712
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14052951.svg)](https://doi.org/10.5281/zenodo.14052951)
 
-This library provides a set of methods for validating information related to scientific names, expressed as Darwin Core terms.  It implements the TDWG Biodiversity Data Quality BDQ Standard Core tests for scientific names, and provides a set of utilities for comparing scientific name authorship strings. 
+This library provides a set of methods for validating information related to scientific names, expressed as Darwin Core terms.  It implements the TDWG Biodiversity Data Quality BDQ Standard tests for scientific names, and provides a set of utilities for comparing scientific name authorship strings. 
 
 ## BDQ Standard Tests
 
-The sci_name_qc library implements the following BDQ Standardd tests, with these implementations passing against all test validation records. 
+The sci_name_qc library implements the following BDQ Standard tests, with these implementations passing against all test validation records. 
 
 - [VALIDATION_TAXONRANK_STANDARD](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_TAXONRANK_STANDARD) 
 - [AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON) 
