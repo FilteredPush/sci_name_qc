@@ -150,7 +150,7 @@ Available in Maven Central.
     <dependency>
         <groupId>org.filteredpush</groupId>
         <artifactId>sci_name_qc</artifactId>
-        <version>1.1.2</version>
+        <version>1.2.0</version>
     </dependency>
 
 
