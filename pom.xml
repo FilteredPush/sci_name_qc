@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.filteredpush</groupId>
 	<artifactId>sci_name_qc</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<name>sci_name_qc</name>
 	<description>FilteredPush dwc:scientificName data quality library..</description>
 	<url>https://wiki.filteredpush.org/</url>
@@ -160,7 +160,7 @@
 		<dependency>
 			<groupId>org.threeten</groupId>
 			<artifactId>threetenbp</artifactId>
-			<version>1.7.0</version>
+			<version>1.7.1</version>
 		</dependency>
 
 	</dependencies>
