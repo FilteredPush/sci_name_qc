@@ -8,7 +8,7 @@ Abstracted from the FilteredPush FP-KurationServices Scientific Name Service cla
 
 DOI: 10.5281/zenodo.7026712
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14052951.svg)](https://doi.org/10.5281/zenodo.14052951)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7026712.svg)](https://doi.org/10.5281/zenodo.7026712)
 
 This library provides a set of methods for validating information related to scientific names, expressed as Darwin Core terms.  It implements the TDWG Biodiversity Data Quality BDQ Standard tests for scientific names, and provides a set of utilities for comparing scientific name authorship strings. 
 
