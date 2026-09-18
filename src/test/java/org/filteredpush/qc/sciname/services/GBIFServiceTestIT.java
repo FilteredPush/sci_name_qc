@@ -83,6 +83,27 @@ public class GBIFServiceTestIT {
 			fail(e.getMessage());
 		}
 		
+		scientificName = "Acer campestre";
+		try {
+			String response = GBIFService.searchForTaxon(scientificName, GBIFService.KEY_GBIFBACKBONE);
+			logger.debug(response);
+			List<NameUsage> hits = GBIFService.parseAllNameUsagesFromJSON(response);
+			assertTrue(hits.size()>0);
+			Iterator<NameUsage> i = hits.iterator();
+			boolean hasMatch = false;
+			while (i.hasNext()) { 
+				NameUsage hit = i.next();
+			 	logger.debug(hit.getScientificName());
+			 	logger.debug(hit.getAuthorship());
+			 	if (hit.getScientificName().equals("Acer campestre L.")) { 
+			 		hasMatch = true;
+			 	}
+			}
+			assertEquals(true, hasMatch);
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+		
 	 // TODO	fail("Not yet implemented");
 	}
 
