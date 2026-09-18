@@ -6,10 +6,10 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="DEBUG">
+    <Root level="WARN">
       <AppenderRef ref="Console"/>
     </Root>
-    <Logger name="org.filteredpush.qc.sciname" level="DEBUG">
+    <Logger name="org.filteredpush.qc.sciname" level="DEBUG" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
     <Logger name="org.gbif.nameparser.NameParserGBIF" level="WARN">

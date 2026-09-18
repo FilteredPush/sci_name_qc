@@ -712,6 +712,48 @@ public class DwCSciNameDQ_IT {
 		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
 	} 
 
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonUnmbiguousProblemCase3() {
+		// this case is failing on live data, separating out for clearer following of log messages
+		SciNameSourceAuthority defaultAuthorityAuth = new SciNameSourceAuthority();
+		String defaultAuthority = defaultAuthorityAuth.getName();
+		Taxon taxon = new Taxon();
+		taxon = new Taxon();
+		taxon.setScientificName("Acer campestre");
+		taxon.setScientificNameAuthorship("");
+		taxon.setKingdom("Plantae");
+		taxon.setFamily("Aceraceae");
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	} 	
+	
+	/**
+	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 */
+	@Test
+	public void testValidationTaxonUnmbiguousProblemCase4() {
+		// this case is failing on live data, separating out for clearer following of log messages
+		SciNameSourceAuthority defaultAuthorityAuth = new SciNameSourceAuthority();
+		String defaultAuthority = defaultAuthorityAuth.getName();
+		Taxon taxon = new Taxon();
+		taxon = new Taxon();
+		taxon.setScientificName("Acer campestre L.");
+		taxon.setScientificNameAuthorship("L.");
+		taxon.setKingdom("Plantae");
+		taxon.setFamily("Aceraceae");
+		DQResponse<ComplianceValue> result = DwCSciNameDQ.validationTaxonUnambiguous(taxon,defaultAuthority);
+		logger.debug(result.getComment());
+		assertFalse(SciNameUtils.isEmpty(result.getComment()));
+		assertEquals(ResultState.RUN_HAS_RESULT.getLabel(), result.getResultState().getLabel());
+		assertEquals(ComplianceValue.COMPLIANT.getLabel(), result.getValue().getLabel());
+	} 
+	
 	
 	/**
 	 * Test method for {@link org.filteredpush.qc.sciname.DwCSciNameDQ#validationTaxonAmbiguous(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.

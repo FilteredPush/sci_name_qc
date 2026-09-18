@@ -997,7 +997,15 @@ public class DwCSciNameDQ {
 								logger.debug(match.getCanonicalName());
 								logger.debug(match.getTaxonomicStatus());
 								logger.debug(match.getAcceptedKey());
-								if ( taxon.sameHigherAs(match) ) { 
+								
+								// rule 2, one match on scientificName, no scientificNameID provided
+								boolean uniqueScientificNameMatch =
+							            !SciNameUtils.isEmpty(taxon.getScientificName()) &&
+							            SciNameUtils.isEmpty(taxon.getScientificNameID()) &&
+							            matchList.size() == 1;
+								logger.debug(uniqueScientificNameMatch);
+								
+								if (uniqueScientificNameMatch || taxon.sameHigherAs(match) ) { 
 									logger.debug(match.getCanonicalName());
 									logger.debug(match.getAuthorship());
 									logger.debug(match.getAuthorshipStringSimilarity());
@@ -1047,7 +1055,13 @@ public class DwCSciNameDQ {
 									}
 									logger.debug(match.getGuid());
 									if (!SciNameUtils.isEmpty(match.getGuid()) && authorshipOK) {
-										if (taxon.sameHigherAs(match)) { 
+										if (uniqueScientificNameMatch) { 
+											// Case (2) dwc:scientificNameID is empty and dwc:scientificName references a single taxon record in the bdq:sourceAuthority,
+											hasMatch=true;
+											matchedKey = match.getKey();
+											matchCounter++;
+											kvp.put("dwc:taxonID", match.getGuid());
+										} else if (taxon.sameHigherAs(match)) { 
 											// Case (4) disambuguate matches by higher taxonomy.
 											if (hasMatch) { 
 												logger.debug(match.getAuthorship());
