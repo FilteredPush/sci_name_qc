@@ -142,6 +142,44 @@ Class: org.filteredpush.qc.sciname.DwCSciNameDQ
 
 Implements the TDWG BDQ TG2 Scientific Name (NAME) tests.
 
+## Remote service client configuration (WoRMS, IRMNG)
+
+WoRMSService and IRMNGService share a single configured HTTP client per service, which:
+
+- identifies itself with the User-Agent `FilteredPush-sci_name_qc/{version} (+https://github.com/FilteredPush/sci_name_qc)`,
+- reuses connections (connection pooling and keep-alive) and has explicit connect, read, and write timeouts,
+- limits the number of concurrent in-flight requests to each service, and the minimum interval between requests, 
+  so that many concurrent callers (e.g. multithreaded test execution) produce a throttled stream of requests rather than a burst,
+- retries only plausibly transient failures (HTTP 408, 429, 500, 502, 503, 504, and connection failures), with exponential 
+  backoff and jitter, honoring a `Retry-After` header, and does not retry other failures (e.g. 400, 401, 403, 404),
+- caches the results of `validate()` (keyed on scientific name, authorship, and kingdom) and of habitat lookups (keyed on 
+  AphiaID/IRMNG_ID), so repeated lookups of the same name are not resent to the service.
+
+Failures are logged, and reported in `ServiceException` messages, with the HTTP status code, request URL, `Retry-After` and 
+`Content-Type` headers, and (truncated) response body, or with the type of connection failure.  `ServiceException.getHttpStatusCode()` 
+returns the HTTP status code (or 0 for connection and parsing failures).
+
+These settings can be changed with java system properties, or with the static setters on `org.filteredpush.qc.sciname.services.ServiceClientConfig`:
+
+| System property | Default | Meaning |
+| --- | --- | --- |
+| `sci_name_qc.userAgent` | `FilteredPush-sci_name_qc/{version} (+https://github.com/FilteredPush/sci_name_qc)` | User-Agent header |
+| `sci_name_qc.maxRetries` | 3 | Retries after a transient failure (total attempts = maxRetries + 1) |
+| `sci_name_qc.backoffBaseMillis` | 500 | Base delay for exponential backoff |
+| `sci_name_qc.backoffMaxMillis` | 8000 | Maximum backoff delay |
+| `sci_name_qc.maxRetryAfterMillis` | 30000 | Longest `Retry-After` that will be waited for, longer requests fail without retrying |
+| `sci_name_qc.maxConcurrentRequests` | 2 | Maximum concurrent in-flight requests to each service |
+| `sci_name_qc.minRequestIntervalMillis` | 100 | Minimum interval between the start of requests to each service (0 for none) |
+| `sci_name_qc.connectTimeoutMillis` | 10000 | Connect timeout |
+| `sci_name_qc.readTimeoutMillis` | 30000 | Read timeout |
+| `sci_name_qc.writeTimeoutMillis` | 30000 | Write timeout |
+| `sci_name_qc.cacheSize` | 10000 | Maximum entries in each lookup cache, 0 disables caching |
+
+The retry, backoff, and cache size settings take effect immediately, the User-Agent, timeout, concurrency, and request interval settings 
+are read when the client for a service is first used, so should be set before any lookups are made, for example:
+
+    java -Dsci_name_qc.maxConcurrentRequests=4 -Dsci_name_qc.maxRetries=5 -jar ...
+
 
 # Include using maven
 

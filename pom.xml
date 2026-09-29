@@ -133,6 +133,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>mockwebserver</artifactId>
+			<version>4.12.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>logging-interceptor</artifactId>
 			<version>4.10.0</version>
 		</dependency>
@@ -160,6 +166,23 @@
 		</repository>
 	</repositories>
 	<build>
+		<resources>
+			<!-- Only the version properties file is filtered, other resources (e.g. log4j2.xml) are copied as is. -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>sci_name_qc-version.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>sci_name_qc-version.properties</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
