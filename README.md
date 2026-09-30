@@ -153,7 +153,14 @@ WoRMSService and IRMNGService share a single configured HTTP client per service,
 - retries only plausibly transient failures (HTTP 408, 429, 500, 502, 503, 504, and connection failures), with exponential 
   backoff and jitter, honoring a `Retry-After` header, and does not retry other failures (e.g. 400, 401, 403, 404),
 - caches the results of `validate()` (keyed on scientific name, authorship, and kingdom) and of habitat lookups (keyed on 
-  AphiaID/IRMNG_ID), so repeated lookups of the same name are not resent to the service.
+  AphiaID/IRMNG_ID), so repeated lookups of the same name are not resent to the service,
+- makes a single request when several threads look up the same value at once, sharing the result between them,
+- remembers a failed lookup for a period, during which the same lookup fails without being resent,
+- waits a limited time for a turn to make a request, rather than blocking indefinitely behind a slow service,
+- has a circuit breaker for each service: after a number of consecutive failed calls, calls fail without being sent 
+  (with a `ServiceUnavailableException`, a `ServiceException`) for a period, then a single trial call is allowed, 
+  and calls resume if it succeeds.  Responses with non-transient error statuses (e.g. 404) show the service is responding, 
+  so do not count as failures.
 
 Failures are logged, and reported in `ServiceException` messages, with the HTTP status code, request URL, `Retry-After` and 
 `Content-Type` headers, and (truncated) response body, or with the type of connection failure.  `ServiceException.getHttpStatusCode()` 
@@ -174,9 +181,13 @@ These settings can be changed with java system properties, or with the static se
 | `sci_name_qc.readTimeoutMillis` | 30000 | Read timeout |
 | `sci_name_qc.writeTimeoutMillis` | 30000 | Write timeout |
 | `sci_name_qc.cacheSize` | 10000 | Maximum entries in each lookup cache, 0 disables caching |
+| `sci_name_qc.acquireTimeoutMillis` | 60000 | Longest wait for a turn to make a request, after which it fails without being sent |
+| `sci_name_qc.failureCacheMillis` | 60000 | How long a failed lookup is remembered, 0 to not remember failures |
+| `sci_name_qc.circuitBreakerThreshold` | 5 | Consecutive failed calls that trip the circuit breaker for a service, 0 to disable it |
+| `sci_name_qc.circuitBreakerOpenMillis` | 60000 | How long calls fail without being sent once the circuit breaker has tripped |
 
-The retry, backoff, and cache size settings take effect immediately, the User-Agent, timeout, concurrency, and request interval settings 
-are read when the client for a service is first used, so should be set before any lookups are made, for example:
+The retry, backoff, cache size, failure cache, and circuit breaker settings take effect immediately, the User-Agent, timeout, 
+concurrency, acquire timeout, and request interval settings are read when the client for a service is first used, so should be set before any lookups are made, for example:
 
     java -Dsci_name_qc.maxConcurrentRequests=4 -Dsci_name_qc.maxRetries=5 -jar ...
 

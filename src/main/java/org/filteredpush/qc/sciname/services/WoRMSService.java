@@ -56,6 +56,9 @@ import java.util.Map;
  * requests to WoRMS.  {@link #validate(NameUsage)} retries transient failures (HTTP 408, 429, 5xx, and 
  * connection failures) with exponential backoff, and caches its results, and the results of 
  * {@link #lookupHabitat(AphiaRecord)}, so repeated lookups of the same name are not resent to WoRMS.
+ * Concurrent validations of the same name make a single request, a validation that failed is not 
+ * resent for a period, and after repeated failures a {@link CircuitBreaker} stops calls to WoRMS for 
+ * a period, during which validations fail with a {@link ServiceUnavailableException}.
  * See {@link ServiceClientConfig} for the system properties that configure this behavior.</p>
  *
  * @author Lei Dou
@@ -690,27 +693,21 @@ public class WoRMSService implements Validator {
 		taxonNameToValidate.setAuthorComparator(comparator);
 		
 		String cacheKey = validationCacheKey(taxonNameToValidate);
-		LookupCache.Entry<NameUsage> cached = VALIDATION_CACHE.get(cacheKey);
-		if (cached!=null) { 
-			logger.debug("Using cached WoRMS result for: " + taxonNameToValidate.getScientificName() + " " + authorship);
-			return copyForInput(cached.getValue(), taxonNameToValidate);
-		}
-		
-		NameUsage result = null;
-		try { 
-			result = ServiceRetrier.execute(SERVICE_NAME, taxonNameToValidate.getScientificName(), 
-					() -> lookupAndCompare(taxonNameToValidate, comparator));
-		} catch (ServiceException e) { 
-			if (e.getHttpStatusCode()==403) {
-				// Form of name provided is invalid, GBIF Parser can return '? epithet', which WoRMS can't lookup.
-				logger.error(e.getMessage() + " Request to lookup [" + taxonNameToValidate.getScientificName() +"] denied");
-				result = null;
-			} else { 
+		NameUsage found = VALIDATION_CACHE.getOrLoad(cacheKey, () -> { 
+			try { 
+				NameUsage lookedUp = ServiceRetrier.execute(SERVICE_NAME, taxonNameToValidate.getScientificName(), 
+						() -> lookupAndCompare(taxonNameToValidate, comparator));
+				return lookedUp==null ? null : new NameUsage(lookedUp);
+			} catch (ServiceException e) { 
+				if (e.getHttpStatusCode()==403) {
+					// Form of name provided is invalid, GBIF Parser can return '? epithet', which WoRMS can't lookup.
+					logger.error(e.getMessage() + " Request to lookup [" + taxonNameToValidate.getScientificName() +"] denied");
+					return null;
+				}
 				throw e;
 			}
-		}
-		VALIDATION_CACHE.put(cacheKey, result==null ? null : new NameUsage(result));
-		return result;		
+		});
+		return copyForInput(found, taxonNameToValidate);
 	}
 	
 	/**

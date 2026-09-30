@@ -47,10 +47,18 @@ import org.apache.commons.logging.LogFactory;
  * <tr><td>sci_name_qc.readTimeoutMillis</td><td>30000</td><td>HTTP read timeout.</td></tr>
  * <tr><td>sci_name_qc.writeTimeoutMillis</td><td>30000</td><td>HTTP write timeout.</td></tr>
  * <tr><td>sci_name_qc.cacheSize</td><td>10000</td><td>Maximum number of entries in each lookup result cache, 0 disables caching.</td></tr>
+ * <tr><td>sci_name_qc.acquireTimeoutMillis</td><td>60000</td><td>Longest wait for a turn to make a request to a service, 
+ *     after which the request fails without being sent.</td></tr>
+ * <tr><td>sci_name_qc.failureCacheMillis</td><td>60000</td><td>How long a failed lookup is remembered, during which the 
+ *     same lookup fails without being resent, 0 to not remember failures.</td></tr>
+ * <tr><td>sci_name_qc.circuitBreakerThreshold</td><td>5</td><td>Number of consecutive failed calls to a service after which 
+ *     calls fail without being sent, 0 to disable the circuit breaker.</td></tr>
+ * <tr><td>sci_name_qc.circuitBreakerOpenMillis</td><td>60000</td><td>How long calls fail without being sent once the circuit 
+ *     breaker for a service has tripped, after which a single trial call is allowed.</td></tr>
  * </table>
  * 
- * <p>The retry, backoff, and cache size settings take effect immediately.  The User-Agent, timeout, 
- * concurrency, and request interval settings are read when the shared HTTP client for a service is first 
+ * <p>The retry, backoff, cache size, failure cache, and circuit breaker settings take effect immediately.  
+ * The User-Agent, timeout, concurrency, acquire timeout, and request interval settings are read when the shared HTTP client for a service is first 
  * created (on the first request to that service), so they should be set before any lookups are made.</p>
  * 
  * @author mole
@@ -70,6 +78,10 @@ public final class ServiceClientConfig {
 	public static final String READ_TIMEOUT_PROPERTY = "sci_name_qc.readTimeoutMillis";
 	public static final String WRITE_TIMEOUT_PROPERTY = "sci_name_qc.writeTimeoutMillis";
 	public static final String CACHE_SIZE_PROPERTY = "sci_name_qc.cacheSize";
+	public static final String ACQUIRE_TIMEOUT_PROPERTY = "sci_name_qc.acquireTimeoutMillis";
+	public static final String FAILURE_CACHE_PROPERTY = "sci_name_qc.failureCacheMillis";
+	public static final String CIRCUIT_BREAKER_THRESHOLD_PROPERTY = "sci_name_qc.circuitBreakerThreshold";
+	public static final String CIRCUIT_BREAKER_OPEN_PROPERTY = "sci_name_qc.circuitBreakerOpenMillis";
 	
 	public static final int DEFAULT_MAX_RETRIES = 3;
 	public static final long DEFAULT_BACKOFF_BASE_MILLIS = 500L;
@@ -81,6 +93,10 @@ public final class ServiceClientConfig {
 	public static final long DEFAULT_READ_TIMEOUT_MILLIS = 30000L;
 	public static final long DEFAULT_WRITE_TIMEOUT_MILLIS = 30000L;
 	public static final int DEFAULT_CACHE_SIZE = 10000;
+	public static final long DEFAULT_ACQUIRE_TIMEOUT_MILLIS = 60000L;
+	public static final long DEFAULT_FAILURE_CACHE_MILLIS = 60000L;
+	public static final int DEFAULT_CIRCUIT_BREAKER_THRESHOLD = 5;
+	public static final long DEFAULT_CIRCUIT_BREAKER_OPEN_MILLIS = 60000L;
 	
 	/** Project URL included in the default User-Agent. */
 	public static final String PROJECT_URL = "https://github.com/FilteredPush/sci_name_qc";
@@ -98,6 +114,10 @@ public final class ServiceClientConfig {
 	private static volatile long readTimeoutMillis;
 	private static volatile long writeTimeoutMillis;
 	private static volatile int cacheSize;
+	private static volatile long acquireTimeoutMillis;
+	private static volatile long failureCacheMillis;
+	private static volatile int circuitBreakerThreshold;
+	private static volatile long circuitBreakerOpenMillis;
 	
 	static { 
 		resetToDefaults();
@@ -121,6 +141,10 @@ public final class ServiceClientConfig {
 		readTimeoutMillis = readLong(READ_TIMEOUT_PROPERTY, DEFAULT_READ_TIMEOUT_MILLIS, 0);
 		writeTimeoutMillis = readLong(WRITE_TIMEOUT_PROPERTY, DEFAULT_WRITE_TIMEOUT_MILLIS, 0);
 		cacheSize = (int) readLong(CACHE_SIZE_PROPERTY, DEFAULT_CACHE_SIZE, 0);
+		acquireTimeoutMillis = readLong(ACQUIRE_TIMEOUT_PROPERTY, DEFAULT_ACQUIRE_TIMEOUT_MILLIS, 1);
+		failureCacheMillis = readLong(FAILURE_CACHE_PROPERTY, DEFAULT_FAILURE_CACHE_MILLIS, 0);
+		circuitBreakerThreshold = (int) readLong(CIRCUIT_BREAKER_THRESHOLD_PROPERTY, DEFAULT_CIRCUIT_BREAKER_THRESHOLD, 0);
+		circuitBreakerOpenMillis = readLong(CIRCUIT_BREAKER_OPEN_PROPERTY, DEFAULT_CIRCUIT_BREAKER_OPEN_MILLIS, 0);
 	}
 	
 	private static long readLong(String property, long defaultValue, long minimum) { 
@@ -214,4 +238,34 @@ public final class ServiceClientConfig {
 	 */
 	public static void setCacheSize(int size) { ServiceClientConfig.cacheSize = Math.max(0, size); }
 	
+	/** @return the longest wait, in milliseconds, for a turn to make a request to a service. */
+	public static long getAcquireTimeoutMillis() { return acquireTimeoutMillis; }
+	/**
+	 * @param millis the longest wait, in milliseconds, for a turn to make a request to a service, at least 1,
+	 *   read when the shared HTTP client for a service is created.
+	 */
+	public static void setAcquireTimeoutMillis(long millis) { ServiceClientConfig.acquireTimeoutMillis = Math.max(1L, millis); }
+
+	/** @return how long, in milliseconds, a failed lookup is remembered. */
+	public static long getFailureCacheMillis() { return failureCacheMillis; }
+	/**
+	 * @param millis how long, in milliseconds, a failed lookup is remembered, 0 to not remember failures.
+	 */
+	public static void setFailureCacheMillis(long millis) { ServiceClientConfig.failureCacheMillis = Math.max(0L, millis); }
+
+	/** @return the number of consecutive failed calls that trips the circuit breaker for a service. */
+	public static int getCircuitBreakerThreshold() { return circuitBreakerThreshold; }
+	/**
+	 * @param threshold the number of consecutive failed calls that trips the circuit breaker for a service, 
+	 *   0 to disable the circuit breaker.
+	 */
+	public static void setCircuitBreakerThreshold(int threshold) { ServiceClientConfig.circuitBreakerThreshold = Math.max(0, threshold); }
+
+	/** @return how long, in milliseconds, calls fail without being sent once the circuit breaker has tripped. */
+	public static long getCircuitBreakerOpenMillis() { return circuitBreakerOpenMillis; }
+	/**
+	 * @param millis how long, in milliseconds, calls fail without being sent once the circuit breaker has tripped.
+	 */
+	public static void setCircuitBreakerOpenMillis(long millis) { ServiceClientConfig.circuitBreakerOpenMillis = Math.max(0L, millis); }
+
 }

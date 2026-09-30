@@ -31,6 +31,10 @@ import com.google.gson.JsonParseException;
  * with a diagnostic description (see {@link ApiFailure}).  Retry state is local to each invocation, 
  * so this is thread-safe.
  * 
+ * <p>Calls are subject to the {@link CircuitBreaker} for the service: while it is open, calls fail 
+ * with a {@link ServiceUnavailableException} without being made, and the outcome of each call is 
+ * reported to it.</p>
+ * 
  * @author mole
  */
 public final class ServiceRetrier {
@@ -54,58 +58,86 @@ public final class ServiceRetrier {
 	private ServiceRetrier() { } 
 	
 	/**
-	 * Invoke a call to a remote service with bounded retries.
+	 * Invoke a call to a remote service with bounded retries, subject to the circuit breaker 
+	 * for the service.
 	 * 
 	 * @param <T> the type returned by the call.
-	 * @param serviceName the name of the service, used in messages, e.g. WoRMS.
+	 * @param serviceName the name of the service, used in messages and to find its circuit breaker, e.g. WoRMS.
 	 * @param subject description of what is being looked up, used in log messages, e.g. a scientific name.
 	 * @param call the call to make.
 	 * @return the result of the call.
+	 * @throws ServiceUnavailableException if the call was not made, because the circuit breaker for the 
+	 *   service is open, or because no turn to make the request became available in time.
 	 * @throws ServiceException if the call failed with a non-transient failure, or failed on every attempt, 
 	 *   with a non-empty message describing the failure, and the HTTP status code where applicable.
 	 */
 	public static <T> T execute(String serviceName, String subject, ServiceCall<T> call) throws ServiceException { 
-		int maxRetries = ServiceClientConfig.getMaxRetries();
-		String about = (subject==null) ? "" : " for [" + subject + "]";
-		for (int attempt = 0; ; attempt++) { 
-			ApiFailure failure;
-			RequestThrottle.clearLastRequestUrl();
-			try { 
-				return call.call();
-			} catch (JsonParseException e) { 
-				failure = ApiFailure.from(serviceName, e);
-			} catch (RuntimeException e) { 
-				throw e;
-			} catch (Exception e) { 
-				failure = ApiFailure.from(serviceName, e);
-			}
-			String description = failure.describe();
-			String attempts = " (attempt " + (attempt+1) + " of " + (maxRetries+1) + ")";
-			if (!failure.isRetryable()) { 
-				if (failure.getKind()==ApiFailure.Kind.HTTP || failure.getKind()==ApiFailure.Kind.TRANSPORT) { 
-					logger.error("Not retrying" + about + ": " + description);
-				} else { 
-					logger.error("Not retrying" + about + ": " + description, failure.getCause());
+		CircuitBreaker breaker = CircuitBreaker.forService(serviceName);
+		boolean trial = breaker.check(subject);
+		boolean reported = false;
+		try { 
+			int maxRetries = ServiceClientConfig.getMaxRetries();
+			String about = (subject==null) ? "" : " for [" + subject + "]";
+			for (int attempt = 0; ; attempt++) { 
+				ApiFailure failure;
+				RequestThrottle.clearLastRequestUrl();
+				try { 
+					T result = call.call();
+					breaker.recordSuccess();
+					reported = true;
+					return result;
+				} catch (JsonParseException e) { 
+					failure = ApiFailure.from(serviceName, e);
+				} catch (RuntimeException e) { 
+					throw e;
+				} catch (Exception e) { 
+					failure = ApiFailure.from(serviceName, e);
 				}
-				throw failure.toServiceException(null);
+				String description = failure.describe();
+				String attempts = " (attempt " + (attempt+1) + " of " + (maxRetries+1) + ")";
+				if (failure.isNotSent()) { 
+					logger.warn("Not sent" + about + ": " + description);
+					throw new ServiceUnavailableException(description, failure.getCause());
+				}
+				if (!failure.isRetryable()) { 
+					if (failure.getKind()==ApiFailure.Kind.HTTP) { 
+						// the service responded, a non-transient error status is not a failure of the service
+						breaker.recordSuccess();
+						reported = true;
+					}
+					if (failure.getKind()==ApiFailure.Kind.HTTP || failure.getKind()==ApiFailure.Kind.TRANSPORT) { 
+						logger.error("Not retrying" + about + ": " + description);
+					} else { 
+						logger.error("Not retrying" + about + ": " + description, failure.getCause());
+					}
+					throw failure.toServiceException(null);
+				}
+				if (attempt >= maxRetries) { 
+					breaker.recordFailure();
+					reported = true;
+					logger.error("Giving up" + about + attempts + ": " + description);
+					throw failure.toServiceException("After " + (attempt+1) + " attempts: ");
+				}
+				long delay = RetryPolicy.delayBeforeRetryMillis(attempt, failure.getRetryAfterMillis(), ThreadLocalRandom.current().nextDouble());
+				if (delay < 0L) { 
+					breaker.recordFailure();
+					reported = true;
+					logger.error("Not retrying" + about + ", Retry-After exceeds maximum wait of " 
+							+ ServiceClientConfig.getMaxRetryAfterMillis() + " ms: " + description);
+					throw failure.toServiceException(null);
+				}
+				logger.warn("Failed" + about + attempts + ", retrying in " + delay + " ms: " + description);
+				try { 
+					Thread.sleep(delay);
+				} catch (InterruptedException e) { 
+					Thread.currentThread().interrupt();
+					throw new ServiceException("Interrupted while waiting to retry: " + description, 
+							failure.getKind()==ApiFailure.Kind.HTTP ? failure.getHttpStatusCode() : 0, e);
+				}
 			}
-			if (attempt >= maxRetries) { 
-				logger.error("Giving up" + about + attempts + ": " + description);
-				throw failure.toServiceException("After " + (attempt+1) + " attempts: ");
-			}
-			long delay = RetryPolicy.delayBeforeRetryMillis(attempt, failure.getRetryAfterMillis(), ThreadLocalRandom.current().nextDouble());
-			if (delay < 0L) { 
-				logger.error("Not retrying" + about + ", Retry-After exceeds maximum wait of " 
-						+ ServiceClientConfig.getMaxRetryAfterMillis() + " ms: " + description);
-				throw failure.toServiceException(null);
-			}
-			logger.warn("Failed" + about + attempts + ", retrying in " + delay + " ms: " + description);
-			try { 
-				Thread.sleep(delay);
-			} catch (InterruptedException e) { 
-				Thread.currentThread().interrupt();
-				throw new ServiceException("Interrupted while waiting to retry: " + description, 
-						failure.getKind()==ApiFailure.Kind.HTTP ? failure.getHttpStatusCode() : 0, e);
+		} finally { 
+			if (!reported) { 
+				breaker.release(trial);
 			}
 		}
 	}

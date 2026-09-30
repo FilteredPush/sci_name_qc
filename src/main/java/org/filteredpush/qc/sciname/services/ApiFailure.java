@@ -140,11 +140,27 @@ public final class ApiFailure {
 	 * @return true if the failure is plausibly transient and worth retrying, see {@link RetryPolicy#isRetryable(int, Throwable)}.
 	 */
 	public boolean isRetryable() { 
-		if (cause instanceof InterruptedIOException && !(cause instanceof SocketTimeoutException)) { 
-			// interrupted while waiting, not a network failure.
+		if (isNotSent() || isInterrupted()) { 
+			// not a failure of the service.
 			return false;
 		}
 		return RetryPolicy.isRetryable(httpStatusCode, cause);
+	}
+	
+	/**
+	 * @return true if the request was not sent, because no turn to make it became available in time, 
+	 *   see {@link RequestNotSentException}.
+	 */
+	public boolean isNotSent() { 
+		return cause instanceof RequestNotSentException;
+	}
+	
+	/**
+	 * @return true if the thread was interrupted while waiting to make or complete the request, 
+	 *   rather than the request timing out.
+	 */
+	public boolean isInterrupted() { 
+		return cause instanceof InterruptedIOException && !(cause instanceof SocketTimeoutException);
 	}
 	
 	/**
@@ -176,6 +192,10 @@ public final class ApiFailure {
 		String from = isBlank(requestUrl) ? "" : " from " + requestUrl;
 		switch (kind) { 
 		case TRANSPORT:
+			if (isNotSent()) { 
+				result.append(" request not sent: ").append(cause.getMessage());
+				break;
+			}
 			result.append(" connection failure").append(isBlank(requestUrl) ? "" : " requesting " + requestUrl).append(": ");
 			result.append(transportDescription(cause));
 			break;

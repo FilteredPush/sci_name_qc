@@ -54,6 +54,9 @@ import okhttp3.OkHttpClient;
  * the number and rate of concurrent requests to IRMNG.  {@link #validate(NameUsage)} retries transient 
  * failures (HTTP 408, 429, 5xx, and connection failures) with exponential backoff, and caches its results, 
  * and the results of habitat lookups, so repeated lookups of the same name are not resent to IRMNG.
+ * Concurrent validations of the same name make a single request, a validation that failed is not 
+ * resent for a period, and after repeated failures a {@link CircuitBreaker} stops calls to IRMNG for 
+ * a period, during which validations fail with a {@link ServiceUnavailableException}.
  * See {@link ServiceClientConfig} for the system properties that configure this behavior.</p>
  *
  * @author mole
@@ -676,16 +679,12 @@ public class IRMNGService implements Validator {
 		taxonNameToValidate.setAuthorComparator(comparator);
 		
 		String cacheKey = WoRMSService.validationCacheKey(taxonNameToValidate);
-		LookupCache.Entry<NameUsage> cached = VALIDATION_CACHE.get(cacheKey);
-		if (cached!=null) { 
-			logger.debug("Using cached IRMNG result for: " + taxonNameToValidate.getScientificName() + " " + authorship);
-			return WoRMSService.copyForInput(cached.getValue(), taxonNameToValidate);
-		}
-		
-		NameUsage result = ServiceRetrier.execute(SERVICE_NAME, taxonNameToValidate.getScientificName(), 
-				() -> lookupAndCompare(taxonNameToValidate, comparator));
-		VALIDATION_CACHE.put(cacheKey, result==null ? null : new NameUsage(result));
-		return result;		
+		NameUsage found = VALIDATION_CACHE.getOrLoad(cacheKey, () -> { 
+			NameUsage lookedUp = ServiceRetrier.execute(SERVICE_NAME, taxonNameToValidate.getScientificName(), 
+					() -> lookupAndCompare(taxonNameToValidate, comparator));
+			return lookedUp==null ? null : new NameUsage(lookedUp);
+		});
+		return WoRMSService.copyForInput(found, taxonNameToValidate);
 	}
 	
 	/**

@@ -426,4 +426,308 @@ public class TestServiceClientSupport {
 		assertEquals(ServiceClientConfig.DEFAULT_MAX_RETRIES, ServiceClientConfig.getMaxRetries());
 	}
 
+	/**
+	 * getOrLoad caches values, including null, and does not reload a cached key.
+	 */
+	@Test
+	public void testGetOrLoadCaches() throws Exception { 
+		LookupCache<String,String> cache = new LookupCache<String,String>(() -> 10, () -> 60000L);
+		AtomicInteger loads = new AtomicInteger();
+		assertEquals("A", cache.getOrLoad("a", () -> { loads.incrementAndGet(); return "A"; }));
+		assertEquals("A", cache.getOrLoad("a", () -> { loads.incrementAndGet(); return "other"; }));
+		assertNull(cache.getOrLoad("none", () -> { loads.incrementAndGet(); return null; }));
+		assertNull(cache.getOrLoad("none", () -> { loads.incrementAndGet(); return "other"; }));
+		assertEquals(2, loads.get());
+		
+		// with the cache disabled, each call loads
+		LookupCache<String,String> disabled = new LookupCache<String,String>(() -> 0, () -> 60000L);
+		disabled.getOrLoad("a", () -> { loads.incrementAndGet(); return "A"; });
+		disabled.getOrLoad("a", () -> { loads.incrementAndGet(); return "A"; });
+		assertEquals(4, loads.get());
+	}
+	
+	/**
+	 * getOrLoad remembers failures for the configured period, with the status code, and forgets them afterwards.
+	 */
+	@Test
+	public void testGetOrLoadRemembersFailures() throws Exception { 
+		LookupCache<String,String> cache = new LookupCache<String,String>(() -> 10, () -> 200L);
+		AtomicInteger loads = new AtomicInteger();
+		try { 
+			cache.getOrLoad("a", () -> { loads.incrementAndGet(); throw new ServiceException("down", 503, null); });
+			fail("Expected ServiceException");
+		} catch (ServiceUnavailableException e) { 
+			fail("Unexpected ServiceUnavailableException");
+		} catch (ServiceException e) { 
+			assertEquals("down", e.getMessage());
+		}
+		assertEquals(1, cache.getFailureCount());
+		try { 
+			cache.getOrLoad("a", () -> { loads.incrementAndGet(); return "A"; });
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertEquals(503, e.getHttpStatusCode());
+			assertTrue(e.getMessage(), e.getMessage().contains("failed recently"));
+			assertTrue(e.getMessage(), e.getMessage().contains("down"));
+		}
+		assertEquals(1, loads.get());
+		// other keys are loaded
+		assertEquals("B", cache.getOrLoad("b", () -> { loads.incrementAndGet(); return "B"; }));
+		// after the period, the lookup is made again
+		Thread.sleep(300L);
+		assertEquals("A", cache.getOrLoad("a", () -> { loads.incrementAndGet(); return "A"; }));
+		assertEquals(3, loads.get());
+		
+		// clear forgets failures
+		try { 
+			cache.getOrLoad("c", () -> { throw new ServiceException("down"); });
+			fail("Expected ServiceException");
+		} catch (ServiceException e) { 
+			// expected
+		}
+		cache.clear();
+		assertEquals(0, cache.getFailureCount());
+		assertEquals("C", cache.getOrLoad("c", () -> "C"));
+	}
+	
+	/**
+	 * getOrLoad does not remember calls that were not made, or failures when configured not to.
+	 */
+	@Test
+	public void testGetOrLoadDoesNotRememberSomeFailures() throws Exception { 
+		LookupCache<String,String> cache = new LookupCache<String,String>(() -> 10, () -> 60000L);
+		try { 
+			cache.getOrLoad("a", () -> { throw new ServiceUnavailableException("circuit open"); });
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertEquals("circuit open", e.getMessage());
+		}
+		try { 
+			cache.getOrLoad("b", () -> { throw new ServiceException("interrupted", new InterruptedException()); });
+			fail("Expected ServiceException");
+		} catch (ServiceException e) { 
+			// expected
+		}
+		assertEquals(0, cache.getFailureCount());
+		assertEquals("A", cache.getOrLoad("a", () -> "A"));
+		
+		LookupCache<String,String> forgetful = new LookupCache<String,String>(() -> 10, () -> 0L);
+		try { 
+			forgetful.getOrLoad("a", () -> { throw new ServiceException("down"); });
+			fail("Expected ServiceException");
+		} catch (ServiceException e) { 
+			// expected
+		}
+		assertEquals(0, forgetful.getFailureCount());
+		assertEquals("A", forgetful.getOrLoad("a", () -> "A"));
+	}
+	
+	/**
+	 * Concurrent getOrLoad calls for the same key make one lookup, and share its result or failure.
+	 */
+	@Test
+	public void testGetOrLoadCombinesConcurrentLookups() throws Exception { 
+		// cache disabled, so that sharing is by combining in progress lookups, not by caching
+		final LookupCache<String,String> cache = new LookupCache<String,String>(() -> 0, () -> 0L);
+		final AtomicInteger loads = new AtomicInteger();
+		final java.util.concurrent.CountDownLatch start = new java.util.concurrent.CountDownLatch(1);
+		java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newFixedThreadPool(8);
+		try { 
+			List<java.util.concurrent.Future<String>> results = new ArrayList<java.util.concurrent.Future<String>>();
+			for (int i=0; i<8; i++) { 
+				results.add(executor.submit(() -> { 
+					start.await();
+					return cache.getOrLoad("a", () -> { 
+						loads.incrementAndGet();
+						try { Thread.sleep(300L); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+						return "A";
+					});
+				}));
+			}
+			start.countDown();
+			for (java.util.concurrent.Future<String> result : results) { 
+				assertEquals("A", result.get(30, java.util.concurrent.TimeUnit.SECONDS));
+			}
+			assertEquals(1, loads.get());
+			
+			// a failure is shared too
+			final java.util.concurrent.CountDownLatch start2 = new java.util.concurrent.CountDownLatch(1);
+			List<java.util.concurrent.Future<String>> failures = new ArrayList<java.util.concurrent.Future<String>>();
+			for (int i=0; i<4; i++) { 
+				failures.add(executor.submit(() -> { 
+					start2.await();
+					return cache.getOrLoad("b", () -> { 
+						loads.incrementAndGet();
+						try { Thread.sleep(300L); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+						throw new ServiceException("down", 500, null);
+					});
+				}));
+			}
+			start2.countDown();
+			for (java.util.concurrent.Future<String> failure : failures) { 
+				try { 
+					failure.get(30, java.util.concurrent.TimeUnit.SECONDS);
+					fail("Expected failure");
+				} catch (java.util.concurrent.ExecutionException e) { 
+					assertTrue(e.getCause() instanceof ServiceException);
+					assertEquals(500, ((ServiceException) e.getCause()).getHttpStatusCode());
+				}
+			}
+			assertEquals(2, loads.get());
+		} finally { 
+			executor.shutdownNow();
+		}
+	}
+	
+	/**
+	 * The circuit breaker trips after the threshold of consecutive failures, allows a single 
+	 * trial after the open period, and closes on success.
+	 */
+	@Test
+	public void testCircuitBreaker() throws Exception { 
+		ServiceClientConfig.setCircuitBreakerThreshold(2);
+		ServiceClientConfig.setCircuitBreakerOpenMillis(200L);
+		CircuitBreaker breaker = new CircuitBreaker("Test");
+		assertFalse(breaker.check("a"));
+		breaker.recordFailure();
+		assertFalse(breaker.isOpen());
+		// a success resets the count
+		assertFalse(breaker.check("a"));
+		breaker.recordSuccess();
+		assertEquals(0, breaker.getConsecutiveFailures());
+		breaker.recordFailure();
+		breaker.recordFailure();
+		assertTrue(breaker.isOpen());
+		try { 
+			breaker.check("a");
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertTrue(e.getMessage(), e.getMessage().contains("Test unavailable after 2 consecutive failed calls"));
+			assertTrue(e.getMessage(), e.getMessage().contains("[a]"));
+		}
+		Thread.sleep(300L);
+		assertFalse(breaker.isOpen());
+		// one trial call is allowed
+		assertTrue(breaker.check("trial"));
+		try { 
+			breaker.check("other");
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertTrue(e.getMessage(), e.getMessage().contains("trial"));
+		}
+		// a trial that says nothing about the service releases the trial slot
+		breaker.release(true);
+		assertTrue(breaker.check("trial"));
+		// a failed trial trips the breaker again
+		breaker.recordFailure();
+		assertTrue(breaker.isOpen());
+		Thread.sleep(300L);
+		assertTrue(breaker.check("trial"));
+		breaker.recordSuccess();
+		assertFalse(breaker.check("a"));
+		assertEquals(0, breaker.getConsecutiveFailures());
+		
+		// reset closes the breaker
+		breaker.recordFailure();
+		breaker.recordFailure();
+		assertTrue(breaker.isOpen());
+		breaker.reset();
+		assertFalse(breaker.isOpen());
+		
+		// a threshold of 0 disables the breaker
+		ServiceClientConfig.setCircuitBreakerThreshold(0);
+		for (int i=0; i<10; i++) { 
+			breaker.recordFailure();
+		}
+		assertFalse(breaker.isOpen());
+		
+		// breakers are shared per service
+		assertTrue(CircuitBreaker.forService("Test") == CircuitBreaker.forService("Test"));
+		assertFalse(CircuitBreaker.forService("Test") == CircuitBreaker.forService("Other"));
+	}
+	
+	/**
+	 * ServiceRetrier reports outcomes to the circuit breaker, a non-transient HTTP error counts as a success, 
+	 * a request not sent is reported as a ServiceUnavailableException and is not counted.
+	 */
+	@Test
+	public void testServiceRetrierAndCircuitBreaker() throws Exception { 
+		ServiceClientConfig.setMaxRetries(0);
+		ServiceClientConfig.setCircuitBreakerThreshold(2);
+		String service = "RetrierTest";
+		CircuitBreaker breaker = CircuitBreaker.forService(service);
+		breaker.reset();
+		try { 
+			ServiceRetrier.execute(service, "a", () -> { throw new ApiException(503, "unavailable"); });
+			fail("Expected ServiceException");
+		} catch (ServiceException e) { 
+			assertEquals(503, e.getHttpStatusCode());
+		}
+		assertEquals(1, breaker.getConsecutiveFailures());
+		try { 
+			ServiceRetrier.execute(service, "a", () -> { throw new ApiException(404, "not found"); });
+			fail("Expected ServiceException");
+		} catch (ServiceException e) { 
+			assertEquals(404, e.getHttpStatusCode());
+		}
+		assertEquals(0, breaker.getConsecutiveFailures());
+		try { 
+			ServiceRetrier.execute(service, "a", () -> { throw new ApiException(new RequestNotSentException("Timed out waiting")); });
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertTrue(e.getMessage(), e.getMessage().contains("not sent"));
+		}
+		assertEquals(0, breaker.getConsecutiveFailures());
+		for (int i=0; i<2; i++) { 
+			try { 
+				ServiceRetrier.execute(service, "a", () -> { throw new ApiException(new ConnectException("refused")); });
+				fail("Expected ServiceException");
+			} catch (ServiceException e) { 
+				assertFalse(e instanceof ServiceUnavailableException);
+			}
+		}
+		assertTrue(breaker.isOpen());
+		AtomicInteger calls = new AtomicInteger();
+		try { 
+			ServiceRetrier.execute(service, "a", () -> calls.incrementAndGet());
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertEquals(0, calls.get());
+		}
+		breaker.reset();
+		assertEquals(Integer.valueOf(1), ServiceRetrier.execute(service, "a", () -> calls.incrementAndGet()));
+	}
+	
+	/**
+	 * The new settings have defaults, minimums, and can be set by system properties.
+	 */
+	@Test
+	public void testGuardSettings() { 
+		assertEquals(ServiceClientConfig.DEFAULT_ACQUIRE_TIMEOUT_MILLIS, ServiceClientConfig.getAcquireTimeoutMillis());
+		assertEquals(ServiceClientConfig.DEFAULT_FAILURE_CACHE_MILLIS, ServiceClientConfig.getFailureCacheMillis());
+		assertEquals(ServiceClientConfig.DEFAULT_CIRCUIT_BREAKER_THRESHOLD, ServiceClientConfig.getCircuitBreakerThreshold());
+		assertEquals(ServiceClientConfig.DEFAULT_CIRCUIT_BREAKER_OPEN_MILLIS, ServiceClientConfig.getCircuitBreakerOpenMillis());
+		ServiceClientConfig.setAcquireTimeoutMillis(0L);
+		assertEquals(1L, ServiceClientConfig.getAcquireTimeoutMillis());
+		ServiceClientConfig.setFailureCacheMillis(-5L);
+		assertEquals(0L, ServiceClientConfig.getFailureCacheMillis());
+		ServiceClientConfig.setCircuitBreakerThreshold(-1);
+		assertEquals(0, ServiceClientConfig.getCircuitBreakerThreshold());
+		try { 
+			System.setProperty(ServiceClientConfig.CIRCUIT_BREAKER_THRESHOLD_PROPERTY, "7");
+			System.setProperty(ServiceClientConfig.FAILURE_CACHE_PROPERTY, "not a number");
+			ServiceClientConfig.resetToDefaults();
+			assertEquals(7, ServiceClientConfig.getCircuitBreakerThreshold());
+			assertEquals(ServiceClientConfig.DEFAULT_FAILURE_CACHE_MILLIS, ServiceClientConfig.getFailureCacheMillis());
+		} finally { 
+			System.clearProperty(ServiceClientConfig.CIRCUIT_BREAKER_THRESHOLD_PROPERTY);
+			System.clearProperty(ServiceClientConfig.FAILURE_CACHE_PROPERTY);
+			ServiceClientConfig.resetToDefaults();
+		}
+		
+		RequestThrottle throttle = new RequestThrottle(2, 0L, 0L);
+		assertEquals(1L, throttle.getAcquireTimeoutMillis());
+		assertEquals(ServiceClientConfig.getAcquireTimeoutMillis(), new RequestThrottle(2, 0L).getAcquireTimeoutMillis());
+	}
+
 }

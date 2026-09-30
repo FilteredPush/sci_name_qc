@@ -68,7 +68,7 @@ public final class ServiceHttpClients {
 	 */
 	public static OkHttpClient newThrottledClient() { 
 		return newThrottledClient(new RequestThrottle(ServiceClientConfig.getMaxConcurrentRequests(), 
-				ServiceClientConfig.getMinRequestIntervalMillis()));
+				ServiceClientConfig.getMinRequestIntervalMillis(), ServiceClientConfig.getAcquireTimeoutMillis()));
 	}
 	
 	/**

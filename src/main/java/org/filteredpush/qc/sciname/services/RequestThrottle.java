@@ -32,7 +32,9 @@ import okhttp3.ResponseBody;
  * so that many concurrent callers do not flood the service with requests.  Limits the number 
  * of concurrent in-flight requests, and enforces a minimum interval between the start of 
  * successive requests.  The response body is read while the permit is held, so the limit 
- * covers the whole exchange.
+ * covers the whole exchange.  A request that does not get a turn within the acquire timeout 
+ * fails with a {@link RequestNotSentException} without being sent, so that callers are not 
+ * blocked indefinitely behind a slow service.
  * 
  * <p>Also records the URL of the last request made on each thread, so that failures can be 
  * reported with the URL that failed.</p>
@@ -46,15 +48,29 @@ public class RequestThrottle implements Interceptor {
 	private final Semaphore permits;
 	private final int maxConcurrentRequests;
 	private final long minIntervalNanos;
+	private final long acquireTimeoutMillis;
 	private long nextStartNanos;  // guarded by this
+	
+	/**
+	 * Constructor, with the acquire timeout from {@link ServiceClientConfig#getAcquireTimeoutMillis()}.
+	 * 
+	 * @param maxConcurrentRequests maximum number of concurrent in-flight requests, at least 1.
+	 * @param minIntervalMillis minimum interval between the start of successive requests, 0 for none.
+	 */
+	public RequestThrottle(int maxConcurrentRequests, long minIntervalMillis) { 
+		this(maxConcurrentRequests, minIntervalMillis, ServiceClientConfig.getAcquireTimeoutMillis());
+	}
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param maxConcurrentRequests maximum number of concurrent in-flight requests, at least 1.
 	 * @param minIntervalMillis minimum interval between the start of successive requests, 0 for none.
+	 * @param acquireTimeoutMillis longest wait for a turn to make a request, at least 1, after 
+	 *   which the request fails with a {@link RequestNotSentException}.
 	 */
-	public RequestThrottle(int maxConcurrentRequests, long minIntervalMillis) { 
+	public RequestThrottle(int maxConcurrentRequests, long minIntervalMillis, long acquireTimeoutMillis) { 
+		this.acquireTimeoutMillis = Math.max(1L, acquireTimeoutMillis);
 		this.maxConcurrentRequests = Math.max(1, maxConcurrentRequests);
 		this.permits = new Semaphore(this.maxConcurrentRequests, true);
 		this.minIntervalNanos = TimeUnit.MILLISECONDS.toNanos(Math.max(0L, minIntervalMillis));
@@ -84,6 +100,13 @@ public class RequestThrottle implements Interceptor {
 	}
 	
 	/**
+	 * @return the longest wait, in milliseconds, for a turn to make a request.
+	 */
+	public long getAcquireTimeoutMillis() { 
+		return acquireTimeoutMillis;
+	}
+	
+	/**
 	 * @return the number of requests that could currently start without waiting for a permit.
 	 */
 	public int availablePermits() { 
@@ -94,11 +117,16 @@ public class RequestThrottle implements Interceptor {
 	public Response intercept(Chain chain) throws IOException {
 		Request request = chain.request();
 		LAST_REQUEST_URL.set(request.url().toString());
+		boolean acquired;
 		try { 
-			permits.acquire();
+			acquired = permits.tryAcquire(acquireTimeoutMillis, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) { 
 			Thread.currentThread().interrupt();
 			throw new InterruptedIOException("Interrupted while waiting to make request to " + request.url());
+		}
+		if (!acquired) { 
+			throw new RequestNotSentException("Timed out after " + acquireTimeoutMillis 
+					+ " ms waiting for a turn to make a request, not sent: " + request.url());
 		}
 		try { 
 			waitForStartSlot(request);

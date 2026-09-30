@@ -18,6 +18,7 @@
 package org.filteredpush.qc.sciname.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
@@ -62,6 +63,7 @@ public class TestServiceResilience {
 	
 	private MockWebServer server;
 	private ConcurrentLinkedQueue<MockResponse> nameResponses;
+	private ConcurrentLinkedQueue<MockResponse> recordResponses;
 	private AtomicInteger nameRequests;
 	private AtomicInteger recordRequests;
 	private String record;
@@ -73,7 +75,9 @@ public class TestServiceResilience {
 		ServiceClientConfig.setBackoffMaxMillis(5L);
 		WoRMSService.clearCaches();
 		IRMNGService.clearCaches();
+		CircuitBreaker.resetAll();
 		nameResponses = new ConcurrentLinkedQueue<MockResponse>();
+		recordResponses = new ConcurrentLinkedQueue<MockResponse>();
 		nameRequests = new AtomicInteger();
 		recordRequests = new AtomicInteger();
 		record = WORMS_RECORD;
@@ -91,7 +95,8 @@ public class TestServiceResilience {
 					return response;
 				} else if (path.contains("/AphiaRecordByAphiaID/") || path.contains("/AphiaRecordByIRMNG_ID/")) { 
 					recordRequests.incrementAndGet();
-					return jsonResponse(record);
+					MockResponse response = recordResponses.poll();
+					return response==null ? jsonResponse(record) : response;
 				}
 				return new MockResponse().setResponseCode(404);
 			}
@@ -105,6 +110,7 @@ public class TestServiceResilience {
 		ServiceClientConfig.resetToDefaults();
 		WoRMSService.clearCaches();
 		IRMNGService.clearCaches();
+		CircuitBreaker.resetAll();
 	}
 	
 	private static MockResponse jsonResponse(String body) { 
@@ -116,6 +122,14 @@ public class TestServiceResilience {
 	 */
 	private static MockResponse errorResponse(int code, String body) { 
 		return new MockResponse().setStatus("HTTP/1.1 " + code + " ").setHeader("Content-Type", "text/plain").setBody(body);
+	}
+	
+	/**
+	 * A WoRMS record for the name searched for in a request for AphiaRecordsByName.
+	 */
+	private static String recordFor(RecordedRequest request) { 
+		String name = request.getRequestUrl().pathSegments().get(request.getRequestUrl().pathSize()-1);
+		return WORMS_RECORD.replace("\"scientificname\":\"" + NAME + "\"", "\"scientificname\":\"" + name + "\"");
 	}
 	
 	private WoRMSService wormsService(RequestThrottle throttle) { 
@@ -207,9 +221,20 @@ public class TestServiceResilience {
 			assertTrue(message, message.contains("Service temporarily unavailable"));
 			assertTrue(message, message.contains("Content-Type: text/plain"));
 		}
-		// failures are not cached
+		// the failure is remembered, the same lookup fails without being resent
 		nameResponses.clear();
+		try { 
+			wormsService().validate(toValidate(NAME, AUTHOR, 1));
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertEquals(503, e.getHttpStatusCode());
+			assertTrue(e.getMessage(), e.getMessage().contains("failed recently"));
+		}
+		assertEquals(4, nameRequests.get());
+		// failed results are not cached, once the failure is forgotten the lookup is made
+		WoRMSService.clearCaches();
 		assertNotNull(wormsService().validate(toValidate(NAME, AUTHOR, 1)));
+		assertEquals(5, nameRequests.get());
 	}
 	
 	@Test
@@ -299,7 +324,7 @@ public class TestServiceResilience {
 				inFlight.decrementAndGet();
 				if (request.getPath().contains("/AphiaRecordsByName/")) { 
 					nameRequests.incrementAndGet();
-					return jsonResponse("[" + WORMS_RECORD + "]");
+					return jsonResponse("[" + recordFor(request) + "]");
 				}
 				return jsonResponse(WORMS_RECORD);
 			}
@@ -314,7 +339,8 @@ public class TestServiceResilience {
 			Thread thread = new Thread(() -> { 
 				try { 
 					start.await();
-					if (service.validate(toValidate(NAME, AUTHOR, id))==null) { 
+					// distinct names, so that concurrent lookups are not combined into one request
+					if (service.validate(toValidate(NAME + " var" + id, AUTHOR, id))==null) { 
 						failures.incrementAndGet();
 					}
 				} catch (Exception e) { 
@@ -373,4 +399,174 @@ public class TestServiceResilience {
 		}
 	}
 
+	/**
+	 * Concurrent validations of the same name make a single request, each caller gets its own copy of the result.
+	 */
+	@Test
+	public void testConcurrentSameNameSingleRequest() throws Exception { 
+		ServiceClientConfig.setCacheSize(0);
+		server.setDispatcher(new Dispatcher() {
+			@Override
+			public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+				Thread.sleep(200);
+				if (request.getPath().contains("/AphiaRecordsByName/")) { 
+					nameRequests.incrementAndGet();
+					return jsonResponse("[" + WORMS_RECORD + "]");
+				}
+				recordRequests.incrementAndGet();
+				return jsonResponse(WORMS_RECORD);
+			}
+		});
+		final WoRMSService service = wormsService();
+		int threadCount = 8;
+		final CountDownLatch start = new CountDownLatch(1);
+		final List<NameUsage> results = java.util.Collections.synchronizedList(new ArrayList<NameUsage>());
+		final AtomicInteger failures = new AtomicInteger();
+		List<Thread> threads = new ArrayList<Thread>();
+		for (int t=0; t<threadCount; t++) { 
+			final int id = t;
+			Thread thread = new Thread(() -> { 
+				try { 
+					start.await();
+					results.add(service.validate(toValidate(NAME, AUTHOR, id)));
+				} catch (Exception e) { 
+					failures.incrementAndGet();
+				}
+			});
+			threads.add(thread);
+			thread.start();
+		}
+		start.countDown();
+		for (Thread thread : threads) { 
+			thread.join(30000L);
+		}
+		assertEquals(0, failures.get());
+		assertEquals(threadCount, results.size());
+		assertEquals(1, nameRequests.get());
+		assertEquals(1, recordRequests.get());
+		java.util.Set<Integer> keys = new java.util.HashSet<Integer>();
+		java.util.Set<NameUsage> instances = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<NameUsage,Boolean>());
+		for (NameUsage result : results) { 
+			assertNotNull(result);
+			assertEquals(NAME, result.getScientificName());
+			keys.add(result.getInputDbPK());
+			instances.add(result);
+		}
+		// each caller gets its own copy, with its own input key
+		assertEquals(threadCount, keys.size());
+		assertEquals(threadCount, instances.size());
+	}
+	
+	/**
+	 * After repeated failures, the circuit breaker stops requests, which fail without being sent, until 
+	 * the open period has passed and a trial request succeeds.
+	 */
+	@Test
+	public void testCircuitBreaker() throws Exception { 
+		ServiceClientConfig.setMaxRetries(0);
+		ServiceClientConfig.setFailureCacheMillis(0L);
+		ServiceClientConfig.setCircuitBreakerThreshold(3);
+		ServiceClientConfig.setCircuitBreakerOpenMillis(300L);
+		for (int i=0; i<3; i++) { 
+			nameResponses.add(errorResponse(503, "Service temporarily unavailable"));
+		}
+		WoRMSService service = wormsService();
+		for (int i=0; i<3; i++) { 
+			assertFalse(CircuitBreaker.forService(WoRMSService.SERVICE_NAME).isOpen());
+			try { 
+				service.validate(toValidate(NAME + " var" + i, AUTHOR, i));
+				fail("Expected ServiceException");
+			} catch (ServiceException e) { 
+				assertEquals(503, e.getHttpStatusCode());
+			}
+		}
+		assertEquals(3, nameRequests.get());
+		assertTrue(CircuitBreaker.forService(WoRMSService.SERVICE_NAME).isOpen());
+		try { 
+			service.validate(toValidate(NAME, AUTHOR, 4));
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertTrue(e.getMessage(), e.getMessage().contains("unavailable after 3 consecutive failed calls"));
+		}
+		assertEquals(3, nameRequests.get());
+		// IRMNG has its own circuit breaker
+		assertFalse(CircuitBreaker.forService(IRMNGService.SERVICE_NAME).isOpen());
+		
+		// after the open period a trial request is made, which succeeds, closing the circuit breaker
+		Thread.sleep(400L);
+		assertNotNull(service.validate(toValidate(NAME, AUTHOR, 4)));
+		assertEquals(4, nameRequests.get());
+		assertFalse(CircuitBreaker.forService(WoRMSService.SERVICE_NAME).isOpen());
+		assertEquals(0, CircuitBreaker.forService(WoRMSService.SERVICE_NAME).getConsecutiveFailures());
+	}
+	
+	/**
+	 * Responses with non-transient error statuses show the service is responding, so do not trip the circuit breaker.
+	 */
+	@Test
+	public void testCircuitBreakerIgnoresClientErrors() throws Exception { 
+		ServiceClientConfig.setFailureCacheMillis(0L);
+		ServiceClientConfig.setCircuitBreakerThreshold(2);
+		for (int i=0; i<4; i++) { 
+			nameResponses.add(errorResponse(400, "Bad request"));
+		}
+		WoRMSService service = wormsService();
+		for (int i=0; i<4; i++) { 
+			try { 
+				service.validate(toValidate(NAME + " var" + i, AUTHOR, i));
+				fail("Expected ServiceException");
+			} catch (ServiceException e) { 
+				assertEquals(400, e.getHttpStatusCode());
+			}
+		}
+		assertFalse(CircuitBreaker.forService(WoRMSService.SERVICE_NAME).isOpen());
+		assertEquals(0, CircuitBreaker.forService(WoRMSService.SERVICE_NAME).getConsecutiveFailures());
+	}
+	
+	/**
+	 * A request that waits too long for a turn fails without being sent, without being remembered as 
+	 * a failure, and without counting towards the circuit breaker.
+	 */
+	@Test
+	public void testAcquireTimeout() throws Exception { 
+		ServiceClientConfig.setCircuitBreakerThreshold(1);
+		server.setDispatcher(new Dispatcher() {
+			@Override
+			public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+				if (request.getPath().contains("/AphiaRecordsByName/")) { 
+					nameRequests.incrementAndGet();
+					Thread.sleep(500);
+					return jsonResponse("[" + recordFor(request) + "]");
+				}
+				recordRequests.incrementAndGet();
+				return jsonResponse(WORMS_RECORD);
+			}
+		});
+		final WoRMSService service = wormsService(new RequestThrottle(1, 0L, 50L));
+		Thread slow = new Thread(() -> { 
+			try { 
+				service.validate(toValidate(NAME + " slow", AUTHOR, 1));
+			} catch (ServiceException e) { 
+				// checked below
+			}
+		});
+		slow.start();
+		long deadline = System.currentTimeMillis() + 10000L;
+		while (nameRequests.get()==0 && System.currentTimeMillis() < deadline) { 
+			Thread.sleep(5L);
+		}
+		try { 
+			service.validate(toValidate(NAME, AUTHOR, 2));
+			fail("Expected ServiceUnavailableException");
+		} catch (ServiceUnavailableException e) { 
+			assertTrue(e.getMessage(), e.getMessage().contains("not sent"));
+		}
+		slow.join(10000L);
+		assertEquals(1, nameRequests.get());
+		assertFalse(CircuitBreaker.forService(WoRMSService.SERVICE_NAME).isOpen());
+		// not remembered as a failure
+		assertNotNull(service.validate(toValidate(NAME, AUTHOR, 2)));
+		assertEquals(2, nameRequests.get());
+	}
+	
 }
