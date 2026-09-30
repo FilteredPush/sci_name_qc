@@ -152,8 +152,12 @@ WoRMSService and IRMNGService share a single configured HTTP client per service,
   so that many concurrent callers (e.g. multithreaded test execution) produce a throttled stream of requests rather than a burst,
 - retries only plausibly transient failures (HTTP 408, 429, 500, 502, 503, 504, and connection failures), with exponential 
   backoff and jitter, honoring a `Retry-After` header, and does not retry other failures (e.g. 400, 401, 403, 404),
-- caches the results of `validate()` (keyed on scientific name, authorship, and kingdom) and of habitat lookups (keyed on 
-  AphiaID/IRMNG_ID), so repeated lookups of the same name are not resent to the service,
+- retries each call to the service separately (so, for example, a failed habitat lookup does not resend the search by name), 
+  for `validate()` and for the static lookup methods (`lookupTaxon`, `lookupTaxonByID`, `lookupGenus`, `lookupTaxonAtRank`, 
+  `simpleNameSearch`, `nameComparisonSearch`), which report failures as an `ApiException` carrying the HTTP status code,
+- caches the results of `validate()` (keyed on scientific name, authorship, and kingdom), of searches by name, and of record 
+  lookups by AphiaID/IRMNG_ID (used for habitat lookups and `lookupTaxonByID`), shared by `validate()` and the static lookup 
+  methods, so repeated lookups are not resent to the service,
 - makes a single request when several threads look up the same value at once, sharing the result between them,
 - remembers a failed lookup for a period, during which the same lookup fails without being resent,
 - waits a limited time for a turn to make a request, rather than blocking indefinitely behind a slow service,

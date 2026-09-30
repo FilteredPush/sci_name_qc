@@ -186,10 +186,12 @@ public class TestServiceResilience {
 		NameUsage third = wormsService().validate(toValidate(NAME, AUTHOR, 3));
 		assertEquals("true", third.getExtension().get("marine"));
 		
-		// a different authorship is a cache miss
+		// a different authorship is a validation cache miss
+		long misses = WoRMSService.getValidationCache().getMissCount();
 		wormsService().validate(toValidate(NAME, "L.", 4));
-		assertEquals(4, nameRequests.get());
-		// but the habitat for the same AphiaID is cached
+		assertEquals(misses + 1, WoRMSService.getValidationCache().getMissCount());
+		// but the search by the same name, and the habitat for the same AphiaID, are cached
+		assertEquals(3, nameRequests.get());
 		assertEquals(1, recordRequests.get());
 	}
 	
@@ -400,6 +402,17 @@ public class TestServiceResilience {
 	}
 
 	/**
+	 * Point the shared WoRMS ApiClient, used by the static lookup methods, at the test server.
+	 * 
+	 * @return the base path to restore after the test.
+	 */
+	private String pointSharedWoRMSClientAtServer() { 
+		String original = WoRMSService.sharedApiClient().getBasePath();
+		WoRMSService.sharedApiClient().setBasePath(server.url("/rest").toString());
+		return original;
+	}
+	
+	/**
 	 * Concurrent validations of the same name make a single request, each caller gets its own copy of the result.
 	 */
 	@Test
@@ -455,6 +468,20 @@ public class TestServiceResilience {
 		// each caller gets its own copy, with its own input key
 		assertEquals(threadCount, keys.size());
 		assertEquals(threadCount, instances.size());
+	}
+	
+	/**
+	 * A failure of a habitat lookup is retried on its own, without resending the search by name.
+	 */
+	@Test
+	public void testHabitatRetriedSeparately() throws Exception { 
+		recordResponses.add(errorResponse(503, "Service temporarily unavailable"));
+		recordResponses.add(errorResponse(500, "Internal error"));
+		NameUsage result = wormsService().validate(toValidate(NAME, AUTHOR, 1));
+		assertNotNull(result);
+		assertEquals("true", result.getExtension().get("marine"));
+		assertEquals(1, nameRequests.get());
+		assertEquals(3, recordRequests.get());
 	}
 	
 	/**
@@ -569,4 +596,86 @@ public class TestServiceResilience {
 		assertEquals(2, nameRequests.get());
 	}
 	
+	/**
+	 * A 403 for a name remembered from an earlier lookup is still treated as no match.
+	 */
+	@Test
+	public void testRememberedForbiddenStillNoMatch() throws Exception { 
+		nameResponses.add(errorResponse(403, ""));
+		assertNull(wormsService().validate(toValidate(NAME, AUTHOR, 1)));
+		// a different authorship, so not in the validation cache, the search by name failure is remembered
+		assertNull(wormsService().validate(toValidate(NAME, "L.", 2)));
+		assertEquals(1, nameRequests.get());
+	}
+	
+	/**
+	 * The static lookup methods retry, cache, and report failures as ApiExceptions.
+	 */
+	@Test
+	public void testStaticLookups() throws Exception { 
+		String originalBasePath = pointSharedWoRMSClientAtServer();
+		try { 
+			nameResponses.add(errorResponse(503, "Service temporarily unavailable"));
+			List<NameUsage> matches = WoRMSService.lookupTaxon(NAME, AUTHOR);
+			assertEquals(1, matches.size());
+			assertEquals(AUTHOR, matches.get(0).getAuthorship());
+			assertEquals(2, nameRequests.get());
+			// cached
+			matches = WoRMSService.lookupTaxon(NAME, AUTHOR);
+			assertEquals(1, matches.size());
+			assertEquals(2, nameRequests.get());
+			
+			NameUsage byId = WoRMSService.lookupTaxonByID("147436");
+			assertEquals(NAME + " " + AUTHOR, byId.getScientificName());
+			assertEquals(1, recordRequests.get());
+			assertNotNull(WoRMSService.lookupTaxonByID("147436"));
+			assertEquals(1, recordRequests.get());
+			
+			// a failure is reported as an ApiException carrying the status code
+			ServiceClientConfig.setMaxRetries(0);
+			nameResponses.add(errorResponse(503, "Service temporarily unavailable"));
+			try { 
+				WoRMSService.lookupGenus("Haematopus");
+				fail("Expected ApiException");
+			} catch (org.marinespecies.aphia.v1_0.handler.ApiException e) { 
+				assertEquals(503, e.getCode());
+				assertTrue(e.getMessage(), e.getMessage().contains("HTTP 503"));
+				assertTrue(e.getCause() instanceof ServiceException);
+			}
+			
+			// while the circuit breaker is open, as an ApiException with no status code
+			ServiceClientConfig.setCircuitBreakerThreshold(1);
+			nameResponses.add(errorResponse(503, "Service temporarily unavailable"));
+			try { 
+				WoRMSService.lookupTaxon("Haematopus palliatus", AUTHOR);
+				fail("Expected ApiException");
+			} catch (org.marinespecies.aphia.v1_0.handler.ApiException e) { 
+				assertEquals(503, e.getCode());
+			}
+			int sent = nameRequests.get();
+			try { 
+				WoRMSService.lookupTaxon("Haematopus bachmani", AUTHOR);
+				fail("Expected ApiException");
+			} catch (org.marinespecies.aphia.v1_0.handler.ApiException e) { 
+				assertEquals(0, e.getCode());
+				assertTrue(e.getCause() instanceof ServiceUnavailableException);
+			}
+			assertEquals(sent, nameRequests.get());
+		} finally { 
+			WoRMSService.sharedApiClient().setBasePath(originalBasePath);
+		}
+	}
+	
+	/**
+	 * The connectivity test made by the constructor goes through the configured client.
+	 */
+	@Test
+	public void testConnectivityTestUsesConfiguredClient() throws Exception { 
+		WoRMSService service = wormsService();
+		service.test();
+		RecordedRequest request = server.takeRequest(1, TimeUnit.SECONDS);
+		assertNotNull(request);
+		assertTrue(request.getHeader("User-Agent"), request.getHeader("User-Agent").startsWith("FilteredPush-sci_name_qc/"));
+	}
+
 }

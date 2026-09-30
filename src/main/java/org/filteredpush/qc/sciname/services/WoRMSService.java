@@ -35,10 +35,10 @@ import org.marinespecies.aphia.v1_0.handler.ApiClient;
 import org.marinespecies.aphia.v1_0.handler.ApiException;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,13 +53,21 @@ import java.util.Map;
  * 
  * <p>All instances share a single configured HTTP client, which identifies this library in its 
  * User-Agent, reuses connections, has explicit timeouts, and limits the number and rate of concurrent
- * requests to WoRMS.  {@link #validate(NameUsage)} retries transient failures (HTTP 408, 429, 5xx, and 
- * connection failures) with exponential backoff, and caches its results, and the results of 
- * {@link #lookupHabitat(AphiaRecord)}, so repeated lookups of the same name are not resent to WoRMS.
- * Concurrent validations of the same name make a single request, a validation that failed is not 
- * resent for a period, and after repeated failures a {@link CircuitBreaker} stops calls to WoRMS for 
- * a period, during which validations fail with a {@link ServiceUnavailableException}.
- * See {@link ServiceClientConfig} for the system properties that configure this behavior.</p>
+ * requests to WoRMS, waiting a limited time for a turn to make a request.
+ * </p>
+ * <ul>
+ * <li>Each call to WoRMS is retried on transient failures (HTTP 408, 429, 5xx, and connection failures)
+ * with exponential backoff, honoring Retry-After.</li>
+ * <li>The results of {@link #validate(NameUsage)}, of searches by name, and of record lookups by ID 
+ * (used for habitat lookups and lookupTaxonByID) are cached, and shared by all instances and by the 
+ * static lookup methods, so repeated lookups are not resent.</li>
+ * <li>Concurrent lookups of the same value make a single request, and a lookup that failed is not 
+ * resent for a period.</li>
+ * <li>After repeated failures, a {@link CircuitBreaker} stops calls to WoRMS for a period, during 
+ * which lookups fail with a {@link ServiceUnavailableException} (an ApiException from the static 
+ * lookup methods) without being sent.</li>
+ * </ul>
+ * <p>See {@link ServiceClientConfig} for the system properties that configure this behavior.</p>
  *
  * @author Lei Dou
  * @author Paul J. Morris
@@ -73,9 +81,20 @@ public class WoRMSService implements Validator {
 	public static final String SERVICE_NAME = "WoRMS";
 	
 	private static final LookupCache<String,NameUsage> VALIDATION_CACHE = new LookupCache<String,NameUsage>();
-	private static final LookupCache<Integer,Map<String,String>> HABITAT_CACHE = new LookupCache<Integer,Map<String,String>>();
+	/** Results of searches by name, keyed on name and marine only flag, shared by validate() and the static lookups. */
+	private static final LookupCache<String,List<AphiaRecord>> NAME_SEARCH_CACHE = new LookupCache<String,List<AphiaRecord>>();
+	/** Records looked up by AphiaID, shared by habitat lookups and lookupTaxonByID(). */
+	private static final LookupCache<Integer,AphiaRecord> RECORD_CACHE = new LookupCache<Integer,AphiaRecord>();
 	
 	private TaxonomicDataApi wormsService;
+	
+	/** 
+	 * No longer used, retries are managed by {@link ServiceRetrier}, retained so that existing 
+	 * subclasses continue to compile.
+	 * @deprecated retries are managed by {@link ServiceRetrier}, will be removed in a future release.
+	 */
+	@Deprecated
+	protected int depth;
 	protected AuthorNameComparator authorNameComparator;
 	
 	private final static String WORMSGUIDPREFIX = "urn:lsid:marinespecies.org:taxname:";
@@ -112,7 +131,8 @@ public class WoRMSService implements Validator {
 	 */
 	public static void clearCaches() { 
 		VALIDATION_CACHE.clear();
-		HABITAT_CACHE.clear();
+		NAME_SEARCH_CACHE.clear();
+		RECORD_CACHE.clear();
 	}
 	
 	/**
@@ -123,10 +143,17 @@ public class WoRMSService implements Validator {
 	}
 	
 	/**
-	 * @return the cache of habitat lookup results, for inspection.
+	 * @return the cache of search by name results, for inspection.
 	 */
-	static LookupCache<Integer,Map<String,String>> getHabitatCache() { 
-		return HABITAT_CACHE;
+	static LookupCache<String,List<AphiaRecord>> getNameSearchCache() { 
+		return NAME_SEARCH_CACHE;
+	}
+	
+	/**
+	 * @return the cache of records looked up by AphiaID, for inspection.
+	 */
+	static LookupCache<Integer,AphiaRecord> getRecordCache() { 
+		return RECORD_CACHE;
 	}
 
 	/**
@@ -167,13 +194,13 @@ public class WoRMSService implements Validator {
 	 * @throws java.io.IOException if any.
 	 */
 	protected void test()  throws IOException { 
-		logger.debug(wormsService.getApiClient().getBasePath());
-		URL test = new URL(wormsService.getApiClient().getBasePath());
-		URLConnection conn = test.openConnection();
-		conn.setRequestProperty("User-Agent", ServiceClientConfig.getUserAgent());
-		conn.setConnectTimeout((int) Math.min(Integer.MAX_VALUE, ServiceClientConfig.getConnectTimeoutMillis()));
-		conn.setReadTimeout((int) Math.min(Integer.MAX_VALUE, ServiceClientConfig.getReadTimeoutMillis()));
-		conn.connect();
+		String basePath = wormsService.getApiClient().getBasePath();
+		logger.debug(basePath);
+		// through the configured client, so the request is throttled, and has the User-Agent and timeouts.
+		Request request = new Request.Builder().url(basePath).header("User-Agent", ServiceClientConfig.getUserAgent()).get().build();
+		try (Response response = wormsService.getApiClient().getHttpClient().newCall(request).execute()) { 
+			logger.debug("Test request to " + basePath + " returned HTTP " + response.code());
+		}
 	}
 	
 	/**
@@ -192,7 +219,7 @@ public class WoRMSService implements Validator {
 			}
 			Integer intAphiaID = Integer.parseInt(aphiaID);
 			TaxonomicDataApi wormsService = new TaxonomicDataApi(sharedApiClient());
-			AphiaRecord ar = wormsService.aphiaRecordByAphiaID(intAphiaID);
+			AphiaRecord ar = apiRecordByID(wormsService, intAphiaID);
 			if (ar !=null && ar.getScientificname()!=null ) { 
 				logger.debug(ar.getScientificname());
 				logger.debug(ar.getAuthority());
@@ -222,7 +249,7 @@ public class WoRMSService implements Validator {
 		if (!SciNameUtils.isEmpty(taxon)) { 
 			TaxonomicDataApi wormsService = new TaxonomicDataApi(sharedApiClient());
 
-			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, false, 1);
+			List<AphiaRecord> results = apiRecordsByName(wormsService, taxon, false);
 			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -269,7 +296,7 @@ public class WoRMSService implements Validator {
 		TaxonomicDataApi wormsService = new TaxonomicDataApi(sharedApiClient());
 
 		try {
-			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
+			List<AphiaRecord> results = apiRecordsByName(wormsService, taxon, marineOnly);	
 			if (results!=null || results.size()==1) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -327,7 +354,7 @@ public class WoRMSService implements Validator {
 		if (!SciNameUtils.isEmpty(genus)) { 
 			TaxonomicDataApi wormsService = new TaxonomicDataApi(sharedApiClient());
 
-			List<AphiaRecord> results = wormsService.aphiaRecordsByName(genus, false, false, 1);
+			List<AphiaRecord> results = apiRecordsByName(wormsService, genus, false);
 			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -369,7 +396,7 @@ public class WoRMSService implements Validator {
 		if (!SciNameUtils.isEmpty(taxon)) { 
 			TaxonomicDataApi wormsService = new TaxonomicDataApi(sharedApiClient());
 
-			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, false, 1);
+			List<AphiaRecord> results = apiRecordsByName(wormsService, taxon, false);
 			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -641,7 +668,7 @@ public class WoRMSService implements Validator {
 		TaxonomicDataApi wormsService = new TaxonomicDataApi(sharedApiClient());
 
 		try {
-			List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
+			List<AphiaRecord> results = apiRecordsByName(wormsService, taxon, marineOnly);	
 			if (results!=null || results.size()==1) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -695,13 +722,13 @@ public class WoRMSService implements Validator {
 		String cacheKey = validationCacheKey(taxonNameToValidate);
 		NameUsage found = VALIDATION_CACHE.getOrLoad(cacheKey, () -> { 
 			try { 
-				NameUsage lookedUp = ServiceRetrier.execute(SERVICE_NAME, taxonNameToValidate.getScientificName(), 
-						() -> lookupAndCompare(taxonNameToValidate, comparator));
+				NameUsage lookedUp = lookupAndCompare(taxonNameToValidate, comparator);
 				return lookedUp==null ? null : new NameUsage(lookedUp);
 			} catch (ServiceException e) { 
 				if (e.getHttpStatusCode()==403) {
 					// Form of name provided is invalid, GBIF Parser can return '? epithet', which WoRMS can't lookup.
-					logger.error(e.getMessage() + " Request to lookup [" + taxonNameToValidate.getScientificName() +"] denied");
+					// The failure has already been logged, treat as no match.
+					logger.debug("Request to lookup [" + taxonNameToValidate.getScientificName() + "] denied, treating as no match");
 					return null;
 				}
 				throw e;
@@ -740,20 +767,21 @@ public class WoRMSService implements Validator {
 	}
 	
 	/**
-	 * Look up a name in WoRMS, and compare the results with the name to validate, a single attempt,
-	 * without retries.
+	 * Look up a name in WoRMS, and compare the results with the name to validate.  Each call to the service
+	 * is retried separately, subject to the circuit breaker for the service, and name searches and 
+	 * habitat lookups are cached.
 	 * 
 	 * @param taxonNameToValidate the name to validate.
 	 * @param authorNameComparator the comparator to use for authorship comparisons.
 	 * @return the matched name usage, or null if no match was found.
-	 * @throws ApiException on failure to invoke the service.
+	 * @throws ServiceException on failure to invoke the service.
 	 */
-	private NameUsage lookupAndCompare(NameUsage taxonNameToValidate, AuthorNameComparator authorNameComparator) throws ApiException { 
+	private NameUsage lookupAndCompare(NameUsage taxonNameToValidate, AuthorNameComparator authorNameComparator) throws ServiceException { 
 		NameUsage result = null;
 		String taxonName = taxonNameToValidate.getScientificName();
 		String authorship = taxonNameToValidate.getAuthorship();
 		ScientificNameComparator scientificNameComparator = new ScientificNameComparator();
-		List<AphiaRecord> results = wormsService.aphiaRecordsByName(taxonName, false, false, 1);
+		List<AphiaRecord> results = recordsByName(wormsService, taxonName, false);
 		if (results!=null && results.size()>0) { 
 			// We got at least one result
 			Iterator<AphiaRecord> i = results.iterator();
@@ -781,7 +809,7 @@ public class WoRMSService implements Validator {
 				    		result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 				    		result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 				    		result.setScientificNameStringEditDistance(1d);
-				    		result.setExtension(lookupHabitat(ar));
+				    		result.setExtension(habitatFor(ar));
 				    		exactMatch = true;
 				    	}
 				    }
@@ -799,7 +827,7 @@ public class WoRMSService implements Validator {
 						if (NameComparison.isPlausible(comparison.getMatchType())) { 
 							names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
 							if (closest==null || ICZNAuthorNameComparator.calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < ICZNAuthorNameComparator.calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
-								current.setExtension(lookupHabitat(ar));
+								current.setExtension(habitatFor(ar));
 								closest = current;
 							}
 						}
@@ -832,7 +860,7 @@ public class WoRMSService implements Validator {
 						result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 						result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 						result.setScientificNameStringEditDistance(1d);
-						result.setExtension(lookupHabitat(ar));
+						result.setExtension(habitatFor(ar));
 					} else {
 						// find how 
 						if (authorship!=null && ar!=null && ar.getAuthority()!=null) { 
@@ -852,7 +880,7 @@ public class WoRMSService implements Validator {
 							NameComparison nameComparison = scientificNameComparator.compareWithoutAuthor(taxonName, ar.getScientificname());
 							result.setNameMatchDescription(nameComparison.getMatchType());
 							result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
-							result.setExtension(lookupHabitat(ar));
+							result.setExtension(habitatFor(ar));
 						} else { 
 							// no authorship was provided in the results, treat as no match
 							logger.error("Result with null authorship.");
@@ -866,7 +894,8 @@ public class WoRMSService implements Validator {
 			// Try WoRMS fuzzy matching query
 			String[] searchNames = { taxonName + " " + authorship };
 			List<String> searchNamesList = Arrays.asList(searchNames);
-			List<AphiaRecordsArray> matchResultsArr = wormsService.aphiaRecordsByMatchNames(searchNamesList, false);
+			List<AphiaRecordsArray> matchResultsArr = ServiceRetrier.execute(SERVICE_NAME, taxonName, 
+					() -> wormsService.aphiaRecordsByMatchNames(searchNamesList, false));
 			if (matchResultsArr!=null && matchResultsArr.size()>0) {
 				Iterator<AphiaRecordsArray> i0 = matchResultsArr.iterator();
 				while (i0.hasNext()) {
@@ -888,7 +917,7 @@ public class WoRMSService implements Validator {
 							if (NameComparison.isPlausible(comparison.getMatchType())) { 
 								match.setNameMatchDescription(comparison.getMatchType());
 								match.setScientificNameStringEditDistance(comparison.getSimilarity());
-								match.setExtension(lookupHabitat(ar));
+								match.setExtension(habitatFor(ar));
 								potentialMatches.add(match);
 							}
 						} else {
@@ -925,60 +954,122 @@ public class WoRMSService implements Validator {
 	}
 	
 	/**
-	 * <p>lookupHabitat.</p>
+	 * Look up the habitat flags (brackish, freshwater, marine, terrestrial, extinct) for a record.
+	 * The record is looked up by its ID through the record cache, with retries.
 	 *
-	 * @param ar a {@link org.marinespecies.aphia.v1_0.model.AphiaRecord} object.
-	 * @return a {@link java.util.Map} object.
-	 * @throws org.marinespecies.aphia.v1_0.handler.ApiException if any.
+	 * @param ar the record for which to look up habitat flags.
+	 * @return a map of habitat flag names to "true", "false", or "" if not known, empty if ar is null,
+	 *   has no ID, or no record was found for its ID.
+	 * @throws org.marinespecies.aphia.v1_0.handler.ApiException on failure to invoke the service.
 	 */
 	public Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
-		Map<String,String> attributes = new HashMap<String,String>();
-		if (ar!=null)  {
-			Integer aphiaID = ar.getAphiaID();
-			LookupCache.Entry<Map<String,String>> cached = aphiaID==null ? null : HABITAT_CACHE.get(aphiaID);
-			if (cached!=null && cached.getValue()!=null) { 
-				logger.debug("Using cached WoRMS habitat for AphiaID " + aphiaID);
-				return new HashMap<String,String>(cached.getValue());
-			}
-			AphiaRecord wormsRecord = wormsService.aphiaRecordByAphiaID(aphiaID);
-			if (wormsRecord==null) { 
-				logger.debug("No record returned for AphiaID " + aphiaID);
-				return attributes;
-			}
-			if (wormsRecord.isIsBrackish()==null) { 
-				attributes.put("brackish", "");
-			} else { 
-				attributes.put("brackish", wormsRecord.isIsBrackish().toString());
-			}
-			if (wormsRecord.isIsFreshwater()==null) { 
-				attributes.put("freshwater", "");
-			} else { 
-				attributes.put("freshwater", wormsRecord.isIsFreshwater().toString());
-			}
-			if (wormsRecord.isIsMarine()==null) { 
-				attributes.put("marine", "");
-			} else { 
-				attributes.put("marine", wormsRecord.isIsMarine().toString());
-			}
-			if (wormsRecord.isIsTerrestrial()==null) { 
-				attributes.put("terrestrial", "");
-			} else { 
-				attributes.put("terrestrial", wormsRecord.isIsTerrestrial().toString());
-			}
-			if (wormsRecord.isIsExtinct()==null) { 
-				attributes.put("extinct", "");
-			} else { 
-				attributes.put("extinct", wormsRecord.isIsExtinct().toString());
-			}
-			Iterator<String> ia = attributes.keySet().iterator();
-			while (ia.hasNext()) { 
-				String key = ia.next();
-				logger.debug(key + " " + attributes.get(key));
-			}
-			if (aphiaID!=null) { 
-				HABITAT_CACHE.put(aphiaID, new HashMap<String,String>(attributes));
-			}
+		try { 
+			return habitatFor(ar);
+		} catch (ServiceException e) { 
+			throw toApiException(e);
 		}
+	}
+	
+	/**
+	 * Look up the habitat flags for a record, see {@link #lookupHabitat(AphiaRecord)}.
+	 *
+	 * @param ar the record for which to look up habitat flags.
+	 * @return a new map of habitat flag names to values.
+	 * @throws ServiceException on failure to invoke the service.
+	 */
+	private Map<String,String> habitatFor(AphiaRecord ar) throws ServiceException { 
+		Map<String,String> attributes = new HashMap<String,String>();
+		if (ar==null || ar.getAphiaID()==null) { 
+			return attributes;
+		}
+		AphiaRecord record = recordByID(wormsService, ar.getAphiaID());
+		if (record==null) { 
+			logger.debug("No record returned for AphiaID " + ar.getAphiaID());
+			return attributes;
+		}
+		attributes.put("brackish", record.isIsBrackish()==null ? "" : record.isIsBrackish().toString());
+		attributes.put("freshwater", record.isIsFreshwater()==null ? "" : record.isIsFreshwater().toString());
+		attributes.put("marine", record.isIsMarine()==null ? "" : record.isIsMarine().toString());
+		attributes.put("terrestrial", record.isIsTerrestrial()==null ? "" : record.isIsTerrestrial().toString());
+		attributes.put("extinct", record.isIsExtinct()==null ? "" : record.isIsExtinct().toString());
+		logger.debug(attributes);
 		return attributes;
+	}
+	
+	/**
+	 * Search for records by name, through the name search cache, with retries, subject to the 
+	 * circuit breaker for the service.
+	 * 
+	 * @param api the client to use for the search if it is not cached.
+	 * @param name the name to search for.
+	 * @param marineOnly passed to the service, limit results to marine taxa.
+	 * @return a new list of the matching records, or null if the service returned none (callers 
+	 *   must not modify the records).
+	 * @throws ServiceException on failure to invoke the service.
+	 */
+	static List<AphiaRecord> recordsByName(TaxonomicDataApi api, String name, boolean marineOnly) throws ServiceException { 
+		List<AphiaRecord> result = NAME_SEARCH_CACHE.getOrLoad(name + "\u0000" + marineOnly, 
+				() -> ServiceRetrier.execute(SERVICE_NAME, name, () -> api.aphiaRecordsByName(name, false, marineOnly, 1)));
+		return result==null ? null : new ArrayList<AphiaRecord>(result);
+	}
+	
+	/**
+	 * Search for records by name, as {@link #recordsByName(TaxonomicDataApi, String, boolean)}, 
+	 * reporting failures as an ApiException, for the static lookup methods.
+	 * 
+	 * @param api the client to use for the search if it is not cached.
+	 * @param name the name to search for.
+	 * @param marineOnly passed to the service, limit results to marine taxa.
+	 * @return a new list of the matching records, or null if the service returned none.
+	 * @throws ApiException on failure to invoke the service.
+	 */
+	static List<AphiaRecord> apiRecordsByName(TaxonomicDataApi api, String name, boolean marineOnly) throws ApiException { 
+		try { 
+			return recordsByName(api, name, marineOnly);
+		} catch (ServiceException e) { 
+			throw toApiException(e);
+		}
+	}
+	
+	/**
+	 * Look up a record by its AphiaID, through the record cache, with retries, subject to 
+	 * the circuit breaker for the service.
+	 * 
+	 * @param api the client to use for the lookup if it is not cached.
+	 * @param id the AphiaID to look up.
+	 * @return the record, or null if none was returned (callers must not modify the record).
+	 * @throws ServiceException on failure to invoke the service.
+	 */
+	static AphiaRecord recordByID(TaxonomicDataApi api, Integer id) throws ServiceException { 
+		return RECORD_CACHE.getOrLoad(id, 
+				() -> ServiceRetrier.execute(SERVICE_NAME, "AphiaID " + id, () -> api.aphiaRecordByAphiaID(id)));
+	}
+	
+	/**
+	 * Look up a record by its AphiaID, as {@link #recordByID(TaxonomicDataApi, Integer)}, 
+	 * reporting failures as an ApiException, for the static lookup methods.
+	 * 
+	 * @param api the client to use for the lookup if it is not cached.
+	 * @param id the AphiaID to look up.
+	 * @return the record, or null if none was returned.
+	 * @throws ApiException on failure to invoke the service.
+	 */
+	static AphiaRecord apiRecordByID(TaxonomicDataApi api, Integer id) throws ApiException { 
+		try { 
+			return recordByID(api, id);
+		} catch (ServiceException e) { 
+			throw toApiException(e);
+		}
+	}
+	
+	/**
+	 * Report a failure as an ApiException, for methods that declare ApiException, carrying the 
+	 * description and HTTP status code (0 if none) of the failure.
+	 * 
+	 * @param e the failure.
+	 * @return an ApiException with e as its cause.
+	 */
+	static ApiException toApiException(ServiceException e) { 
+		return new ApiException(e.getMessage(), e, e.getHttpStatusCode(), null);
 	}
 }

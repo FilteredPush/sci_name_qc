@@ -18,8 +18,6 @@
 package org.filteredpush.qc.sciname.services;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +42,8 @@ import edu.harvard.mcz.nametools.NameComparison;
 import edu.harvard.mcz.nametools.NameUsage;
 import edu.harvard.mcz.nametools.ScientificNameComparator;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * <p>IRMNGService class.</p>
@@ -51,13 +51,21 @@ import okhttp3.OkHttpClient;
  * <p>Provides support for scientific name validation against the IRMNG (Interim Register of 
  * Marine and Nonmarine Genera) Aphia web service.  All instances share a single configured HTTP client, 
  * which identifies this library in its User-Agent, reuses connections, has explicit timeouts, and limits 
- * the number and rate of concurrent requests to IRMNG.  {@link #validate(NameUsage)} retries transient 
- * failures (HTTP 408, 429, 5xx, and connection failures) with exponential backoff, and caches its results, 
- * and the results of habitat lookups, so repeated lookups of the same name are not resent to IRMNG.
- * Concurrent validations of the same name make a single request, a validation that failed is not 
- * resent for a period, and after repeated failures a {@link CircuitBreaker} stops calls to IRMNG for 
- * a period, during which validations fail with a {@link ServiceUnavailableException}.
- * See {@link ServiceClientConfig} for the system properties that configure this behavior.</p>
+ * the number and rate of concurrent requests to IRMNG, waiting a limited time for a turn to make a request.
+ * </p>
+ * <ul>
+ * <li>Each call to IRMNG is retried on transient failures (HTTP 408, 429, 5xx, and connection failures)
+ * with exponential backoff, honoring Retry-After.</li>
+ * <li>The results of {@link #validate(NameUsage)}, of searches by name, and of record lookups by ID 
+ * (used for habitat lookups and lookupTaxonByID) are cached, and shared by all instances and by the 
+ * static lookup methods, so repeated lookups are not resent.</li>
+ * <li>Concurrent lookups of the same value make a single request, and a lookup that failed is not 
+ * resent for a period.</li>
+ * <li>After repeated failures, a {@link CircuitBreaker} stops calls to IRMNG for a period, during 
+ * which lookups fail with a {@link ServiceUnavailableException} (an ApiException from the static 
+ * lookup methods) without being sent.</li>
+ * </ul>
+ * <p>See {@link ServiceClientConfig} for the system properties that configure this behavior.</p>
  *
  * @author mole
  * @version $Id: $Id
@@ -70,9 +78,20 @@ public class IRMNGService implements Validator {
 	public static final String SERVICE_NAME = "IRMNG";
 	
 	private static final LookupCache<String,NameUsage> VALIDATION_CACHE = new LookupCache<String,NameUsage>();
-	private static final LookupCache<Integer,Map<String,String>> HABITAT_CACHE = new LookupCache<Integer,Map<String,String>>();
+	/** Results of searches by name, keyed on name and marine only flag, shared by validate() and the static lookups. */
+	private static final LookupCache<String,List<AphiaRecord>> NAME_SEARCH_CACHE = new LookupCache<String,List<AphiaRecord>>();
+	/** Records looked up by IRMNG_ID, shared by habitat lookups and lookupTaxonByID(). */
+	private static final LookupCache<Integer,AphiaRecord> RECORD_CACHE = new LookupCache<Integer,AphiaRecord>();
 	
 	private TaxonomicDataApi irmngService;
+	
+	/** 
+	 * No longer used, retries are managed by {@link ServiceRetrier}, retained so that existing 
+	 * subclasses continue to compile.
+	 * @deprecated retries are managed by {@link ServiceRetrier}, will be removed in a future release.
+	 */
+	@Deprecated
+	protected int depth;
 	protected AuthorNameComparator authorNameComparator;
 	
 	private final static String IRMNGGUIDPREFIX = "urn:lsid:irmng.org:taxname:";
@@ -112,7 +131,22 @@ public class IRMNGService implements Validator {
 	 */
 	public static void clearCaches() { 
 		VALIDATION_CACHE.clear();
-		HABITAT_CACHE.clear();
+		NAME_SEARCH_CACHE.clear();
+		RECORD_CACHE.clear();
+	}
+	
+	/**
+	 * @return the cache of search by name results, for inspection.
+	 */
+	static LookupCache<String,List<AphiaRecord>> getNameSearchCache() { 
+		return NAME_SEARCH_CACHE;
+	}
+	
+	/**
+	 * @return the cache of records looked up by IRMNG_ID, for inspection.
+	 */
+	static LookupCache<Integer,AphiaRecord> getRecordCache() { 
+		return RECORD_CACHE;
 	}
 	
 	/**
@@ -160,13 +194,13 @@ public class IRMNGService implements Validator {
 	 * @throws java.io.IOException if any.
 	 */
 	protected void test()  throws IOException { 
-		logger.debug(irmngService.getApiClient().getBasePath());
-		URL test = new URL(irmngService.getApiClient().getBasePath());
-		URLConnection conn = test.openConnection();
-		conn.setRequestProperty("User-Agent", ServiceClientConfig.getUserAgent());
-		conn.setConnectTimeout((int) Math.min(Integer.MAX_VALUE, ServiceClientConfig.getConnectTimeoutMillis()));
-		conn.setReadTimeout((int) Math.min(Integer.MAX_VALUE, ServiceClientConfig.getReadTimeoutMillis()));
-		conn.connect();
+		String basePath = irmngService.getApiClient().getBasePath();
+		logger.debug(basePath);
+		// through the configured client, so the request is throttled, and has the User-Agent and timeouts.
+		Request request = new Request.Builder().url(basePath).header("User-Agent", ServiceClientConfig.getUserAgent()).get().build();
+		try (Response response = irmngService.getApiClient().getHttpClient().newCall(request).execute()) { 
+			logger.debug("Test request to " + basePath + " returned HTTP " + response.code());
+		}
 	}
 	
 	/**
@@ -186,7 +220,7 @@ public class IRMNGService implements Validator {
 			Integer intAphiaID = Integer.parseInt(aphiaID);
 			logger.debug(intAphiaID);
 			TaxonomicDataApi irmngService = new TaxonomicDataApi(sharedApiClient());
-			AphiaRecord ar = irmngService.aphiaRecordByIRMNGID(intAphiaID);
+			AphiaRecord ar = apiRecordByID(irmngService, intAphiaID);
 			logger.debug(ar);
 			if (ar !=null && ar.getScientificname()!=null ) { 
 				logger.debug(ar.getScientificname());
@@ -217,7 +251,7 @@ public class IRMNGService implements Validator {
 		if (!SciNameUtils.isEmpty(taxon)) { 
 			TaxonomicDataApi irmngService = new TaxonomicDataApi(sharedApiClient());
 
-			List<AphiaRecord> results = irmngService.aphiaRecordsByName(taxon, false, false, 1);
+			List<AphiaRecord> results = apiRecordsByName(irmngService, taxon, false);
 			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -264,7 +298,7 @@ public class IRMNGService implements Validator {
 		TaxonomicDataApi irmngService = new TaxonomicDataApi(sharedApiClient());
 
 		try {
-			List<AphiaRecord> results = irmngService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
+			List<AphiaRecord> results = apiRecordsByName(irmngService, taxon, marineOnly);	
 			if (results!=null || results.size()==1) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -322,7 +356,7 @@ public class IRMNGService implements Validator {
 		if (!SciNameUtils.isEmpty(genus)) { 
 			TaxonomicDataApi irmngService = new TaxonomicDataApi(sharedApiClient());
 
-			List<AphiaRecord> results = irmngService.aphiaRecordsByName(genus, false, false, 1);
+			List<AphiaRecord> results = apiRecordsByName(irmngService, genus, false);
 			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -364,7 +398,7 @@ public class IRMNGService implements Validator {
 		if (!SciNameUtils.isEmpty(taxon)) { 
 			TaxonomicDataApi irmngService = new TaxonomicDataApi(sharedApiClient());
 
-			List<AphiaRecord> results = irmngService.aphiaRecordsByName(taxon, false, false, 1);
+			List<AphiaRecord> results = apiRecordsByName(irmngService, taxon, false);
 			if (results!=null && results.size()>0) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -636,7 +670,7 @@ public class IRMNGService implements Validator {
 		TaxonomicDataApi irmngService = new TaxonomicDataApi(sharedApiClient());
 
 		try {
-			List<AphiaRecord> results = irmngService.aphiaRecordsByName(taxon, false, marineOnly, 1);	
+			List<AphiaRecord> results = apiRecordsByName(irmngService, taxon, marineOnly);	
 			if (results!=null || results.size()==1) { 
 				Iterator<AphiaRecord> i = results.iterator();
 				logger.debug(results.size());
@@ -680,28 +714,28 @@ public class IRMNGService implements Validator {
 		
 		String cacheKey = WoRMSService.validationCacheKey(taxonNameToValidate);
 		NameUsage found = VALIDATION_CACHE.getOrLoad(cacheKey, () -> { 
-			NameUsage lookedUp = ServiceRetrier.execute(SERVICE_NAME, taxonNameToValidate.getScientificName(), 
-					() -> lookupAndCompare(taxonNameToValidate, comparator));
+			NameUsage lookedUp = lookupAndCompare(taxonNameToValidate, comparator);
 			return lookedUp==null ? null : new NameUsage(lookedUp);
 		});
 		return WoRMSService.copyForInput(found, taxonNameToValidate);
 	}
 	
 	/**
-	 * Look up a name in IRMNG, and compare the results with the name to validate, a single attempt,
-	 * without retries.
+	 * Look up a name in IRMNG, and compare the results with the name to validate.  Each call to the service
+	 * is retried separately, subject to the circuit breaker for the service, and name searches and 
+	 * habitat lookups are cached.
 	 * 
 	 * @param taxonNameToValidate the name to validate.
 	 * @param authorNameComparator the comparator to use for authorship comparisons.
 	 * @return the matched name usage, or null if no match was found.
-	 * @throws ApiException on failure to invoke the service.
+	 * @throws ServiceException on failure to invoke the service.
 	 */
-	private NameUsage lookupAndCompare(NameUsage taxonNameToValidate, AuthorNameComparator authorNameComparator) throws ApiException { 
+	private NameUsage lookupAndCompare(NameUsage taxonNameToValidate, AuthorNameComparator authorNameComparator) throws ServiceException { 
 		NameUsage result = null;
 		String taxonName = taxonNameToValidate.getScientificName();
 		String authorship = taxonNameToValidate.getAuthorship();
 		ScientificNameComparator scientificNameComparator = new ScientificNameComparator();
-		List<AphiaRecord> results = irmngService.aphiaRecordsByName(taxonName, false, false, 1);
+		List<AphiaRecord> results = recordsByName(irmngService, taxonName, false);
 		if (results!=null && results.size()>0) { 
 			// We got at least one result
 			Iterator<AphiaRecord> i = results.iterator();
@@ -729,7 +763,7 @@ public class IRMNGService implements Validator {
 				    		result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 				    		result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 				    		result.setScientificNameStringEditDistance(1d);
-				    		result.setExtension(lookupHabitat(ar));
+				    		result.setExtension(habitatFor(ar));
 				    		exactMatch = true;
 				    	}
 				    }
@@ -747,7 +781,7 @@ public class IRMNGService implements Validator {
 						if (NameComparison.isPlausible(comparison.getMatchType())) { 
 							names.append("; ").append(current.getScientificName()).append(" ").append(current.getAuthorship()).append(" ").append(current.getUnacceptReason()).append(" ").append(current.getTaxonomicStatus());
 							if (closest==null || ICZNAuthorNameComparator.calulateSimilarityOfAuthor(closest.getAuthorship(), authorship) < ICZNAuthorNameComparator.calulateSimilarityOfAuthor(current.getAuthorship(), authorship)) { 
-								current.setExtension(lookupHabitat(ar));
+								current.setExtension(habitatFor(ar));
 								closest = current;
 							}
 						}
@@ -780,7 +814,7 @@ public class IRMNGService implements Validator {
 						result.setOriginalAuthorship(taxonNameToValidate.getAuthorship());
 						result.setOriginalScientificName(taxonNameToValidate.getScientificName());
 						result.setScientificNameStringEditDistance(1d);
-						result.setExtension(lookupHabitat(ar));
+						result.setExtension(habitatFor(ar));
 					} else {
 						// find how 
 						if (authorship!=null && ar!=null && ar.getAuthority()!=null) { 
@@ -800,7 +834,7 @@ public class IRMNGService implements Validator {
 							NameComparison nameComparison = scientificNameComparator.compareWithoutAuthor(taxonName, ar.getScientificname());
 							result.setNameMatchDescription(nameComparison.getMatchType());
 							result.setScientificNameStringEditDistance(nameComparison.getSimilarity());
-							result.setExtension(lookupHabitat(ar));
+							result.setExtension(habitatFor(ar));
 						} else { 
 							// no authorship was provided in the results, treat as no match
 							logger.error("Result with null authorship.");
@@ -814,7 +848,8 @@ public class IRMNGService implements Validator {
 			// Try WoRMS fuzzy matching query
 			String[] searchNames = { taxonName + " " + authorship };
 			List<String> searchNamesList = Arrays.asList(searchNames);
-			List<AphiaRecordsArray> matchResultsArr = irmngService.aphiaRecordsByMatchNames(searchNamesList, false);
+			List<AphiaRecordsArray> matchResultsArr = ServiceRetrier.execute(SERVICE_NAME, taxonName, 
+					() -> irmngService.aphiaRecordsByMatchNames(searchNamesList, false));
 			if (matchResultsArr!=null && matchResultsArr.size()>0) {
 				Iterator<AphiaRecordsArray> i0 = matchResultsArr.iterator();
 				while (i0.hasNext()) {
@@ -836,7 +871,7 @@ public class IRMNGService implements Validator {
 							if (NameComparison.isPlausible(comparison.getMatchType())) { 
 								match.setNameMatchDescription(comparison.getMatchType());
 								match.setScientificNameStringEditDistance(comparison.getSimilarity());
-								match.setExtension(lookupHabitat(ar));
+								match.setExtension(habitatFor(ar));
 								potentialMatches.add(match);
 							}
 						} else {
@@ -873,61 +908,123 @@ public class IRMNGService implements Validator {
 	}
 	
 	/**
-	 * <p>lookupHabitat.</p>
+	 * Look up the habitat flags (brackish, freshwater, marine, terrestrial, extinct) for a record.
+	 * The record is looked up by its ID through the record cache, with retries.
 	 *
-	 * @param ar a {@link org.irmng.aphia.v1_0.model.AphiaRecord} object.
-	 * @return a {@link java.util.Map} object.
-	 * @throws org.irmng.aphia.v1_0.handler.ApiException if any.
+	 * @param ar the record for which to look up habitat flags.
+	 * @return a map of habitat flag names to "true", "false", or "" if not known, empty if ar is null,
+	 *   has no ID, or no record was found for its ID.
+	 * @throws org.irmng.aphia.v1_0.handler.ApiException on failure to invoke the service.
 	 */
 	protected Map<String,String> lookupHabitat(AphiaRecord ar) throws ApiException { 
-		Map<String,String> attributes = new HashMap<String,String>();
-		if (ar!=null)  {
-			Integer irmngID = ar.getIRMNGID();
-			LookupCache.Entry<Map<String,String>> cached = irmngID==null ? null : HABITAT_CACHE.get(irmngID);
-			if (cached!=null && cached.getValue()!=null) { 
-				logger.debug("Using cached IRMNG habitat for IRMNGID " + irmngID);
-				return new HashMap<String,String>(cached.getValue());
-			}
-			AphiaRecord wormsRecord = irmngService.aphiaRecordByIRMNGID(irmngID);
-			if (wormsRecord==null) { 
-				logger.debug("No record returned for IRMNGID " + irmngID);
-				return attributes;
-			}
-			if (wormsRecord.isIsBrackish()==null) { 
-				attributes.put("brackish", "");
-			} else { 
-				attributes.put("brackish", wormsRecord.isIsBrackish().toString());
-			}
-			if (wormsRecord.isIsFreshwater()==null) { 
-				attributes.put("freshwater", "");
-			} else { 
-				attributes.put("freshwater", wormsRecord.isIsFreshwater().toString());
-			}
-			if (wormsRecord.isIsMarine()==null) { 
-				attributes.put("marine", "");
-			} else { 
-				attributes.put("marine", wormsRecord.isIsMarine().toString());
-			}
-			if (wormsRecord.isIsTerrestrial()==null) { 
-				attributes.put("terrestrial", "");
-			} else { 
-				attributes.put("terrestrial", wormsRecord.isIsTerrestrial().toString());
-			}
-			if (wormsRecord.isIsExtinct()==null) { 
-				attributes.put("extinct", "");
-			} else { 
-				attributes.put("extinct", wormsRecord.isIsExtinct().toString());
-			}
-			Iterator<String> ia = attributes.keySet().iterator();
-			while (ia.hasNext()) { 
-				String key = ia.next();
-				logger.debug(key + " " + attributes.get(key));
-			}
-			if (irmngID!=null) { 
-				HABITAT_CACHE.put(irmngID, new HashMap<String,String>(attributes));
-			}
+		try { 
+			return habitatFor(ar);
+		} catch (ServiceException e) { 
+			throw toApiException(e);
 		}
+	}
+	
+	/**
+	 * Look up the habitat flags for a record, see {@link #lookupHabitat(AphiaRecord)}.
+	 *
+	 * @param ar the record for which to look up habitat flags.
+	 * @return a new map of habitat flag names to values.
+	 * @throws ServiceException on failure to invoke the service.
+	 */
+	private Map<String,String> habitatFor(AphiaRecord ar) throws ServiceException { 
+		Map<String,String> attributes = new HashMap<String,String>();
+		if (ar==null || ar.getIRMNGID()==null) { 
+			return attributes;
+		}
+		AphiaRecord record = recordByID(irmngService, ar.getIRMNGID());
+		if (record==null) { 
+			logger.debug("No record returned for IRMNG_ID " + ar.getIRMNGID());
+			return attributes;
+		}
+		attributes.put("brackish", record.isIsBrackish()==null ? "" : record.isIsBrackish().toString());
+		attributes.put("freshwater", record.isIsFreshwater()==null ? "" : record.isIsFreshwater().toString());
+		attributes.put("marine", record.isIsMarine()==null ? "" : record.isIsMarine().toString());
+		attributes.put("terrestrial", record.isIsTerrestrial()==null ? "" : record.isIsTerrestrial().toString());
+		attributes.put("extinct", record.isIsExtinct()==null ? "" : record.isIsExtinct().toString());
+		logger.debug(attributes);
 		return attributes;
+	}
+	
+	/**
+	 * Search for records by name, through the name search cache, with retries, subject to the 
+	 * circuit breaker for the service.
+	 * 
+	 * @param api the client to use for the search if it is not cached.
+	 * @param name the name to search for.
+	 * @param marineOnly passed to the service, limit results to marine taxa.
+	 * @return a new list of the matching records, or null if the service returned none (callers 
+	 *   must not modify the records).
+	 * @throws ServiceException on failure to invoke the service.
+	 */
+	static List<AphiaRecord> recordsByName(TaxonomicDataApi api, String name, boolean marineOnly) throws ServiceException { 
+		List<AphiaRecord> result = NAME_SEARCH_CACHE.getOrLoad(name + "\u0000" + marineOnly, 
+				() -> ServiceRetrier.execute(SERVICE_NAME, name, () -> api.aphiaRecordsByName(name, false, marineOnly, 1)));
+		return result==null ? null : new ArrayList<AphiaRecord>(result);
+	}
+	
+	/**
+	 * Search for records by name, as {@link #recordsByName(TaxonomicDataApi, String, boolean)}, 
+	 * reporting failures as an ApiException, for the static lookup methods.
+	 * 
+	 * @param api the client to use for the search if it is not cached.
+	 * @param name the name to search for.
+	 * @param marineOnly passed to the service, limit results to marine taxa.
+	 * @return a new list of the matching records, or null if the service returned none.
+	 * @throws ApiException on failure to invoke the service.
+	 */
+	static List<AphiaRecord> apiRecordsByName(TaxonomicDataApi api, String name, boolean marineOnly) throws ApiException { 
+		try { 
+			return recordsByName(api, name, marineOnly);
+		} catch (ServiceException e) { 
+			throw toApiException(e);
+		}
+	}
+	
+	/**
+	 * Look up a record by its IRMNG_ID, through the record cache, with retries, subject to 
+	 * the circuit breaker for the service.
+	 * 
+	 * @param api the client to use for the lookup if it is not cached.
+	 * @param id the IRMNG_ID to look up.
+	 * @return the record, or null if none was returned (callers must not modify the record).
+	 * @throws ServiceException on failure to invoke the service.
+	 */
+	static AphiaRecord recordByID(TaxonomicDataApi api, Integer id) throws ServiceException { 
+		return RECORD_CACHE.getOrLoad(id, 
+				() -> ServiceRetrier.execute(SERVICE_NAME, "IRMNG_ID " + id, () -> api.aphiaRecordByIRMNGID(id)));
+	}
+	
+	/**
+	 * Look up a record by its IRMNG_ID, as {@link #recordByID(TaxonomicDataApi, Integer)}, 
+	 * reporting failures as an ApiException, for the static lookup methods.
+	 * 
+	 * @param api the client to use for the lookup if it is not cached.
+	 * @param id the IRMNG_ID to look up.
+	 * @return the record, or null if none was returned.
+	 * @throws ApiException on failure to invoke the service.
+	 */
+	static AphiaRecord apiRecordByID(TaxonomicDataApi api, Integer id) throws ApiException { 
+		try { 
+			return recordByID(api, id);
+		} catch (ServiceException e) { 
+			throw toApiException(e);
+		}
+	}
+	
+	/**
+	 * Report a failure as an ApiException, for methods that declare ApiException, carrying the 
+	 * description and HTTP status code (0 if none) of the failure.
+	 * 
+	 * @param e the failure.
+	 * @return an ApiException with e as its cause.
+	 */
+	static ApiException toApiException(ServiceException e) { 
+		return new ApiException(e.getMessage(), e, e.getHttpStatusCode(), null);
 	}
 
 	
