@@ -188,6 +188,59 @@ public class NameUsage implements LinneanClassification {
 		setOriginalScientificName(originalScientificName);
 	}
 	
+	/**
+	 * Copy constructor, creates a copy of the provided NameUsage (with a copy of its 
+	 * extension map), for example to return a cached lookup result without sharing
+	 * a mutable instance between callers.
+	 *
+	 * @param other the NameUsage to copy.
+	 */
+	public NameUsage(NameUsage other) { 
+		init();
+		this.key = other.key;
+		this.acceptedKey = other.acceptedKey;
+		this.datasetKey = other.datasetKey;
+		this.parentKey = other.parentKey;
+		this.parent = other.parent;
+		this.acceptedName = other.acceptedName;
+		this.scientificName = other.scientificName;
+		this.canonicalName = other.canonicalName;
+		this.authorship = other.authorship;
+		this.acceptedAuthorship = other.acceptedAuthorship;
+		this.taxonomicStatus = other.taxonomicStatus;
+		this.rank = other.rank;
+		this.kingdom = other.kingdom;
+		this.phylum = other.phylum;
+		this.tclass = other.tclass;
+		this.order = other.order;
+		this.superfamily = other.superfamily;
+		this.family = other.family;
+		this.subfamily = other.subfamily;
+		this.tribe = other.tribe;
+		this.subtribe = other.subtribe;
+		this.genus = other.genus;
+		this.subgenus = other.subgenus;
+		this.species = other.species;
+		this.numDescendants = other.numDescendants;
+		this.sourceID = other.sourceID;
+		this.link = other.link;
+		this.synonyms = other.synonyms;
+		this.sourceAuthority = other.sourceAuthority;
+		this.unacceptReason = other.unacceptReason;
+		this.guid = other.guid;
+		this.matchDescription = other.matchDescription;
+		this.nameMatchDescription = other.nameMatchDescription;
+		this.authorshipStringSimilarity = other.authorshipStringSimilarity;
+		this.scientificNameStringSimilarity = other.scientificNameStringSimilarity;
+		this.inputDbPK = other.inputDbPK;
+		this.originalScientificName = other.originalScientificName;
+		this.originalAuthorship = other.originalAuthorship;
+		if (other.extension!=null) { 
+			this.extension = new HashMap<String,String>(other.extension);
+		}
+		this.authorComparator = other.authorComparator;
+	}
+	
 
 	
 	/**

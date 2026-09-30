@@ -142,6 +142,103 @@ Class: org.filteredpush.qc.sciname.DwCSciNameDQ
 
 Implements the TDWG BDQ TG2 Scientific Name (NAME) tests.
 
+## Remote service client configuration (WoRMS, IRMNG)
+
+WoRMSService and IRMNGService share a single configured HTTP client per service, which:
+
+- identifies itself with the User-Agent `FilteredPush-sci_name_qc/{version} (+https://github.com/FilteredPush/sci_name_qc)`,
+- reuses connections (connection pooling and keep-alive) and has explicit connect, read, and write timeouts,
+- limits the number of concurrent in-flight requests to each service, and the minimum interval between requests, 
+  so that many concurrent callers (e.g. multithreaded test execution) produce a throttled stream of requests rather than a burst,
+- retries only plausibly transient failures (HTTP 408, 429, 500, 502, 503, 504, and connection failures), with exponential 
+  backoff and jitter, honoring a `Retry-After` header, and does not retry other failures (e.g. 400, 401, 403, 404),
+- retries each call to the service separately (so, for example, a failed habitat lookup does not resend the search by name), 
+  for `validate()` and for the static lookup methods (`lookupTaxon`, `lookupTaxonByID`, `lookupGenus`, `lookupTaxonAtRank`, 
+  `simpleNameSearch`, `nameComparisonSearch`), which report failures as an `ApiException` carrying the HTTP status code,
+- caches the results of `validate()` (keyed on scientific name, authorship, and kingdom), of searches by name, and of record 
+  lookups by AphiaID/IRMNG_ID (used for habitat lookups and `lookupTaxonByID`), shared by `validate()` and the static lookup 
+  methods, so repeated lookups are not resent to the service,
+- makes a single request when several threads look up the same value at once, sharing the result between them,
+- remembers a failed lookup for a period, during which the same lookup fails without being resent,
+- waits a limited time for a turn to make a request, rather than blocking indefinitely behind a slow service,
+- has a circuit breaker for each service: after a number of consecutive failed calls, calls fail without being sent 
+  (with a `ServiceUnavailableException`, a `ServiceException`) for a period, then a single trial call is allowed, 
+  and calls resume if it succeeds.  Responses with non-transient error statuses (e.g. 404) show the service is responding, 
+  so do not count as failures.
+
+Failures are logged, and reported in `ServiceException` messages, with the HTTP status code, request URL, `Retry-After` and 
+`Content-Type` headers, and (truncated) response body, or with the type of connection failure.  `ServiceException.getHttpStatusCode()` 
+returns the HTTP status code (or 0 for connection and parsing failures).
+
+These settings can be changed with java system properties, or with the static setters on `org.filteredpush.qc.sciname.services.ServiceClientConfig`:
+
+| System property | Default | Meaning |
+| --- | --- | --- |
+| `sci_name_qc.userAgent` | `FilteredPush-sci_name_qc/{version} (+https://github.com/FilteredPush/sci_name_qc)` | User-Agent header |
+| `sci_name_qc.maxRetries` | 3 | Retries after a transient failure (total attempts = maxRetries + 1) |
+| `sci_name_qc.backoffBaseMillis` | 500 | Base delay for exponential backoff |
+| `sci_name_qc.backoffMaxMillis` | 8000 | Maximum backoff delay |
+| `sci_name_qc.maxRetryAfterMillis` | 30000 | Longest `Retry-After` that will be waited for, longer requests fail without retrying |
+| `sci_name_qc.maxConcurrentRequests` | 2 | Maximum concurrent in-flight requests to each service |
+| `sci_name_qc.minRequestIntervalMillis` | 100 | Minimum interval between the start of requests to each service (0 for none) |
+| `sci_name_qc.connectTimeoutMillis` | 10000 | Connect timeout |
+| `sci_name_qc.readTimeoutMillis` | 30000 | Read timeout |
+| `sci_name_qc.writeTimeoutMillis` | 30000 | Write timeout |
+| `sci_name_qc.cacheSize` | 10000 | Maximum entries in each lookup cache, 0 disables caching |
+| `sci_name_qc.acquireTimeoutMillis` | 60000 | Longest wait for a turn to make a request, after which it fails without being sent |
+| `sci_name_qc.failureCacheMillis` | 60000 | How long a failed lookup is remembered, 0 to not remember failures |
+| `sci_name_qc.circuitBreakerThreshold` | 5 | Consecutive failed calls that trip the circuit breaker for a service, 0 to disable it |
+| `sci_name_qc.circuitBreakerOpenMillis` | 60000 | How long calls fail without being sent once the circuit breaker has tripped |
+
+The retry, backoff, cache size, failure cache, and circuit breaker settings take effect immediately (see below for how a change 
+to the failure cache applies to failures already remembered), the User-Agent, timeout, 
+concurrency, acquire timeout, and request interval settings are read when the client for a service is first used, so should be set before any lookups are made, for example:
+
+    java -Dsci_name_qc.maxConcurrentRequests=4 -Dsci_name_qc.maxRetries=5 -jar ...
+
+### Remembered failures (`sci_name_qc.failureCacheMillis`)
+
+When a lookup fails, after any retries, the failure is remembered for `sci_name_qc.failureCacheMillis` (default 60000 ms, one minute). 
+Until then, repeating the same lookup fails immediately without sending a request to the service.  This keeps a failing lookup 
+from being resent for every record that contains the same name.
+
+- **What is remembered:** failures after retries have been exhausted, including non-transient HTTP errors (e.g. 400, 403, 404) 
+  and responses that could not be parsed.  Failures are not remembered for calls that were never sent (the circuit breaker was 
+  open, or no turn to make the request became available in time), or that were interrupted.
+- **What counts as the same lookup:** failures are remembered for each cached lookup separately: 
+  - `validate()`: the scientific name, authorship, and kingdom;
+  - searches by name: the name and the marine only flag;
+  - record lookups: the AphiaID or IRMNG_ID.
+  
+  Because `validate()` and the static lookup methods share the searches by name, a failed search for a name also affects the 
+  other lookups of that name (e.g. `validate()` with a different authorship, or `lookupTaxon()`), until the failure expires.
+- **How a remembered failure is reported:** as a `ServiceUnavailableException` (a `ServiceException`), with a message starting 
+  `Lookup failed recently, not resending for another N ms:` followed by the original failure, and with the original HTTP status 
+  code from `getHttpStatusCode()`.  The static lookup methods report it as an `ApiException` with that status code.  The BDQ tests 
+  report it, as they report other service failures, as EXTERNAL_PREREQUISITES_NOT_MET, with the message in the result comments.  
+  A WoRMS 403 (a name WoRMS will not look up) is still treated as no match when it is remembered.
+- **The drawback:** if the service recovers during the period, lookups that failed shortly before still fail until their failures 
+  expire.
+
+Setting `sci_name_qc.failureCacheMillis=0` turns this off, so every lookup that is not answered from the cache is sent to the 
+service again, with its retries:
+
+    java -Dsci_name_qc.failureCacheMillis=0 -jar ...
+
+or, in code, `ServiceClientConfig.setFailureCacheMillis(0L);`.  The change applies to failures that happen after it is made.  
+Failures already remembered continue to apply until they expire, or until they are cleared with `WoRMSService.clearCaches()` or 
+`IRMNGService.clearCaches()`, which clear both the cached results and the remembered failures for that service.
+
+Related settings work independently of `sci_name_qc.failureCacheMillis`:
+
+- `sci_name_qc.cacheSize=0` stops results (including "no match" results) being cached, but failures are still remembered (unless 
+  `sci_name_qc.failureCacheMillis=0` is also set), and threads looking up the same value at the same moment still share a single request.
+- The circuit breaker still stops calls to a service that keeps failing, whatever `sci_name_qc.failureCacheMillis` is set to.  
+  `sci_name_qc.circuitBreakerThreshold=0` disables it.  An open circuit breaker can be closed with 
+  `CircuitBreaker.forService(WoRMSService.SERVICE_NAME).reset()` (or `IRMNGService.SERVICE_NAME`), or `CircuitBreaker.resetAll()`.
+- With both `sci_name_qc.failureCacheMillis=0` and `sci_name_qc.circuitBreakerThreshold=0`, each lookup against a service that is 
+  down makes all of its attempts (by default four, with backoff between them) before failing.
+
 
 # Include using maven
 
