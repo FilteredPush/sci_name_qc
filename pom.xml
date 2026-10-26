@@ -31,6 +31,24 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
+	<dependencyManagement>
+		<!-- versions with fixes for known vulnerabilities in the transitive jackson and commons-io;
+		the cfweblib jar supplies these to the other FilteredPush QC jars in ColdFusion -->
+		<dependencies>
+			<dependency>
+				<groupId>com.fasterxml.jackson</groupId>
+				<artifactId>jackson-bom</artifactId>
+				<version>2.18.11</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.22.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.datakurator</groupId>
@@ -317,12 +335,26 @@
 								${project.artifactId}-${project.version}-${git.commit.id.abbrev}-cfweblib.jar</outputFile>
 							<artifactSet>
 								<excludes>
-									<exclude>axis:axis</exclude>
-									<exclude>commons:commons-logging</exclude>
-									<!--
-									<exclude>org.apache.axis:axis-jaxrpc</exclude>
-									<exclude>org.apache.axis:axis-saaj</exclude>
-									-->
+									<!-- provided by ColdFusion cfusion/lib; bundling would override its copy for the whole webapp -->
+									<exclude>org.apache.logging.log4j:log4j-api</exclude>
+									<exclude>org.apache.logging.log4j:log4j-core</exclude>
+									<exclude>org.apache.logging.log4j:log4j-jcl</exclude>
+									<exclude>org.slf4j:slf4j-api</exclude>
+									<exclude>commons-logging:commons-logging</exclude>
+									<exclude>org.apache.commons:commons-csv</exclude>
+									<exclude>commons-beanutils:commons-beanutils</exclude>
+									<exclude>org.dom4j:dom4j</exclude>
+									<exclude>javax.activation:activation</exclude>
+									<exclude>javax.mail:mail</exclude>
+									<exclude>xerces:xercesImpl</exclude>
+									<!-- provided by MCZbase WEB-INF/lib (guava-31.1-jre, failureaccess-1.0.1) -->
+									<exclude>com.google.guava:guava</exclude>
+									<exclude>com.google.guava:failureaccess</exclude>
+									<exclude>com.google.guava:listenablefuture</exclude>
+									<!-- compile time only -->
+									<exclude>org.projectlombok:lombok</exclude>
+									<!-- from gbif-api, not used by sci_name_qc; GeoTools in the geo_ref_qc cfweblib jar provides jts-core 1.19 -->
+									<exclude>org.locationtech.jts:jts-core</exclude>
 								</excludes>
 							</artifactSet>
 							<filters>
