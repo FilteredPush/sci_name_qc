@@ -339,14 +339,13 @@
 									<exclude>org.apache.logging.log4j:log4j-api</exclude>
 									<exclude>org.apache.logging.log4j:log4j-core</exclude>
 									<exclude>org.apache.logging.log4j:log4j-jcl</exclude>
-									<exclude>org.slf4j:slf4j-api</exclude>
 									<exclude>org.apache.commons:commons-csv</exclude>
 									<exclude>commons-beanutils:commons-beanutils</exclude>
 									<exclude>org.dom4j:dom4j</exclude>
 									<exclude>javax.activation:activation</exclude>
 									<exclude>javax.mail:mail</exclude>
 									<exclude>xerces:xercesImpl</exclude>
-									<!-- commons-logging is bundled: classes in WEB-INF/lib can't load ColdFusion's copy -->
+									<!-- commons-logging and slf4j-api are bundled: classes in WEB-INF/lib can't load ColdFusion's copies -->
 									<!-- provided by MCZbase WEB-INF/lib (guava-33.7.2-jre, failureaccess-1.0.3) -->
 									<exclude>com.google.guava:guava</exclude>
 									<exclude>com.google.guava:failureaccess</exclude>
