@@ -73,7 +73,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_PHYLUM_FOUND", description="Does the value of dwc:phylum occur at rank of Phylum in bdq:sourceAuthority?")
     @Provides("eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f/2022-03-25")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f-2022-03-25")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum is EMPTY; COMPLIANT if the value of dwc:phylum was found as a value at the rank of Phylum by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei], 'API endpoint' [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<ComplianceValue> validationPhylumFound(@ActedUpon("dwc:phylum") String phylum) {
     	return validationPhylumFound(phylum, null);
@@ -91,7 +91,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_FAMILY_FOUND", description="Does the value of dwc:family occur at rank of Family in bdq:sourceAuthority?")
     @Provides("3667556d-d8f5-454c-922b-af8af38f613c")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/3667556d-d8f5-454c-922b-af8af38f613c/2023-09-17")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/3667556d-d8f5-454c-922b-af8af38f613c-2023-09-17")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:family is EMPTY; COMPLIANT if the value of dwc:family was found as a value at the rank of Family by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationFamilyFound(@ActedUpon("dwc:family") String family) {
     	return validationFamilyFound(family, null);
@@ -109,7 +109,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_SCIENTIFICNAME_FOUND", description="Is there a match of the contents of dwc:scientificName with bdq:sourceAuthority?")
     @Provides("3f335517-f442-4b98-b149-1e87ff16de45")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/3f335517-f442-4b98-b149-1e87ff16de45/2023-09-17")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/3f335517-f442-4b98-b149-1e87ff16de45-2023-09-17")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName is EMPTY; COMPLIANT if there is a match of the contents of dwc:scientificName with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationScientificnameFound(@ActedUpon("dwc:scientificName") String scientificName) {
         return validationScientificnameFound(scientificName, null);
@@ -152,7 +152,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Amendment(label="AMENDMENT_TAXONID_FROM_TAXON", description="Propose amendment to the value of dwc:taxonID if it can be unambiguously resolved from bdq:sourceAuthority using the available taxon terms.")
     @Provides("431467d6-9b4b-48fa-a197-cd5379f5e889")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/431467d6-9b4b-48fa-a197-cd5379f5e889/2023-07-04")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/431467d6-9b4b-48fa-a197-cd5379f5e889-2023-09-17")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available;  INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonID is not EMPTY or if all of dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, and dwc:cultivarEpithet are EMPTY, FILLED_IN the value of taxonID for an unambiguously resolved single taxon record in the bdq:sourceAuthority through (1) the value of dwc:scientificName or (2) if dwc:scientificName is EMPTY through values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship and dwc:cultivarEpithet, or (3) if ambiguity produced by multiple matches in (1) or (2) can be disambiguated to a single Taxon using the values of dwc:subtribe, dwc:tribe, dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID, dwc:taxonomicRank, and dwc:vernacularName; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
 	public static  DQResponse<AmendmentValue> amendmentTaxonidFromTaxon(
 			@ActedUpon("dwc:taxonID") String taxonID, 
@@ -227,7 +227,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_TAXON_UNAMBIGUOUS", description="Can the taxon be unambiguously resolved from bdq:sourceAuthority using the available taxon terms?")
     @Provides("4c09f127-737b-4686-82a0-7c8e30841590")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/4c09f127-737b-4686-82a0-7c8e30841590/2023-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/4c09f127-737b-4686-82a0-7c8e30841590-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of dwc:scientificNameID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:scientificNameID references a single taxon record in the bdq:sourceAuthority, or (2) dwc:scientificNameID is empty and dwc:scientificName references a single taxon record in the bdq:sourceAuthority, or (3) if dwc:scientificName and dwc:scientificNameID are EMPTY and if a combination of the values of the terms dwc:genericName, dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously resolved to a unique taxon in the bdq:sourceAuthority, or (4) if ambiguity produced by multiple matches in (2) or (3) can be disambiguated to a unique Taxon using the values of dwc:tribe, dwc:subtribe, dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:superfamily, dwc:order, dwc:class, dwc:phylum, dwc:kingdom, dwc:higherClassification, dwc:taxonID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationTaxonUnambiguous(
     		@ActedUpon("dwc:class") String taxonomic_class, 
@@ -268,7 +268,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * where bdq:sourceAuthority is the default GBIF Backbone Taxonomy.
      *
      * Provides: #71 AMENDMENT_SCIENTIFICNAME_FROM_TAXONID
-     * Version: 2023-12-13
+     * Version: 2024-08-18
      *
      * @param scientificNameID the provided dwc:scientificNameID to evaluate
      * @param scientificName the provided dwc:scientificName to evaluate
@@ -276,7 +276,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Amendment(label="AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID", description="Propose an amendment to the value of dwc:scientificName using the dwc:scientificNameID value from bdq:sourceAuthority.")
     @Provides("f01fb3f9-2f7e-418b-9f51-adf50f202aea")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f01fb3f9-2f7e-418b-9f51-adf50f202aea/2023-12-13")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/f01fb3f9-2f7e-418b-9f51-adf50f202aea-2024-08-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY, the value of dwc:scientificNameID is ambiguous or dwc:scientificName was not EMPTY; FILLED_IN the value of dwc:scientificName if the value of scientificNameID could be unambiguously interpreted as a value in bdq:sourceAuthority; otherwise NOT_AMENDED. bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' [https://doi.org/10.15468/39omei],API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]")
     public static DQResponse<AmendmentValue> amendmentScientificnameFromTaxonid(
     		@Consulted("dwc:scientificNameID") String scientificNameID, 
@@ -298,7 +298,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_CLASS_FOUND", description="Does the value of dwc:class occur at rank of Class in bdq:sourceAuthority?")
     @Provides("2cd6884e-3d14-4476-94f7-1191cfff309b")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2cd6884e-3d14-4476-94f7-1191cfff309b/2023-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/2cd6884e-3d14-4476-94f7-1191cfff309b-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:class is EMPTY; COMPLIANT if the value of dwc:class was found as a value at the rank of Class in the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationClassFound(@ActedUpon("dwc:class") String taxonomic_class) {
     	return validationClassFound(taxonomic_class, null);
@@ -316,7 +316,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_KINGDOM_FOUND", description="Does the value of dwc:kingdom occur at rank of Kingdom in bdq:sourceAuthority?")
     @Provides("125b5493-052d-4a0d-a3e1-ed5bf792689e")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/125b5493-052d-4a0d-a3e1-ed5bf792689e/2023-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/125b5493-052d-4a0d-a3e1-ed5bf792689e-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:kingdom is EMPTY; COMPLIANT if the value of dwc:kingdom was found as a value at the rank of kingdom by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationKingdomFound(@ActedUpon("dwc:kingdom") String kingdom) {
         return validationKingdomFound(kingdom, null);
@@ -335,7 +335,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_ORDER_FOUND", description="Does the value of dwc:order occur at rank of Order in bdq:sourceAuthority?")
     @Provides("81cc974d-43cc-4c0f-a5e0-afa23b455aa3")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/81cc974d-43cc-4c0f-a5e0-afa23b455aa3/2023-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/81cc974d-43cc-4c0f-a5e0-afa23b455aa3-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:order is EMPTY; COMPLIANT if the value of dwc:order was found as a value at the rank of Order by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationOrderFound(@ActedUpon("dwc:order") String order) {
     	return validationOrderFound(order,null);
@@ -354,7 +354,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_GENUS_FOUND", description="Does the value of dwc:genus occur at the rank of Genus in bdq:sourceAuthority?")
     @Provides("f2ce7d55-5b1d-426a-b00e-6d4efe3058ec")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/f2ce7d55-5b1d-426a-b00e-6d4efe3058ec/2023-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/f2ce7d55-5b1d-426a-b00e-6d4efe3058ec-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available;  INTERNAL_PREREQUISITES_NOT_MET if dwc:genus is EMPTY; COMPLIANT if the value of dwc:genus was found as a value at the rank of genus by the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationGenusFound(@ActedUpon("dwc:genus") String genus) {
     	return validationGenusFound(genus, null);
@@ -373,7 +373,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_TAXONRANK_STANDARD", description="Does the value of dwc:taxonRank occur in bdq:sourceAuthority?")
     @Provides("7bdb13a4-8a51-4ee5-be7f-20693fdb183e")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/7bdb13a4-8a51-4ee5-be7f-20693fdb183e/2023-09-18")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/7bdb13a4-8a51-4ee5-be7f-20693fdb183e-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; COMPLIANT if the value of dwc:taxonRank is in the bdq:sourceAuthority; otherwise NOT_COMPLIANT. bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]}")
     public static DQResponse<ComplianceValue> validationTaxonrankStandard(@ActedUpon("dwc:taxonRank") String taxonRank) {
        DQResponse<ComplianceValue> result = new DQResponse<ComplianceValue>();
@@ -392,7 +392,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
     */
    @Amendment(label="AMENDMENT_TAXONRANK_STANDARDIZED", description="Propose amendment to the value of dwc:taxonRank using bdq:sourceAuthority.")
    @Provides("e39098df-ef46-464c-9aef-bcdeee2a88cb")
-   @ProvidesVersion("https://rs.tdwg.org/bdq/terms/e39098df-ef46-464c-9aef-bcdeee2a88cb/2023-09-18")
+   @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/e39098df-ef46-464c-9aef-bcdeee2a88cb-2023-09-18")
    @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL PREREQUISITES_NOT_MET if dwc:taxonRank is EMPTY; AMENDED the value of dwc:taxonRank if it can be unambiguously matched to a term in bdq:sourceAuthority; otherwise NOT_AMENDED bdq:sourceAuthority default = 'GBIF Vocabulary: Taxonomic Rank' {[https://api.gbif.org/v1/vocabularies/TaxonRank/concepts]} {dwc:taxonRank [https://dwc.tdwg.org/list/#dwc_taxonRank]}")
    public static DQResponse<AmendmentValue> amendmentTaxonrankStandardized(@ActedUpon("dwc:taxonRank") String taxonRank) {
 	   return DwCSciNameDQ.amendmentTaxonrankStandardized(taxonRank, null);
@@ -405,7 +405,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      * where bdq:sourceAuthority is the default GBIF Backbone Taxonomy.
      *
      * Provides: #123 VALIDATION_CLASSIFICATION_CONSISTENT
-     * Version: 2023-07-13
+     * Version: 2023-09-18
      *
      * @param kingdom the provided dwc:kingdom to evaluate
      * @param phylum the provided dwc:phylum to evaluate
@@ -421,7 +421,7 @@ public class DwCSciNameDQDefaults extends DwCSciNameDQ {
      */
     @Validation(label="VALIDATION_CLASSIFICATION_CONSISTENT", description="Is the combination of higher classification taxonomic terms consistent using bdq:sourceAuthority?")
     @Provides("2750c040-1d4a-4149-99fe-0512785f2d5f")
-    @ProvidesVersion("https://rs.tdwg.org/bdq/terms/2750c040-1d4a-4149-99fe-0512785f2d5f/2023-07-13")
+    @ProvidesVersion("https://rs.tdwg.org/bdqtest/terms/version/2750c040-1d4a-4149-99fe-0512785f2d5f-2023-09-18")
     @Specification("EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; INTERNAL_PREREQUISITES_NOT_MET if all of the fields dwc:kingdom dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus are EMPTY; COMPLIANT if the combination of values of higher classification taxonomic terms (dwc:kingdom, dwc:phylum, dwc:class, dwc:order, dwc:superfamily, dwc:family, dwc:subfamily, dwc:tribe, dwc:subtribe, dwc:genus) are consistent with the bdq:sourceAuthority; otherwise NOT_COMPLIANT bdq:sourceAuthority default = 'GBIF Backbone Taxonomy' {[https://doi.org/10.15468/39omei]} {API endpoint [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=]}")
     public static DQResponse<ComplianceValue> validationClassificationConsistent(
     		@ActedUpon("dwc:kingdom") String kingdom, 
