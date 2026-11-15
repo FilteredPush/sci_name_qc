@@ -46,17 +46,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationPhylumFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:phylum 
         // is EMPTY; COMPLIANT if the value of dwc:phylum was found 
-        // as a value at the rank of Phylum by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Phylum by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -96,17 +96,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationFamilyFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:family 
         // is EMPTY; COMPLIANT if the value of dwc:family was found 
-        // as a value at the rank of Family by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Family by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -145,13 +145,13 @@ public class DwCSciNameDQ_IT {
 	@Test
 	public void testValidationScientificnameFound() {
 		
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificName 
         // is EMPTY; COMPLIANT if there is a match of the contents 
-        // of dwc:scientificName with the bdq:sourceAuthority; otherwise 
+        // of dwc:scientificName with the bdqval:sourceAuthority; otherwise 
         // NOT_COMPLIANT
 		
-        // bdq:sourceAuthority default = "GBIF Backbone 
+        // bdqval:sourceAuthority default = "GBIF Backbone 
         // Taxonomy" [https://doi.org/10.15468/39omei], "API endpoint" 
         // [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
@@ -237,13 +237,13 @@ public class DwCSciNameDQ_IT {
 	public void testAmendmentTaxonidFromTaxon() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID 
         // is not EMPTY or if all of dwc:scientificName, dwc:genericName, 
         // dwc:specificEpithet, dwc:infraspecificEpithet, dwc:scientificNameAuthorship, 
         // and dwc:cultivarEpithet are EMPTY, FILLED_IN the value of 
         // dwc:scientificNameID for an unambiguously resolved single 
-        // taxon record in the bdq:sourceAuthority through (1) the 
+        // taxon record in the bdqval:sourceAuthority through (1) the 
         // value of dwc:scientificName or (2) if dwc:scientificName 
         // is EMPTY through values of the terms dwc:genericName, dwc:specificEpithet, 
         // dwc:infraspecificEpithet, dwc:scientificNameAuthorship and 
@@ -258,7 +258,7 @@ public class DwCSciNameDQ_IT {
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
         // [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 		
@@ -761,19 +761,19 @@ public class DwCSciNameDQ_IT {
 	@Test
 	public void testValidationTaxonUnmbiguous() {
 		
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if all 
         // of dwc:taxonID, dwc:scientificName, dwc:genericName, dwc:specificEpithet, 
         // dwc:infraspecificEpithet, dwc:scientificNameAuthorship, 
         // dwc:cultivarEpithet are EMPTY; COMPLIANT if (1) dwc:taxonId 
-        // references a single taxon record in the bdq:sourceAuthority, 
+        // references a single taxon record in the bdqval:sourceAuthority, 
         // or (2) dwc:taxonID is empty and dwc:scientificName references 
-        // a single taxon record in the bdq:sourceAuthority, or (3) 
+        // a single taxon record in the bdqval:sourceAuthority, or (3) 
         // if dwc:scientificName and dwc:taxonID are EMPTY and if a 
         // combination of the values of the terms dwc:genericName, 
         // dwc:specificEpithet, dwc:infraspecificEpithet, dwc:cultivarEpithet, 
         // dwc:taxonRank, and dwc:scientificNameAuthorship can be unambiguously 
-        // resolved to a unique taxon in the bdq:sourceAuthority, or 
+        // resolved to a unique taxon in the bdqval:sourceAuthority, or 
         // (4) if ambiguity produced by multiple matches in (2) or 
         // (3) can be disambiguated to a unique Taxon using the values 
         // of dwc:subgenus, dwc:genus, dwc:subfamily, dwc:family, dwc:order, 
@@ -781,7 +781,7 @@ public class DwCSciNameDQ_IT {
         // dwc:scientificNameID, dwc:acceptedNameUsageID, dwc:originalNameUsageID, 
         // dwc:taxonConceptID and dwc:vernacularName; otherwise NOT_COMPLIANT 
 		
-        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
+        // bdqval:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
         // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
 		
 		SciNameSourceAuthority defaultAuthorityAuth = new SciNameSourceAuthority();
@@ -1367,18 +1367,18 @@ public class DwCSciNameDQ_IT {
 	@Test
 	public void testAmendmentScientificnameFromScientificnameid() {
 		
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority is not available; 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority is not available; 
 		// INTERNAL_PREREQUISITES_NOT_MET if dwc:scientificNameID is EMPTY, the value 
 		// of dwc:scientificNameID is ambiguous or dwc:scientificName was not EMPTY; 
 		// FILLED_IN the value of dwc:scientificName if the value of scientificNameID 
-		// could be unambiguously interpreted as a value in bdq:sourceAuthority; 
+		// could be unambiguously interpreted as a value in bdqval:sourceAuthority; 
 		// otherwise NOT_AMENDED
-        // bdq:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
+        // bdqval:sourceAuthority default = "GBIF Backbone Taxonomy" [https://doi.org/10.15468/39omei], 
         // "API endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = null;
 		try {
@@ -1464,17 +1464,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationClassFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:class 
         // is EMPTY; COMPLIANT if the value of dwc:class was found 
-        // as a value at the rank of Class in the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Class in the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -1514,17 +1514,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationKingdomFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:kingdom 
         // is EMPTY; COMPLIANT if the value of dwc:kingdom was found 
-        // as a value at the rank of kingdom by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of kingdom by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -1565,17 +1565,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationOrderFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:order 
         // is EMPTY; COMPLIANT if the value of dwc:order was found 
-        // as a value at the rank of Order by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Order by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -1616,17 +1616,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationGenusFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:genus 
         // is EMPTY; COMPLIANT if the value of dwc:genus was found 
-        // as a value at the rank of genus by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of genus by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
@@ -2004,17 +2004,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationTribeFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
         // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
-        // as a value at the rank of Tribe by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Tribe by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -2052,17 +2052,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationSuperfamilyFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
         // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
-        // as a value at the rank of Superfamily by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Superfamily by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
@@ -2099,17 +2099,17 @@ public class DwCSciNameDQ_IT {
 	public void testValidationSubtribeFound() {
 		
         // Specification
-        // EXTERNAL_PREREQUISITES_NOT_MET if the bdq:sourceAuthority 
+        // EXTERNAL_PREREQUISITES_NOT_MET if the bdqval:sourceAuthority 
         // is not available; INTERNAL_PREREQUISITES_NOT_MET if dwc:tribe 
         // is EMPTY; COMPLIANT if the value of dwc:tribe was found 
-        // as a value at the rank of Subtribe by the bdq:sourceAuthority; 
-        // otherwise NOT_COMPLIANT bdq:sourceAuthority default = "GBIF 
+        // as a value at the rank of Subtribe by the bdqval:sourceAuthority; 
+        // otherwise NOT_COMPLIANT bdqval:sourceAuthority default = "GBIF 
         // Backbone Taxonomy" [https://doi.org/10.15468/39omei], "API 
         // endpoint" [https://api.gbif.org/v1/species?datasetKey=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c&name=] 
         // 
 
         // Parameters. This test is defined as parameterized.
-        // bdq:sourceAuthority default="GBIF Backbone Taxonomy"
+        // bdqval:sourceAuthority default="GBIF Backbone Taxonomy"
 		
 		SciNameSourceAuthority authority = new SciNameSourceAuthority();
 		
