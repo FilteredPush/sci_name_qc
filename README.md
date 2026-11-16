@@ -129,6 +129,28 @@ matches of those names against the authority.
                           WoRMS+ZooBank).
      -t,--test            Test connectivity with an example name
 
+### GbifToCol: Catalogue of Life identifiers for GBIF Backbone Taxonomy identifiers
+
+Finds the Catalogue of Life identifier, `col:{id}` (registered at identifiers.org and Bioregistry, e.g.
+https://identifiers.org/col:4QHKG), for each GBIF Backbone Taxonomy identifier (`gbif:{key}`, or a link such
+as `https://www.gbif.org/species/{key}`) in a file, one per line or in the first column of a CSV file.  The name
+is looked up in GBIF, then the same name at the same rank and in the same kingdom in the Catalogue of Life, and
+the authorships are compared (with IPNI standard forms for botanical authors).  The identifier is that of the
+name given: a GBIF synonym maps to the COL name usage of the synonym, not to COL's accepted name.  An
+identifier is proposed only for a single match (EXACT, SAME_AUTHORSHIP, or NAME_ONLY where one source has no
+authorship); otherwise the match is AMBIGUOUS, AUTHORSHIP_DIFFERS, or NOT_FOUND, with the candidates in the remark.
+
+    $ java -cp sci_name_qc-{version}-{commit}-executable.jar org.filteredpush.qc.sciname.GbifToCol -h
+    usage: GbifToCol
+     -f,--file <arg>      Input file: GBIF identifiers (gbif:{key},
+                          https://www.gbif.org/species/{key}), one per line, or
+                          in the first column of a CSV file.
+     -h,--help            Print this message.
+     -o,--output <arg>    Output CSV file, default gbif_to_col.csv.
+     -r,--release <arg>   Catalogue of Life release: Latest (default), or a
+                          ChecklistBank dataset key or release alias, e.g.
+                          317005, COL25.
+
 #### Processing output to sql
 
 Example regex (in vim) to convert csv output to sql queries to add WoRMS guids to MCZbase:
