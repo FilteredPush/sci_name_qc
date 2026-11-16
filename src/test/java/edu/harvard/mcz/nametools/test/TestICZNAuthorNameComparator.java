@@ -35,10 +35,13 @@ public class TestICZNAuthorNameComparator {
 		assertEquals(NameComparison.MATCH_EXACTADDSYEAR, comparator.compare("Reeve","Reeve, 1843").getMatchType());
 		assertEquals(NameComparison.MATCH_EXACTMISSINGYEAR, comparator.compare("(Smith, 1880)","(Smith)").getMatchType());
 		
-		assertEquals(NameComparison.MATCH_WEAKEXACTYEAR, comparator.compare("(Von Born, 1778)", "(Born, 1778)").getMatchType());
+		// The particle von may be added or omitted: Ignaz von Born is cited as Born (tdwg/bdq#345 work on authorship variants).
+		assertEquals(NameComparison.MATCH_SAMEBUTABBREVIATED, comparator.compare("(Von Born, 1778)", "(Born, 1778)").getMatchType());
 		
-		assertEquals(NameComparison.MATCH_SIMILAREXACTYEAR, comparator.compare("(v Born, 1778)", "(Born, 1778)").getMatchType());
-		assertEquals(NameComparison.MATCH_SIMILAREXACTYEAR, comparator.compare("Ferussac, 1822", "Férussac, 1822").getMatchType());
+		// v (for von) is part of a compound surname whose last part is Born.
+		assertEquals(NameComparison.MATCH_SAMEBUTABBREVIATED, comparator.compare("(v Born, 1778)", "(Born, 1778)").getMatchType());
+		// Differ only in an accent: the same author.
+		assertEquals(NameComparison.MATCH_SAMEBUTABBREVIATED, comparator.compare("Ferussac, 1822", "Férussac, 1822").getMatchType());
 		
 		assertEquals(NameComparison.MATCH_EXACTDIFFERENTYEAR, comparator.compare("(Carpenter, 1864)", "(Carpenter, 1857)").getMatchType());
 		

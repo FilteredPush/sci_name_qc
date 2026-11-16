@@ -12,6 +12,10 @@
     <Logger name="org.filteredpush.qc.sciname" level="DEBUG">
       <AppenderRef ref="SciNameQCLog"/>
     </Logger>
+    <!-- Name and authorship comparisons: debug logging off, except in tests (src/test/resources/log4j2-test.xml). -->
+    <Logger name="edu.harvard.mcz.nametools" level="WARN">
+      <AppenderRef ref="SciNameQCLog"/>
+    </Logger>
     <Logger name="org.gbif.nameparser.NameParserGBIF" level="WARN">
       <AppenderRef ref="SciNameQCLog"/>
     </Logger>

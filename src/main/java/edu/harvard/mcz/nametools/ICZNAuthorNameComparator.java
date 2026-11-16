@@ -17,6 +17,9 @@
  */
 package edu.harvard.mcz.nametools;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Make comparisons between pairs of scientificNameAuthor strings, under the assumption
@@ -26,6 +29,8 @@ package edu.harvard.mcz.nametools;
  * @version $Id: $Id
  */
 public class ICZNAuthorNameComparator extends AuthorNameComparator {
+
+	private static final Log logger = LogFactory.getLog(ICZNAuthorNameComparator.class);
 	
 	/**
 	 *  Threshold of similarity (0-1) over which strong similarity is asserted.
@@ -124,9 +129,9 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 						String testTwo = toOtherAuthor.replaceFirst("^\\(", "");
 						testTwo = testTwo.replace(testOne, "");
 						String pattern = "^[A-Z]\\.([ ]{0,1}[A-Z]\\.){0,1} $";
-						System.out.println(pattern);
-						System.out.println(testOne);
-						System.out.println(testTwo);
+						logger.debug(pattern);
+						logger.debug(testOne);
+						logger.debug(testTwo);
 						if (testTwo.matches(pattern)) { 
 							result.setMatchType(NameComparison.MATCH_ADDSINITIALEXACTYEAR);
 						}
@@ -149,6 +154,13 @@ public class ICZNAuthorNameComparator extends AuthorNameComparator {
 						    result.setMatchType(NameComparison.MATCH_SAMEBUTABBREVIATED);
 						}
 					}					
+					// Abbreviated surnames, added or removed initials or particles (Lam. and Lamarck,
+					// J.B. de Lamarck and Lamarck), with the same year (or neither with a year).
+					boolean sameYears = similarityYear==1d || (!ICZNAuthorNameComparator.calculateHasYear(anAuthor) && !ICZNAuthorNameComparator.calculateHasYear(toOtherAuthor));
+					if (parenSame && sameYears && similarityAlpha < 1d && !NameComparison.isPlausibleAuthorMatch(result.getMatchType())
+							&& AuthorNameComparator.sameAuthorsAbbreviated(anAuthor, toOtherAuthor)) {
+						result.setMatchType(NameComparison.MATCH_SAMEBUTABBREVIATED);
+					}
 					if (!parenSame && (similarityYear==1d && similarityAlpha==1d)) { 
 						result.setMatchType(NameComparison.MATCH_PARENTHESIESDIFFER);
 					}

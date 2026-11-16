@@ -12,6 +12,10 @@
     <Logger name="org.filteredpush.qc.sciname" level="DEBUG" additivity="false">
       <AppenderRef ref="Console"/>
     </Logger>
+    <!-- Name and authorship comparisons: logged to standard out when running tests (e.g. individually in an IDE). -->
+    <Logger name="edu.harvard.mcz.nametools" level="DEBUG" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
     <Logger name="org.gbif.nameparser.NameParserGBIF" level="WARN">
       <AppenderRef ref="Console"/>
     </Logger>

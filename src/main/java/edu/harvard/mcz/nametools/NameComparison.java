@@ -102,6 +102,12 @@ public class NameComparison {
      * between the strings can be explained by differences in abbreviation or addition/removal of initials.
      */
 	public static final String MATCH_SAMEBUTABBREVIATED = "Same Author, but abbreviated differently.";
+	/**
+	 * Botanical authorship strings that are the same once the optional ex authors (the part before "ex") and
+	 * sanctioning authors (the part after ":") are removed, e.g. "Planch. ex F.Muell." and "F.Muell.",
+	 * "(Pers. : Fr.) P.Kumm." and "(Pers.) P.Kumm.".
+	 */
+	public static final String MATCH_EXORSANCTIONINGOMITTED = "Same Author, ex or sanctioning author omitted";
 	
 	/** Constant <code>SNMATCH_SUBGENUS="Same name, but with subgenus present in"{trunked}</code> */
 	public static final String SNMATCH_SUBGENUS = "Same name, but with subgenus present in one case.";
@@ -279,6 +285,7 @@ public class NameComparison {
 				match.equals(MATCH_EXACT_BRACKETS) || 
 				match.equals(MATCH_EXACTADDSYEAR) ||
 				match.equals(MATCH_SAMEBUTABBREVIATED) ||
+				match.equals(MATCH_EXORSANCTIONINGOMITTED) ||
 				match.equals(MATCH_L) ||
 				match.equals(MATCH_L_EXACTYEAR) ||
 				match.equals(MATCH_SOWERBYEXACTYEAR) ||

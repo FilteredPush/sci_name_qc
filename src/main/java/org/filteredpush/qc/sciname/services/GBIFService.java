@@ -639,7 +639,6 @@ public class GBIFService implements Validator {
 		// TODO: Report not getting all records.
 		if (!gotAll) { 
 			logger.error("Incomplete Harvest");
-			System.out.println("Incomplete Harvest");
 		}
 		
 		return result;

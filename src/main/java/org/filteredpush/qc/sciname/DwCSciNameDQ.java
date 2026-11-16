@@ -318,8 +318,6 @@ public class DwCSciNameDQ {
 				try {
 					logger.debug(toValidate.getScientificName());
 					logger.debug(toValidate.getAuthorship());
-					System.out.println(toValidate.getScientificName());
-					System.out.println(toValidate.getAuthorship());
 					NameUsage validationResponse = service.validate(toValidate);
 					if (validationResponse==null) { 
 						result.addComment("No Match found for dwc:scientificName["+scientificName+"] parsed as name=["+toValidate.getScientificName()+"], authorship=["+toValidate.getAuthorship()+"] in ["+sourceAuthority.getName()+"]");
@@ -328,8 +326,6 @@ public class DwCSciNameDQ {
 					} else { 
 						logger.debug(validationResponse.getMatchDescription());
 						logger.debug(validationResponse.getNameMatchDescription());
-						System.out.println(validationResponse.getMatchDescription());
-						System.out.println(validationResponse.getNameMatchDescription());
 						if (validationResponse.getMatchDescription().equals(NameComparison.MATCH_EXACT)) { 
 							result.addComment("Exact Match found for ["+scientificName+"] to ["+validationResponse.getGuid()+"]");
 							result.setResultState(ResultState.RUN_HAS_RESULT);
@@ -635,6 +631,9 @@ public class DwCSciNameDQ {
 									authorshipOK = true;
 								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_SAMEBUTABBREVIATED)) {
 									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+									authorshipOK = true;
+								} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXORSANCTIONINGOMITTED)) {
+									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with the same author, ex or sanctioning author omitted: " + authorshipComparison.getRemark());
 									authorshipOK = true;
 								} else {
 									result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " has different author: " + authorshipComparison.getRemark());
@@ -1047,6 +1046,9 @@ public class DwCSciNameDQ {
 											authorshipOK = true;
 										} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_SAMEBUTABBREVIATED)) {
 											result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with similar author: " + authorshipComparison.getRemark());
+											authorshipOK = true;
+										} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_EXORSANCTIONINGOMITTED)) {
+											result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with the same author, ex or sanctioning author omitted: " + authorshipComparison.getRemark());
 											authorshipOK = true;
 										} else if (authorshipComparison.getMatchType().equals(NameComparison.MATCH_L_EXACTYEAR) && taxon.getKingdom()=="Animalia") {
 											result.addComment("Match for provided taxon in " + sourceAuthority.getName() + " with ambiguous L., but same year: " + authorshipComparison.getRemark());

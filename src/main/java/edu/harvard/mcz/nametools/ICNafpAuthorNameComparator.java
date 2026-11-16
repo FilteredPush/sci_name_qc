@@ -78,6 +78,12 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
         result.setMatchType(NameComparison.MATCH_ERROR);
 		if (anAuthor==null || toOtherAuthor==null) {
 		    result.setMatchType(NameComparison.MATCH_ERROR);
+		} else if (!withoutYear(anAuthor).equals(anAuthor.trim()) || !withoutYear(toOtherAuthor).equals(toOtherAuthor.trim())) { 
+			// Botanical authorships do not include a year; a year given with one (e.g. "L. (1753)",
+			// "F.Muell., 1859") is a date of publication, not part of the authorship.
+			NameComparison withoutYears = compare(withoutYear(anAuthor), withoutYear(toOtherAuthor));
+			result.setMatchType(withoutYears.getMatchType());
+			result.setSimilarity(withoutYears.getSimilarity());
 		} else { 
 			if (anAuthor.equals(toOtherAuthor) 
 					|| anAuthor.toLowerCase().replaceAll("[ .,]", "").equals(toOtherAuthor.toLowerCase().replaceAll("[ .,]", ""))) 
@@ -124,12 +130,77 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 					if (!parenSame && (similarityAlpha==1d)) { 
 						result.setMatchType(NameComparison.MATCH_PARENTHESIESDIFFER);
 					}
+
+					// Abbreviated surnames in the same parts, in the same roles (Lam. and Lamarck).
+					if (parenSame && !NameComparison.isPlausibleAuthorMatch(result.getMatchType())
+							&& anAuthorBits.size()==toOtherAuthorBits.size()
+							&& anAuthor.contains(" ex ")==toOtherAuthor.contains(" ex ")
+							&& anAuthor.contains(":")==toOtherAuthor.contains(":")) {
+						boolean allParts = true;
+						for (int i=0; i<anAuthorBits.size() && allParts; i++) {
+							allParts = AuthorNameComparator.sameAuthorsAbbreviated(anAuthorBits.get(i), toOtherAuthorBits.get(i));
+						}
+						if (allParts) {
+							result.setMatchType(NameComparison.MATCH_SAMEBUTABBREVIATED);
+						}
+					}
+
+					// The authors before "ex" and the sanctioning authors after ":" may be omitted from a citation:
+					// one authorship has them, the other omits them.
+					String anCore = AuthorNameComparator.withoutExAndSanctioningAuthors(anAuthor);
+					String otherCore = AuthorNameComparator.withoutExAndSanctioningAuthors(toOtherAuthor);
+					boolean anHasOptional = !anCore.equals(anAuthor.trim().replaceAll("\\s+", " "));
+					boolean otherHasOptional = !otherCore.equals(toOtherAuthor.trim().replaceAll("\\s+", " "));
+					if (!NameComparison.isPlausibleAuthorMatch(result.getMatchType()) && (anHasOptional != otherHasOptional)) {
+						logger.debug(anCore + " / " + otherCore);
+						if (sameOrAbbreviatedParts(anCore, otherCore)) {
+							result.setMatchType(NameComparison.MATCH_EXORSANCTIONINGOMITTED);
+						}
+					}
 				}
 			}
 		}
 		return result;
 	}	
 	
+	/**
+	 * Are two botanical authorships the same, or the same with abbreviated surnames, part by part
+	 * (parenthetical authors, ex authors, sanctioning authors in the same positions)?
+	 *
+	 * @param anAuthor an authorship
+	 * @param toOtherAuthor another authorship
+	 * @return true if the same, allowing for abbreviation of the authors in each part
+	 */
+	static boolean sameOrAbbreviatedParts(String anAuthor, String toOtherAuthor) {
+		if (anAuthor.toLowerCase().replaceAll("[ .,]", "").equals(toOtherAuthor.toLowerCase().replaceAll("[ .,]", ""))) {
+			return true;
+		}
+		if (calculateHasParen(anAuthor)!=calculateHasParen(toOtherAuthor)
+				|| anAuthor.contains(" ex ")!=toOtherAuthor.contains(" ex ")
+				|| anAuthor.contains(":")!=toOtherAuthor.contains(":")) {
+			return false;
+		}
+		List<String> one = tokenizeAuthorship(anAuthor);
+		List<String> other = tokenizeAuthorship(toOtherAuthor);
+		if (one.size()!=other.size()) { return false; }
+		for (int i=0; i<one.size(); i++) {
+			if (!AuthorNameComparator.sameAuthorsAbbreviated(one.get(i), other.get(i))) { return false; }
+		}
+		return true;
+	}
+
+	/**
+	 * Remove a year of publication from a botanical authorship: "L. (1753)" gives "L.", "F.Muell., 1859" gives "F.Muell.".
+	 *
+	 * @param authorship a botanical authorship
+	 * @return the authorship without a year
+	 */
+	static String withoutYear(String authorship) {
+		return authorship.replaceAll("\\s*\\(\\s*1[5-9][0-9]{2}\\s*\\)", "")
+				.replaceAll(",?\\s*\\b1[5-9][0-9]{2}\\b", "")
+				.replaceAll("\\s+", " ").trim();
+	}
+
 	/**
 	 * Compare the two author strings to see if they look like differing abbreviations
 	 * of the same set of authors in the same semantic positions (comparing each

@@ -17,8 +17,16 @@
  */
 package edu.harvard.mcz.nametools;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,6 +41,8 @@ import org.apache.commons.lang3.StringUtils;
  * @version $Id: $Id
  */
 public abstract class AuthorNameComparator {
+
+	private static final Log logger = LogFactory.getLog(AuthorNameComparator.class);
 	
 	/**
 	 * Obtain the similarity threshold for comparison.
@@ -271,7 +281,7 @@ public abstract class AuthorNameComparator {
 			result.put("ICNafp", true);
 			result.put("ICZN", true);
 		}
- 		System.out.println(result.toString());
+ 		logger.debug(result.toString());
 		return result;
 	}	
 	
@@ -421,4 +431,156 @@ public abstract class AuthorNameComparator {
 		return result;
 	}
 	
+
+	/** Lower case particles of surnames, ignored in comparing abbreviated authorships. */
+	private static final Set<String> PARTICLES = new HashSet<String>(Arrays.asList(
+			"de", "d'", "du", "da", "di", "van", "von", "der", "den", "la", "le", "dos", "des"));
+
+	/**
+	 * One author in an authorship string: the surname (without particles) and the initials.
+	 */
+	static class AuthorPart {
+		final String surname;
+		final String initials;
+		AuthorPart(String surname, String initials) { this.surname = surname; this.initials = initials; }
+		@Override public String toString() { return initials + "|" + surname; }
+	}
+
+	private static String stripAccents(String value) {
+		return Normalizer.normalize(value, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+	}
+
+	/** Transliterate German umlauts (ü to ue), as in Müll. and Muell. */
+	private static String transliterateUmlauts(String value) {
+		return value.replace("ü", "ue").replace("ö", "oe").replace("ä", "ae")
+				.replace("Ü", "Ue").replace("Ö", "Oe").replace("Ä", "Ae");
+	}
+
+	/**
+	 * Split an authorship string (without regard to parentheses, ex or sanctioning authors, or year) into
+	 * its authors, each with its surname and initials, e.g. "J.B. de Lamarck &amp; Smith, 1822" gives
+	 * [JB|Lamarck, |Smith].
+	 *
+	 * @param authorship the authorship
+	 * @return the authors, in order
+	 */
+	static List<AuthorPart> authorParts(String authorship) {
+		List<AuthorPart> result = new ArrayList<AuthorPart>();
+		if (authorship==null) { return result; }
+		String a = authorship.replaceAll("[()\\[\\]0-9]", " ")
+				.replaceAll("\\s+(&|and|et)\\s+", ",").replace("&", ",").replace(";", ",")
+				.replaceAll("\\.", ". ");
+		for (String segment : a.split(",")) {
+			StringBuilder surname = new StringBuilder();
+			StringBuilder initials = new StringBuilder();
+			for (String token : segment.trim().split("\\s+")) {
+				if (token.isEmpty()) { continue; }
+				if (token.matches("^[A-Z][a-z]?\\.$") && surname.length()==0) {
+					initials.append(token.charAt(0));
+				} else if (PARTICLES.contains(token.toLowerCase())) {
+					// a particle, e.g. de, von
+				} else {
+					if (surname.length()>0) { surname.append(" "); }
+					surname.append(token);
+				}
+			}
+			if (surname.length()==0 && initials.length()>0) {
+				// a single abbreviation such as L.: the initial is the abbreviated surname
+				surname.append(initials.charAt(initials.length()-1)).append(".");
+				initials.setLength(initials.length()-1);
+			}
+			if (surname.length()>0) {
+				result.add(new AuthorPart(surname.toString(), initials.toString()));
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Is one surname an abbreviation of another, or the same: equal (ignoring case and accents), or
+	 * an abbreviation ending with a period whose stem, of at least two letters, begins the other
+	 * (e.g. Lam. and Lamarck, Desm. and Desmarest, F.Muell. and Mueller are not, Muell. and Mueller are).
+	 *
+	 * @param one a surname
+	 * @param other another surname
+	 * @return true if the same or one abbreviates the other
+	 */
+	static boolean sameOrAbbreviatedSurname(String one, String other) {
+		if (sameOrAbbreviated(stripAccents(one), stripAccents(other))
+				|| sameOrAbbreviated(transliterateUmlauts(one), transliterateUmlauts(other))) {
+			return true;
+		}
+		// A compound surname and its last part (de Monet de Lamarck and Lamarck).
+		String[] oneWords = one.trim().split("\\s+");
+		String[] otherWords = other.trim().split("\\s+");
+		if (oneWords.length!=otherWords.length && (oneWords.length==1 || otherWords.length==1)) {
+			// The leading words of the compound surname must be lower case (v for von) or of at least three
+			// letters (Monet), not a short capitalized word that may be a given name or initials (Ze).
+			String[] compound = oneWords.length>1 ? oneWords : otherWords;
+			for (int i=0; i<compound.length-1; i++) {
+				String word = compound[i];
+				if (!(word.equals(word.toLowerCase()) || word.replaceAll("[^\\p{L}]", "").length()>=3) || word.endsWith(".")) {
+					return false;
+				}
+			}
+			return sameOrAbbreviatedSurname(oneWords[oneWords.length-1], otherWords[otherWords.length-1]);
+		}
+		return false;
+	}
+
+	private static boolean sameOrAbbreviated(String one, String other) {
+		String a = stripAccents(one).toLowerCase().trim();
+		String b = stripAccents(other).toLowerCase().trim();
+		if (a.replace(".", "").equals(b.replace(".", ""))) { return true; }
+		for (String[] pair : new String[][] { { a, b }, { b, a } }) {
+			if (pair[0].endsWith(".")) {
+				String stem = pair[0].substring(0, pair[0].length()-1).replace(".", "");
+				if (stem.length()>=2 && stem.matches("^[a-z' -]+$") && pair[1].replace(".", "").startsWith(stem)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Do two authorship strings name the same authors, in the same order, where some surnames are
+	 * abbreviated, initials added or removed, or surname particles (de, von) added or removed, e.g.
+	 * "Lam., 1822" and "Lamarck, 1822", "(Desm., 1804)" and "(Desmarest, 1804)", "J.B. de Lamarck" and "Lamarck".
+	 * Initials given in both must agree.  Parentheses and years are not compared here.
+	 *
+	 * @param anAuthor an authorship
+	 * @param toOtherAuthor another authorship
+	 * @return true if the authors are the same, allowing for abbreviation
+	 */
+	public static boolean sameAuthorsAbbreviated(String anAuthor, String toOtherAuthor) {
+		List<AuthorPart> one = authorParts(anAuthor);
+		List<AuthorPart> other = authorParts(toOtherAuthor);
+		if (one.isEmpty() || one.size()!=other.size()) { return false; }
+		for (int i=0; i<one.size(); i++) {
+			AuthorPart a = one.get(i);
+			AuthorPart b = other.get(i);
+			if (!sameOrAbbreviatedSurname(a.surname, b.surname)) { return false; }
+			if (!a.initials.isEmpty() && !b.initials.isEmpty() && !a.initials.equals(b.initials)) { return false; }
+			// A one letter abbreviation (L.) is ambiguous, handled elsewhere.
+			if (a.surname.matches("^[A-Z]\\.$") != b.surname.matches("^[A-Z]\\.$")) { return false; }
+		}
+		return true;
+	}
+
+	/**
+	 * Remove the optional parts of a botanical authorship: the authors before "ex" (e.g. "Planch. ex F.Muell."
+	 * gives "F.Muell.") and sanctioning authors after ":" (e.g. "(Pers. : Fr.) P.Kumm." gives "(Pers.) P.Kumm."),
+	 * in the parenthetical authorship as well.
+	 *
+	 * @param authorship a botanical authorship
+	 * @return the authorship without ex and sanctioning authors
+	 */
+	public static String withoutExAndSanctioningAuthors(String authorship) {
+		if (authorship==null) { return null; }
+		String result = authorship.replaceAll("\\s*:\\s*[^()]*", "");
+		result = result.replaceAll("(^|\\(|\\)\\s*)[^()]*?\\s+ex\\.?\\s+", "$1");
+		return result.replaceAll("\\s+", " ").trim();
+	}
+
 }
