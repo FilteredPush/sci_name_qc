@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.SciNameUtils;
@@ -204,6 +205,78 @@ public class COLService implements Validator {
 		return lookupName(name);
 	}
 
+	/** Maximum edit distance between a name and a similar name (a possible misspelling). */
+	public static final int MAX_EDIT_DISTANCE = 2;
+	/** Minimum similarity, 1 - (edit distance / length of the longer name), of a similar name. */
+	public static final double MIN_SIMILARITY = 0.8d;
+	private static final int FUZZY_LIMIT = 50;
+
+	/**
+	 * Names in COL similar to a name that is not found, as possible misspellings of it: a fuzzy search
+	 * (GET /dataset/{key}/nameusage/search?type=FUZZY), filtered to names with the same number of words,
+	 * an edit distance (Levenshtein, case insensitive) of at most {@value #MAX_EDIT_DISTANCE}, and a similarity of
+	 * at least {@value #MIN_SIMILARITY}, ordered from the most similar.  The name itself is not included.
+	 * These are candidates to report, not matches.
+	 *
+	 * @param name the scientific name without authorship
+	 * @param rank the rank, or null for any rank
+	 * @return the similar name usages, each with its similarity as its scientific name string edit distance
+	 *   and MATCH_FUZZY_SCINAME as its name match description, possibly none
+	 * @throws IOException if COL cannot be queried
+	 */
+	public List<NameUsage> lookupSimilarNames(String name, String rank) throws IOException {
+		List<NameUsage> result = new ArrayList<NameUsage>();
+		if (SciNameUtils.isEmpty(name)) {
+			return result;
+		}
+		String target = name.trim();
+		int words = target.split("\\s+").length;
+		String url = API + "/dataset/" + datasetKey + "/nameusage/search?q=" + encode(target)
+			+ "&type=FUZZY&content=SCIENTIFIC_NAME&limit=" + FUZZY_LIMIT;
+		if (!SciNameUtils.isEmpty(rank)) {
+			url = url + "&rank=" + encode(rank.trim().toLowerCase());
+		}
+		Object response = parse(get(url));
+		if (response instanceof JSONObject && ((JSONObject)response).get("result") instanceof JSONArray) {
+			for (Object item : (JSONArray)((JSONObject)response).get("result")) {
+				if (item instanceof JSONObject) {
+					NameUsage usage = nameUsageFromSearchResult((JSONObject)item);
+					if (usage==null) { continue; }
+					String candidate = usage.getCanonicalName();
+					if (candidate.equalsIgnoreCase(target) || candidate.split("\\s+").length!=words) { continue; }
+					if (!SciNameUtils.isEmpty(rank) && !usage.getRank().equalsIgnoreCase(rank.trim())) { continue; }
+					int distance = StringUtils.getLevenshteinDistance(target.toLowerCase(), candidate.toLowerCase());
+					double similarity = 1d - ((double)distance / Math.max(target.length(), candidate.length()));
+					if (distance<=MAX_EDIT_DISTANCE && similarity>=MIN_SIMILARITY) {
+						usage.setNameMatchDescription(NameComparison.MATCH_FUZZY_SCINAME);
+						usage.setScientificNameStringEditDistance(similarity);
+						result.add(usage);
+					}
+				}
+			}
+		}
+		result.sort((a, b) -> Double.compare(b.getScientificNameStringEditDistance(), a.getScientificNameStringEditDistance()));
+		return result;
+	}
+
+	/**
+	 * Describe similar names (possible misspellings), for a comment.
+	 *
+	 * @param similar the result of lookupSimilarNames
+	 * @return e.g. "Morus L. (genus, accepted, https://www.catalogueoflife.org/data/taxon/5VCQ); ...", or an empty string
+	 */
+	public static String describe(List<NameUsage> similar) {
+		StringBuffer result = new StringBuffer();
+		for (NameUsage usage : similar) {
+			if (result.length()>0) { result.append("; "); }
+			result.append(usage.getCanonicalName());
+			if (!SciNameUtils.isEmpty(usage.getAuthorship())) { result.append(" ").append(usage.getAuthorship()); }
+			result.append(" (").append(usage.getRank()).append(", ").append(usage.getTaxonomicStatus().toLowerCase())
+				.append(", ").append(usage.getGuid()).append(")");
+		}
+		return result.toString();
+	}
+
 	/**
 	 * The name usage with a COL identifier.
 	 *
@@ -291,7 +364,27 @@ public class COLService implements Validator {
 		}
 		NameUsage result = null;
 		if (hits.size()==0) {
-			return null;
+			// Not found: report the most similar names (possible misspellings) as a fuzzy match, which
+			// is not an exact match.
+			List<NameUsage> similar;
+			try {
+				similar = lookupSimilarNames(taxonName, null);
+			} catch (IOException e) {
+				throw new ServiceException(e.getMessage());
+			}
+			if (similar.isEmpty()) {
+				return null;
+			}
+			result = similar.get(0);
+			NameComparison authorComparison = authorNameComparator.compare(authorship, result.getAuthorship());
+			result.setAuthorshipStringEditDistance(authorComparison.getSimilarity());
+			result.setMatchDescription(NameComparison.MATCH_FUZZY_SCINAME + "; authorship " + authorComparison.getMatchType()
+					+ "; similar names in " + SERVICE_NAME + ": " + describe(similar));
+			result.setInputDbPK(taxonNameToValidate.getInputDbPK());
+			result.setOriginalScientificName(taxonName);
+			result.setOriginalAuthorship(authorship);
+			result.setAuthorComparator(authorNameComparator);
+			return result;
 		}
 		// An exact match on the name and authorship, or, if no authorship is given, on the name: the
 		// provided name is matched, with no authorship to compare (as validation data dataID 230 expects).

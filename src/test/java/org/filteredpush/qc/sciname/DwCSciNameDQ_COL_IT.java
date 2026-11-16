@@ -57,6 +57,25 @@ public class DwCSciNameDQ_COL_IT {
 	}
 
 	@Test
+	public void testSimilarNames() throws Exception {
+		COLService service = new COLService();
+		List<NameUsage> brevispinna = service.lookupSimilarNames("Murex brevispinna", null);
+		assertEquals("Murex brevispina", brevispinna.get(0).getCanonicalName());
+		assertEquals(IRI + "44LVK", brevispinna.get(0).getGuid());
+		// Names with a different number of words (e.g. subspecies) are not candidates.
+		assertTrue(brevispinna.stream().allMatch(u -> u.getCanonicalName().split(" ").length==2));
+		assertEquals(IRI + "4QHKG", service.lookupSimilarNames("Puma concolour", null).get(0).getGuid());
+		// Both homonyms of Morus are candidates for Morrus, at rank genus.
+		List<NameUsage> morrus = service.lookupSimilarNames("Morrus", "Genus");
+		assertTrue(morrus.stream().anyMatch(u -> u.getGuid().equals(IRI + "5VCQ")));
+		assertTrue(morrus.stream().anyMatch(u -> u.getGuid().equals(IRI + "5VCR")));
+		assertTrue(morrus.stream().allMatch(u -> u.getRank().equalsIgnoreCase("genus")));
+		// An exact name is not its own candidate, and a name like nothing in COL has none.
+		assertTrue(service.lookupSimilarNames("Morus", "Genus").stream().noneMatch(u -> u.getCanonicalName().equals("Morus")));
+		assertEquals(0, service.lookupSimilarNames("Xqzvwkjhyt", null).size());
+	}
+
+	@Test
 	public void testHigherTaxaFound() {
 		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationKingdomFound("Animalia", col));
 		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationKingdomFound("Animal", col));
@@ -234,6 +253,16 @@ public class DwCSciNameDQ_COL_IT {
 		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationKingdomFound("Plantea", col));
 		assertEquals(ResultState.NOT_AMENDED, DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", null, "Puma concolour", null), col).getResultState());
 		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(taxon("Animalia", null, "Puma concolour", null), "CatalogOfLife:Latest"));
+		// The misspellings are reported with the similar names in COL as candidates, without changing the result.
+		DQResponse<ComplianceValue> puma = DwCSciNameDQ.validationScientificnameFound("Puma concolour", col);
+		assertEquals(ComplianceValue.NOT_COMPLIANT, puma.getValue());
+		assertTrue(puma.getComment(), puma.getComment().contains("Puma concolor (Linnaeus, 1771)"));
+		assertTrue(puma.getComment(), puma.getComment().contains(IRI + "4QHKG"));
+		DQResponse<ComplianceValue> morrus = DwCSciNameDQ.validationGenusFound("Morrus", col);
+		assertTrue(morrus.getComment(), morrus.getComment().contains(IRI + "5VCQ") && morrus.getComment().contains(IRI + "5VCR"));
+		DQResponse<AmendmentValue> concolour = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", null, "Puma concolour", null), col);
+		assertNull(concolour.getValue());
+		assertTrue(concolour.getComment(), concolour.getComment().contains("Puma concolor"));
 		// A misspelled authorship: the name is found, but does not match exactly.
 		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Murex brevispina Lamark, 1822", col));
 	}

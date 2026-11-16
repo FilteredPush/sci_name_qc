@@ -741,6 +741,7 @@ public class DwCSciNameDQ {
 					}
 				} else { 
 					result.addComment("No match found for provided taxon in " + sourceAuthority.getName() + ".");
+					if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) { addCOLSimilarNamesComment(lookMeUp, null, sourceAuthority, result); }
 					result.setResultState(ResultState.NOT_AMENDED);
 				}
 			} catch (IOException e) {
@@ -1134,6 +1135,7 @@ public class DwCSciNameDQ {
 							}
 						} else { 
 							result.addComment("No match found for provided taxon in " + sourceAuthority.getName() + ".");
+							if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) { addCOLSimilarNamesComment(lookMeUp, null, sourceAuthority, result); }
 							result.setValue(ComplianceValue.NOT_COMPLIANT);
 							result.setResultState(ResultState.RUN_HAS_RESULT);
 						}
@@ -2496,14 +2498,36 @@ public class DwCSciNameDQ {
 	 * @param result the response to set: COMPLIANT if a name usage with exactly that name at that rank exists, 
 	 *   otherwise NOT_COMPLIANT, or EXTERNAL_PREREQUISITES_NOT_MET if the Catalogue of Life cannot be queried
 	 */
+	/**
+	 * Add a comment listing names in the Catalogue of Life similar to a name that was not found
+	 * (possible misspellings), if there are any.  The comment informs; it does not change the result.
+	 *
+	 * @param name the name not found
+	 * @param rank the rank, or null for any rank
+	 * @param sourceAuthority a CATALOGUE_OF_LIFE source authority
+	 * @param result the response to which to add the comment
+	 */
+	protected static void addCOLSimilarNamesComment(String name, String rank, SciNameSourceAuthority sourceAuthority, DQResponse<?> result) {
+		try {
+			List<NameUsage> similar = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupSimilarNames(name, rank);
+			if (!similar.isEmpty()) {
+				result.addComment("Similar names (possible misspellings of [" + name + "]) in the Catalogue of Life"
+						+ (rank==null ? "" : " at rank " + rank) + ": " + COLService.describe(similar) + ".");
+			}
+		} catch (IOException e) {
+			logger.debug(e.getMessage());
+		}
+	}
+
 	protected static void colTaxonAtRank(String taxon, String rank, SciNameSourceAuthority sourceAuthority, DQResponse<ComplianceValue> result) { 
 		try {
 			List<NameUsage> matches = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonAtRank(taxon, rank);
 			if (matches.size()>0) { 
 				result.addComment("Exact match to provided " + rank + " found in the Catalogue of Life (" + sourceAuthority.getAuthoritySubDataset() + ") at rank " + rank + ".");
 				result.setValue(ComplianceValue.COMPLIANT);
-			} else { 
+			} else {
 				result.addComment("No exact match to provided " + rank + " ["+ taxon + "] found in the Catalogue of Life (" + sourceAuthority.getAuthoritySubDataset() + ") at rank " + rank + ".");
+				addCOLSimilarNamesComment(taxon, rank, sourceAuthority, result);
 				result.setValue(ComplianceValue.NOT_COMPLIANT);
 			}
 			result.setResultState(ResultState.RUN_HAS_RESULT);
