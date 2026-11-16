@@ -122,6 +122,122 @@ public class DwCSciNameDQ_COL_IT {
 				"Plantae", "Mollusca", "Gastropoda", "Neogastropoda", "", "Muricidae", "", "", "", "", col));
 	}
 
+	private static final String IRI = COLService.TAXON_IRI;
+
+	private static Taxon taxon(String kingdom, String family, String scientificName, String authorship) {
+		Taxon taxon = new Taxon();
+		if (kingdom!=null) { taxon.setKingdom(kingdom); }
+		if (family!=null) { taxon.setFamily(family); }
+		taxon.setScientificName(scientificName);
+		if (authorship!=null) { taxon.setScientificNameAuthorship(authorship); }
+		return taxon;
+	}
+
+	private static void assertFilledIn(String expectedId, DQResponse<AmendmentValue> result) {
+		assertEquals(result.getComment(), ResultState.FILLED_IN, result.getResultState());
+		assertEquals(result.getComment(), IRI + expectedId, result.getValue().getObject().get("dwc:scientificNameID"));
+	}
+
+	/**
+	 * Ambiregnal homonyms: Morus L. (Plantae, mulberries, 5VCQ) and Morus Vieillot, 1816 (Animalia, gannets, 5VCR);
+	 * Pieris D.Don (Plantae) and Pieris (Animalia, butterflies).  The name alone is found, but is ambiguous;
+	 * the kingdom, family, or authorship distinguishes them.
+	 */
+	@Test
+	public void testAmbiregnalHomonyms() {
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationGenusFound("Morus", col));
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationGenusFound("Pieris", col));
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Morus L.", col));
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Morus Vieillot, 1816", col));
+
+		// The name alone: two taxa, so not unambiguous, and no identifier is proposed.
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(taxon(null, null, "Morus", null), "CatalogOfLife:Latest"));
+		assertEquals(ResultState.NOT_AMENDED, DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, null, "Morus", null), col).getResultState());
+
+		// Distinguished by kingdom.
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(taxon("Plantae", null, "Morus", null), "CatalogOfLife:Latest"));
+		assertFilledIn("5VCQ", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Plantae", null, "Morus", null), col));
+		assertFilledIn("5VCR", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", null, "Morus", null), col));
+		// Distinguished by family.
+		assertFilledIn("5VCR", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, "Sulidae", "Morus", null), col));
+		assertFilledIn("5VCQ", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, "Moraceae", "Morus", null), col));
+		// Distinguished by authorship.
+		assertFilledIn("5VCQ", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, null, "Morus", "L."), col));
+		assertFilledIn("5VCR", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, null, "Morus", "Vieillot, 1816"), col));
+
+		// The classification is checked against the homonym in the right kingdom.
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationClassificationConsistent(
+				"Animalia", "", "", "", "", "Sulidae", "", "", "", "Morus", col));
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationClassificationConsistent(
+				"Plantae", "", "", "", "", "Moraceae", "", "", "", "Morus", col));
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationClassificationConsistent(
+				"Plantae", "", "", "", "", "Sulidae", "", "", "", "", col));
+	}
+
+	/**
+	 * Homonyms in one kingdom.  Cyclops O.F. Müller, 1785 (a copepod, accepted, 7NV4D) and Cyclops Montfort, 1810
+	 * (a gastropod, a synonym of Tritia, BDVPW).  Aaroniella badonneli (Danks, 1950) (accepted, 8HDV) and
+	 * Aaroniella badonneli Thornton, 1990 (an ambiguous synonym of Aaroniella andrei, 8HDW), both Psocodea.
+	 */
+	@Test
+	public void testHomonymsInOneKingdom() {
+		assertFilledIn("BDVPW", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, null, "Cyclops", "Montfort, 1810"), col));
+		assertFilledIn("7NV4D", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, "Cyclopidae", "Cyclops", null), col));
+		assertEquals(ResultState.NOT_AMENDED, DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", null, "Cyclops", null), col).getResultState());
+
+		assertFilledIn("8HDV", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, null, "Aaroniella badonneli", "(Danks, 1950)"), col));
+		assertFilledIn("8HDW", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon(null, null, "Aaroniella badonneli", "Thornton, 1990"), col));
+		// Without authorship the two cannot be told apart.
+		assertEquals(ResultState.NOT_AMENDED, DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", null, "Aaroniella badonneli", null), col).getResultState());
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(taxon("Animalia", null, "Aaroniella badonneli", null), "CatalogOfLife:Latest"));
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(taxon("Animalia", null, "Aaroniella badonneli", "Thornton, 1990"), "CatalogOfLife:Latest"));
+	}
+
+	/**
+	 * A name that COL treats as a synonym is identified as that name, not as COL's accepted name for the taxon:
+	 * Felis concolor Linnaeus, 1771 (3DXV5) is a synonym of Puma concolor (Linnaeus, 1771) (4QHKG);
+	 * Compositae Giseke (5T83V) of Asteraceae (622TP).
+	 */
+	@Test
+	public void testSynonymsKeepTheirOwnIdentifiers() throws Exception {
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Felis concolor Linnaeus, 1771", col));
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationFamilyFound("Compositae", col));
+
+		DQResponse<AmendmentValue> felis = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", "Felidae", "Felis concolor", "Linnaeus, 1771"), col);
+		assertFilledIn("3DXV5", felis);
+		assertFilledIn("4QHKG", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", "Felidae", "Puma concolor", "(Linnaeus, 1771)"), col));
+		assertFilledIn("5T83V", DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Plantae", null, "Compositae", null), col));
+
+		// The identifier of the synonym gives back the synonym's name.
+		DQResponse<AmendmentValue> name = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(IRI + "3DXV5", "", col);
+		assertEquals(ResultState.FILLED_IN, name.getResultState());
+		assertEquals("Felis concolor Linnaeus, 1771", name.getValue().getObject().get("dwc:scientificName"));
+		NameUsage usage = new COLService().lookupTaxonByID("3DXV5");
+		assertEquals("Felis concolor", usage.getScientificName());
+		assertEquals("SYNONYM", usage.getTaxonomicStatus());
+		assertEquals("Puma concolor", usage.getAcceptedName());
+
+		Taxon byId = new Taxon();
+		byId.setScientificNameID(IRI + "3DXV5");
+		assertCompliance(ComplianceValue.COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(byId, "CatalogOfLife:Latest"));
+	}
+
+	/**
+	 * Misspelled names are not found, and are not silently replaced by a correctly spelled name.
+	 */
+	@Test
+	public void testMisspellings() {
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Murex brevispinna Lamarck, 1822", col));
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Puma concolour", col));
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationGenusFound("Morrus", col));
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationFamilyFound("Muricidea", col));
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationKingdomFound("Plantea", col));
+		assertEquals(ResultState.NOT_AMENDED, DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon("Animalia", null, "Puma concolour", null), col).getResultState());
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationTaxonUnambiguous(taxon("Animalia", null, "Puma concolour", null), "CatalogOfLife:Latest"));
+		// A misspelled authorship: the name is found, but does not match exactly.
+		assertCompliance(ComplianceValue.NOT_COMPLIANT, DwCSciNameDQ.validationScientificnameFound("Murex brevispina Lamark, 1822", col));
+	}
+
 	private static void assertCompliance(ComplianceValue expected, DQResponse<ComplianceValue> result) {
 		assertEquals(result.getComment(), ResultState.RUN_HAS_RESULT, result.getResultState());
 		assertEquals(result.getComment(), expected, result.getValue());
