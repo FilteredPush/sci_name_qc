@@ -219,7 +219,7 @@ public class SciNameUtils {
 		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
 			String id = COLService.idFromScientificNameID(taxonID);
 			if (id==null) { 
-				throw new IDFormatException("Not a Catalogue of Life identifier, expected " + COLService.TAXON_IRI + "{id} or col:{id}");
+				throw new IDFormatException("Not a Catalogue of Life identifier, expected " + COLService.CURIE_PREFIX + "{id} or col:{id}");
 			}
 			try { 
 				NameUsage match = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonByID(id);
@@ -289,7 +289,7 @@ public class SciNameUtils {
 						if (sourceAuthority.isGBIFChecklist()) { 
 							synonymResults= GBIFService.parseAllNameUsagesFromJSON(GBIFService.fetchSynonyms(value.getKey(), sourceAuthority.getAuthoritySubDataset()));
 						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
-							String acceptedId = value.getGuid().replace(COLService.TAXON_IRI, "");
+							String acceptedId = COLService.idFromScientificNameID(value.getGuid());
 							synonymResults = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupSynonyms(acceptedId);
 						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 							// TODO: needs implementation

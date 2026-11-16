@@ -108,12 +108,12 @@ public class DwCSciNameDQ_COL_IT {
 		taxon.setFamily("Muricidae");
 		DQResponse<AmendmentValue> result = DwCSciNameDQ.amendmentScientificnameidFromTaxon(taxon, col);
 		assertEquals(result.getComment(), ResultState.FILLED_IN, result.getResultState());
-		assertEquals("https://www.catalogueoflife.org/data/taxon/44LVK", result.getValue().getObject().get("dwc:scientificNameID"));
+		assertEquals("col:44LVK", result.getValue().getObject().get("dwc:scientificNameID"));
 	}
 
 	@Test
 	public void testAmendmentScientificnameFromScientificnameid() {
-		for (String id : new String[] { "https://www.catalogueoflife.org/data/taxon/44LVK", "col:44LVK" }) {
+		for (String id : new String[] { "col:44LVK", "https://www.catalogueoflife.org/data/taxon/44LVK", "https://identifiers.org/col:44LVK" }) {
 			DQResponse<AmendmentValue> result = DwCSciNameDQ.amendmentScientificnameFromScientificnameid(id, "", col);
 			assertEquals(result.getComment(), ResultState.FILLED_IN, result.getResultState());
 			assertEquals("Murex brevispina Lamarck, 1822", result.getValue().getObject().get("dwc:scientificName"));
@@ -141,7 +141,7 @@ public class DwCSciNameDQ_COL_IT {
 				"Plantae", "Mollusca", "Gastropoda", "Neogastropoda", "", "Muricidae", "", "", "", "", col));
 	}
 
-	private static final String IRI = COLService.TAXON_IRI;
+	private static final String IRI = COLService.CURIE_PREFIX;
 
 	private static Taxon taxon(String kingdom, String family, String scientificName, String authorship) {
 		Taxon taxon = new Taxon();

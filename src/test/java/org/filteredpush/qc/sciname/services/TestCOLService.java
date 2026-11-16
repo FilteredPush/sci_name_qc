@@ -52,6 +52,8 @@ public class TestCOLService {
 		assertEquals("44LVK", COLService.idFromScientificNameID("http://www.catalogueoflife.org/data/taxon/44LVK"));
 		assertEquals("44LVK", COLService.idFromScientificNameID("https://catalogueoflife.org/data/taxon/44LVK/"));
 		assertEquals("44LVK", COLService.idFromScientificNameID("col:44LVK"));
+		assertEquals("44LVK", COLService.idFromScientificNameID("https://identifiers.org/col:44LVK"));
+		assertEquals("44LVK", COLService.idFromScientificNameID("https://bioregistry.io/col:44LVK"));
 		assertNull(COLService.idFromScientificNameID("gbif:5192826"));
 		assertNull(COLService.idFromScientificNameID("44LVK"));
 		assertNull(COLService.idFromScientificNameID("urn:lsid:marinespecies.org:taxname:138196"));
@@ -78,7 +80,7 @@ public class TestCOLService {
 		assertEquals("Giseke", usage.getAuthorship());
 		assertEquals("family", usage.getRank());
 		assertEquals("SYNONYM", usage.getTaxonomicStatus());
-		assertEquals("https://www.catalogueoflife.org/data/taxon/5T83V", usage.getGuid());
+		assertEquals("col:5T83V", usage.getGuid());
 		assertEquals("Asteraceae", usage.getAcceptedName());
 		assertEquals("622TP".hashCode(), usage.getAcceptedKey());
 		assertEquals("Plantae", usage.getKingdom());

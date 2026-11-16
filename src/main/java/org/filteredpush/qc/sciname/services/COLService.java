@@ -53,7 +53,9 @@ import okhttp3.Response;
  * By default the latest release of COL is used (ChecklistBank dataset "3LR"); a specific release can be
  * used (pinned) by giving its ChecklistBank dataset key (e.g. 317005) or release alias (e.g. COL25, COL26.11).
  * As a bdqval:sourceAuthority: CatalogOfLife:Latest, or CatalogOfLife:{pin_target} (see SciNameSourceAuthority).  Name usages are identified by their COL identifiers, given
- * as IRIs in the form {@value #TAXON_IRI}&lt;id&gt; (also accepted: http, and col:&lt;id&gt;).
+ * by the CURIE col:&lt;id&gt; (the prefix col is registered at identifiers.org and Bioregistry, and resolves to
+ * the taxon in the latest release, e.g. https://identifiers.org/col:4QHKG); also accepted as input:
+ * {@value #TAXON_IRI}&lt;id&gt; (http or https) and the identifiers.org and Bioregistry IRIs.
  *
  * Name searches are exact on the scientific name without authorship
  * (GET /dataset/{key}/nameusage/search?q=&lt;name&gt;&amp;type=EXACT&amp;content=SCIENTIFIC_NAME),
@@ -74,10 +76,12 @@ public class COLService implements Validator {
 	public static final String LATEST_RELEASE = "3LR";
 	/** Prefix of the IRIs of COL taxa and name usages. */
 	public static final String TAXON_IRI = "https://www.catalogueoflife.org/data/taxon/";
+	/** Prefix of the CURIEs of COL taxa and name usages (registered at identifiers.org and Bioregistry), e.g. col:4QHKG. */
+	public static final String CURIE_PREFIX = "col:";
 
 	private static final int SEARCH_LIMIT = 100;
 	private static final Pattern ID_PATTERN = Pattern.compile(
-			"^(?:https?://(?:www\\.)?catalogueoflife\\.org/data/taxon/|col:|COL:)([A-Za-z0-9]+)/?$");
+			"^(?:https?://(?:www\\.)?catalogueoflife\\.org/data/taxon/|https?://identifiers\\.org/col:|https?://bioregistry\\.io/col:|col:|COL:)([A-Za-z0-9]+)/?$");
 	private static final Pattern DATASET_IRI = Pattern.compile(
 			"^https?://api\\.checklistbank\\.org/dataset/([0-9]+|3LR)/?$", Pattern.CASE_INSENSITIVE);
 
@@ -136,7 +140,8 @@ public class COLService implements Validator {
 	/**
 	 * Extract a COL identifier from a scientificNameID.
 	 *
-	 * @param scientificNameID in the form https://www.catalogueoflife.org/data/taxon/{id} or col:{id}
+	 * @param scientificNameID in the form col:{id}, https://www.catalogueoflife.org/data/taxon/{id},
+	 *   https://identifiers.org/col:{id}, or https://bioregistry.io/col:{id}
 	 * @return the identifier, or null if scientificNameID is not in a recognized form.
 	 */
 	public static String idFromScientificNameID(String scientificNameID) {
@@ -263,7 +268,7 @@ public class COLService implements Validator {
 	 * Describe similar names (possible misspellings), for a comment.
 	 *
 	 * @param similar the result of lookupSimilarNames
-	 * @return e.g. "Morus L. (genus, accepted, https://www.catalogueoflife.org/data/taxon/5VCQ); ...", or an empty string
+	 * @return e.g. "Morus L. (genus, accepted, col:5VCQ); ...", or an empty string
 	 */
 	public static String describe(List<NameUsage> similar) {
 		StringBuffer result = new StringBuffer();
@@ -474,7 +479,7 @@ public class COLService implements Validator {
 		result.setRank(text(name.get("rank")));
 		result.setTaxonomicStatus(text(usage.get("status")).toUpperCase().replace(' ', '_'));
 		if (!id.isEmpty()) {
-			result.setGuid(TAXON_IRI + id);
+			result.setGuid(CURIE_PREFIX + id);
 			result.setKey(id.hashCode());
 			result.setAcceptedKey(id.hashCode());
 		}

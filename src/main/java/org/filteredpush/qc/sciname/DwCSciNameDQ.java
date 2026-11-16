@@ -1350,7 +1350,7 @@ public class DwCSciNameDQ {
 					result.setResultState(ResultState.NOT_AMENDED);
 				}
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
-				// COL identifiers, as https://www.catalogueoflife.org/data/taxon/{id} or col:{id}
+				// COL identifiers, as col:{id} (or https://www.catalogueoflife.org/data/taxon/{id}, identifiers.org, Bioregistry)
 				String id = COLService.idFromScientificNameID(scientificNameID);
 				if (id==null) { 
 					result.addComment("dwc:scientificNameID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ scientificNameID +"].");
