@@ -17,6 +17,9 @@
  */
 package edu.harvard.mcz.nametools;
 
+import org.filteredpush.qc.sciname.services.IPNIAuthorService;
+import edu.harvard.mcz.nametools.AuthorNameComparator.AuthorPart;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -138,10 +141,23 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 							&& anAuthor.contains(":")==toOtherAuthor.contains(":")) {
 						boolean allParts = true;
 						for (int i=0; i<anAuthorBits.size() && allParts; i++) {
-							allParts = AuthorNameComparator.sameAuthorsAbbreviated(anAuthorBits.get(i), toOtherAuthorBits.get(i));
+							allParts = sameAuthorsBotanical(anAuthorBits.get(i), toOtherAuthorBits.get(i));
 						}
 						if (allParts) {
 							result.setMatchType(NameComparison.MATCH_SAMEBUTABBREVIATED);
+						}
+					}
+
+					// IPNI standard forms that identify different authors (Desm. is Desmazières, not Desmarest).
+					if (result.getMatchType().equals(NameComparison.MATCH_SAMEBUTABBREVIATED)
+							&& anAuthorBits.size()==toOtherAuthorBits.size()) {
+						for (int i=0; i<anAuthorBits.size(); i++) {
+							String contradiction = ipniContradiction(anAuthorBits.get(i), toOtherAuthorBits.get(i));
+							if (contradiction!=null) {
+								result.setMatchType(NameComparison.MATCH_DISSIMILAR);
+								result.setRemark(contradiction);
+								break;
+							}
 						}
 					}
 
@@ -164,6 +180,94 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 	}	
 	
 	/**
+	 * Split one part of a botanical authorship into its authors ("Hook. &amp; Arn.", "Hook., Arn." give Hook., Arn.).
+	 */
+	static List<String> authorsInPart(String part) {
+		List<String> result = new ArrayList<String>();
+		for (String author : part.trim().split("\\s*(?:&|,|;|\\s+et\\s+)\\s*")) {
+			if (!author.trim().isEmpty()) { result.add(author.trim()); }
+		}
+		return result;
+	}
+
+	/**
+	 * Does IPNI say whether two author citations are the same person: both standard forms of the same IPNI author,
+	 * or a standard form and the author's surname (with initials, if any, agreeing with the forename)?
+	 *
+	 * @param one an author citation, e.g. Desm. or Desmarest
+	 * @param other another
+	 * @return TRUE or FALSE if IPNI decides, null if neither is a standard form in IPNI (or IPNI is not available)
+	 */
+	static Boolean ipniSameAuthor(String one, String other) {
+		IPNIAuthorService.IPNIAuthor a = IPNIAuthorService.lookupStandardForm(one);
+		IPNIAuthorService.IPNIAuthor b = IPNIAuthorService.lookupStandardForm(other);
+		if (a!=null && b!=null) { return a.id.equals(b.id); }
+		if (a!=null) { return surnameAgrees(a, other); }
+		if (b!=null) { return surnameAgrees(b, one); }
+		return null;
+	}
+
+	private static Boolean surnameAgrees(IPNIAuthorService.IPNIAuthor author, String citation) {
+		List<AuthorPart> parts = AuthorNameComparator.authorParts(citation);
+		if (parts.size()!=1) { return Boolean.FALSE; }
+		AuthorPart part = parts.get(0);
+		if (part.surname.endsWith(".")) {
+			// an abbreviation that is not a standard form in IPNI: IPNI does not decide
+			return null;
+		}
+		if (!part.initials.isEmpty() && !author.forename.isEmpty()
+				&& Character.toUpperCase(part.initials.charAt(0))!=Character.toUpperCase(author.forename.charAt(0))) {
+			return Boolean.FALSE;
+		}
+		return AuthorNameComparator.sameOrAbbreviatedSurname(part.surname, author.surname);
+	}
+
+	/**
+	 * Are two parts of botanical authorships the same authors: by IPNI standard forms where IPNI decides,
+	 * otherwise allowing for abbreviation (AuthorNameComparator.sameAuthorsAbbreviated).
+	 *
+	 * @param one a part (e.g. the parenthetical authors)
+	 * @param other the corresponding part of another authorship
+	 * @return true if the same authors
+	 */
+	static boolean sameAuthorsBotanical(String one, String other) {
+		List<String> a = authorsInPart(one);
+		List<String> b = authorsInPart(other);
+		if (a.isEmpty() || a.size()!=b.size()) { return false; }
+		for (int i=0; i<a.size(); i++) {
+			Boolean ipni = ipniSameAuthor(a.get(i), b.get(i));
+			if (ipni!=null) {
+				if (!ipni.booleanValue()) { return false; }
+			} else if (!AuthorNameComparator.sameAuthorsAbbreviated(a.get(i), b.get(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * If IPNI shows that corresponding authors in two parts are different people, say why.
+	 *
+	 * @param one a part of an authorship
+	 * @param other the corresponding part of another
+	 * @return a remark, or null if IPNI does not show a difference
+	 */
+	static String ipniContradiction(String one, String other) {
+		List<String> a = authorsInPart(one);
+		List<String> b = authorsInPart(other);
+		if (a.size()!=b.size()) { return null; }
+		for (int i=0; i<a.size(); i++) {
+			if (Boolean.FALSE.equals(ipniSameAuthor(a.get(i), b.get(i)))) {
+				IPNIAuthorService.IPNIAuthor x = IPNIAuthorService.lookupStandardForm(a.get(i));
+				IPNIAuthorService.IPNIAuthor y = IPNIAuthorService.lookupStandardForm(b.get(i));
+				return "Different authors by IPNI standard forms: " + a.get(i) + (x==null ? "" : " is " + x) + "; "
+						+ b.get(i) + (y==null ? "" : " is " + y);
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Are two botanical authorships the same, or the same with abbreviated surnames, part by part
 	 * (parenthetical authors, ex authors, sanctioning authors in the same positions)?
 	 *
@@ -184,7 +288,7 @@ public class ICNafpAuthorNameComparator extends AuthorNameComparator {
 		List<String> other = tokenizeAuthorship(toOtherAuthor);
 		if (one.size()!=other.size()) { return false; }
 		for (int i=0; i<one.size(); i++) {
-			if (!AuthorNameComparator.sameAuthorsAbbreviated(one.get(i), other.get(i))) { return false; }
+			if (!sameAuthorsBotanical(one.get(i), other.get(i))) { return false; }
 		}
 		return true;
 	}

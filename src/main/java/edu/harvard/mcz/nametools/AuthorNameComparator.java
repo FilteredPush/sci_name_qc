@@ -439,7 +439,7 @@ public abstract class AuthorNameComparator {
 	/**
 	 * One author in an authorship string: the surname (without particles) and the initials.
 	 */
-	static class AuthorPart {
+	public static class AuthorPart {
 		final String surname;
 		final String initials;
 		AuthorPart(String surname, String initials) { this.surname = surname; this.initials = initials; }

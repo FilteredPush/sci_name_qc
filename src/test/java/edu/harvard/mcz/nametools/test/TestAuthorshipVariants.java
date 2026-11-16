@@ -50,7 +50,7 @@ public class TestAuthorshipVariants {
 		{ "Plantae", "Mill.", "Miller", "Y" },
 		{ "Plantae", "Mill.", "Mill", "Y" },
 		{ "Plantae", "J.F.Arnold", "J. F. Arnold", "Y" },
-		{ "Plantae", "J.F.Arnold", "Arnold", "Y" },
+		// Not "Arnold": in IPNI that is the standard form of a different author (see AuthorshipIPNI_IT).
 		{ "Plantae", "Planch. ex F.Muell.", "Planch. ex F.Muell.", "Y" },
 		{ "Plantae", "Planch. ex F.Muell.", "Planch. ex F. Muell.", "Y" },
 		{ "Plantae", "Planch. ex F.Muell.", "Planch. ex F.Müll.", "Y" },
