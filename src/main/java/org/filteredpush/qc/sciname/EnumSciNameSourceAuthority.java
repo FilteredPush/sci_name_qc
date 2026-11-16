@@ -37,6 +37,8 @@ public enum EnumSciNameSourceAuthority {
     WORMS,
     IRMNG,
     ANSL_APNI, 
+    /** The Catalogue of Life, through the ChecklistBank API (latest release, or a release given as the sub data set). */
+    CATALOGUE_OF_LIFE,
     INVALID;
 
 	/**

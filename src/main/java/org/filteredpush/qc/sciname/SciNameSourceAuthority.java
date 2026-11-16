@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.api.result.AmendmentValue;
+import org.filteredpush.qc.sciname.services.COLService;
 import org.filteredpush.qc.sciname.services.GBIFService;
 
 /**
@@ -108,6 +109,11 @@ public class SciNameSourceAuthority {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_PALEOBIOLOGY_DATABASE;	
 	    } else if (authorityString.toUpperCase().equals(EnumSciNameSourceAuthority.GBIF_UKSI.getName())) {
 	    	this.authority = EnumSciNameSourceAuthority.GBIF_UKSI;	
+	    } else if (isCatalogueOfLife(authorityString)) { 
+	    	this.authority = EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE;
+	    	this.authoritySubDataset = catalogueOfLifePin(authorityString);
+	    	updateDefaultSubAuthorities();
+	    	return;
 	    } else if (authorityString.toUpperCase().startsWith("HTTPS://INVALID/")) { 
 	    	this.authority = EnumSciNameSourceAuthority.INVALID;	
 	    } else { 
@@ -153,6 +159,72 @@ public class SciNameSourceAuthority {
 	 * for GBIF_BACKBONE_TAXONOMY in GBIF checklist bank, set the authoritySubDatset to 
 	 * GBIFService.KEY_GBIFBACKBONE (=d7dddbf4-2cf0-4f39-9b2a-bb099caae36c).
 	 */
+	/** Prefix of the source authority strings for the Catalogue of Life: CatalogOfLife:Latest or CatalogOfLife:{pin_target}. */
+	public static final String CATALOG_OF_LIFE_PREFIX = "CatalogOfLife:";
+	/** The pin target for the latest release of the Catalogue of Life. */
+	public static final String CATALOG_OF_LIFE_LATEST = "Latest";
+
+	/**
+	 * Does a string identify the Catalogue of Life as a source authority.  The convention is 
+	 * CatalogOfLife:Latest for the latest release, or CatalogOfLife:{pin_target} for a specific release, 
+	 * where the pin target is a ChecklistBank dataset key (e.g. 317005) or release alias (e.g. COL25 for the 
+	 * Annual Checklist 2025, COL26.11 for the November 2026 monthly release).  Also accepted, as the latest 
+	 * release: CATALOGUE_OF_LIFE, COL, "Catalogue of Life", https://www.catalogueoflife.org/; and a 
+	 * ChecklistBank dataset IRI (https://api.checklistbank.org/dataset/3LR/ for the latest release, 
+	 * https://api.checklistbank.org/dataset/{key}/ for a specific release).
+	 *
+	 * @param authorityString the string to check
+	 * @return true if the string identifies the Catalogue of Life
+	 */
+	public static boolean isCatalogueOfLife(String authorityString) { 
+		if (authorityString==null) { return false; } 
+		String s = authorityString.trim().toUpperCase().replaceAll("/+$", "");
+		return (s.startsWith(CATALOG_OF_LIFE_PREFIX.toUpperCase()) && catalogueOfLifePin(authorityString)!=null)
+				|| s.equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE.getName()) 
+				|| s.equals("COL") 
+				|| s.equals("CATALOGUE OF LIFE") 
+				|| s.equals("CATALOGUE OF LIFE (COL)")
+				|| s.matches("^HTTPS?://(WWW\\.)?CATALOGUEOFLIFE\\.ORG$")
+				|| COLService.datasetKeyFromIri(authorityString)!=null;
+	}
+
+	/**
+	 * The ChecklistBank dataset (release) of a Catalogue of Life source authority string.
+	 *
+	 * @param authorityString a string for which isCatalogueOfLife is true
+	 * @return the ChecklistBank dataset key or alias: 3LR for CatalogOfLife:Latest and the other forms of 
+	 *   the latest release, the pin target for CatalogOfLife:{pin_target}, the key in a ChecklistBank 
+	 *   dataset IRI; null if the pin target is not a key or alias (letters, digits, and dots).
+	 */
+	public static String catalogueOfLifePin(String authorityString) { 
+		if (authorityString==null) { return null; } 
+		String s = authorityString.trim();
+		if (s.toUpperCase().startsWith(CATALOG_OF_LIFE_PREFIX.toUpperCase())) { 
+			String pin = s.substring(CATALOG_OF_LIFE_PREFIX.length()).trim();
+			if (pin.equalsIgnoreCase(CATALOG_OF_LIFE_LATEST)) { 
+				return COLService.LATEST_RELEASE;
+			}
+			return pin.matches("^[A-Za-z0-9.]+$") ? pin : null;
+		}
+		String fromIri = COLService.datasetKeyFromIri(s);
+		return fromIri==null ? COLService.LATEST_RELEASE : fromIri;
+	}
+
+	/**
+	 * The source authority string for this source authority, in the convention for the Catalogue of Life 
+	 * (CatalogOfLife:Latest, CatalogOfLife:{pin_target}), otherwise the name of the authority.
+	 *
+	 * @return the source authority string
+	 */
+	public String getSourceAuthorityString() { 
+		if (EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE.equals(authority)) { 
+			String pin = authoritySubDataset==null || authoritySubDataset.equals(COLService.LATEST_RELEASE) 
+					? CATALOG_OF_LIFE_LATEST : authoritySubDataset;
+			return CATALOG_OF_LIFE_PREFIX + pin;
+		}
+		return getName();
+	}
+	
 	private void updateDefaultSubAuthorities() { 
 		switch (this.authority) {
 		case GBIF_BACKBONE_TAXONOMY: 
@@ -178,6 +250,11 @@ public class SciNameSourceAuthority {
 			break;
 		case GBIF_FAUNA_EUROPAEA:
 			this.authoritySubDataset = GBIFService.KEY_FAUNA_EUROPAEA;
+			break;
+		case CATALOGUE_OF_LIFE:
+			if (this.authoritySubDataset==null) { 
+				this.authoritySubDataset = COLService.LATEST_RELEASE;
+			}
 			break;
 		default:
 			// don't overwrite a specified sub authority/
@@ -241,7 +318,9 @@ public class SciNameSourceAuthority {
 	 * @return a {@link java.lang.String} object.
 	 */
 	public String getName() {
-		
+		if (EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE.equals(authority)) { 
+			return getSourceAuthorityString();
+		}
 		return authority.getName();
 	}
 

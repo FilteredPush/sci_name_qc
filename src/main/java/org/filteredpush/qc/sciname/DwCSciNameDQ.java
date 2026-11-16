@@ -38,6 +38,7 @@ import org.datakurator.ffdq.api.DQResponse;
 import org.datakurator.ffdq.model.ResultState;
 import org.filteredpush.qc.sciname.services.APNIService;
 import org.filteredpush.qc.sciname.services.GBIFService;
+import org.filteredpush.qc.sciname.services.COLService;
 import org.filteredpush.qc.sciname.services.IRMNGService;
 import org.filteredpush.qc.sciname.services.ServiceException;
 import org.filteredpush.qc.sciname.services.Validator;
@@ -258,6 +259,8 @@ public class DwCSciNameDQ {
 					result.addComment("GBIF API not available:" + e.getMessage());
 					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				}        		
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+				service = new COLService(sourceAuthority.getAuthoritySubDataset());
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 				try {
 					service = new WoRMSService(false);
@@ -577,6 +580,8 @@ public class DwCSciNameDQ {
 					String matches = GBIFService.searchForTaxon(lookMeUp, sourceAuthority.getAuthoritySubDataset());
 					logger.debug(matches);
 					matchList = GBIFService.parseAllNameUsagesFromJSON(matches);					
+				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+					matchList = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
 				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 					matchList = WoRMSService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
 				} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
@@ -975,6 +980,8 @@ public class DwCSciNameDQ {
 							String matches = GBIFService.searchForTaxon(lookMeUp, sourceAuthority.getAuthoritySubDataset());
 							logger.debug(matches);
 							matchList = GBIFService.parseAllNameUsagesFromJSON(matches);					
+						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+							matchList = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
 						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 							matchList = WoRMSService.lookupTaxon(lookMeUp, taxon.getScientificNameAuthorship());
 						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) {
@@ -1338,6 +1345,33 @@ public class DwCSciNameDQ {
 					result.addComment("dwc:scientificNameID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ scientificNameID +"].");
 					result.setResultState(ResultState.NOT_AMENDED);
 				}
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+				// COL identifiers, as https://www.catalogueoflife.org/data/taxon/{id} or col:{id}
+				String id = COLService.idFromScientificNameID(scientificNameID);
+				if (id==null) { 
+					result.addComment("dwc:scientificNameID not interpretable as an identifier in " + sourceAuthority.getName() +" ["+ scientificNameID +"].");
+					result.setResultState(ResultState.NOT_AMENDED);
+				} else { 
+					try {
+						NameUsage nameUsage = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonByID(id);
+						if (nameUsage==null || SciNameUtils.isEmpty(nameUsage.getScientificName())) { 
+							result.setResultState(ResultState.NOT_AMENDED);
+							result.addComment("Unable to find scientificName for provided scientificNameID in " + sourceAuthority.getName());
+						} else { 
+							String sciName = nameUsage.getScientificName();
+							if (!SciNameUtils.isEmpty(nameUsage.getAuthorship())) { 
+								sciName = sciName + " " + nameUsage.getAuthorship();
+							}
+							result.setResultState(ResultState.FILLED_IN);
+							Map<String,String> amend = new HashMap<String,String>();
+							amend.put("dwc:scientificName", sciName);
+							result.setValue(new AmendmentValue(amend));
+						}
+					} catch (IOException e) {
+						result.addComment("Error looking up scientific name in sourceAuthority: "+ e.getMessage() );
+						result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+					}
+				}
 			} else { 
 				result.addComment("Unsupported Source Authority: " + sourceAuthority.getName() +".");
 				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
@@ -1544,6 +1578,8 @@ public class DwCSciNameDQ {
 					result.addComment("GBIF API not available:" + e.getMessage());
 					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				}        		
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+				colTaxonAtRank(order, "Order", sourceAuthority, result);
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 				try {
 					List<NameUsage> matches = WoRMSService.lookupTaxonAtRank(order,"Order");
@@ -2084,6 +2120,8 @@ public class DwCSciNameDQ {
 					result.addComment("GBIF API not available:" + e.getMessage());
 					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				}        		
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+				colTaxonAtRank(genus, "Genus", sourceAuthority, result);
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 				try {
 					List<NameUsage> matches = WoRMSService.lookupGenus(genus);
@@ -2450,6 +2488,32 @@ public class DwCSciNameDQ {
 		return result;
 	}
 	/**
+	 * Is a name found at a rank in the Catalogue of Life: set the result of a VALIDATION_..._FOUND Test.
+	 *
+	 * @param taxon the name to look for, not empty
+	 * @param rank the rank (e.g. Order)
+	 * @param sourceAuthority a CATALOGUE_OF_LIFE source authority, with its release as the sub data set
+	 * @param result the response to set: COMPLIANT if a name usage with exactly that name at that rank exists, 
+	 *   otherwise NOT_COMPLIANT, or EXTERNAL_PREREQUISITES_NOT_MET if the Catalogue of Life cannot be queried
+	 */
+	protected static void colTaxonAtRank(String taxon, String rank, SciNameSourceAuthority sourceAuthority, DQResponse<ComplianceValue> result) { 
+		try {
+			List<NameUsage> matches = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonAtRank(taxon, rank);
+			if (matches.size()>0) { 
+				result.addComment("Exact match to provided " + rank + " found in the Catalogue of Life (" + sourceAuthority.getAuthoritySubDataset() + ") at rank " + rank + ".");
+				result.setValue(ComplianceValue.COMPLIANT);
+			} else { 
+				result.addComment("No exact match to provided " + rank + " ["+ taxon + "] found in the Catalogue of Life (" + sourceAuthority.getAuthoritySubDataset() + ") at rank " + rank + ".");
+				result.setValue(ComplianceValue.NOT_COMPLIANT);
+			}
+			result.setResultState(ResultState.RUN_HAS_RESULT);
+		} catch (IOException e) {
+			result.addComment("Catalogue of Life API not available:" + e.getMessage());
+			result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
+		}
+	}
+
+	/**
 	 * Provides internals for validationKingdomNotFound etc.
 	 *
 	 * @param taxon name of the taxon to look up
@@ -2506,6 +2570,8 @@ public class DwCSciNameDQ {
 					result.addComment("GBIF API not available:" + e.getMessage());
 					result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
 				}        		
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+				colTaxonAtRank(taxon, rank, sourceAuthority, result);
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.INVALID)) {
 				result.addComment("Invalid service is not available.");
 				result.setResultState(ResultState.EXTERNAL_PREREQUISITES_NOT_MET);
@@ -2735,6 +2801,8 @@ public class DwCSciNameDQ {
 					List<NameUsage> lookupResult = null;
 					if (sourceAuthority.isGBIFChecklist()) { 
 						lookupResult = GBIFService.lookupTaxonAtRank(lowestRankingTaxon, sourceAuthority.getAuthoritySubDataset(), lowestRank, 10);
+					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) { 
+						lookupResult = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
 					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
 						lookupResult = WoRMSService.lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
 					} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) { 

@@ -35,6 +35,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.filteredpush.qc.sciname.services.APNIService;
+import org.filteredpush.qc.sciname.services.COLService;
 import org.filteredpush.qc.sciname.services.GBIFService;
 import org.filteredpush.qc.sciname.services.GNIService;
 import org.filteredpush.qc.sciname.services.IRMNGService;
@@ -215,6 +216,17 @@ public class SciNameUtils {
 				logger.debug(match.getScientificName());
 				result=true;
 			}
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+			String id = COLService.idFromScientificNameID(taxonID);
+			if (id==null) { 
+				throw new IDFormatException("Not a Catalogue of Life identifier, expected " + COLService.TAXON_IRI + "{id} or col:{id}");
+			}
+			try { 
+				NameUsage match = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonByID(id);
+				result = match!=null;
+			} catch (IOException e) { 
+				throw new ApiException(e.getMessage());
+			}
 		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.ANSL_APNI)) {
 			// TODO implement
 			String id = taxonID.replace("https://id.biodiversity.org.au/name/apni/", "");
@@ -259,6 +271,8 @@ public class SciNameUtils {
 			List<NameUsage> synonymResults = null;
 			if (sourceAuthority.isGBIFChecklist()) { 
 				lookupResults = GBIFService.lookupTaxonAtRank(compareToName, sourceAuthority.getAuthoritySubDataset(), atRank, 50);
+			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) { 
+				lookupResults = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonAtRank(compareToName, atRank);
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
 				lookupResults = WoRMSService.lookupTaxonAtRank(compareToName, atRank);
 			} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) { 
@@ -274,6 +288,9 @@ public class SciNameUtils {
 					} else { 
 						if (sourceAuthority.isGBIFChecklist()) { 
 							synonymResults= GBIFService.parseAllNameUsagesFromJSON(GBIFService.fetchSynonyms(value.getKey(), sourceAuthority.getAuthoritySubDataset()));
+						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) {
+							String acceptedId = value.getGuid().replace(COLService.TAXON_IRI, "");
+							synonymResults = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupSynonyms(acceptedId);
 						} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) {
 							// TODO: needs implementation
 						}
@@ -679,6 +696,8 @@ public class SciNameUtils {
 		List<NameUsage> lookupResult = null;
 		if (sourceAuthority.isGBIFChecklist()) { 
 			lookupResult = GBIFService.lookupTaxonAtRank(lowestRankingTaxon, sourceAuthority.getAuthoritySubDataset(), lowestRank, 10);
+		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.CATALOGUE_OF_LIFE)) { 
+			lookupResult = new COLService(sourceAuthority.getAuthoritySubDataset()).lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
 		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.WORMS)) { 
 			lookupResult = WoRMSService.lookupTaxonAtRank(lowestRankingTaxon, lowestRank);
 		} else if (sourceAuthority.getAuthority().equals(EnumSciNameSourceAuthority.IRMNG)) { 
