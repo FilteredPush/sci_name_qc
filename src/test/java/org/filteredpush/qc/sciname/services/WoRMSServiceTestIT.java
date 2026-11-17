@@ -90,7 +90,10 @@ public class WoRMSServiceTestIT {
 	public void testSimpleNameSearch() {
 		try {
 			assertEquals("urn:lsid:marinespecies.org:taxname:216786", service.simpleNameSearch("Cypraea argus", "Linnaeus, 1758", true));
-			assertEquals(null, service.simpleNameSearch("Pseudamussium septemradiatum", "(Muller, 1776)", true));
+			// WoRMS has (O. F. Müller, 1776): (Muller, 1776) is the same author, without initials or umlaut.
+			assertEquals("urn:lsid:marinespecies.org:taxname:153001", service.simpleNameSearch("Pseudamussium septemradiatum", "(Muller, 1776)", true));
+			// A different author is not a match.
+			assertEquals(null, service.simpleNameSearch("Pseudamussium septemradiatum", "(Linnaeus, 1758)", true));
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
