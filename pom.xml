@@ -60,6 +60,18 @@
 				<artifactId>dwc-api</artifactId>
 				<version>2.1.15</version>
 			</dependency>
+			<!-- from gbif-api; the same versions as geo_ref_qc (its JAXB runtime for the Getty TGN), so that
+			     the cfweblib jars of both, side by side in WEB-INF/lib, carry identical copies -->
+			<dependency>
+				<groupId>jakarta.xml.bind</groupId>
+				<artifactId>jakarta.xml.bind-api</artifactId>
+				<version>4.0.5</version>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.activation</groupId>
+				<artifactId>jakarta.activation-api</artifactId>
+				<version>2.1.4</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
