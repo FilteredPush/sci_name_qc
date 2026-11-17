@@ -62,8 +62,8 @@ bdqffdq:ActedUpon rdfs:subClassOf bdqffdq:InformationElement .
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:1193230f-f188-4917-92da-bba3390ed3fa>;
   skos:historyNote "Source: iDigBio";
-  rdfs:label "ValidationMethod: VALIDATION_PHYLUM_FOUND with Specification for: VALIDATION_PHYLUM_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_PHYLUM_FOUND with Specification for: VALIDATION_PHYLUM_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_PHYLUM_FOUND with Specification: Specification for: VALIDATION_PHYLUM_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_PHYLUM_FOUND with Specification: Specification for: VALIDATION_PHYLUM_FOUND";
   bdqffdq:forValidation bdqtest:eaad41c5-1d46-4917-a08b-4fd1d7ff5c0f-2025-03-06 .
 
 bdqffdq:ValidationMethod rdfs:subClassOf bdqffdq:DataQualityMethod .
@@ -109,8 +109,8 @@ bdqtest:3667556d-d8f5-454c-922b-af8af38f613c-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:16f999d9-1cf5-4208-b2ca-1a93d6700085>;
   skos:historyNote "Source: iDigBio";
-  rdfs:label "ValidationMethod: VALIDATION_FAMILY_FOUND with Specification for: VALIDATION_FAMILY_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_FAMILY_FOUND with Specification for: VALIDATION_FAMILY_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_FAMILY_FOUND with Specification: Specification for: VALIDATION_FAMILY_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_FAMILY_FOUND with Specification: Specification for: VALIDATION_FAMILY_FOUND";
   bdqffdq:forValidation bdqtest:3667556d-d8f5-454c-922b-af8af38f613c-2025-03-06 .
 
 <urn:uuid:16f999d9-1cf5-4208-b2ca-1a93d6700085> a bdqffdq:Specification;
@@ -152,8 +152,8 @@ bdqtest:3f335517-f442-4b98-b149-1e87ff16de45-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:3c2fe7e9-186f-4ceb-8274-8bbcb4a62de4>;
   skos:historyNote "Source: ALA";
-  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAME_FOUND with Specification for: VALIDATION_SCIENTIFICNAME_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAME_FOUND with Specification for: VALIDATION_SCIENTIFICNAME_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAME_FOUND with Specification: Specification for: VALIDATION_SCIENTIFICNAME_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAME_FOUND with Specification: Specification for: VALIDATION_SCIENTIFICNAME_FOUND";
   bdqffdq:forValidation bdqtest:3f335517-f442-4b98-b149-1e87ff16de45-2025-03-06 .
 
 <urn:uuid:3c2fe7e9-186f-4ceb-8274-8bbcb4a62de4> a bdqffdq:Specification;
@@ -213,8 +213,8 @@ bdqffdq:Consulted rdfs:subClassOf bdqffdq:InformationElement .
   bdqffdq:forAmendment bdqtest:431467d6-9b4b-48fa-a197-cd5379f5e889-2025-03-06;
   bdqffdq:hasSpecification <urn:uuid:566faded-60b6-44bf-a335-dc78d5013582>;
   skos:historyNote "Source: FP-Akka";
-  rdfs:label "AmendmentMethod: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON with Specification Specification for: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON";
-  skos:prefLabel "AmendmentMethod: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON with Specification Specification for: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON" .
+  rdfs:label "AmendmentMethod: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON with Specification: Specification for: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON";
+  skos:prefLabel "AmendmentMethod: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON with Specification: Specification for: AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON" .
 
 bdqffdq:AmendmentMethod rdfs:subClassOf bdqffdq:DataQualityMethod .
 
@@ -270,8 +270,8 @@ bdqcrit:Unambiguous a bdqffdq:Criterion;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:8bd6f6de-49e4-4889-82e0-e4af093981e0>;
   skos:historyNote "Source: ALA, GBIF, CRIA";
-  rdfs:label "ValidationMethod: VALIDATION_TAXON_UNAMBIGUOUS with Specification for: VALIDATION_TAXON_UNAMBIGUOUS";
-  skos:prefLabel "ValidationMethod: VALIDATION_TAXON_UNAMBIGUOUS with Specification for: VALIDATION_TAXON_UNAMBIGUOUS";
+  rdfs:label "ValidationMethod: VALIDATION_TAXON_UNAMBIGUOUS with Specification: Specification for: VALIDATION_TAXON_UNAMBIGUOUS";
+  skos:prefLabel "ValidationMethod: VALIDATION_TAXON_UNAMBIGUOUS with Specification: Specification for: VALIDATION_TAXON_UNAMBIGUOUS";
   bdqffdq:forValidation bdqtest:4c09f127-737b-4686-82a0-7c8e30841590-2026-11-15 .
 
 <urn:uuid:8bd6f6de-49e4-4889-82e0-e4af093981e0> a bdqffdq:Specification;
@@ -318,8 +318,8 @@ bdqdim:Completeness a bdqffdq:DataQualityDimension;
   bdqffdq:forAmendment bdqtest:f01fb3f9-2f7e-418b-9f51-adf50f202aea-2025-03-06;
   bdqffdq:hasSpecification <urn:uuid:8e8355a6-e5d0-4ad7-9f2c-8a4148bfda57>;
   skos:historyNote "Source: iDigBio";
-  rdfs:label "AmendmentMethod: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID with Specification Specification for: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID";
-  skos:prefLabel "AmendmentMethod: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID with Specification Specification for: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID" .
+  rdfs:label "AmendmentMethod: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID with Specification: Specification for: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID";
+  skos:prefLabel "AmendmentMethod: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID with Specification: Specification for: AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID" .
 
 <urn:uuid:8e8355a6-e5d0-4ad7-9f2c-8a4148bfda57> a bdqffdq:Specification;
   skos:example "dwc:scientificNameID=\"gbif:8102122\", dwc:scientificName=\"\": Response.status=FILLED_IN, Response.result=dwc:scientificName=\"Harpullia pendula F.Muell.\", Response.comment=\"dwc:scientificNameID contains an interpretable value\"",
@@ -359,8 +359,8 @@ bdqtest:2cd6884e-3d14-4476-94f7-1191cfff309b-2025-03-06 a bdqffdq:Validation;
     "Example Implementations Source Code: https://github.com/FilteredPush/sci_name_qc/blob/v1.1.2/src/main/java/org/filteredpush/qc/sciname/DwCSciNameDQ.java#L1345",
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:a2b39526-d08a-4a91-8b6d-aacf73677789>;
-  rdfs:label "ValidationMethod: VALIDATION_CLASS_FOUND with Specification for: VALIDATION_CLASS_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_CLASS_FOUND with Specification for: VALIDATION_CLASS_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_CLASS_FOUND with Specification: Specification for: VALIDATION_CLASS_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_CLASS_FOUND with Specification: Specification for: VALIDATION_CLASS_FOUND";
   bdqffdq:forValidation bdqtest:2cd6884e-3d14-4476-94f7-1191cfff309b-2025-03-06 .
 
 <urn:uuid:a2b39526-d08a-4a91-8b6d-aacf73677789> a bdqffdq:Specification;
@@ -402,8 +402,8 @@ bdqtest:125b5493-052d-4a0d-a3e1-ed5bf792689e-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:a90e100a-3522-4742-aa73-3b98a35ab826>;
   skos:historyNote "Source: GBIF";
-  rdfs:label "ValidationMethod: VALIDATION_KINGDOM_FOUND with Specification for: VALIDATION_KINGDOM_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_KINGDOM_FOUND with Specification for: VALIDATION_KINGDOM_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_KINGDOM_FOUND with Specification: Specification for: VALIDATION_KINGDOM_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_KINGDOM_FOUND with Specification: Specification for: VALIDATION_KINGDOM_FOUND";
   bdqffdq:forValidation bdqtest:125b5493-052d-4a0d-a3e1-ed5bf792689e-2025-03-06 .
 
 <urn:uuid:a90e100a-3522-4742-aa73-3b98a35ab826> a bdqffdq:Specification;
@@ -443,8 +443,8 @@ bdqcrit:NotEmpty a bdqffdq:Criterion;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:a9c18563-f63e-42db-98e5-a3e6079086b7>;
   skos:historyNote "Source: ALA,GBIF,OBIS";
-  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAME_NOTEMPTY with Specification for: VALIDATION_SCIENTIFICNAME_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAME_NOTEMPTY with Specification for: VALIDATION_SCIENTIFICNAME_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAME_NOTEMPTY with Specification: Specification for: VALIDATION_SCIENTIFICNAME_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAME_NOTEMPTY with Specification: Specification for: VALIDATION_SCIENTIFICNAME_NOTEMPTY";
   bdqffdq:forValidation bdqtest:7c4b9498-a8d9-4ebb-85f1-9f200c788595-2025-03-06 .
 
 <urn:uuid:a9c18563-f63e-42db-98e5-a3e6079086b7> a bdqffdq:Specification;
@@ -480,8 +480,8 @@ bdqtest:81cc974d-43cc-4c0f-a5e0-afa23b455aa3-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:ae08b4b4-89ba-4972-b51f-912b132bd006>;
   skos:historyNote "Source: iDigBio";
-  rdfs:label "ValidationMethod: VALIDATION_ORDER_FOUND with Specification for: VALIDATION_ORDER_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_ORDER_FOUND with Specification for: VALIDATION_ORDER_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_ORDER_FOUND with Specification: Specification for: VALIDATION_ORDER_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_ORDER_FOUND with Specification: Specification for: VALIDATION_ORDER_FOUND";
   bdqffdq:forValidation bdqtest:81cc974d-43cc-4c0f-a5e0-afa23b455aa3-2025-03-06 .
 
 <urn:uuid:ae08b4b4-89ba-4972-b51f-912b132bd006> a bdqffdq:Specification;
@@ -529,8 +529,8 @@ bdqcrit:Consistent a bdqffdq:Criterion;
     "TG2 Validation NAME CODED Test Consistency CORE";
   bdqffdq:hasSpecification <urn:uuid:d92c5e23-bf6a-483b-86c3-9374e12d01c7>;
   skos:historyNote "Source: Paula Zermoglio";
-  rdfs:label "ValidationMethod: VALIDATION_POLYNOMIAL_CONSISTENT with Specification for: VALIDATION_POLYNOMIAL_CONSISTENT";
-  skos:prefLabel "ValidationMethod: VALIDATION_POLYNOMIAL_CONSISTENT with Specification for: VALIDATION_POLYNOMIAL_CONSISTENT";
+  rdfs:label "ValidationMethod: VALIDATION_POLYNOMIAL_CONSISTENT with Specification: Specification for: VALIDATION_POLYNOMIAL_CONSISTENT";
+  skos:prefLabel "ValidationMethod: VALIDATION_POLYNOMIAL_CONSISTENT with Specification: Specification for: VALIDATION_POLYNOMIAL_CONSISTENT";
   bdqffdq:forValidation bdqtest:17f03f1f-f74d-40c0-8071-2927cfc9487b-2025-03-06 .
 
 <urn:uuid:d92c5e23-bf6a-483b-86c3-9374e12d01c7> a bdqffdq:Specification;
@@ -569,8 +569,8 @@ bdqtest:06851339-843f-4a43-8422-4e61b9a00e75-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:f38e3644-354d-4180-bc7c-c437cef1d606>;
   skos:historyNote "Source: Lee Belbin";
-  rdfs:label "ValidationMethod: VALIDATION_TAXON_NOTEMPTY with Specification for: VALIDATION_TAXON_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_TAXON_NOTEMPTY with Specification for: VALIDATION_TAXON_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_TAXON_NOTEMPTY with Specification: Specification for: VALIDATION_TAXON_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_TAXON_NOTEMPTY with Specification: Specification for: VALIDATION_TAXON_NOTEMPTY";
   bdqffdq:forValidation bdqtest:06851339-843f-4a43-8422-4e61b9a00e75-2025-03-06 .
 
 <urn:uuid:f38e3644-354d-4180-bc7c-c437cef1d606> a bdqffdq:Specification;
@@ -601,8 +601,8 @@ bdqtest:401bf207-9a55-4dff-88a5-abcd58ad97fa-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:02242018-3e73-4e0a-8d6f-d1db06cf81a3>;
   skos:historyNote "Source: TG2-Gainesville";
-  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY with Specification for: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY with Specification for: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY with Specification: Specification for: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY with Specification: Specification for: VALIDATION_SCIENTIFICNAMEID_NOTEMPTY";
   bdqffdq:forValidation bdqtest:401bf207-9a55-4dff-88a5-abcd58ad97fa-2025-03-06 .
 
 <urn:uuid:02242018-3e73-4e0a-8d6f-d1db06cf81a3> a bdqffdq:Specification;
@@ -638,8 +638,8 @@ bdqtest:f2ce7d55-5b1d-426a-b00e-6d4efe3058ec-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:15bbda19-dd18-471a-a5c3-56c7e543012f>;
   skos:historyNote "Source: iDigBio";
-  rdfs:label "ValidationMethod: VALIDATION_GENUS_FOUND with Specification for: VALIDATION_GENUS_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_GENUS_FOUND with Specification for: VALIDATION_GENUS_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_GENUS_FOUND with Specification: Specification for: VALIDATION_GENUS_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_GENUS_FOUND with Specification: Specification for: VALIDATION_GENUS_FOUND";
   bdqffdq:forValidation bdqtest:f2ce7d55-5b1d-426a-b00e-6d4efe3058ec-2025-03-06 .
 
 <urn:uuid:15bbda19-dd18-471a-a5c3-56c7e543012f> a bdqffdq:Specification;
@@ -682,8 +682,8 @@ bdqtest:2750c040-1d4a-4149-99fe-0512785f2d5f-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test VOCABULARY Consistency Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:21d0b5f6-5b3e-4810-8413-c975b7cf343a>;
   skos:historyNote "Source: TG2-Gainesville";
-  rdfs:label "ValidationMethod: VALIDATION_CLASSIFICATION_CONSISTENT with Specification for: VALIDATION_CLASSIFICATION_CONSISTENT";
-  skos:prefLabel "ValidationMethod: VALIDATION_CLASSIFICATION_CONSISTENT with Specification for: VALIDATION_CLASSIFICATION_CONSISTENT";
+  rdfs:label "ValidationMethod: VALIDATION_CLASSIFICATION_CONSISTENT with Specification: Specification for: VALIDATION_CLASSIFICATION_CONSISTENT";
+  skos:prefLabel "ValidationMethod: VALIDATION_CLASSIFICATION_CONSISTENT with Specification: Specification for: VALIDATION_CLASSIFICATION_CONSISTENT";
   bdqffdq:forValidation bdqtest:2750c040-1d4a-4149-99fe-0512785f2d5f-2025-03-06 .
 
 <urn:uuid:21d0b5f6-5b3e-4810-8413-c975b7cf343a> a bdqffdq:Specification;
@@ -728,8 +728,8 @@ bdqtest:14da5b87-8304-4b2b-911d-117e3c29e890-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:c619ec9b-92ec-4047-a8d3-931e3324bf3e>;
   skos:historyNote "Source: TDWG2018";
-  rdfs:label "ValidationMethod: VALIDATION_TAXONRANK_NOTEMPTY with Specification for: VALIDATION_TAXONRANK_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_TAXONRANK_NOTEMPTY with Specification for: VALIDATION_TAXONRANK_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_TAXONRANK_NOTEMPTY with Specification: Specification for: VALIDATION_TAXONRANK_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_TAXONRANK_NOTEMPTY with Specification: Specification for: VALIDATION_TAXONRANK_NOTEMPTY";
   bdqffdq:forValidation bdqtest:14da5b87-8304-4b2b-911d-117e3c29e890-2025-03-06 .
 
 <urn:uuid:c619ec9b-92ec-4047-a8d3-931e3324bf3e> a bdqffdq:Specification;
@@ -766,8 +766,8 @@ bdqcrit:Standard a bdqffdq:Criterion;
     "TG2 Validation NAME CODED Test VOCABULARY Conformance Parameterized CORE";
   bdqffdq:hasSpecification <urn:uuid:c8964200-630e-47c6-baad-7e334fddbbdb>;
   skos:historyNote "Source: TDWG2018";
-  rdfs:label "ValidationMethod: VALIDATION_TAXONRANK_STANDARD with Specification for: VALIDATION_TAXONRANK_STANDARD";
-  skos:prefLabel "ValidationMethod: VALIDATION_TAXONRANK_STANDARD with Specification for: VALIDATION_TAXONRANK_STANDARD";
+  rdfs:label "ValidationMethod: VALIDATION_TAXONRANK_STANDARD with Specification: Specification for: VALIDATION_TAXONRANK_STANDARD";
+  skos:prefLabel "ValidationMethod: VALIDATION_TAXONRANK_STANDARD with Specification: Specification for: VALIDATION_TAXONRANK_STANDARD";
   bdqffdq:forValidation bdqtest:7bdb13a4-8a51-4ee5-be7f-20693fdb183e-2025-03-06 .
 
 <urn:uuid:c8964200-630e-47c6-baad-7e334fddbbdb> a bdqffdq:Specification;
@@ -808,8 +808,8 @@ bdqenh:Standardized a bdqffdq:Enhancement;
   bdqffdq:forAmendment bdqtest:e39098df-ef46-464c-9aef-bcdeee2a88cb-2025-03-06;
   bdqffdq:hasSpecification <urn:uuid:ca6b9d39-4a1d-4ec5-925a-d1d67f95bea0>;
   skos:historyNote "Source: TDWG2018";
-  rdfs:label "AmendmentMethod: AMENDMENT_TAXONRANK_STANDARDIZED with Specification Specification for: AMENDMENT_TAXONRANK_STANDARDIZED";
-  skos:prefLabel "AmendmentMethod: AMENDMENT_TAXONRANK_STANDARDIZED with Specification Specification for: AMENDMENT_TAXONRANK_STANDARDIZED" .
+  rdfs:label "AmendmentMethod: AMENDMENT_TAXONRANK_STANDARDIZED with Specification: Specification for: AMENDMENT_TAXONRANK_STANDARDIZED";
+  skos:prefLabel "AmendmentMethod: AMENDMENT_TAXONRANK_STANDARDIZED with Specification: Specification for: AMENDMENT_TAXONRANK_STANDARDIZED" .
 
 <urn:uuid:ca6b9d39-4a1d-4ec5-925a-d1d67f95bea0> a bdqffdq:Specification;
   skos:example "dwc:taxonRank=\"sp.\": Response.status=AMENDED, Response.result=dwc:taxonRank=\"species\", Response.comment=\"dwc:taxonRank contains an interpretable value in the bdqval:sourceAuthority\"",
@@ -851,8 +851,8 @@ bdqcrit:Complete a bdqffdq:Criterion;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:e6c02558-8541-4292-9a11-2f4408d69699>;
   skos:historyNote "Source: TG2 December 2023";
-  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_COMPLETE with Specification for: VALIDATION_SCIENTIFICNAMEID_COMPLETE";
-  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_COMPLETE with Specification for: VALIDATION_SCIENTIFICNAMEID_COMPLETE";
+  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_COMPLETE with Specification: Specification for: VALIDATION_SCIENTIFICNAMEID_COMPLETE";
+  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAMEID_COMPLETE with Specification: Specification for: VALIDATION_SCIENTIFICNAMEID_COMPLETE";
   bdqffdq:forValidation bdqtest:6eeac3ed-f691-457f-a42e-eaa9c8a71ce8-2025-03-06 .
 
 <urn:uuid:e6c02558-8541-4292-9a11-2f4408d69699> a bdqffdq:Specification;
@@ -882,8 +882,8 @@ bdqtest:36ed36c9-b1a7-40b2-b5e2-0d012e772098-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:e6f0a9ce-3e72-40fb-9fad-63cf5962f93e>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_KINGDOM_NOTEMPTY with Specification for: VALIDATION_KINGDOM_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_KINGDOM_NOTEMPTY with Specification for: VALIDATION_KINGDOM_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_KINGDOM_NOTEMPTY with Specification: Specification for: VALIDATION_KINGDOM_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_KINGDOM_NOTEMPTY with Specification: Specification for: VALIDATION_KINGDOM_NOTEMPTY";
   bdqffdq:forValidation bdqtest:36ed36c9-b1a7-40b2-b5e2-0d012e772098-2025-03-06 .
 
 <urn:uuid:e6f0a9ce-3e72-40fb-9fad-63cf5962f93e> a bdqffdq:Specification;
@@ -918,8 +918,8 @@ bdqtest:49f1d386-5bed-43ae-bd43-deabf7df64fc-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:e9ffc3b0-0fb8-4a7c-a588-a00085ba980b>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY with Specification for: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY with Specification for: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY with Specification: Specification for: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY with Specification: Specification for: VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY";
   bdqffdq:forValidation bdqtest:49f1d386-5bed-43ae-bd43-deabf7df64fc-2025-03-06 .
 
 <urn:uuid:e9ffc3b0-0fb8-4a7c-a588-a00085ba980b> a bdqffdq:Specification;
@@ -954,8 +954,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Completeness CORE";
   bdqffdq:hasSpecification <urn:uuid:f09fc9ad-a449-4422-b32f-63d8ccf2501f>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY with Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY with Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY with Specification: Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY with Specification: Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY";
   bdqffdq:forValidation bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 .
 
 <urn:uuid:f09fc9ad-a449-4422-b32f-63d8ccf2501f> a bdqffdq:Specification;
@@ -989,8 +989,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:e78d9524-a655-40d4-b86a-73a9ee470814>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_VERNACULARNAME_NOTEMPTY with Specification for: VALIDATION_VERNACULARNAME_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_VERNACULARNAME_NOTEMPTY with Specification for: VALIDATION_VERNACULARNAME_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_VERNACULARNAME_NOTEMPTY with Specification: Specification for: VALIDATION_VERNACULARNAME_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_VERNACULARNAME_NOTEMPTY with Specification: Specification for: VALIDATION_VERNACULARNAME_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:eb9b70c7-9cf6-42ea-a708-5de527211df4> .
 
 <urn:uuid:e78d9524-a655-40d4-b86a-73a9ee470814> a bdqffdq:Specification;
@@ -1024,8 +1024,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:1819e21b-f7d2-4492-8460-8d49cc898021>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_TYPESTATUS_NOTEMPTY with Specification for: VALIDATION_TYPESTATUS_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_TYPESTATUS_NOTEMPTY with Specification for: VALIDATION_TYPESTATUS_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_TYPESTATUS_NOTEMPTY with Specification: Specification for: VALIDATION_TYPESTATUS_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_TYPESTATUS_NOTEMPTY with Specification: Specification for: VALIDATION_TYPESTATUS_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:cd7cae15-f255-41a3-b002-c9620c40f620> .
 
 <urn:uuid:1819e21b-f7d2-4492-8460-8d49cc898021> a bdqffdq:Specification;
@@ -1059,8 +1059,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:9e1452e6-a54e-443e-970a-425fcecefdeb>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY with Specification for: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY with Specification for: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY with Specification: Specification for: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY with Specification: Specification for: VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:72ed16f1-0587-4afd-a9fc-602c2f3f1975> .
 
 <urn:uuid:9e1452e6-a54e-443e-970a-425fcecefdeb> a bdqffdq:Specification;
@@ -1094,8 +1094,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:c1731d4b-e80c-4dbf-8fc0-e23c7e64737c>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_SPECIFICEPITHET_NOTEMPTY with Specification for: VALIDATION_SPECIFICEPITHET_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_SPECIFICEPITHET_NOTEMPTY with Specification for: VALIDATION_SPECIFICEPITHET_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_SPECIFICEPITHET_NOTEMPTY with Specification: Specification for: VALIDATION_SPECIFICEPITHET_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_SPECIFICEPITHET_NOTEMPTY with Specification: Specification for: VALIDATION_SPECIFICEPITHET_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:cdb37443-292e-49b6-a012-4718f0d7ba64> .
 
 <urn:uuid:c1731d4b-e80c-4dbf-8fc0-e23c7e64737c> a bdqffdq:Specification;
@@ -1129,8 +1129,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:40565507-cb36-46f0-8396-b911d89d0270>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY with Specification for: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY with Specification for: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY with Specification: Specification for: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY with Specification: Specification for: VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:77c6fde2-c3ca-4ad3-b2f2-3b81bba9a673> .
 
 <urn:uuid:40565507-cb36-46f0-8396-b911d89d0270> a bdqffdq:Specification;
@@ -1165,8 +1165,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:fe2b75e7-3ff1-4646-8eb0-0fee7dfd296c>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_PHYLUM_NOTEMPTY with Specification for: VALIDATION_PHYLUM_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_PHYLUM_NOTEMPTY with Specification for: VALIDATION_PHYLUM_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_PHYLUM_NOTEMPTY with Specification: Specification for: VALIDATION_PHYLUM_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_PHYLUM_NOTEMPTY with Specification: Specification for: VALIDATION_PHYLUM_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:19bbd107-6b14-4c82-8d3e-f7a2a67df309> .
 
 <urn:uuid:fe2b75e7-3ff1-4646-8eb0-0fee7dfd296c> a bdqffdq:Specification;
@@ -1196,8 +1196,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:08d94832-46a8-434d-a1ff-9ffc2dcf5685>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_ORDER_NOTEMPTY with Specification for: VALIDATION_ORDER_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_ORDER_NOTEMPTY with Specification for: VALIDATION_ORDER_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_ORDER_NOTEMPTY with Specification: Specification for: VALIDATION_ORDER_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_ORDER_NOTEMPTY with Specification: Specification for: VALIDATION_ORDER_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:d1c40fc8-d8ad-4148-82e0-b4b7ead70051> .
 
 <urn:uuid:08d94832-46a8-434d-a1ff-9ffc2dcf5685> a bdqffdq:Specification;
@@ -1227,8 +1227,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:0e9d5cab-3b82-4dc6-8d0f-3bf0d852a2d0>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_FAMILY_NOTEMPTY with Specification for: VALIDATION_FAMILY_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_FAMILY_NOTEMPTY with Specification for: VALIDATION_FAMILY_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_FAMILY_NOTEMPTY with Specification: Specification for: VALIDATION_FAMILY_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_FAMILY_NOTEMPTY with Specification: Specification for: VALIDATION_FAMILY_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:5bfa043c-1e19-4224-8d55-b568ced347c2> .
 
 <urn:uuid:0e9d5cab-3b82-4dc6-8d0f-3bf0d852a2d0> a bdqffdq:Specification;
@@ -1258,8 +1258,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:1a2f785e-a2d3-4480-9832-07d6332d2346>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_GENUS_NOTEMPTY with Specification for: VALIDATION_GENUS_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_GENUS_NOTEMPTY with Specification for: VALIDATION_GENUS_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_GENUS_NOTEMPTY with Specification: Specification for: VALIDATION_GENUS_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_GENUS_NOTEMPTY with Specification: Specification for: VALIDATION_GENUS_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:d02c1ffd-af28-49bd-9c9c-e8e23a8b7258> .
 
 <urn:uuid:1a2f785e-a2d3-4480-9832-07d6332d2346> a bdqffdq:Specification;
@@ -1289,8 +1289,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Completeness";
   bdqffdq:hasSpecification <urn:uuid:5f4da325-d902-4b75-a4c0-b4366b866a42>;
   skos:historyNote "Source: TG2";
-  rdfs:label "ValidationMethod: VALIDATION_CLASS_NOTEMPTY with Specification for: VALIDATION_CLASS_NOTEMPTY";
-  skos:prefLabel "ValidationMethod: VALIDATION_CLASS_NOTEMPTY with Specification for: VALIDATION_CLASS_NOTEMPTY";
+  rdfs:label "ValidationMethod: VALIDATION_CLASS_NOTEMPTY with Specification: Specification for: VALIDATION_CLASS_NOTEMPTY";
+  skos:prefLabel "ValidationMethod: VALIDATION_CLASS_NOTEMPTY with Specification: Specification for: VALIDATION_CLASS_NOTEMPTY";
   bdqffdq:forValidation <urn:uuid:b854b179-3572-48b6-aab2-879e3172fd7d> .
 
 <urn:uuid:5f4da325-d902-4b75-a4c0-b4366b866a42> a bdqffdq:Specification;
@@ -1327,8 +1327,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "Example Implementations Source Code: https://github.com/FilteredPush/sci_name_qc/blob/v1.1.2/src/main/java/org/filteredpush/qc/sciname/DwCSciNameDQ.java#L3682",
     "TG2 Validation NAME CODED Test Supplementary Conformance";
   bdqffdq:hasSpecification <urn:uuid:0e153bbb-d135-42be-aeb7-a742ea76fd5e>;
-  rdfs:label "ValidationMethod: VALIDATION_SUBTRIBE_FOUND with Specification for: VALIDATION_SUBTRIBE_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_SUBTRIBE_FOUND with Specification for: VALIDATION_SUBTRIBE_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_SUBTRIBE_FOUND with Specification: Specification for: VALIDATION_SUBTRIBE_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_SUBTRIBE_FOUND with Specification: Specification for: VALIDATION_SUBTRIBE_FOUND";
   bdqffdq:forValidation <urn:uuid:4527c47e-61d9-4abb-af3e-f2999191be17> .
 
 <urn:uuid:0e153bbb-d135-42be-aeb7-a742ea76fd5e> a bdqffdq:Specification;
@@ -1368,8 +1368,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "Example Implementations Source Code: https://github.com/FilteredPush/sci_name_qc/blob/v1.1.2/src/main/java/org/filteredpush/qc/sciname/DwCSciNameDQ.java#L3727",
     "TG2 Validation NAME CODED Test Supplementary Conformance Parameterized";
   bdqffdq:hasSpecification <urn:uuid:a11ce583-71b3-4562-94ea-8b0b67b72f2f>;
-  rdfs:label "ValidationMethod: VALIDATION_TRIBE_FOUND with Specification for: VALIDATION_TRIBE_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_TRIBE_FOUND with Specification for: VALIDATION_TRIBE_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_TRIBE_FOUND with Specification: Specification for: VALIDATION_TRIBE_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_TRIBE_FOUND with Specification: Specification for: VALIDATION_TRIBE_FOUND";
   bdqffdq:forValidation <urn:uuid:8c15f351-26d5-4edd-b38e-07541dc64fd0> .
 
 <urn:uuid:a11ce583-71b3-4562-94ea-8b0b67b72f2f> a bdqffdq:Specification;
@@ -1409,8 +1409,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "Example Implementations Source Code: https://github.com/FilteredPush/sci_name_qc/blob/v1.1.2/src/main/java/org/filteredpush/qc/sciname/DwCSciNameDQ.java#L3772",
     "TG2 Validation NAME CODED Test Supplementary Conformance Parameterized";
   bdqffdq:hasSpecification <urn:uuid:13f9168b-5bab-470f-a351-aefac6ec1e29>;
-  rdfs:label "ValidationMethod: VALIDATION_SUPERFAMILY_FOUND with Specification for: VALIDATION_SUPERFAMILY_FOUND";
-  skos:prefLabel "ValidationMethod: VALIDATION_SUPERFAMILY_FOUND with Specification for: VALIDATION_SUPERFAMILY_FOUND";
+  rdfs:label "ValidationMethod: VALIDATION_SUPERFAMILY_FOUND with Specification: Specification for: VALIDATION_SUPERFAMILY_FOUND";
+  skos:prefLabel "ValidationMethod: VALIDATION_SUPERFAMILY_FOUND with Specification: Specification for: VALIDATION_SUPERFAMILY_FOUND";
   bdqffdq:forValidation <urn:uuid:2a45e0e9-446c-429f-992d-c3ec1d29eebb> .
 
 <urn:uuid:13f9168b-5bab-470f-a351-aefac6ec1e29> a bdqffdq:Specification;
@@ -1471,8 +1471,8 @@ bdqtest:ff59f77d-71e9-4eb1-aac9-8bd05c50ff70-2025-03-06 a bdqffdq:Validation;
     "TG2 Validation NAME CODED Test Supplementary Conformance";
   bdqffdq:hasSpecification <urn:uuid:48f95949-4c13-423f-98b3-d36fe91df04a>;
   skos:historyNote "Source: TG2-Gainesville";
-  rdfs:label "ValidationMethod: VALIDATION_TAXONID_COMPLETE with Specification for: VALIDATION_TAXONID_COMPLETE";
-  skos:prefLabel "ValidationMethod: VALIDATION_TAXONID_COMPLETE with Specification for: VALIDATION_TAXONID_COMPLETE";
+  rdfs:label "ValidationMethod: VALIDATION_TAXONID_COMPLETE with Specification: Specification for: VALIDATION_TAXONID_COMPLETE";
+  skos:prefLabel "ValidationMethod: VALIDATION_TAXONID_COMPLETE with Specification: Specification for: VALIDATION_TAXONID_COMPLETE";
   bdqffdq:forValidation <urn:uuid:a82c7e3a-3a50-4438-906c-6d0fefa9e984> .
 
 <urn:uuid:48f95949-4c13-423f-98b3-d36fe91df04a> a bdqffdq:Specification;
@@ -1504,8 +1504,8 @@ bdqcrit:InRange a bdqffdq:Criterion;
     "TG2 Validation NAME CODED Test Supplementary Conformance";
   bdqffdq:hasSpecification <urn:uuid:8a7dd34e-5f37-49e4-8f65-c34bfcd28dec>;
   skos:historyNote "Source: VertNet";
-  rdfs:label "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE with Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE";
-  skos:prefLabel "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE with Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE";
+  rdfs:label "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE with Specification: Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE";
+  skos:prefLabel "ValidationMethod: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE with Specification: Specification for: VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE";
   bdqffdq:forValidation <urn:uuid:399ef91d-425c-46f2-a6df-8a0fe4c3e86e> .
 
 <urn:uuid:8a7dd34e-5f37-49e4-8f65-c34bfcd28dec> a bdqffdq:Specification;
