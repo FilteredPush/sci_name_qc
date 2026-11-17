@@ -84,7 +84,12 @@ public class APNIService {
 		HttpResponse<String> response;
 		try {
 			response = client.send(request,HttpResponse.BodyHandlers.ofString());
-			JSONObject responseJson = (JSONObject) JSONValue.parse(response.body());
+			Object parsed = response.statusCode() == 200 ? JSONValue.parse(response.body()) : null;
+			if (!(parsed instanceof JSONObject)) {
+				// e.g. the service is unavailable, or returns an error page: not a usable response
+				throw new ApiException("APNI did not return a JSON response (HTTP status " + response.statusCode() + ")");
+			}
+			JSONObject responseJson = (JSONObject) parsed;
 			
 			logger.debug(response);
 			logger.debug(response.body());
@@ -140,7 +145,12 @@ public class APNIService {
 		HttpResponse<String> response;
 		try {
 			response = client.send(request,HttpResponse.BodyHandlers.ofString());
-			JSONObject responseJson = (JSONObject) JSONValue.parse(response.body());
+			Object parsed = response.statusCode() == 200 ? JSONValue.parse(response.body()) : null;
+			if (!(parsed instanceof JSONObject)) {
+				// e.g. the service is unavailable, or returns an error page: not a usable response
+				throw new ApiException("APNI did not return a JSON response (HTTP status " + response.statusCode() + ")");
+			}
+			JSONObject responseJson = (JSONObject) parsed;
 			logger.debug(response);
 			logger.debug(response.body());
 			
