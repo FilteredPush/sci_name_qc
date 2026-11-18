@@ -1,5 +1,5 @@
 # sci_name_qc 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.filteredpush/sci_name_qc/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.filteredpush/sci_name_qc)
+[![Maven Central](https://img.shields.io/maven-central/v/org.filteredpush/sci_name_qc)](https://central.sonatype.com/artifact/org.filteredpush/sci_name_qc)
 [![Javadocs](http://javadoc.io/badge/org.filteredpush/sci_name_qc.svg)](http://javadoc.io/doc/org.filteredpush/sci_name_qc)
 
 Data Quality library for dwc:scientificName and dwc:scientificNameAuthorship and related terms
