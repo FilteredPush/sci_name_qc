@@ -12,6 +12,19 @@ DOI: 10.5281/zenodo.7026712
 
 This library provides a set of methods for validating information related to scientific names, expressed as Darwin Core terms.  It implements the TDWG Biodiversity Data Quality BDQ Standard tests for scientific names, and provides a set of utilities for comparing scientific name authorship strings. 
 
+## Running these Tests on a data set
+
+To run these Tests over a whole data set without writing code, use [bdq_workbench](https://github.com/FilteredPush/bdq_workbench). It reads a Darwin Core Archive or a Darwin Core Data Package, finds the Tests that a chosen BDQ Use Case calls for among the Test implementations it bundles (sci_name_qc's NAME Tests, together with those in event_date_qc, rec_occur_qc and geo_ref_qc), and runs them on each record: before amendment, then the Amendments, then again with the proposed amendments applied. It reports the results as HTML and Markdown with overview charts, as a spreadsheet (XLSX) with cells colored by outcome, and as RDF following the BDQ Standard.
+
+Download the executable jar from the [latest bdq_workbench release](https://github.com/FilteredPush/bdq_workbench/releases/latest) (Java 17 or later), then:
+
+```bash
+java -jar bdq_workbench-<version>.jar                                  # desktop GUI: choose the data set and the Use Case
+java -jar bdq_workbench-<version>.jar --help                            # options for running from the command line
+```
+
+To check the implementations against the BDQ Test validation data instead, use [bdqtestrunner](https://github.com/FilteredPush/bdqtestrunner).
+
 ## BDQ Standard Tests
 
 sci_name_qc implements the following CORE Tests of the draft TDWG [BDQ Standard](https://bdq.tdwg.org/) ([review draft](https://bdq.tdwg.org/draft/)). Each links to its entry in the BDQ Quick Reference Guide.
