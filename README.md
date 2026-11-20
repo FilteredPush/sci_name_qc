@@ -14,30 +14,57 @@ This library provides a set of methods for validating information related to sci
 
 ## BDQ Standard Tests
 
-The sci_name_qc library implements the following BDQ Standard tests, with these implementations passing against all test validation records. 
+sci_name_qc implements the following CORE Tests of the draft TDWG [BDQ Standard](https://bdq.tdwg.org/) ([review draft](https://bdq.tdwg.org/draft/)). Each links to its entry in the BDQ Quick Reference Guide.
 
-- [VALIDATION_TAXONRANK_STANDARD](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_TAXONRANK_STANDARD) 
-- [AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON) 
-- [AMENDMENT_TAXONRANK_STANDARDIZED](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#AMENDMENT_TAXONRANK_STANDARDIZED) 
-- [VALIDATION_FAMILY_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_FAMILY_FOUND) 
-- [AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID) 
-- [VALIDATION_KINGDOM_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_KINGDOM_FOUND) 
-- [VALIDATION_SCIENTIFICNAMEID_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_SCIENTIFICNAMEID_NOTEMPTY) 
-- [VALIDATION_SCIENTIFICNAMEID_COMPLETE](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_SCIENTIFICNAMEID_COMPLETE) 
-- [VALIDATION_KINGDOM_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_KINGDOM_NOTEMPTY) 
-- [VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY) 
-- [VALIDATION_TAXONRANK_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_TAXONRANK_NOTEMPTY) 
-- [VALIDATION_POLYNOMIAL_CONSISTENT](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_POLYNOMIAL_CONSISTENT) 
-- [VALIDATION_TAXON_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_TAXON_NOTEMPTY) 
-- [VALIDATION_ORDER_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_ORDER_FOUND) 
-- [VALIDATION_CLASSIFICATION_CONSISTENT](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_CLASSIFICATION_CONSISTENT) 
-- [VALIDATION_PHYLUM_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_PHYLUM_FOUND) 
-- [VALIDATION_SCIENTIFICNAME_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_SCIENTIFICNAME_NOTEMPTY) 
-- [VALIDATION_TAXON_UNAMBIGUOUS](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_TAXON_UNAMBIGUOUS) 
-- [VALIDATION_GENUS_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_GENUS_FOUND) 
-- [VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY) 
-- [VALIDATION_CLASS_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_CLASS_FOUND) 
-- [VALIDATION_SCIENTIFICNAME_FOUND](https://github.com/tdwg/bdq/blob/5f1754bcd59639874b0c3d12d97abdce01f503b0/tg2/_review/docs/terms/bdqtest/index.md#VALIDATION_SCIENTIFICNAME_FOUND)
+**Validations**
+
+- [VALIDATION_CLASSIFICATION_CONSISTENT](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_CLASSIFICATION_CONSISTENT)
+- [VALIDATION_CLASS_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_CLASS_FOUND)
+- [VALIDATION_FAMILY_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_FAMILY_FOUND)
+- [VALIDATION_GENUS_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_GENUS_FOUND)
+- [VALIDATION_KINGDOM_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_KINGDOM_FOUND)
+- [VALIDATION_KINGDOM_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_KINGDOM_NOTEMPTY)
+- [VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_NAMEPUBLISHEDINYEAR_NOTEMPTY)
+- [VALIDATION_ORDER_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_ORDER_FOUND)
+- [VALIDATION_PHYLUM_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_PHYLUM_FOUND)
+- [VALIDATION_POLYNOMIAL_CONSISTENT](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_POLYNOMIAL_CONSISTENT)
+- [VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_SCIENTIFICNAMEAUTHORSHIP_NOTEMPTY)
+- [VALIDATION_SCIENTIFICNAMEID_COMPLETE](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_SCIENTIFICNAMEID_COMPLETE)
+- [VALIDATION_SCIENTIFICNAMEID_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_SCIENTIFICNAMEID_NOTEMPTY)
+- [VALIDATION_SCIENTIFICNAME_FOUND](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_SCIENTIFICNAME_FOUND)
+- [VALIDATION_SCIENTIFICNAME_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_SCIENTIFICNAME_NOTEMPTY)
+- [VALIDATION_TAXONRANK_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_TAXONRANK_NOTEMPTY)
+- [VALIDATION_TAXONRANK_STANDARD](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_TAXONRANK_STANDARD)
+- [VALIDATION_TAXON_NOTEMPTY](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_TAXON_NOTEMPTY)
+- [VALIDATION_TAXON_UNAMBIGUOUS](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#VALIDATION_TAXON_UNAMBIGUOUS)
+
+**Amendments**
+
+- [AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#AMENDMENT_SCIENTIFICNAMEID_FROM_TAXON)
+- [AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#AMENDMENT_SCIENTIFICNAME_FROM_SCIENTIFICNAMEID)
+- [AMENDMENT_TAXONRANK_STANDARDIZED](https://bdq.tdwg.org/draft/docs/terms/bdqtest/#AMENDMENT_TAXONRANK_STANDARDIZED)
+
+### Supplementary Tests
+
+These Tests are not in the BDQ Standard; each links to its tdwg/bdq issue.
+
+**Validations**
+
+- VALIDATION_CLASS_NOTEMPTY ([tdwg/bdq#213](https://github.com/tdwg/bdq/issues/213))
+- VALIDATION_FAMILY_NOTEMPTY ([tdwg/bdq#215](https://github.com/tdwg/bdq/issues/215))
+- VALIDATION_GENUS_NOTEMPTY ([tdwg/bdq#214](https://github.com/tdwg/bdq/issues/214))
+- VALIDATION_HIGHERCLASSIFICATION_NOTEMPTY ([tdwg/bdq#229](https://github.com/tdwg/bdq/issues/229))
+- VALIDATION_INFRASPECIFICEPITHET_NOTEMPTY ([tdwg/bdq#219](https://github.com/tdwg/bdq/issues/219))
+- VALIDATION_NAMEPUBLISHEDINYEAR_INRANGE ([tdwg/bdq#64](https://github.com/tdwg/bdq/issues/64))
+- VALIDATION_ORDER_NOTEMPTY ([tdwg/bdq#217](https://github.com/tdwg/bdq/issues/217))
+- VALIDATION_PHYLUM_NOTEMPTY ([tdwg/bdq#218](https://github.com/tdwg/bdq/issues/218))
+- VALIDATION_SPECIFICEPITHET_NOTEMPTY ([tdwg/bdq#220](https://github.com/tdwg/bdq/issues/220))
+- VALIDATION_SUBTRIBE_FOUND ([tdwg/bdq#208](https://github.com/tdwg/bdq/issues/208))
+- VALIDATION_SUPERFAMILY_FOUND ([tdwg/bdq#206](https://github.com/tdwg/bdq/issues/206))
+- VALIDATION_TAXONID_COMPLETE ([tdwg/bdq#121](https://github.com/tdwg/bdq/issues/121))
+- VALIDATION_TRIBE_FOUND ([tdwg/bdq#207](https://github.com/tdwg/bdq/issues/207))
+- VALIDATION_TYPESTATUS_NOTEMPTY ([tdwg/bdq#246](https://github.com/tdwg/bdq/issues/246))
+- VALIDATION_VERNACULARNAME_NOTEMPTY ([tdwg/bdq#254](https://github.com/tdwg/bdq/issues/254))
 
 ## Primitives
 
@@ -330,3 +357,19 @@ To deploy a new release to maven central, set the version in pom.xml and in meta
 
 After this, you may login to the sonatype oss repository hosting nexus instance find the staged release in the staging repositories and confirm the release.  
 
+## Related BDQ libraries and applications
+
+This library is one of a set of libraries and applications for the draft TDWG [BDQ Standard](https://bdq.tdwg.org/) (Biodiversity Data Quality), about to go into public review ([review draft](https://bdq.tdwg.org/draft/)). None of them are part of the standard.
+
+| Repository | Kind | Role | Available from |
+|---|---|---|---|
+| [ffdq-api](https://github.com/kurator-org/ffdq-api) | Library | Java annotations and result API for Test implementations | [Maven Central](https://central.sonatype.com/artifact/org.datakurator/ffdq-api), [latest release](https://github.com/kurator-org/ffdq-api/releases/latest) |
+| [kurator-ffdq](https://github.com/kurator-org/kurator-ffdq) | Library | bdqffdq model, RDF reports, Test RDF generation and Test runner | [Maven Central](https://central.sonatype.com/artifact/org.datakurator/kurator-ffdq), [latest release](https://github.com/kurator-org/kurator-ffdq/releases/latest) |
+| [sci_name_qc](https://github.com/FilteredPush/sci_name_qc) (this repository) | Test implementations | NAME Tests | [Maven Central](https://central.sonatype.com/artifact/org.filteredpush/sci_name_qc), [latest release](https://github.com/FilteredPush/sci_name_qc/releases/latest) |
+| [event_date_qc](https://github.com/FilteredPush/event_date_qc) | Test implementations | TIME Tests | [Maven Central](https://central.sonatype.com/artifact/org.filteredpush/event_date_qc), [latest release](https://github.com/FilteredPush/event_date_qc/releases/latest) |
+| [rec_occur_qc](https://github.com/FilteredPush/rec_occur_qc) | Test implementations | OTHER (metadata) Tests and SingleRecord Measures | [Maven Central](https://central.sonatype.com/artifact/org.filteredpush/rec_occur_qc), [latest release](https://github.com/FilteredPush/rec_occur_qc/releases/latest) |
+| [geo_ref_qc](https://github.com/FilteredPush/geo_ref_qc) | Test implementations | SPACE Tests | [Maven Central](https://central.sonatype.com/artifact/org.filteredpush/geo_ref_qc), [latest release](https://github.com/FilteredPush/geo_ref_qc/releases/latest) |
+| [bdqtestrunner](https://github.com/FilteredPush/bdqtestrunner) | Application | Checks Test implementations against the BDQ Test validation data | [latest release](https://github.com/FilteredPush/bdqtestrunner/releases/latest) |
+| [bdq_workbench](https://github.com/FilteredPush/bdq_workbench) | Application | Runs BDQ Tests over Darwin Core data for a Use Case | [latest release](https://github.com/FilteredPush/bdq_workbench/releases/latest) |
+| [bdq_usecase_builder](https://github.com/FilteredPush/bdq_usecase_builder) | Application | Authors Use Cases and Test definitions | [latest release](https://github.com/FilteredPush/bdq_usecase_builder/releases/latest) |
+| [bdq_issue_to_csv](https://github.com/kurator-org/bdq_issue_to_csv) | Application | Converts tdwg/bdq Test issues to a term-version CSV | [latest release](https://github.com/kurator-org/bdq_issue_to_csv/releases/latest) |
